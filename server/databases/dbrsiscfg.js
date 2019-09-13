@@ -15,12 +15,12 @@ switch (process.env.NODE_ENV) {
       dbName.rsiscfg
     );
     break;
-/*
+
   case 'intranet':
     uri = process.env.MONGO_STANDALONE_URI+'/'+dbName.rsiscfg;
     //var dbURI = 'mongodb://localhost:36667/rsiscfg';      
     break;
-*/
+
   default:
     uri = process.env.MONGO_DEV1_URI+'/'+dbName.rsiscfg;
      //var dbURI = 'mongodb://localhost:27017/rsiscfg';    

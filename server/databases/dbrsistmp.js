@@ -11,18 +11,15 @@ let uri = util.format(process.env.CLOUDDB_URI_TEMPLATE,
 );
 
 switch (process.env.NODE_ENV) {
-  
+
+  case 'intranet':  
   case 'production': 
     uri = util.format(process.env.CLOUDDB_URI_TEMPLATE,
       process.env.ATLAS_CREDENTIALS,
       dbName.rsistmp
     );
     break;
-/*
-  case 'intranet':
-    //uri = process.env.CLOUDDB_TMP_URI;     
-    break;
-*/
+
   default:
     uri = process.env.MONGO_DEV1_URI+'/'+dbName.rsistmp;
      //var dbURI = 'mongodb://localhost:27016/rsistmp';    
