@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>login</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" 
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no">
+
+    <!-- Required styles for MDC Web -->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+
+    <!-- Required MDC Web JavaScript library -->
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+    <!-- link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" -->
+    <style> 
+      html, body {  
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 32px;
+      }
+      .demo-headline {
+        margin-bottom: 32px;
+      }
+      .mdc-text-field {
+        margin-bottom: 24px;
+        flex-shrink: 0;
+      }
+      .greet-message {
+        margin-top: 48px; 
+      }
+    </style>
+  
+  </head>
+  <body>
+
+    <div id="root">
+      <h6 class="mdc-typography mdc-typography--headline6 demo-headline">Log in to rsis</h6>
+
+      <form action="/api/login" method="POST">
+      <div class="mdc-text-field">
+        <input type="text" name="email"
+               id="my-text-field" 
+               class="mdc-text-field__input user-account-input">
+        <label class="mdc-floating-label" for="my-text-field">User Account</label>
+        <div class="mdc-line-ripple"></div>
+      </div>
+      <br/>
+      <div class="mdc-text-field">
+        <input type="text" name="password"
+               id="my-text-field" 
+               class="mdc-text-field__input password-input">
+        <label class="mdc-floating-label" for="my-text-field" >Password</label>
+        <div class="mdc-line-ripple"></div>
+      </div>
+      <br/>
+
+
+      <button class="mdc-button login-button" type="submit">LogIn</button>
+      </form>
+
+      <button class="mdc-button greet-button">Greet</button>      
+
+      <div class="mdc-typography mdc-typography--overline greet-message"></div>
+
+    </div>
+
+    <script>
+
+
+      /** Initialize MDC Web components. */
+      const buttons = document.querySelectorAll('.mdc-button');
+      for (const button of buttons) {
+        mdc.ripple.MDCRipple.attachTo(button);
+      }
+
+      const textFields = document.querySelectorAll('.mdc-text-field');
+      for (const textField of textFields) {
+        mdc.textField.MDCTextField.attachTo(textField);
+      }
+
+      /** Custom javascript code. */
+      const greetMessageEl = document.querySelector('.greet-message');
+      const greetButton = document.querySelector('.greet-button');
+      const loginButton = document.querySelector('.login-button');
+
+      greetButton.addEventListener('click', () => {
+        const userAccountInput = document.querySelector('.user-account-input').value;
+        const passwordInput = document.querySelector('.password-input').value;
+        let message;
+        if (userAccountInput || passwordInput) {
+          message = userAccountInput + ' ' + passwordInput;
+        } else {
+          message = 'Anonymous';
+        }
+        greetMessageEl.textContent = `Hello, ${message}!`;
+      });
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+.AgentsEditorWrapper 
+{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap:1px;
+  background-color: whitesmoke;
+}
+
+@media screen and (min-width: 1400px) 
+{  
+  .AgentsEditorWrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/*
+@media screen and (min-width: 1900px) 
+{  
+  .AgentsEditorWrapper {
+    grid-template-columns: 1fr 1fr 1fr;
+  }*/
+
+.AgentsEditorElement
+{
+  background-color: #0069b3;
+  /*display: flex;
+  justify-content: center;
+  align-items: left;*/
+  padding: 20px;
+  color: white;
+}
