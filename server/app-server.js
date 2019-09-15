@@ -5,7 +5,7 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 //const bodyParser = require('body-parser');
-const logger = require('morgan');
+const morgan = require('morgan');
 
 const passport = require('passport');  //passport must be before dbs-models
 const { 
@@ -35,7 +35,13 @@ app.use((req,res,next) => {
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + './../public/favicon.ico'));
 
-app.use(logger('dev'));
+let loggerTemplate = [
+  '[:date[web]]', ':status',  
+  //':remote-addr', ':remote-user',
+  ':method :url :response-time[0] ms - :res[content-length]'
+].join(' ');
+app.use(morgan(loggerTemplate)); // dev | common | combined |short
+
 app.use(express.json({
     limit : "5mb",
 }));

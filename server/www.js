@@ -5,8 +5,8 @@ const {
 const debug = require('debug')('rsisexpress:server');
 const http = require('http');
 const chalk = require('react-dev-utils/chalk');
-const icwd = require('fs').realpathSync(process.cwd());
 
+const icwd = require('fs').realpathSync(process.cwd());
 let version = require(`${icwd}/package.json`).version;
 
 // пока работает только через 'npm run compile'
@@ -46,10 +46,12 @@ const onError = error =>
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
+
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
       process.exit(1);
       break;
+
     default:
       throw error;
   }
@@ -66,21 +68,28 @@ const onListening = () => {
 };
 
 
-const serverOutput = mode => 
+const serverAppOutput = (outputMode, appVersion, httpserver) => 
 {  
-  switch (mode.toLowerCase()) {
+  let addr = httpserver.address();
+  let { address, family, port } = addr;
+  let bind = typeof addr === 'string' 
+    ? 'pipe ' + addr
+    : 'port ' + port;
+
+  switch (outputMode.toLowerCase()) {
     case 'full': 
-      console.log('Express server= ',  server);
+      console.log('Express server = ',  httpserver);
       return;
+
     case 'addr':
       // don't work on herokuapp.com: process.env.npm_package_version
-      console.log('\tapp version ', chalk.cyan(version));
+      console.log('\tapp version ', chalk.cyan(appVersion));
       console.log(
-        'Express server= "' + server.address().address +
-        '" Family= "' + server.address().family +'"\n',
-        ' listening on port ' + server.address().port
+        '\tExpress server = "' + address + '" Family= "' + family +'"\n',
+        '\tlistening on ' + bind
       );       
       return;
+
     default:
       console.log('\n');
   }
@@ -112,7 +121,7 @@ server.on('close', () => {
  */
 server.listen(port);
 
-serverOutput('addr');//'full');
+serverAppOutput('addr'/*'full'*/, version, server);
 
 
 // CAPTURE APP TERMINATION / RESTART EVENTS

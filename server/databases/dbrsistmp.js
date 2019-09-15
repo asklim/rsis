@@ -2,12 +2,13 @@
 const util = require('util');
 
 const { dbName } = require('../../src/config/enumvalues');
+let rsisDbName = dbName.rsistmp;
 const conn = require('./dbconnect');
 
 let title = 'rsis.tmp';
 let uri = util.format(process.env.CLOUDDB_URI_TEMPLATE,
   process.env.ATLAS_CREDENTIALS,
-  dbName.rsistmp
+  rsisDbName
 );
 
 switch (process.env.NODE_ENV) {
@@ -16,12 +17,12 @@ switch (process.env.NODE_ENV) {
   case 'production': 
     uri = util.format(process.env.CLOUDDB_URI_TEMPLATE,
       process.env.ATLAS_CREDENTIALS,
-      dbName.rsistmp
+      rsisDbName
     );
     break;
 
   default:
-    uri = process.env.MONGO_DEV1_URI+'/'+dbName.rsistmp;
+    uri = process.env.MONGO_DEV2_URI + '/' + rsisDbName;
      //var dbURI = 'mongodb://localhost:27016/rsistmp';    
 }      
 
