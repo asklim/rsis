@@ -16,6 +16,7 @@ const sendJSONresponse = (res, status, content) =>
   res.json(content);
 };
 
+
 /** 
  * Read a week summary Natural info by the XXI century weekId or 'last' 
  * GET /api/sum/weeknatural/:weekId
