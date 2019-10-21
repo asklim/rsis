@@ -2,6 +2,7 @@ require('dotenv').load();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 //const bodyParser = require('body-parser');
@@ -18,9 +19,10 @@ require('./passport'); //after db create models
 
 //const restRouter = require('./routes/rest-router');
 //var usersRouter = require('./routes/users-router');
-const apiRouter = require('./routes/api-router');
+
 
 const app = express();
+const apiRouter = require('./routes/api-router');
 
 // view engine setup
 app.set('views', path.join(__dirname, /*'server',*/ 'views'));
@@ -34,6 +36,8 @@ app.use((req,res,next) => {
 
 // uncomment after placing your favicon in /public
 app.use(favicon(__dirname + './../public/favicon.ico'));
+
+app.use(cors());
 
 let loggerTemplate = [
   '[:date[web]]', ':status',  
@@ -63,13 +67,11 @@ app.use('/api', apiRouter);
 app.get('*', 
   (req, res, next) => {
     console.log('server app: dirname is ', __dirname);
-    res.sendFile( path.resolve(
-        __dirname, 
-        '../static/index.html'
-        ),
-        err => {
-          if(err) { next(err); }
-        }
+    res.sendFile( 
+      path.resolve( __dirname, '../static/index.html' ),
+      err => {
+        if(err) { next(err); }
+      }
     );
 });
 
@@ -91,8 +93,8 @@ app.use( (err, req, res, next) => {
     res.locals.error = isDev ? err : {};
 
     // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+    res.status( err.status || 500 );
+    res.render( 'error' );
 });
 
 module.exports = {

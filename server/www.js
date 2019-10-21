@@ -2,7 +2,7 @@ const {
   app,
   databasesShutdown
 } = require('./app-server');
-const debug = require('debug')('rsisexpress:server');
+const debug = require('debug')('rsis:www');
 const http = require('http');
 const chalk = require('react-dev-utils/chalk');
 
@@ -68,9 +68,9 @@ const onListening = () => {
 };
 
 
-const serverAppOutput = (outputMode, appVersion, httpserver) => 
+const serverAppOutput = (outputMode, appVersion, httpServer) => 
 {  
-  let addr = httpserver.address();
+  let addr = httpServer.address();
   let { address, family, port } = addr;
   let bind = typeof addr === 'string' 
     ? 'pipe ' + addr
@@ -78,11 +78,10 @@ const serverAppOutput = (outputMode, appVersion, httpserver) =>
 
   switch (outputMode.toLowerCase()) {
     case 'full': 
-      console.log('Express server = ',  httpserver);
+      console.log('Express server = ',  httpServer);
       return;
 
     case 'addr':
-      // don't work on herokuapp.com: process.env.npm_package_version
       console.log('\tapp version ', chalk.cyan(appVersion));
       console.log(
         '\tExpress server = "' + address + '" Family= "' + family +'"\n',
@@ -100,7 +99,7 @@ const serverAppOutput = (outputMode, appVersion, httpserver) =>
 /*******************************************************
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '3666');
+const port = normalizePort(process.env.PORT || '3067');
 app.set('port', port);
 
 /**

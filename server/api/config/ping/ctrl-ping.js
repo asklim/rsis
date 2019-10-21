@@ -3,6 +3,9 @@ let db = require(`${icwd}/server/databases`).getDB('config');
 const Agent = db.model('Agent');
 db = require(`${icwd}/server/databases`).getDB('sum');
 const WeekNatural = db.model('WeekNatural');
+const HTTP = require(`${icwd}/src/config/httpResponseCodes`);
+
+var debug = require('debug')('api:config:ping');
 
 const sendJSONresponse = (res, status, content) =>
 {
@@ -12,7 +15,7 @@ const sendJSONresponse = (res, status, content) =>
 
 const response400 = (res, msg = 'Bad Request (invalid syntax)') => {
   // Bad Request (invalid syntax)
-  sendJSONresponse(res, 400, { message : msg});
+  sendJSONresponse(res, HTTP.BAD_REQUEST, { message : msg});
 };
 
 /** 
@@ -29,11 +32,11 @@ const response400 = (res, msg = 'Bad Request (invalid syntax)') => {
 module.exports.readOne = (req, res) =>
 {
   //params : {'app' | 'mongo'}
-  console.log('ctrl-ping.ROne: Finding params: ', req.params,
-              ' count: ', Object.keys(req.params).length );
-  //console.log('env.ROne: Finding query: ', req.query);  
+  let count = Object.keys(req.params).length;
+  debug('ctrl.ROne: params: %O count: %d', req.params, count);
+  //debug('ctrl.ROne: query: %O', req.query);  
 
-  if( Object.keys(req.params).length === 0) // должно быть
+  if( !count || count === 0) // должно быть
   {    
     response400( res, ".params is missing" );
     return;
@@ -47,17 +50,17 @@ module.exports.readOne = (req, res) =>
   }
 
   if(pingId.toLowerCase() === 'app') {    
-    sendJSONresponse( res, 200, {message : 'app'} );
+    sendJSONresponse( res, HTTP.OK, {message : 'app'} );
     return;      
   }
 
   if(pingId.toLowerCase() === 'mongocfg') {
     Agent.countDocuments({}, (err,count) => {
       if(err) {
-        sendJSONresponse( res, 503, {message : '-1'} );
+        sendJSONresponse( res, HTTP.SERVICE_UNAVAILABLE, {message : '-1'} );
         return;
       }            
-      sendJSONresponse( res, 200, {message : count.toString()} );
+      sendJSONresponse( res, HTTP.OK, {message : count.toString()} );
       return;      
     });
     return;
@@ -66,10 +69,10 @@ module.exports.readOne = (req, res) =>
   if(pingId.toLowerCase() === 'mongosum') {
     WeekNatural.countDocuments({}, (err,count) => {
       if(err) {
-        sendJSONresponse( res, 503, {message : '-1'} );
+        sendJSONresponse( res, HTTP.SERVICE_UNAVAILABLE, {message : '-1'} );
         return;
       }            
-      sendJSONresponse( res, 200, {message : count.toString()} );
+      sendJSONresponse( res, HTTP.OK, {message : count.toString()} );
       return;      
     });
     return;

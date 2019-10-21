@@ -1,9 +1,14 @@
+var debug = require('debug')('helper:sendToWebApp');
 const request = require('request');
 
+const icwd = require('fs').realpathSync(process.cwd());
+const HTTP = require(`${icwd}/src/config/httpResponseCodes`);
+/*
 const HTTP_OK = 200;
 const HTTP_CREATED = 201;
 const HTTP_CONFLICT = 409;
 const HTTP_SERVICE_UNAVAILABLE = 503;
+*/
 
 function sendTo (apiRoute, verb, reqBody, callback) {
   let webServerURL = process.env.API_SERVER;
@@ -18,13 +23,14 @@ function sendTo (apiRoute, verb, reqBody, callback) {
     json : reqBody,
     qs : {},
   }; 
-  
+  //debug('sendTo\n', reqBody);
+
   request( 
     reqOptions,
     (err, res, /*body*/) =>
     {  
       if(err) {
-        callback( HTTP_SERVICE_UNAVAILABLE );
+        callback( HTTP.SERVICE_UNAVAILABLE );
         return;   
       }
       callback( res.statusCode ); 
@@ -32,38 +38,43 @@ function sendTo (apiRoute, verb, reqBody, callback) {
 }
 
 
-function sendToWebApp (apiRoute, reqBody) {
+module.exports.sendToWebApp = (apiRoute, reqBody) => 
+{
   let { id, type } = reqBody;
-  let docMetaInfo = `type: ${type} id: ${id}`;
+  let docMetaInfo = ` - type: ${type} id: ${id}`;
+  debug( docMetaInfo );
 
   sendTo( apiRoute, "POST", reqBody,
     postStatus => 
     {
-      if( postStatus == HTTP_SERVICE_UNAVAILABLE ) {
-        console.log('WebApp Service UnAvailable, ' + docMetaInfo);
+      debug( ' - POST - %d', postStatus );
+      if( postStatus == HTTP.SERVICE_UNAVAILABLE ) {
+        console.log( 'WebApp Service UnAvailable, ' + docMetaInfo );
         return;
       }
  
-      if( postStatus == HTTP_CREATED ) {
-        console.log('WebApp document Created, ' + docMetaInfo);
+      if( postStatus == HTTP.CREATED ) {
+        console.log( 'WebApp document Created, ' + docMetaInfo );
         return;
       }
       
-      if( postStatus == HTTP_CONFLICT ) { //нельзя создать. Уже существует.
+      if( postStatus == HTTP.CONFLICT ) { //нельзя создать. Уже существует.
         sendTo( apiRoute, "PUT", reqBody,
           putStatus => 
           {
-            if( putStatus == HTTP_OK) {
-              console.log('WebApp document Updated, ' + docMetaInfo);
+            debug( 'sendToWebApp - PUT - %d', putStatus );
+            if( putStatus == HTTP.OK ) {
+              console.log( 'WebApp document Updated, ' + docMetaInfo );
               return;
             }
-            console.log('WebApp document sending FAILURE, ' + docMetaInfo);
+            console.log( 'WebApp document sending FAILURE, ' + docMetaInfo );
             return;
         });
       }   
   });
-}
+};
 
+/*
 module.export = {
   sendToWebApp,
-};
+};*/
