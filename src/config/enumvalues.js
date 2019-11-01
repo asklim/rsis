@@ -1,14 +1,4 @@
 /* */
-const dbName = {
-  rsiscfg : 'rsiscfg',
-  rsistmp : 'rsistmp',
-  rsissum : 'rsissum',
-  rsiswp : 'rsiswp',
-  rsiswc : 'rsiswc',
-  rsiswn : 'rsiswn'
-};
-
-
 const staffRole = { 
   DA : {  
               id : 'DA',  
@@ -72,7 +62,6 @@ const nextWorkDayTime = {
 module.exports = {
   staffRole,
   staffStatus,
-  dbName,
   procurementPeriods,
   nextWorkDayTime,
 };

@@ -1,8 +1,7 @@
-//'use strict';
-const util = require('util');
-
-const { dbName } = require('../../src/config/enumvalues');
 const conn = require('./dbconnect');
+const { 
+  dbName,
+  mongoURI } = require('../../src/config/enumvalues');
 
 const title = 'rsis.sum';
 let uri;
@@ -10,21 +9,13 @@ let uri;
 switch (process.env.NODE_ENV) {
   
   case 'production': 
-    //uri = process.env.CLOUDDB_SUM_URI;
-    uri = util.format(process.env.CLOUDDB_URI_TEMPLATE,
-      process.env.ATLAS_CREDENTIALS,
-      dbName.rsissum
-    );
-    break;
-
-  case 'intranet':
-    uri = process.env.MONGO_STANDALONE_URI+'/'+dbName.rsissum;
-    //var dbURI = 'mongodb://localhost:36667/rsissum';  
+    uri = mongoURI.STANDALONE+'/'+dbName.rsissum;
+    //var dbURI = 'mongodb://hp8710w:36667/rsissum';  
     break;
 
   default:
-    uri = process.env.MONGO_DEV1_URI+'/'+dbName.rsissum;
-     //var dbURI = 'mongodb://localhost:27016/rsissum';    
+    uri = mongoURI.DEV1+'/'+dbName.rsissum;
+     //var dbURI = 'mongodb://hp8710w:27017/rsissum';    
 }      
 
 const db = conn.createConn(uri, title);    

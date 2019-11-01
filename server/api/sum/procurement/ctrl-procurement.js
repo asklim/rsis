@@ -9,15 +9,18 @@ const dataset = require(`${icwd}/server/sample-datasets/procurement`);
 const { procurementPeriods : period } = require(`${icwd}/src/config/enumvalues`);
 const { needUnitsForPeriod } = require(`${icwd}/src/lib/utils/rsis`);
 
+const { NODE_ENV, API_SERVER } = process.env;
+const { API_SERVER_LOCAL } = require(`${icwd}/server/helpers/serverconfig`);
+
+const apiServer = NODE_ENV === 'production' ?
+  API_SERVER                   //'https://rsis-webapp.herokuapp.com'
+  : API_SERVER_LOCAL;
+
+
 const sendJSONresponse = (res, status, content) => {
   res.status(status);
   res.json(content);
 };
-
-const { PORT, NODE_ENV, API_SERVER } = process.env;
-const apiServer = NODE_ENV === 'production' ?
-  API_SERVER //'https://rsis-webapp.herokuapp.com'
-  : `http://kanote:${PORT}`;
 
 
 const fetchDataSet = ( hostname, weekId, callback ) => 
@@ -29,7 +32,7 @@ const fetchDataSet = ( hostname, weekId, callback ) =>
     return;
   }
     
-  const reqOptions = {
+  let reqOptions = {
     url : `${hostname}/api/sum/weeknatural/${weekId}`,
     method : "GET",
     headers : {
@@ -98,7 +101,7 @@ const readOne = (req, res) =>
       (err, data) =>
       {
         if (err) {
-          //console.log(err);
+          console.log(err);
           sendJSONresponse(res, 404, err);
           return;
         } 

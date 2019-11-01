@@ -1,29 +1,29 @@
-//'use strict';
 const util = require('util');
 
-const { dbName } = require('../../src/config/enumvalues');
-let rsisDbName = dbName.rsistmp;
 const conn = require('./dbconnect');
+const { 
+  dbName,
+  mongoURI } = require('../../src/config/enumvalues');
+
 
 let title = 'rsis.tmp';
-let uri = util.format(process.env.CLOUDDB_URI_TEMPLATE,
+let uri = util.format(mongoURI.CLOUDDB_TEMPLATE,
   process.env.ATLAS_CREDENTIALS,
-  rsisDbName
+  dbName.rsistmp
 );
 
 switch (process.env.NODE_ENV) {
 
-  case 'intranet':  
   case 'production': 
-    uri = util.format(process.env.CLOUDDB_URI_TEMPLATE,
+    uri = util.format(mongoURI.CLOUDDB_TEMPLATE,
       process.env.ATLAS_CREDENTIALS,
-      rsisDbName
+      dbName.rsistmp
     );
     break;
 
   default:
-    uri = process.env.MONGO_DEV2_URI + '/' + rsisDbName;
-     //var dbURI = 'mongodb://localhost:27016/rsistmp';    
+    uri = mongoURI.DEV2 + '/' + dbName.rsistmp;
+     //var dbURI = 'mongodb://hp8710w:27016/rsistmp';    
 }      
 
 const db = conn.createConn(uri, title);    
