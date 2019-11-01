@@ -1,36 +1,36 @@
-const conn = require('./dbconnect');
+const connection = require( './createConn' );
 const { 
   dbName,
-  mongoURI } = require('../../src/config/enumvalues');
+  mongoURI } = require( '../helpers/serverconfig' );
 
-const title = 'rsis.cfg';
+let title = 'rsis.cfg';
 let uri;
 
-switch (process.env.NODE_ENV) {
+switch( process.env.NODE_ENV ) {
   
   case 'production': 
-    uri = mongoURI.STANDALONE+'/'+dbName.rsiscfg;
+    uri = mongoURI.STANDALONE + '/' + dbName.rsiscfg;
     //var dbURI = 'mongodb://hp8710w:36667/rsiscfg';      
     break;
 
   default:
-    uri = mongoURI.DEV1+'/'+dbName.rsiscfg;
+    uri = mongoURI.DEV1 + '/' + dbName.rsiscfg;
      //var dbURI = 'mongodb://hp8710w:27017/rsiscfg';    
 }      
 
-const db = conn.createConn(uri, title);    
+const db = connection.createConn( uri, title );    
       
 
 // BRING IN YOUR SCHEMAS & MODELS
 
-const agentSchema = require('../models/agents');
-db.model('Agent', agentSchema, 'agents'); 
+const agentSchema = require( '../models/agents' );
+db.model( 'Agent', agentSchema, 'agents' ); 
 
-const userSchema = require('../models/users');
-db.model('User', userSchema, 'users'); 
+const userSchema = require( '../models/users' );
+db.model( 'User', userSchema, 'users' ); 
 
-const idMappingSchema = require('../models/catalogs').idMappingExcel;
-db.model('IdMappingExcel', idMappingSchema, 'catalogs'); 
+const idMappingSchema = require( '../models/catalogs' ).idMappingExcel;
+db.model( 'IdMappingExcel', idMappingSchema, 'catalogs' ); 
 
 
 module.exports = db;

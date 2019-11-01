@@ -15,12 +15,12 @@ var dbSum;
  */
 const getDB = dbType => 
 {    
-  if(typeof dbType !== 'string') {
-    console.log('dbType must be a string.');
+  if( typeof dbType !== 'string' ) {
+    console.log( 'dbType must be a string.' );
     return;
   }
-  //console.log('getDB : ',); 
-  switch (dbType.toLowerCase()) {
+  //console.log( 'getDB : ', ); 
+  switch( dbType.toLowerCase() ) {
     case 'config': return dbCfg;
     case   'temp': return dbTmp;
     case    'sum': return dbSum;
@@ -30,9 +30,9 @@ const getDB = dbType =>
 
 const createConns = () => 
 {
-  if(!dbCfg) { dbCfg = require('./dbrsiscfg'); }
-  if(!dbSum) { dbSum = require('./dbrsissum'); }
-  if(!dbTmp) { dbTmp = require('./dbrsistmp'); }
+  if( !dbCfg ) { dbCfg = require( './dbrsiscfg' ); }
+  if( !dbSum ) { dbSum = require( './dbrsissum' ); }
+  if( !dbTmp ) { dbTmp = require( './dbrsistmp' ); }
 };
 
 
@@ -45,12 +45,12 @@ const databasesShutdown = (msg, next) => {
     dbCfg.closeConn()
   ])
   .then( dbsNames => {
-    console.log('dbs closed: ', dbsNames);
-    console.log('Mongoose disconnected through ' + msg);
+    console.log( 'dbs closed: ', dbsNames );
+    console.log( 'Mongoose disconnected through ' + msg );
     next();  
   })
   .catch( error => {
-    console.log(error.message);
+    console.log( error.message );
   });
 };
 

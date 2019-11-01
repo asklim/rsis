@@ -1,30 +1,30 @@
-const conn = require('./dbconnect');
+const connection = require( './createConn' );
 const { 
   dbName,
-  mongoURI } = require('../../src/config/enumvalues');
+  mongoURI } = require( '../helpers/serverconfig' );
 
-const title = 'rsis.sum';
+let title = 'rsis.sum';
 let uri;
 
-switch (process.env.NODE_ENV) {
+switch( process.env.NODE_ENV ) {
   
   case 'production': 
-    uri = mongoURI.STANDALONE+'/'+dbName.rsissum;
+    uri = mongoURI.STANDALONE + '/' + dbName.rsissum;
     //var dbURI = 'mongodb://hp8710w:36667/rsissum';  
     break;
 
   default:
-    uri = mongoURI.DEV1+'/'+dbName.rsissum;
+    uri = mongoURI.DEV1 + '/' + dbName.rsissum;
      //var dbURI = 'mongodb://hp8710w:27017/rsissum';    
 }      
 
-const db = conn.createConn(uri, title);    
+const db = connection.createConn( uri, title );    
       
 
 // BRING IN YOUR SCHEMAS & MODELS
 
-const weekNaturalSchema = require('../api/sum/weeknatural/schm-weeknatural');
-db.model('WeekNatural', weekNaturalSchema, 'weekNatural'); 
+const weekNaturalSchema = require( '../api/sum/weeknatural/schm-weeknatural' );
+db.model( 'WeekNatural', weekNaturalSchema, 'weekNatural' ); 
 // last arg - collection`s name in MongoDB
 
 /*

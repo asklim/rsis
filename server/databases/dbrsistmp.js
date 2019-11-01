@@ -1,9 +1,9 @@
-const util = require('util');
+const util = require( 'util' );
 
-const conn = require('./dbconnect');
+const connection = require( './createConn' );
 const { 
   dbName,
-  mongoURI } = require('../../src/config/enumvalues');
+  mongoURI } = require( '../helpers/serverconfig' );
 
 
 let title = 'rsis.tmp';
@@ -12,10 +12,10 @@ let uri = util.format(mongoURI.CLOUDDB_TEMPLATE,
   dbName.rsistmp
 );
 
-switch (process.env.NODE_ENV) {
+switch( process.env.NODE_ENV ) {
 
   case 'production': 
-    uri = util.format(mongoURI.CLOUDDB_TEMPLATE,
+    uri = util.format( mongoURI.CLOUDDB_TEMPLATE,
       process.env.ATLAS_CREDENTIALS,
       dbName.rsistmp
     );
@@ -26,7 +26,7 @@ switch (process.env.NODE_ENV) {
      //var dbURI = 'mongodb://hp8710w:27016/rsistmp';    
 }      
 
-const db = conn.createConn(uri, title);    
+const db = connection.createConn( uri, title );    
       
 
 // BRING IN YOUR SCHEMAS & MODELS
