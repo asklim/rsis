@@ -1,19 +1,22 @@
+/*eslint-disable*/
 import React from "react";
-import PropTypes from "prop-types";
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
+import { makeStyles } from "@material-ui/core/styles";
 import Hidden from "@material-ui/core/Hidden";
+
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
 
-import iconsStyle from "assets/jss/views/iconsStyle.jsx";
+import styles from "assets/jss/m-d-r/views/iconsStyle.js";
 
-function Icons(props) {
-  const { classes } = props;
+const useStyles = makeStyles(styles);
+
+export default function Icons() {
+  const classes = useStyles();
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
@@ -23,9 +26,8 @@ function Icons(props) {
             <p className={classes.cardCategoryWhite}>
               Handcrafted by our friends from{" "}
               <a
-                href="https://design.google.com/icons/"
+                href="https://design.google.com/icons/?ref=creativetime"
                 target="_blank"
-                rel="noopener noreferrer"
               >
                 Google
               </a>
@@ -48,9 +50,8 @@ function Icons(props) {
                   the iframe is not working on Mobile and Tablets please visit
                   the icons on their original page on Google. Check the
                   <a
-                    href="https://design.google.com/icons/"
+                    href="https://design.google.com/icons/?ref=creativetime"
                     target="_blank"
-                    rel="noopener noreferrer"
                   >
                     Material Icons
                   </a>
@@ -63,9 +64,3 @@ function Icons(props) {
     </GridContainer>
   );
 }
-
-Icons.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(iconsStyle)(Icons);

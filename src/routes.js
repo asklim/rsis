@@ -14,17 +14,16 @@ import Fingerprint from '@material-ui/icons/Fingerprint';
 import DashboardPage from "./views/m-d-r/Dashboard.jsx";
 import ProcurementBoardPage from "./views/ProcurementBoard.jsx";
 import UserProfile from "./views/m-d-r/UserProfile.jsx";
-import DialogList from "./views/m-d-r/DialogList.jsx";
 import TableList from "./views/m-d-r/TableList.jsx";
 import Typography from "./views/m-d-r/Typography.jsx";
 import Icons from "./views/m-d-r/Icons.jsx";
 import Maps from "./views/m-d-r/Maps.jsx";
 import NotificationsPage from "./views/m-d-r/Notifications.jsx";
 import UpgradeToPro from "./views/m-d-r/UpgradeToPro.jsx";
-
-
 // core components/views for RTL layout
 import RTLPage from "./views/m-d-r/RTLPage.jsx";
+
+import DialogList from "./views/DialogList.jsx";
 
 const dashboardRoutes = [
   {

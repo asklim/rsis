@@ -1,22 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-
+import { makeStyles } from "@material-ui/core/styles";
 // core components
-import Quote from "components/Typography/Quote.jsx";
-import Muted from "components/Typography/Muted.jsx";
-import Primary from "components/Typography/Primary.jsx";
-import Info from "components/Typography/Info.jsx";
-import Success from "components/Typography/Success.jsx";
-import Warning from "components/Typography/Warning.jsx";
-import Danger from "components/Typography/Danger.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
+import Quote from "components/m-d-r/Typography/Quote.jsx";
+import Muted from "components/m-d-r/Typography/Muted.jsx";
+import Primary from "components/m-d-r/Typography/Primary.jsx";
+import Info from "components/m-d-r/Typography/Info.jsx";
+import Success from "components/m-d-r/Typography/Success.jsx";
+import Warning from "components/m-d-r/Typography/Warning.jsx";
+import Danger from "components/m-d-r/Typography/Danger.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
 
-const style = {
+const styles = {
   typo: {
     paddingLeft: "25%",
     marginBottom: "40px",
@@ -52,10 +49,11 @@ const style = {
     textDecoration: "none"
   }
 };
-function TypographyPage(props) 
-{
-  const { classes } = props;
 
+const useStyles = makeStyles(styles);
+
+export default function TypographyPage() {
+  const classes = useStyles();
   return (
     <Card>
       <CardHeader color="primary">
@@ -153,16 +151,12 @@ function TypographyPage(props)
           <h2>
             Header with small subtitle
             <br />
-            <small>{"Use \"Small\" tag for the headers"}</small>
+            <small>
+              Use {'"'}Small{'"'} tag for the headers
+            </small>
           </h2>
         </div>
       </CardBody>
     </Card>
   );
 }
-
-TypographyPage.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(style)(TypographyPage);

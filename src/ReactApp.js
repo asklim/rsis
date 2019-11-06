@@ -9,7 +9,7 @@ import Invoice from "layouts/Invoice.jsx";
 import RTL from "layouts/RTL.jsx";
 //import Whoops404 from "components/misc/Whoops404.jsx";
 
-import "assets/css/material-dashboard-react.css?v=1.6.0";
+import "assets/css/material-dashboard-react.css?v=1.8.0";
 
 const hist = createBrowserHistory();
 

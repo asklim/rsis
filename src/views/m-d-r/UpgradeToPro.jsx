@@ -1,22 +1,18 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-
+import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Close from "@material-ui/icons/Close";
 import Check from "@material-ui/icons/Check";
-
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Danger from "components/Typography/Danger.jsx";
-import Success from "components/Typography/Success.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import Danger from "components/m-d-r/Typography/Danger.jsx";
+import Success from "components/m-d-r/Typography/Success.jsx";
+import Button from "components/m-d-r/CustomButtons/Button.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
 
 const styles = {
   cardCategoryWhite: {
@@ -85,10 +81,10 @@ const styles = {
   }
 };
 
-function UpgradeToPro(props) 
-{
-  const { classes } = props;
+const useStyles = makeStyles(styles);
 
+export default function UpgradeToPro() {
+  const classes = useStyles();
   return (
     <GridContainer justify="center">
       <GridItem xs={12} sm={12} md={8}>
@@ -199,7 +195,7 @@ function UpgradeToPro(props)
                       <Button
                         round
                         color="danger"
-                        href="https://www.creative-tim.com/product/material-dashboard-pro-react?ref=md-free-react-upgrade-live"
+                        href="https://www.creative-tim.com/product/material-dashboard-pro-react?ref=mdr-upgrade-live"
                       >
                         Upgrade to Pro
                       </Button>
@@ -214,8 +210,3 @@ function UpgradeToPro(props)
     </GridContainer>
   );
 }
-
-UpgradeToPro.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-export default withStyles(styles)(UpgradeToPro);

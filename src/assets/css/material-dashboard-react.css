@@ -1,11 +1,11 @@
 /*!
 
  =========================================================
- * Material Dashboard React - v1.6.0 based on Material Dashboard - v1.2.0
+ * Material Dashboard React - v1.8.0 based on Material Dashboard - v1.2.0
  =========================================================
 
  * Product Page: http://www.creative-tim.com/product/material-dashboard-react
- * Copyright 2018 Creative Tim (http://www.creative-tim.com)
+ * Copyright 2019 Creative Tim (http://www.creative-tim.com)
  * Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/master/LICENSE.md)
 
  =========================================================
@@ -238,7 +238,6 @@ footer ul li a:hover {
     overflow-x: hidden;
   }
 }
-
 .fixed-plugin {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 300;
@@ -392,8 +391,8 @@ footer ul li a:hover {
 }
 
 .fixed-plugin .adjustments-line p {
-  float: left;
-  /*display: inline-block;*/
+  /*float: left;*/
+  display: inline-block;
   margin-bottom: 0;
   font-size: 1em;
   color: #3c4858;
@@ -506,4 +505,7 @@ footer ul li a:hover {
 .fixed-plugin.rtl-fixed-plugin .dropdown-menu {
   right: auto;
   left: 80px;
+}
+* {
+  letter-spacing: normal !important;
 }

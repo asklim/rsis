@@ -1,20 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
+import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
-
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardAvatar from "components/Card/CardAvatar.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import CustomInput from "components/m-d-r/CustomInput/CustomInput.jsx";
+import Button from "components/m-d-r/CustomButtons/Button.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardAvatar from "components/m-d-r/Card/CardAvatar.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
+import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
 
 import avatar from "assets/img/faces/marc.jpg";
 
@@ -37,10 +34,10 @@ const styles = {
   }
 };
 
-function UserProfile(props) 
-{
-  const { classes } = props;
+const useStyles = makeStyles(styles);
 
+export default function UserProfile() {
+  const classes = useStyles();
   return (
     <div>
       <GridContainer>
@@ -165,7 +162,7 @@ function UserProfile(props)
               <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
               <h4 className={classes.cardTitle}>Alec Thompson</h4>
               <p className={classes.description}>
-                Don&apos;t be scared of the truth because we need to restart the
+                Don{"'"}t be scared of the truth because we need to restart the
                 human foundation in truth And I love you like Kanye loves Kanye
                 I love Rick Owens’ bed design but the back is...
               </p>
@@ -179,9 +176,3 @@ function UserProfile(props)
     </div>
   );
 }
-
-UserProfile.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(UserProfile);

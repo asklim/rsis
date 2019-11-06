@@ -6,7 +6,7 @@ const icwd = require('fs').realpathSync(process.cwd());
 console.log(chalk.red('\tINIT_CWD is ', icwd)); // = '/app'
 
 const dataset = require(`${icwd}/server/sample-datasets/procurement`);
-const { procurementPeriods : period } = require(`${icwd}/src/config/enumvalues`);
+const { procurementPeriods : period } = require(`${icwd}/src/config/enumValues`);
 const { needUnitsForPeriod } = require(`${icwd}/src/lib/utils/rsis`);
 
 const { NODE_ENV, API_SERVER } = process.env;

@@ -36,25 +36,25 @@ import Accessibility from "@material-ui/icons/Accessibility";
 
 
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Table from "components/Table/Table.jsx";
-import CustomTabs from "components/CustomTabs/CustomTabs.jsx";
-import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
-//import Tasks from "components/Tasks/Tasks.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import Table from "components/m-d-r/Table/Table.jsx";
+import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.jsx";
+import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
+//import Tasks from "components/m-d-r/Tasks/Tasks.jsx";
 
 
 /*
-import Danger from "components/Typography/Danger.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardIcon from "components/Card/CardIcon.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import Danger from "components/m-d-r/Typography/Danger.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardIcon from "components/m-d-r/Card/CardIcon.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
+import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
 */
 
-import dashboardStyle from "assets/jss/views/dashboardStyle.jsx";
-import checkboxAdnRadioStyle from "assets/jss/material-dashboard-react/checkboxAdnRadioStyle.jsx";
+import dashboardStyle from "assets/jss/m-d-r/views/dashboardStyle.js";
+import checkboxAdnRadioStyle from "assets/jss/m-d-r/checkboxAdnRadioStyle.js";
 
 const procurementBoardStyle = {
   ...dashboardStyle,
@@ -63,7 +63,7 @@ const procurementBoardStyle = {
 
 import {
   procurementPeriods as days
-} from "config/enumvalues";
+} from "config/enumValues";
 
 
 

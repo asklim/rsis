@@ -1,29 +1,13 @@
-/* eslint-disable react/prop-types */
-
-import React, { useState } from "react";
-
+import React from "react";
 // @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-
+import { makeStyles } from "@material-ui/core/styles";
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Table from "components/Table/Table.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import Button from '@material-ui/core/Button';
-//import Fingerprint from '@material-ui/icons/Fingerprint';
-import Typography from '@material-ui/core/Typography';
-
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
-//import SimpleDialog from 'components/SimpleDialog/SimpleDialog.jsx';
-import TodosEditor from "components/TodosEditor/TodosEditor.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import Table from "components/m-d-r/Table/Table.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
 
 const styles = {
   cardCategoryWhite: {
@@ -55,93 +39,12 @@ const styles = {
   }
 };
 
-function AlertDialog() 
-{
-  const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('');
+const useStyles = makeStyles(styles);
 
-  function handleClickOpen() {
-    setOpen(true);
-  }
-
-  const handleClose = () => setOpen(false);
-  
-  function handleCloseYes() {
-    setOpen(false);
-    setSelectedValue('Yes');
-  }
-
-  function handleCloseNo() {
-    setOpen(false);
-    setSelectedValue('No');
-  }
-
-  return (
-    <div>
-      <span>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button>
-      <Typography 
-          variant="subtitle1"
-      >
-          Selected: {selectedValue}
-      </Typography>
-      </span>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title"
-        >
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseNo} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={handleCloseYes} color="primary" autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
-
-//const defaultEmails = ['username@gmail.com', 'user02@gmail.com'];
-
-function TableList(props) 
-{
-  const { classes } = props;
-/*
-  const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(emails[1]);
-
-  const fetchEmails = () => { return defaultEmails; };
-  const emails = fetchEmails();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = value => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-*/
+export default function TableList() {
+  const classes = useStyles();
   return (
     <GridContainer>
-      {/*console.log('TableList Props : ', props)*/}
-
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">
@@ -166,37 +69,6 @@ function TableList(props)
           </CardBody>
         </Card>
       </GridItem>
-
-      <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="rose">
-            <h4 className={classes.cardTitleWhite}>Todo List</h4>
-            <p className={classes.cardCategoryWhite}>
-              Simple sample for todos (input, check/uncheck, delete)
-            </p>
-          </CardHeader>
-          <CardBody>
-            <TodosEditor />
-          </CardBody>
-        </Card>
-      </GridItem>
-
-      <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="warning">
-            <h4 className={classes.cardTitleWhite}>Alert Dialog</h4>
-            <p className={classes.cardCategoryWhite}>
-              Simple Alert dialog w/Hooks
-            </p>
-          </CardHeader>
-          <CardBody>
-
-            <AlertDialog />
-
-          </CardBody>
-        </Card>
-      </GridItem>
-
       <GridItem xs={12} sm={12} md={12}>
         <Card plain>
           <CardHeader plain color="primary">
@@ -238,5 +110,3 @@ function TableList(props)
     </GridContainer>
   );
 }
-
-export default withStyles(styles)(TableList);
