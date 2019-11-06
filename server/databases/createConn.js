@@ -5,9 +5,11 @@ const infoDB = require('./infodb');
 
 module.exports.createConn = function( uri, title) {
 
-  const conn = mongoose.createConnection(uri, 
-                  { useNewUrlParser: true,
-                    useCreateIndex : true });
+  const conn = mongoose.createConnection( uri, 
+    { useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex : true }
+  );
 
   // CONNECTION EVENTS
   conn.on('connected', () => {
