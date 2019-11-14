@@ -1,25 +1,24 @@
 const connection = require( './createConn' );
 const { 
   dbName,
-  mongoURI } = require( '../helpers/serverconfig' );
+  mongoURI 
+} = require( '../helpers/serverconfig' );
+const { rsissum: databaseName } = dbName;
 
 let title = 'rsis.sum';
-let uri;
+/*let uri = ( process.env.NODE_ENV === 'production' ) 
+  ? mongoURI.STANDALONE + '/' + dbName.rsissum
+    //'mongodb://hp8710w:36667/rsissum';  
+  : mongoURI.DEV1 + '/' + dbName.rsissum;
+    //'mongodb://hp8710w:27017/rsissum';       
+*/
 
-switch( process.env.NODE_ENV ) {
-  
-  case 'production': 
-    uri = mongoURI.STANDALONE + '/' + dbName.rsissum;
-    //var dbURI = 'mongodb://hp8710w:36667/rsissum';  
-    break;
+//'mongodb://hp8710w:36667 || env.MONGO_DEV1 || hp8710w:27017
+let uri = ( process.env.NODE_ENV === 'production' ) 
+  ? ( process.env.MONGO_STANDALONE || mongoURI.STANDALONE )
+  : ( process.env.MONGO_DEV1 || mongoURI.DEV1 );
+const db = connection.createConn( `${uri}/${databaseName}`, title );   
 
-  default:
-    uri = mongoURI.DEV1 + '/' + dbName.rsissum;
-     //var dbURI = 'mongodb://hp8710w:27017/rsissum';    
-}      
-
-const db = connection.createConn( uri, title );    
-      
 
 // BRING IN YOUR SCHEMAS & MODELS
 

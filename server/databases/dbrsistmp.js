@@ -3,28 +3,18 @@ const util = require( 'util' );
 const connection = require( './createConn' );
 const { 
   dbName,
-  mongoURI } = require( '../helpers/serverconfig' );
-
+  mongoURI 
+} = require( '../helpers/serverconfig' );
+const { rsistmp: databaseName } = dbName;
 
 let title = 'rsis.tmp';
-let uri = util.format(mongoURI.CLOUDDB_TEMPLATE,
-  process.env.ATLAS_CREDENTIALS,
-  dbName.rsistmp
-);
-
-switch( process.env.NODE_ENV ) {
-
-  case 'production': 
-    uri = util.format( mongoURI.CLOUDDB_TEMPLATE,
+let uri = ( process.env.NODE_ENV === 'production' ) 
+  ? util.format( mongoURI.CLOUDDB_TEMPLATE,
       process.env.ATLAS_CREDENTIALS,
-      dbName.rsistmp
-    );
-    break;
-
-  default:
-    uri = mongoURI.DEV2 + '/' + dbName.rsistmp;
-     //var dbURI = 'mongodb://hp8710w:27016/rsistmp';    
-}      
+      databaseName 
+    )
+  : `${ process.env.MONGO_DEV2 || mongoURI.DEV2 }/${databaseName}`;
+  //var dbURI = 'mongodb://hp8710w:27016/rsistmp';       
 
 const db = connection.createConn( uri, title );    
       

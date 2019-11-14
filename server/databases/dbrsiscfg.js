@@ -1,24 +1,23 @@
 const connection = require( './createConn' );
 const { 
   dbName,
-  mongoURI } = require( '../helpers/serverconfig' );
+  mongoURI 
+} = require( '../helpers/serverconfig' );
+const { rsiscfg: databaseName } = dbName;
 
 let title = 'rsis.cfg';
-let uri;
+/*let uri = ( process.env.NODE_ENV === 'production' ) 
+  ? mongoURI.STANDALONE + '/' + dbName.rsiscfg
+    //'mongodb://hp8710w:36667/rsiscfg';  
+  : mongoURI.DEV1 + '/' + dbName.rsiscfg;
+    //'mongodb://hp8710w:27017/rsiscfg';     
+*/
 
-switch( process.env.NODE_ENV ) {
-  
-  case 'production': 
-    uri = mongoURI.STANDALONE + '/' + dbName.rsiscfg;
-    //var dbURI = 'mongodb://hp8710w:36667/rsiscfg';      
-    break;
-
-  default:
-    uri = mongoURI.DEV1 + '/' + dbName.rsiscfg;
-     //var dbURI = 'mongodb://hp8710w:27017/rsiscfg';    
-}      
-
-const db = connection.createConn( uri, title );    
+//'mongodb://hp8710w:36667 || env.MONGO_DEV1 || hp8710w:27017
+let uri = ( process.env.NODE_ENV === 'production' ) 
+  ? ( process.env.MONGO_STANDALONE || mongoURI.STANDALONE )
+  : ( process.env.MONGO_DEV1 || mongoURI.DEV1 );
+const db = connection.createConn( `${uri}/${databaseName}`, title );    
       
 
 // BRING IN YOUR SCHEMAS & MODELS

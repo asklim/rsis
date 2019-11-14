@@ -12,8 +12,8 @@ const { needUnitsForPeriod } = require(`${icwd}/src/lib/utils/rsis`);
 const { NODE_ENV, API_SERVER } = process.env;
 const { API_SERVER_LOCAL } = require(`${icwd}/server/helpers/serverconfig`);
 
-const apiServer = NODE_ENV === 'production' ?
-  API_SERVER                   //'https://rsis-webapp.herokuapp.com'
+const apiServer = NODE_ENV === 'production' 
+  ? API_SERVER                   //'https://rsis-webapp.herokuapp.com'
   : API_SERVER_LOCAL;
 
 
