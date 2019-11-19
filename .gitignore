@@ -1,3 +1,10 @@
+# dotenv environment variables file
+.env
+
+# microsoft office temporary documents
+~$*.*
+
+
 # Static Bootstrap map files
 /static/bootstrap/css/*.css.map
 static/
@@ -57,9 +64,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variables file
-.env
 
 # next.js build output
 .next

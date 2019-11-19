@@ -159,14 +159,14 @@ module.exports = function(webpackEnv)
 
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
-
+    context: paths.appBuild,
     // Stop compilation early in production
     bail: isEnvProduction,
     devtool: isEnvProduction
       ? shouldUseSourceMap
         ? 'source-map'
         : false
-      : isEnvDevelopment && 'inline-source-map',
+      : isEnvDevelopment && 'eval', //'inline-source-map',
     devServer: {
       contentBase: paths.appBuild,
       hot: true,
@@ -174,7 +174,8 @@ module.exports = function(webpackEnv)
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: [
-      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true',
+      //'react-hot-loader/patch',
+      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
       // Include an alternative client for WebpackDevServer. A client's job is to
       // connect to WebpackDevServer by a socket and get notified about changes.
       // When you save a file, the client will either apply hot updates (in case
@@ -347,6 +348,7 @@ module.exports = function(webpackEnv)
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
       alias: {
+        'react-dom': '@hot-loader/react-dom',
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
@@ -432,13 +434,11 @@ module.exports = function(webpackEnv)
               loader: require.resolve('babel-loader'),
               options: {
                 presets: ['@babel/preset-env', '@babel/preset-react'],
-                
-                // Плагин вызывает ReferenceError: dom is not defined !!!!!
                 customize: require.resolve(
                   'babel-preset-react-app/webpack-overrides'
-                ),
-                
+                ),                
                 plugins: [
+                  'react-hot-loader/babel',
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {

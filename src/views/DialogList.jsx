@@ -21,7 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import SimpleDialogDemoCC from "components/misc/SimpleDialog/SimpleDialogDemo.CC.jsx";
 import SimpleDialogDemoRFC from "components/misc/SimpleDialog/SimpleDialogDemo.jsx";
 import TodosEditor from "components/misc/TodosEditor/TodosEditor.jsx";
-import AlertDialog from "components/misc/AlertDialog/AlertDialog.jsx";
+import AlertDialog from "components/misc/AlertDialog/AlertDialog";
 
 import dashboard from "assets/jss/m-d-r/views/dashboardStyle.js";
 

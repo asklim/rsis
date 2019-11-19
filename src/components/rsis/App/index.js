@@ -1,13 +1,9 @@
-/*
 import { hot } from 'react-hot-loader';
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
-*/
-import React from "react";
-import ReactDOM from "react-dom";
-import App from 'components/rsis/App';
 
-/*
+import React from "react";
+
 // core components
 import Admin from "layouts/Admin.jsx";
 import Invoice from "layouts/Invoice.jsx";
@@ -19,7 +15,7 @@ import "assets/css/material-dashboard-react.css?v=1.8.0";
 const hist = createBrowserHistory();
 
 //console.log('running ReactApp');
-const App = () => hot(module)(
+const App = () =>
   <Router history={hist}>
   <Switch>
     <Route path="/admin" component={Admin} />
@@ -29,17 +25,9 @@ const App = () => hot(module)(
     <Redirect from="/i" to="/invoice/dashboard" />
     <Redirect from="/" to="/admin/dashboard" />     
 
-    {/*<Route component={Whoops404} />}
+    {/*<Route component={Whoops404} />*/}
   </Switch>
   </Router>
-);
-*/
+;
 
-ReactDOM.render( 
-  <App/>,
-  document.getElementById("react-app")
-);
-/*
-console.log(React);
-console.log(ReactDOM);
-*/
+export default hot(module)( App );

@@ -7,7 +7,8 @@
   "directories": {
     "lib": "/imports"
   },
-  "scripts": {
+  "scripts": {    
+    "production": "NODE_ENV=production npm run start",
     "/1/": "*******   for Heroku    *******",
     "start": "node server/www.js",
     "build": "node scripts/build.js",
@@ -20,7 +21,6 @@
     "bundleServerDev": "webpack --config webpack.serverdev.js",
     "bundleServerWeb": "webpack --config webpack.serverdev.js",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
-    "production": "NODE_ENV=production npm run start",
     "forever": "forever start --fifo --minUptime 1000 --spinSleepTime 1000 --killSignal=SIGINT static/server.bundle.js && forever list",
     "test": "npm run test:lib",
     "test:lib": "mocha \"./src/lib/**/*.spec.js\"",
@@ -95,12 +95,13 @@
     "postcss-safe-parser": "^4.0.1",
     "precss": "^4.0.0",
     "prop-types": "^15.7.2",
-    "react": "^16.9.0",
+    "react": "^16.12.0",
     "react-bootstrap": "^0.32.4",
     "react-chartist": "^0.13.3",
     "react-dev-utils": "^9.1.0",
-    "react-dom": "^16.9.0",
+    "react-dom": "^16.12.0",
     "react-google-maps": "^9.4.5",
+    "react-hot-loader": "^4.12.18",
     "react-icons": "^3.5.0",
     "react-router": "^5.1.0",
     "react-router-bootstrap": "^0.24.4",
@@ -126,6 +127,7 @@
   "//": "chai & mocha to '*' - last version",
   "devDependencies": {
     "@babel/cli": "^7.6.0",
+    "@hot-loader/react-dom": "^16.11.0",
     "clean-webpack-plugin": "^3.0.0",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.2.1",

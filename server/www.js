@@ -1,13 +1,13 @@
 const {
-  app,
+  app: rsisExpressApp,
   databasesShutdown
-} = require('./app-server');
-const debug = require('debug')('rsis:www');
-const http = require('http');
-const chalk = require('react-dev-utils/chalk');
+} = require( './app-server' );
+const debug = require( 'debug' )('rsis:www');
+const http = require( 'http' );
+const chalk = require( 'react-dev-utils/chalk' );
 
-const icwd = require('fs').realpathSync(process.cwd());
-let version = require(`${icwd}/package.json`).version;
+const icwd = require( 'fs' ).realpathSync( process.cwd() );
+let version = require( `${icwd}/package.json` ).version;
 
 // пока работает только через 'npm run compile'
 //import app from '../server/app-server';
@@ -19,8 +19,8 @@ let version = require(`${icwd}/package.json`).version;
  */
 const normalizePort = val =>
 {
-  let port = parseInt(val, 10);
-  if( isNaN(port) ) {  // named pipe
+  let port = parseInt( val, 10 );
+  if( isNaN( port ) ) {  // named pipe
     return val;
   }
   if( port >= 0 ) {    // port number
@@ -32,23 +32,23 @@ const normalizePort = val =>
 /**
  * Event listener for HTTP server "error" event.
  */
-const onError = error =>
+const handleOnError = error =>
 {
-  if (error.syscall !== 'listen') {
+  if( error.syscall !== 'listen' ) {
     throw error;
   }
   let bind = typeof port === 'string' ? 'Pipe ' + port
     : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
-  switch (error.code) {
+  switch( error.code ) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error( bind + ' requires elevated privileges' );
       process.exit(1);
       break;
 
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error( bind + ' is already in use' );
       process.exit(1);
       break;
 
@@ -60,23 +60,34 @@ const onError = error =>
 /**
  * Event listener for HTTP server "listening" event.
  */
-const onListening = () => {
+const handleOnListening = () => {
   let addr = server.address();
   let bind = typeof addr === 'string' ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug( 'Listening on ' + bind );
 };
 
 
-const serverAppOutput = (outputMode, appVersion, httpServer) => 
+const serverAppOutput = ( outputMode, appVersion, httpServer ) => 
 {  
   let addr = httpServer.address();
   let { address, family, port } = addr;
-  let bind = typeof addr === 'string' 
-    ? 'pipe ' + addr
+  let bind = typeof addr === 'string' ? 'pipe ' + addr
     : 'port ' + port;
 
-  switch (outputMode.toLowerCase()) {
+  const outputs = {
+    full: () => console.log('Express server = ',  httpServer),
+    addr: () => {
+            console.log('\tapp version ', chalk.cyan(appVersion));
+            console.log(
+              '\tExpress server = "' + address + '" Family= "' + family +'"\n',
+              '\tlistening on ' + bind );
+          },
+    default: () => console.log( '\n' )
+  };  
+  (outputs[ outputMode.toLowerCase() ] || outputs[ 'default' ])();
+
+/*  switch (outputMode.toLowerCase()) {
     case 'full': 
       console.log('Express server = ',  httpServer);
       return;
@@ -90,77 +101,65 @@ const serverAppOutput = (outputMode, appVersion, httpServer) =>
       return;
 
     default:
-      console.log('\n');
-  }
+      console.log( '\n' );
+  }*/
 };
-
 
 
 /*******************************************************
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '3067');
-app.set('port', port);
+const port = normalizePort( process.env.PORT || '3067' );
+rsisExpressApp.set( 'port', port );
 
 /**
  * Create HTTP server.
  */
-const server = http.createServer(app);
-server.on('error', onError);
-server.on('listening', onListening);
-server.on('clientError', (err, socket) => {
-  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+const server = http.createServer( rsisExpressApp );
+const shutdownTheServer = () => new Promise( 
+  (resolve /*, reject*/) => {  
+    server.close( () => {
+      console.log( 'http-server closed now.' );
+      resolve();
+    });
 });
-server.on('close', () => {
-  console.log('http-server closing ....');
-  }
-);
+
+server.on( 'error', handleOnError );
+server.on( 'listening', handleOnListening );
+server.on( 'clientError', (err, socket) => {
+  socket.end( 'HTTP/1.1 400 Bad Request\r\n\r\n' );
+});
+server.on( 'close', () => {
+  console.log( 'http-server closing ....' );
+});
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen(port);
+server.listen( port );
 
-serverAppOutput('addr'/*'full'*/, version, server);
+serverAppOutput( 'addr'/*'full'*/, version, server );
 
 
 // CAPTURE APP TERMINATION / RESTART EVENTS
-
-const serverClose = () => {
-  // eslint-disable-next-line no-unused-vars
-  return new Promise( (resolve, reject ) => {  
-    server.close( () => {
-      console.log('http-server closed now.');
-      resolve();
+// For nodemon restarts
+process.once( 'SIGUSR2', () => {
+  databasesShutdown( 'nodemon restart', () => { 
+    shutdownTheServer().then( () => {
+      process.kill( process.pid, 'SIGUSR2' ); 
     });
   });
-};
-
-// For nodemon restarts
-process.once('SIGUSR2', () => {
-    databasesShutdown('nodemon restart', 
-      () => { 
-        serverClose()
-        .then( () => {
-          process.kill( process.pid, 'SIGUSR2'); 
-        });
-    });
 });
 
 // For app termination
-process.on('SIGINT', () => {
-    databasesShutdown( 'app termination', 
-      () => { 
-        serverClose()
-        .then( () => { process.exit(0); });
-    });
+process.on( 'SIGINT', () => { 
+  databasesShutdown( 'app termination', () => {
+    shutdownTheServer().then( () => { process.exit(0); });
+  });
 });
 
 // For Heroku app termination
-process.on('SIGTERM', () => {
-    databasesShutdown( 'Heroku app termination', 
-      () => {
-        serverClose()
-        .then( () => { process.exit(0); });
-    });
+process.on( 'SIGTERM', () => {
+  databasesShutdown( 'Heroku app termination', () => {
+    shutdownTheServer().then( () => { process.exit(0); });
+  });
 });
-

@@ -1,14 +1,14 @@
+var debug = require('debug')('front:views:invoice');
 import 
   React, {
   useState,
   useEffect,
  // useCallback,
 } from "react";
-import PropTypes from "prop-types";
-
+//import PropTypes from "prop-types";
 
 // @material-ui/core
-import withStyles from "@material-ui/core/styles/withStyles";
+import { makeStyles } from "@material-ui/core/styles";
 import { 
   Checkbox,
   Radio, 
@@ -26,7 +26,7 @@ import {
   Battery50 as MiddlePeriod,
   Battery80 as LongPeriod,
   BatteryFull as XtraLongPeriod,
-  AddAlert,
+  //AddAlert,
   Check,
   //Store, Warning, DateRange, LocalOffer,
   //Update, ArrowUpward, AccessTime,  Accessibility
@@ -37,10 +37,8 @@ import GridItem from "components/m-d-r/Grid/GridItem.jsx";
 import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
 import Table from "components/m-d-r/Table/Table.jsx";
 import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.jsx";
-import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
+//import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
 //import Tasks from "components/m-d-r/Tasks/Tasks.jsx";
-
-
 /*
 import Danger from "components/m-d-r/Typography/Danger.jsx";
 import Card from "components/m-d-r/Card/Card.jsx";
@@ -50,46 +48,50 @@ import CardBody from "components/m-d-r/Card/CardBody.jsx";
 import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
 */
 
+import Loading from "components/misc/Loading.jsx";
+import DataLoadError from "components/misc/DataLoadError.jsx";
+
+import {
+  procurementPeriods as days,
+} from "config/enumValues";
+
 import dashboardStyle from "assets/jss/m-d-r/views/dashboardStyle.js";
 import checkboxAdnRadioStyle from "assets/jss/m-d-r/checkboxAdnRadioStyle.js";
 
-const procurementBoardStyle = {
+const useStyles = makeStyles( {
   ...dashboardStyle,
   ...checkboxAdnRadioStyle,
-};
-
-import {
-  procurementPeriods as days
-} from "config/enumValues";
+});
 
 
-
-const ProcurementBoardPage = (props) => {
+export default function ProcurementBoardPage() {
   
-  const freqValues = ['last','avrg','max'];
-  const fromValues = ['ru','by','eu'];
+  const freqValues = ['last', 'avrg', 'max'];
+  const fromValues = ['ru', 'by', 'eu'];
 
-  const [filterByFreq, setFilterByFreq] = useState(freqValues[0]);
-  const [filterByFrom, setFilterByFrom] = useState(fromValues);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [serverDataset, setServerDataset] = useState([]);           // Array of Hash 
+  const [filterByFreq, setFilterByFreq] = useState( freqValues[0] );
+  const [filterByFrom, setFilterByFrom] = useState( fromValues );
+  const [isLoaded, setIsLoaded] = useState( false );
+  const [isDataLoadingError, setIsDataLoadingError] = useState( false );
+  const [serverDataset, setServerDataset] = useState( [] );        // Array of Hash 
   //  /server/sample-datasets/procurements.js
   // Viewing lists for Table
-  const [shortPeriod, setShortPeriod] = useState([]);  // Array of Array
-  const [middlePeriod, setMiddlePeriod] = useState([]);
-  const [longPeriod, setLongPeriod] = useState([]);
-  const [xtraLongPeriod, setXtraLongPeriod] = useState([]);
+  const [shortPeriod, setShortPeriod] = useState( [] );  // Array of Array
+  const [middlePeriod, setMiddlePeriod] = useState( [] );
+  const [longPeriod, setLongPeriod] = useState( [] );
+  const [xtraLongPeriod, setXtraLongPeriod] = useState( [] );
 
+  const [dataServerResponse, setDataServerResponse] = useState( {} );
 
-  const tableHeader = ( period ) => {
+  const tableHeader = period => {
     const lineCount = {
-      sp : shortPeriod.length,
-      mp : middlePeriod.length,
-      lp : longPeriod.length,
-      xlp : xtraLongPeriod.length,
+       sp: shortPeriod.length,
+       mp: middlePeriod.length,
+       lp: longPeriod.length,
+      xlp: xtraLongPeriod.length,
     };
     return [
-      '#', 'La', 'Av', 'Mx', `Название (${lineCount[period]})`
+      '#', 'La', 'Av', 'Mx', `Название (${lineCount[ period ]})`
     ];    
   };
 
@@ -102,13 +104,13 @@ const ProcurementBoardPage = (props) => {
 
   const handleFromFilterClick = from => 
     (/*event,oldValue?*/) => {
-      const currentIndex = filterByFrom.indexOf(from);
-      const newChecked = [...filterByFrom];
+      const currentIndex = filterByFrom.indexOf( from );
+      const newChecked = [ ...filterByFrom ];
 
-      if (currentIndex === -1) {
-          newChecked.push(from);
+      if( currentIndex === -1 ) {
+          newChecked.push( from );
       } else {
-          newChecked.splice(currentIndex, 1);
+          newChecked.splice( currentIndex, 1 );
       }
       updateViewingLists( null, newChecked );
       setFilterByFrom( newChecked );
@@ -123,15 +125,15 @@ const ProcurementBoardPage = (props) => {
   } */
 
       const isFromIntersected = (item, fromFilter) => { 
-        const itemFroms = item.from.split(',').map(x => x.toLowerCase());
+        const itemFroms = item.from.split( ',' ).map( x => x.toLowerCase() );
         //console.log('isIntersected : ', itemFroms);
-        const result = fromFilter.filter(x => itemFroms.includes(x));
+        const result = fromFilter.filter( x => itemFroms.includes( x ));
         return result.length !== 0;
       };
   
       const serverDatasetFilter = ( period, freqId, fromFilter ) => {
         return ( 
-          item => item[period][freqId] > 0 &&
+          item => item[ period ][ freqId ] > 0 &&
           isFromIntersected( item, fromFilter )
         );
       };
@@ -144,144 +146,147 @@ const ProcurementBoardPage = (props) => {
         .filter( filtering ) // item => item[period][freqId] > 0 ) 
         .map( (item, key) => {
           return [ 
-            (key+1).toString(),  
-            item[period][0].toString(), // last 
-            item[period][1].toString(), // average 
-            item[period][2].toString(), // max
+            ( key+1 ).toString(),  
+            item[ period ][0].toString(), // last 
+            item[ period ][1].toString(), // average 
+            item[ period ][2].toString(), // max
             item.name
           ];
         });
       //console.log("convertToView : ", freqId, hashs.length, viewList.length ); 
-      const p = Promise.resolve(viewList); 
-      //console.log("convertToView : ", p);
+      const p = Promise.resolve( viewList ); 
+      //console.log( "convertToView : ", p );
       return p;
     };
 
   const updateViewingLists = ( freq, from ) => {  
     //console.log("updateViewLists freq, from ", freq, from);
-    if(!freq) { freq = filterByFreq; }
-    if(!from) { from = filterByFrom; } 
+    if( !freq ) { freq = filterByFreq; }
+    if( !from ) { from = filterByFrom; } 
     //console.log("updateViewLists oldState ", oldState);
     Promise.all([
       convertToViewList( 'sp', freq, from ),
       convertToViewList( 'mp', freq, from ),
       convertToViewList( 'lp', freq, from ),
-      convertToViewList( 'xlp', freq, from )
+      convertToViewList('xlp', freq, from )
     ])
     .then( lists => {     
       setShortPeriod( lists[0] );
       setMiddlePeriod( lists[1] );
       setLongPeriod( lists[2] );
       setXtraLongPeriod( lists[3] );
-    //console.log("updateViewLists ", lists.map( item => item.length ));       
+    //console.log( "updateViewLists ", lists.map( item => item.length ));       
     });
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchLists = () => {    
-    let route = window.location.origin;
+    let route;
+    console.log( 'fetchLists .origin: ', window.location.origin ); 
+    route = window.location.origin;  
     route += '/api/sum/procurement/last';
-    //console.log('ProcurementBoard.fetchLists route: ', route);    
-    fetch(route,{
-      headers : {
-        "Content-Type" : "application/json",
-        "Cache-Control" : 'no-cache, no-store',
-        "charset" : "utf-8"
+    console.log( 'fetchLists route: ', route ); 
+    debug( 'fetchLists route: %s', route );  // не работает !!! ???
+    let headers = {
+      mode: "cors",
+      credentials: "omit",
+      "Content-Type" : "application/json",
+      "Cache-Control" : 'no-cache, no-store',
+      charset : "utf-8"
+    };
+    fetch( route, { headers } )
+    .then( response => {
+      if( !response.ok ) {
+        setDataServerResponse( response );
+        setIsDataLoadingError( true );
+        console.log( 'fetch is not ok', response );
+        throw new Error( 'Ответ сети был не ok.' );
       }
-    })
-    .then( response => response.json())  // '[{}, ..., {}]'      
+      return response.json();    
+    })  // '[{}, ..., {}]'      
     .then( hashs => {
       //console.log('fetch Lists hash Length: ', hashs.length); //is Ok: 444
       //return Promise.resolve( 
       setServerDataset( hashs );
-      //console.log(filterByFreq, filterByFrom);
+      //console.log(filterByFreq, filterByFrom);      
       setIsLoaded( true );      
-    }) /*
-    .then( () => {        
-      // =0 ???????????
-      console.log('fetch Lists serverDataset Length: ', serverDataset.length);
-      console.log("Update ViewLists after fetch from server.");
-      return Promise.resolve(
-        updateViewingLists( filterByFreq, filterByFrom )
-      );      
-    })*/
-    .catch(err => {
+      setIsDataLoadingError( false );
+    }) 
+    .catch( err => {
       setIsLoaded( false );
-      console.log(err); 
+      setIsDataLoadingError( true );
+      console.log('ProcBoard.fetch catch ', err ); 
+      debug( 'fetch is catch.' );
     });    
   };
 
   //Эффект применяется после рендеринга и только 1 раз
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => fetchLists(), []);
-  useEffect(
-    () => {
-      updateViewingLists( filterByFreq, filterByFrom );
-    },
+  useEffect( () => fetchLists(), []);
+
+  useEffect( () => {
+    updateViewingLists( filterByFreq, filterByFrom ); },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [serverDataset]
   );
   
   const isFilterByFromChecked = index =>
-    filterByFrom.includes(fromValues[index]);
+    filterByFrom.includes( fromValues[ index ] );
 
-  const { classes } = props;
+  const classes = useStyles(); 
+      
+  if( isDataLoadingError ) {
+    return (
+      <DataLoadError fetchapiResponse = {dataServerResponse}/>
+    );
+  }
+  if( !isLoaded ) { return <Loading/>; }
 
-  return !isLoaded ?
-  (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={8} lg={4}>
-      <SnackbarContent
-        message = {'Loading ... Wait please...'}
-        color="info"
-        icon={AddAlert}
-      />
-      </GridItem>
-    </GridContainer>
-  ):(
+     
+  return (
     <div>
     <GridContainer>
       <GridItem xs={5} sm={4} md={3} lg={2}> 
-        <FormControl component="fieldset" className={classes.formControl}>
-        <FormLabel component="legend">По продажам</FormLabel>
+        <FormControl component = "fieldset" className = {classes.formControl}>
+        <FormLabel component = "legend">По продажам</FormLabel>
         <RadioGroup
-          aria-label="SelectOnFreq"
-          name="FilterByFreq"
-          className={classes.group}
-          value={filterByFreq}
-          onChange={handleFilterByFreqChange}
+          aria-label = "SelectOnFreq"
+          name = "FilterByFreq"
+          className = {classes.group}
+          value = {filterByFreq}
+          onChange = {handleFilterByFreqChange}
         >
           <FormControlLabel 
-            value={freqValues[0]} 
-            control={<Radio />} 
-            label="Last"
+            value = {freqValues[0]} 
+            control = {<Radio />} 
+            label = "Last"
           />
           <FormControlLabel 
-            value={freqValues[1]}  
-            control={<Radio />} 
-            label="Средние" 
+            value = {freqValues[1]}  
+            control = {<Radio />} 
+            label = "Средние" 
           />
           <FormControlLabel 
-            value={freqValues[2]}  
-            control={<Radio />} 
-            label="Maximal" 
+            value = {freqValues[2]}  
+            control = {<Radio />} 
+            label = "Maximal" 
           />
         </RadioGroup>
         </FormControl>       
       </GridItem>
       <GridItem xs={5} sm={4} md={3} lg={2}> 
-      <FormControl component="fieldset" className={classes.formControl}>
-      <FormLabel component="legend">Откуда</FormLabel>
+      <FormControl component = "fieldset" className = {classes.formControl}>
+      <FormLabel component = "legend">Откуда</FormLabel>
       <FormGroup>
           <FormControlLabel
             control = {
               <Checkbox
-                checked={isFilterByFromChecked(0)}
-                tabIndex={-1}
-                onClick={handleFromFilterClick(fromValues[0])}
-                checkedIcon={<Check className={classes.checkedIcon}/>}
-                icon={<Check className={classes.uncheckedIcon}/>}
-                classes={{ checked: classes.checked }}
+                checked = {isFilterByFromChecked(0)}
+                tabIndex = {-1}
+                onClick = {handleFromFilterClick( fromValues[0] )}
+                checkedIcon = {<Check className = {classes.checkedIcon}/>}
+                icon = {<Check className = {classes.uncheckedIcon}/>}
+                classes = {{ checked: classes.checked }}
               />
             }
             label="RU"
@@ -289,25 +294,25 @@ const ProcurementBoardPage = (props) => {
           <FormControlLabel
             control = {
               <Checkbox
-                checked={isFilterByFromChecked(1)}
-                tabIndex={-1}
-                onClick={handleFromFilterClick(fromValues[1])}
-                checkedIcon={<Check className={classes.checkedIcon}/>}
-                icon={<Check className={classes.uncheckedIcon}/>}
-                classes={{ checked: classes.checked }}
+                checked = {isFilterByFromChecked(1)}
+                tabIndex = {-1}
+                onClick = {handleFromFilterClick( fromValues[1] )}
+                checkedIcon = {<Check className={classes.checkedIcon}/>}
+                icon = {<Check className={classes.uncheckedIcon}/>}
+                classes = {{ checked: classes.checked }}
               />
             }
-            label="BY"
+            label = "BY"
           />
           <FormControlLabel
             control = {
               <Checkbox
-                checked={isFilterByFromChecked(2)}
-                tabIndex={-1}
-                onClick={handleFromFilterClick(fromValues[2])}
-                checkedIcon={<Check className={classes.checkedIcon}/>}
-                icon={<Check className={classes.uncheckedIcon}/>}
-                classes={{ checked: classes.checked }}
+                checked = {isFilterByFromChecked(2)}
+                tabIndex = {-1}
+                onClick = {handleFromFilterClick( fromValues[2] )}
+                checkedIcon = {<Check className={classes.checkedIcon}/>}
+                icon = {<Check className={classes.uncheckedIcon}/>}
+                classes = {{ checked: classes.checked }}
               />
             }
             label="EU"
@@ -321,17 +326,17 @@ const ProcurementBoardPage = (props) => {
     <GridContainer>  
       <GridItem xs={12} sm={10} md={8} lg={6}>
         <CustomTabs
-          title="Заказ на:"
-          headerColor="primary"
-          tabs={[
+          title = "Заказ на:"
+          headerColor = "primary"
+          tabs = {[
             {
               tabName: `${days.short} дней`,
               tabIcon: ShortPeriod,
               tabContent: (
                 <Table
-                  tableHeaderColor="danger"
-                  tableHead={tableHeader('sp')}
-                  tableData={shortPeriod}
+                  tableHeaderColor = "danger"
+                  tableHead = {tableHeader('sp')}
+                  tableData = {shortPeriod}
                 />
               )
             },
@@ -340,9 +345,9 @@ const ProcurementBoardPage = (props) => {
               tabIcon: MiddlePeriod,
               tabContent: (
                 <Table
-                  tableHeaderColor="warning"
-                  tableHead={tableHeader('mp')}
-                  tableData={middlePeriod}
+                  tableHeaderColor = "warning"
+                  tableHead = {tableHeader('mp')}
+                  tableData = {middlePeriod}
                 />
               )
             },
@@ -351,9 +356,9 @@ const ProcurementBoardPage = (props) => {
               tabIcon: LongPeriod,
               tabContent: (
                 <Table
-                  tableHeaderColor="primary"
-                  tableHead={tableHeader('lp')}
-                  tableData={longPeriod}
+                  tableHeaderColor = "primary"
+                  tableHead = {tableHeader('lp')}
+                  tableData = {longPeriod}
                 />
               )
             },
@@ -362,9 +367,9 @@ const ProcurementBoardPage = (props) => {
               tabIcon: XtraLongPeriod,
               tabContent: (
                 <Table
-                  tableHeaderColor="info"
-                  tableHead={tableHeader('xlp')}
-                  tableData={xtraLongPeriod}
+                  tableHeaderColor = "info"
+                  tableHead = {tableHeader('xlp')}
+                  tableData = {xtraLongPeriod}
                 />
               )
             }
@@ -375,10 +380,4 @@ const ProcurementBoardPage = (props) => {
     </GridContainer>
     </div>
   );
-};
-
-ProcurementBoardPage.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(procurementBoardStyle)(ProcurementBoardPage);
+}

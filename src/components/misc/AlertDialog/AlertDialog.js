@@ -33,43 +33,42 @@ const AlertDialog = () =>
   return (
     <div>
       <span>
-      <Button 
-        variant = "outlined" 
-        color = "primary" 
-        onClick = {handleClickOpen}
+      <Button onClick ={handleClickOpen}
+        variant ="outlined" 
+        color ="primary"         
       >
         Open alert dialog
       </Button>
-      <Typography 
-        variant="subtitle1"
-      >
+      <Typography variant ="subtitle1">
           Selected: {selectedValue}
       </Typography>
       </span>
-      <Dialog
-        open = {open}
-        onClose = {handleClose}
-        aria-labelledby = "alert-dialog-title"
-        aria-describedby = "alert-dialog-description"
+
+      <Dialog open ={open} onClose ={handleClose}
+        aria-labelledby ="alert-dialog-title"
+        aria-describedby ="alert-dialog-description"
       >
-        <DialogTitle id = "alert-dialog-title"
+        <DialogTitle id ="alert-dialog-title"
         >
           {"Use Google's location service?"}
         </DialogTitle>
+
         <DialogContent>
-          <DialogContentText id = "alert-dialog-description">
+          <DialogContentText id ="alert-dialog-description">
             Let Google help apps determine location. This means sending anonymous location data to
             Google, even when no apps are running.
           </DialogContentText>
         </DialogContent>
+
         <DialogActions>
-          <Button onClick = {handleCloseNo} color = "primary">
+          <Button onClick ={handleCloseNo} color ="primary">
             Disagree
           </Button>
-          <Button onClick = {handleCloseYes} color = "primary" autoFocus>
+          <Button onClick ={handleCloseYes} color ="primary" autoFocus>
             Agree
           </Button>
         </DialogActions>
+        
       </Dialog>
     </div>
   );

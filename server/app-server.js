@@ -11,7 +11,7 @@ const icwd = require( 'fs' ).realpathSync( process.cwd() );
 
 const isProduction = process.env.NODE_ENV === 'production';
 const webpack = isProduction ? null : require( 'webpack' );
-const configFactory = isProduction ? null : require(`${icwd}/config/webpackNodeHMR.config`);
+const configFactory = isProduction ? null : require(`${icwd}/config/wdmNodeHMR.config`);
 const webpackDevMiddleware = isProduction ? null : require('webpack-dev-middleware');
 
 const passport = require( 'passport' );  //passport must be before dbs-models
@@ -22,10 +22,6 @@ const {
 createConns();
 
 require( './passport' ); //after db create models
-
-//const restRouter = require('./routes/rest-router');
-//var usersRouter = require('./routes/users-router');
-
 
 const app = express();
 const apiRouter = require( './routes/api-router' );
@@ -63,23 +59,24 @@ app.use( express.urlencoded({
  }));
 app.use( cookieParser() );
 
-if( !isProduction ) {
-  const webpackConfig = configFactory( 'development' );
-  const compiler = webpack( webpackConfig );
-  const devServerOption = {
-    loglevel: 'debug', //'info' - default
-    publicPath: webpackConfig.output.publicPath,
-  };
-  console.log( 'develop Middleware config: ', devServerOption );
-  app.use( webpackDevMiddleware( compiler, devServerOption ));
-  app.use( require('webpack-hot-middleware')(compiler));
-}
-
 app.use( express.static( path.join( `${icwd}/static` )));
 
 app.use( '/api', apiRouter );
-//app.use('/users', usersRouter);
-//app.use('*', restRouter);
+
+if( !isProduction ) {
+  const webpackConfig = configFactory( 'development' );
+  const compiler = webpack( webpackConfig );
+  const wdmOption = {
+    loglevel: 'debug', //'info' - default
+    publicPath: webpackConfig.output.publicPath,
+  };
+  console.log( 'webpack-dev-middleware (wdm) config: ', wdmOption );
+  app.use( webpackDevMiddleware( compiler, wdmOption ));
+  app.use( require( 'webpack-hot-middleware' )( compiler, {
+    path: '/__webpack_hmr',
+    heartbeat: 10 * 1000,
+  }));
+}
 
 app.get( '*', 
   (req, res, next) => {
@@ -96,7 +93,7 @@ app.get( '*',
 app.use( (req, res, next) => {
     next( createError( 404 ), req, res );
 });
- 
+
 // error handler
 // eslint-disable-next-line no-unused-vars
 app.use( (err, req, res, next) => { 
@@ -114,6 +111,7 @@ app.use( (err, req, res, next) => {
     res.status( err.status || 500 );
     res.render( 'error' );
 });
+
 
 module.exports = {
   app,
