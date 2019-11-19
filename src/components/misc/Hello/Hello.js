@@ -1,6 +1,6 @@
 import React from 'react';
-import Comments from './Comments.jsx';
-import News from './News.jsx';
+import Comments from './Comments.js';
+import News from './News.js';
 
 export default class Hello extends React.Component {
   // displayName: 'Hello',

@@ -2,16 +2,16 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
-import Quote from "components/m-d-r/Typography/Quote.jsx";
-import Muted from "components/m-d-r/Typography/Muted.jsx";
-import Primary from "components/m-d-r/Typography/Primary.jsx";
-import Info from "components/m-d-r/Typography/Info.jsx";
-import Success from "components/m-d-r/Typography/Success.jsx";
-import Warning from "components/m-d-r/Typography/Warning.jsx";
-import Danger from "components/m-d-r/Typography/Danger.jsx";
-import Card from "components/m-d-r/Card/Card.jsx";
-import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
-import CardBody from "components/m-d-r/Card/CardBody.jsx";
+import Quote from "components/m-d-r/Typography/Quote.js";
+import Muted from "components/m-d-r/Typography/Muted.js";
+import Primary from "components/m-d-r/Typography/Primary.js";
+import Info from "components/m-d-r/Typography/Info.js";
+import Success from "components/m-d-r/Typography/Success.js";
+import Warning from "components/m-d-r/Typography/Warning.js";
+import Danger from "components/m-d-r/Typography/Danger.js";
+import Card from "components/m-d-r/Card/Card.js";
+import CardHeader from "components/m-d-r/Card/CardHeader.js";
+import CardBody from "components/m-d-r/Card/CardBody.js";
 
 const styles = {
   typo: {

@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import SimpleDialog from './SimpleDialog.CC.jsx';
+import SimpleDialog from './SimpleDialog.CC.js';
 import styles from './simpleDialogStyle.js';
 
 

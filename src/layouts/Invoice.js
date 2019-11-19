@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types*/
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+//import PropTypes from "prop-types";
+import { Switch, Route /*, Redirect*/ } from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -9,24 +11,25 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { makeStyles } from "@material-ui/core/styles";
 
 // core components
-import Navbar from "components/m-d-r/Navbars/Navbar.jsx";
-import Footer from "components/m-d-r/Footer/Footer.jsx";
-import Sidebar from "components/m-d-r/Sidebar/Sidebar.jsx";
-import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.jsx";
+import Navbar from "components/m-d-r/Navbars/Navbar.js";
+import Footer from "components/m-d-r/Footer/Footer.js";
+import Sidebar from "components/m-d-r/Sidebar/Sidebar.js";
+import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
+import Whoops404 from "components/misc/Whoops404.js";
+import routes from "./InvoiceRoutes.js";
 
-import styles from "assets/jss/m-d-r/layouts/rtlStyle.js";
+import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/reactlogo.png";
+import logo from "assets/img/reactlogo.png"; // must be an image
 
 let ps;
 
 const switchRoutes = (
   <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/rtl") {
+    {routes.map( (prop, key) => {
+      if( prop.layout === "/invoice" ) {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -37,93 +40,112 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/rtl" to="/rtl/rtl-page" />
+    <Route component={Whoops404} />
   </Switch>
 );
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles( styles );
 
-export default function RTL({ ...rest }) {
+export default function InvoiceBoard( {...rest} )
+{
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
-  const [image, setImage] = React.useState(bgImage);
-  const [color, setColor] = React.useState("blue");
-  const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [image, setImage] = React.useState( bgImage );
+  const [color, setColor] = React.useState( "blue" );
+  const [fixedClasses, setFixedClasses] = React.useState( "dropdown show" );
+  const [mobileOpen, setMobileOpen] = React.useState( false );
+  //hasImage: true
+
   const handleImageClick = image => {
-    setImage(image);
+    setImage( image );
   };
+
   const handleColorClick = color => {
-    setColor(color);
+    setColor( color );
   };
+
   const handleFixedClick = () => {
-    if (fixedClasses === "dropdown") {
-      setFixedClasses("dropdown show");
-    } else {
-      setFixedClasses("dropdown");
+    if( fixedClasses === "dropdown" ) {
+      setFixedClasses( "dropdown show" );
+    } 
+    else {
+      setFixedClasses( "dropdown" );
     }
   };
+
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    setMobileOpen( !mobileOpen );
   };
-  const getRoute = () => {
-    return window.location.pathname !== "/admin/maps";
-  };
+
   const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
+    if( window.innerWidth >= 960 ) {
+      setMobileOpen( false );
     }
   };
+
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
-      ps = new PerfectScrollbar(mainPanel.current, {
+      ps = new PerfectScrollbar( mainPanel.current, {
         suppressScrollX: true,
         suppressScrollY: false
       });
       document.body.style.overflow = "hidden";
     }
-    window.addEventListener("resize", resizeFunction);
+    window.addEventListener( "resize", resizeFunction );
     // Specify how to clean up after this effect:
     return function cleanup() {
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
       window.removeEventListener("resize", resizeFunction);
-    };
+    };  
   }, [mainPanel]);
+/*
+  componentDidUpdate(e) {
+    if (e.history.location.pathname !== e.location.pathname) {
+      // eslint-disable-next-line react/no-string-refs
+      this.refs.mainPanel.scrollTop = 0;
+      if (this.state.mobileOpen) {
+        this.setState({ mobileOpen: false });
+      }
+    }
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeFunction);
+  }
+*/
+
   return (
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"الإبداعية تيم"}
+        logoText={"Invoice Board"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         color={color}
-        rtlActive
         {...rest}
       />
+      {/* eslint-disable-next-line react/no-string-refs */}
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
-          rtlActive
           {...rest}
         />
-        {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-        {getRoute() ? (
+
           <div className={classes.content}>
-            <div className={classes.container}>{switchRoutes}</div>
+            <div className={classes.container}>
+              {switchRoutes}
+            </div>
           </div>
-        ) : (
-          <div className={classes.map}>{switchRoutes}</div>
-        )}
-        {getRoute() ? <Footer /> : null}
+      
+        <Footer />
         <FixedPlugin
           handleImageClick={handleImageClick}
           handleColorClick={handleColorClick}
@@ -131,9 +153,9 @@ export default function RTL({ ...rest }) {
           bgImage={image}
           handleFixedClick={handleFixedClick}
           fixedClasses={fixedClasses}
-          rtlActive
         />
       </div>
     </div>
   );
 }
+

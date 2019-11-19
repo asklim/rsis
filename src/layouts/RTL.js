@@ -9,14 +9,14 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { makeStyles } from "@material-ui/core/styles";
 
 // core components
-import Navbar from "components/m-d-r/Navbars/Navbar.jsx";
-import Footer from "components/m-d-r/Footer/Footer.jsx";
-import Sidebar from "components/m-d-r/Sidebar/Sidebar.jsx";
-import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.jsx";
+import Navbar from "components/m-d-r/Navbars/Navbar.js";
+import Footer from "components/m-d-r/Footer/Footer.js";
+import Sidebar from "components/m-d-r/Sidebar/Sidebar.js";
+import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
-import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
+import styles from "assets/jss/m-d-r/layouts/rtlStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
@@ -26,7 +26,7 @@ let ps;
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+      if (prop.layout === "/rtl") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -37,13 +37,13 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/admin" to="/admin/dashboard" />
+    <Redirect from="/rtl" to="/rtl/rtl-page" />
   </Switch>
 );
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({ ...rest }) {
+export default function RTL({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -53,7 +53,6 @@ export default function Admin({ ...rest }) {
   const [color, setColor] = React.useState("blue");
   const [fixedClasses, setFixedClasses] = React.useState("dropdown show");
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
   const handleImageClick = image => {
     setImage(image);
   };
@@ -100,18 +99,20 @@ export default function Admin({ ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"Creative AsKlim"}
+        logoText={"الإبداعية تيم"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}
         open={mobileOpen}
         color={color}
+        rtlActive
         {...rest}
       />
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
+          rtlActive
           {...rest}
         />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
@@ -130,6 +131,7 @@ export default function Admin({ ...rest }) {
           bgImage={image}
           handleFixedClick={handleFixedClick}
           fixedClasses={fixedClasses}
+          rtlActive
         />
       </div>
     </div>

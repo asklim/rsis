@@ -3,15 +3,15 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.jsx";
-import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
-import CustomInput from "components/m-d-r/CustomInput/CustomInput.jsx";
-import Button from "components/m-d-r/CustomButtons/Button.jsx";
-import Card from "components/m-d-r/Card/Card.jsx";
-import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
-import CardAvatar from "components/m-d-r/Card/CardAvatar.jsx";
-import CardBody from "components/m-d-r/Card/CardBody.jsx";
-import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.js";
+import GridContainer from "components/m-d-r/Grid/GridContainer.js";
+import CustomInput from "components/m-d-r/CustomInput/CustomInput.js";
+import Button from "components/m-d-r/CustomButtons/Button.js";
+import Card from "components/m-d-r/Card/Card.js";
+import CardHeader from "components/m-d-r/Card/CardHeader.js";
+import CardAvatar from "components/m-d-r/Card/CardAvatar.js";
+import CardBody from "components/m-d-r/Card/CardBody.js";
+import CardFooter from "components/m-d-r/Card/CardFooter.js";
 
 import avatar from "assets/img/faces/marc.jpg";
 

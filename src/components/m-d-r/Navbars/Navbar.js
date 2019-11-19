@@ -10,9 +10,9 @@ import Hidden from "@material-ui/core/Hidden";
 // @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
 // core components
-import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
-import RTLNavbarLinks from "./RTLNavbarLinks.jsx";
-import Button from "../CustomButtons/Button.jsx";
+import AdminNavbarLinks from "./AdminNavbarLinks.js";
+import RTLNavbarLinks from "./RTLNavbarLinks.js";
+import Button from "../CustomButtons/Button.js";
 
 import styles from "assets/jss/m-d-r/components/headerStyle.js";
 

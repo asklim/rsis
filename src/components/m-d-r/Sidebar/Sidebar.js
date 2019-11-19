@@ -12,8 +12,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
-import AdminNavbarLinks from "../Navbars/AdminNavbarLinks.jsx";
-import RTLNavbarLinks from "../Navbars/RTLNavbarLinks.jsx";
+import AdminNavbarLinks from "../Navbars/AdminNavbarLinks.js";
+import RTLNavbarLinks from "../Navbars/RTLNavbarLinks.js";
 
 import styles from "assets/jss/m-d-r/components/sidebarStyle.js";
 

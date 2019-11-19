@@ -6,21 +6,21 @@ import React  from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.jsx";
-import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
-import Table from "components/m-d-r/Table/Table.jsx";
-import Card from "components/m-d-r/Card/Card.jsx";
-import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
-import CardBody from "components/m-d-r/Card/CardBody.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.js";
+import GridContainer from "components/m-d-r/Grid/GridContainer.js";
+import Table from "components/m-d-r/Table/Table.js";
+import Card from "components/m-d-r/Card/Card.js";
+import CardHeader from "components/m-d-r/Card/CardHeader.js";
+import CardBody from "components/m-d-r/Card/CardBody.js";
 //import Fingerprint from '@material-ui/icons/Fingerprint';
 /*
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 */
 
-import SimpleDialogDemoCC from "components/misc/SimpleDialog/SimpleDialogDemo.CC.jsx";
-import SimpleDialogDemoRFC from "components/misc/SimpleDialog/SimpleDialogDemo.jsx";
-import TodosEditor from "components/misc/TodosEditor/TodosEditor.jsx";
+import SimpleDialogDemoCC from "components/misc/SimpleDialog/SimpleDialogDemo.CC.js";
+import SimpleDialogDemoRFC from "components/misc/SimpleDialog/SimpleDialogDemo.js";
+import TodosEditor from "components/misc/TodosEditor/TodosEditor.js";
 import AlertDialog from "components/misc/AlertDialog/AlertDialog";
 
 import dashboard from "assets/jss/m-d-r/views/dashboardStyle.js";

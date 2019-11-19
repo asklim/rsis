@@ -20,20 +20,20 @@ import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
 
 // core components
-import Button from "components/m-d-r/CustomButtons/Button.jsx";
-import GridItem from "components/m-d-r/Grid/GridItem.jsx";
-import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
-import Table from "components/m-d-r/Table/Table.jsx";
-import Tasks from "components/m-d-r/Tasks/Tasks.jsx";
-import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.jsx";
-import Danger from "components/m-d-r/Typography/Danger.jsx";
-import Card from "components/m-d-r/Card/Card.jsx";
-import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
-import CardAvatar from "components/m-d-r/Card/CardAvatar.jsx";
-import CardIcon from "components/m-d-r/Card/CardIcon.jsx";
-import CardBody from "components/m-d-r/Card/CardBody.jsx";
-import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
-import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
+import Button from "components/m-d-r/CustomButtons/Button.js";
+import GridItem from "components/m-d-r/Grid/GridItem.js";
+import GridContainer from "components/m-d-r/Grid/GridContainer.js";
+import Table from "components/m-d-r/Table/Table.js";
+import Tasks from "components/m-d-r/Tasks/Tasks.js";
+import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.js";
+import Danger from "components/m-d-r/Typography/Danger.js";
+import Card from "components/m-d-r/Card/Card.js";
+import CardHeader from "components/m-d-r/Card/CardHeader.js";
+import CardAvatar from "components/m-d-r/Card/CardAvatar.js";
+import CardIcon from "components/m-d-r/Card/CardIcon.js";
+import CardBody from "components/m-d-r/Card/CardBody.js";
+import CardFooter from "components/m-d-r/Card/CardFooter.js";
+import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.js";
 
 import {
   dailySalesChart,

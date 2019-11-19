@@ -9,9 +9,9 @@ import {
 } from "@material-ui/icons";
 
 // core components/views for Invoice layout
-import DashboardPage from "../views/m-d-r/Dashboard.jsx";
-import DialogList from "../views/DialogList.jsx";
-import ProcurementBoardPage from "../views/ProcurementBoard.jsx";
+import DashboardPage from "../views/m-d-r/Dashboard.js";
+import DialogList from "../views/DialogList.js";
+import ProcurementBoardPage from "../views/ProcurementBoard.js";
 
 
 const dashboardRoutes = [

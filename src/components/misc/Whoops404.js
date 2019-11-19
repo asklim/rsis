@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.jsx";
-import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
-import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.js";
+import GridContainer from "components/m-d-r/Grid/GridContainer.js";
+import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.js";
 
 // @material-ui/icons
 import AddAlert from "@material-ui/icons/AddAlert";

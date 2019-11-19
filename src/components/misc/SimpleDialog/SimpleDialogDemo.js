@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import SimpleDialog from './SimpleDialog.jsx';
+import SimpleDialog from './SimpleDialog.js';
 import styles from './simpleDialogStyle.js';
 
 const emails = ['FunctionComp@gmail.com', 'ReactFC@gmail.com'];

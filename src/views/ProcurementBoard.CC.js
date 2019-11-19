@@ -36,21 +36,21 @@ import Accessibility from "@material-ui/icons/Accessibility";
 
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.jsx";
-import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
-import Table from "components/m-d-r/Table/Table.jsx";
-import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.jsx";
-import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
-//import Tasks from "components/m-d-r/Tasks/Tasks.jsx";
+import GridItem from "components/m-d-r/Grid/GridItem.js";
+import GridContainer from "components/m-d-r/Grid/GridContainer.js";
+import Table from "components/m-d-r/Table/Table.js";
+import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.js";
+import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.js";
+//import Tasks from "components/m-d-r/Tasks/Tasks.js";
 
 
 /*
-import Danger from "components/m-d-r/Typography/Danger.jsx";
-import Card from "components/m-d-r/Card/Card.jsx";
-import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
-import CardIcon from "components/m-d-r/Card/CardIcon.jsx";
-import CardBody from "components/m-d-r/Card/CardBody.jsx";
-import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
+import Danger from "components/m-d-r/Typography/Danger.js";
+import Card from "components/m-d-r/Card/Card.js";
+import CardHeader from "components/m-d-r/Card/CardHeader.js";
+import CardIcon from "components/m-d-r/Card/CardIcon.js";
+import CardBody from "components/m-d-r/Card/CardBody.js";
+import CardFooter from "components/m-d-r/Card/CardFooter.js";
 */
 
 import dashboardStyle from "assets/jss/m-d-r/views/dashboardStyle.js";

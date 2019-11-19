@@ -1,8 +1,8 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 
-import SaleplaceFull from './SaleplaceFull.jsx';
-import SaleplacesSummary from './SaleplacesSummary.jsx';
+import SaleplaceFull from './SaleplaceFull.js';
+import SaleplacesSummary from './SaleplacesSummary.js';
 
 
 export default class SaleplacesList extends React.Component {
