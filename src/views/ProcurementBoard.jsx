@@ -232,7 +232,7 @@ const ProcurementBoardPage = (props) => {
     <GridContainer>
       <GridItem xs={12} sm={12} md={8} lg={4}>
       <SnackbarContent
-        message = {'Loading ...'}
+        message = {'Loading ... Wait please...'}
         color="info"
         icon={AddAlert}
       />

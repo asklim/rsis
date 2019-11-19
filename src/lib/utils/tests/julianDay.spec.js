@@ -1,7 +1,10 @@
 
 const utils = require('../utils');
-const { datesAsString,
-      datesAsDate } = require('./dataset-helper');
+const { 
+  datesAsString,
+  datesAsDate,
+  datesSet,
+} = require('./dataset-helper');
 const expect = require('chai').expect
   , should = require('chai').should();
 
@@ -10,14 +13,14 @@ const assert = require('assert');
 describe("function julianDay() testing ...", 
 () => {
 
-  datesAsString()
+  datesAsString( datesSet )
   .forEach( elem => {
     it(`${elem[0]} is ${elem[2]} julian day.`, () => {
       utils.julianDay(elem[0]).should.be.equal(elem[2]);
     });  
   });
 
-  datesAsDate()
+  datesAsDate( datesSet )
   .forEach( elem => {
     it(`${elem[0]} is ${elem[2]} julian day.`, () => {
       utils.julianDay(elem[0]).should.be.equal(elem[2]);

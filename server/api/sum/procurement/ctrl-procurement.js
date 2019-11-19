@@ -7,7 +7,7 @@ console.log(chalk.red('\tINIT_CWD is ', icwd)); // = '/app'
 
 const dataset = require(`${icwd}/server/sample-datasets/procurement`);
 const { procurementPeriods : period } = require(`${icwd}/src/config/enumValues`);
-const { needUnitsForPeriod } = require(`${icwd}/src/lib/utils/rsis`);
+const { needUnitsForPeriod } = require(`${icwd}/src/lib/rsis`);
 
 const { NODE_ENV, API_SERVER } = process.env;
 const { API_SERVER_LOCAL } = require(`${icwd}/server/helpers/serverconfig`);

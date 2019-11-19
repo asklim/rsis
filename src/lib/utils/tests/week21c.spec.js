@@ -1,7 +1,10 @@
 
-var { week21c } = require('./week21c');
-var { datesAsString,
-      datesAsDate } = require('./dataset-helper');
+const { week21c } = require('../index');
+const { 
+  datesAsString,
+  datesAsDate,
+  datesSet,
+} = require('./dataset-helper');
 var expect = require('chai').expect
   , should = require('chai').should();
 
@@ -24,14 +27,14 @@ describe("function week21c() testing ...", () => {
   });
 
   
-  datesAsString()
+  datesAsString( datesSet )
   .forEach( elem => {
     it(`${elem[0]} is ${elem[1]} week.`, () => {
       week21c(elem[0]).should.be.equal(elem[1]);
     });  
   });
 
-  datesAsDate()
+  datesAsDate( datesSet )
   .forEach( elem => {
     it(`${elem[0]} is ${elem[1]} week.`, () => {
       week21c(elem[0]).should.be.equal(elem[1]);

@@ -1,5 +1,5 @@
 
-const { needUnitsForPeriod } = require('../../utils/rsis');
+const { needUnitsForPeriod } = require('..');
 
 const 
 //  expect = require('chai').expect,

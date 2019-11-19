@@ -32,7 +32,7 @@ const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
 const useYarn = fs.existsSync(paths.yarnLockFile);
-const isInteractive = process.stdout.isTTY;
+const isInteractive = process.stdout.isTTY;      // =true
 
 //console.log('before checkRequiredFiles');
 
@@ -68,14 +68,11 @@ if (process.env.HOST) {
 // browserslist defaults.
 const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 
-checkBrowsers(
-  paths.appPath, 
-  isInteractive
-  )
-  // We attempt to use the default port but if it is busy, we offer the user to
-  // run on a different port.
-  // `choosePort()` Promise resolves to the next free port.  
+checkBrowsers( paths.appPath, isInteractive ) 
   .then(() => {
+    // We attempt to use the default port but if it is busy, we offer the user to
+    // run on a different port.
+    // `choosePort()` Promise resolves to the next free port. 
     return choosePort(HOST, DEFAULT_PORT);
   })
   .then(port => {
@@ -87,6 +84,7 @@ checkBrowsers(
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require(paths.appPackageJson).name;
     const useTypeScript = fs.existsSync(paths.appTsConfig);
+    const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
     const urls = prepareUrls(protocol, HOST, port);
     const devSocket = {
       warnings: warnings =>
@@ -95,15 +93,19 @@ checkBrowsers(
         devServer.sockWrite(devServer.sockets, 'errors', errors),
     };
     // Create a webpack compiler that is configured with custom messages.
-    const compiler = createCompiler({
+    const compilerOptions = {
       appName,
       config,
       devSocket,
       urls,
       useYarn,
       useTypeScript,
+      tscCompileOnError,
       webpack,
-    });
+    };
+    console.log('compiler`s options: ', compilerOptions );
+    const compiler = createCompiler( compilerOptions );
+
     // Load proxy config
     const proxySetting = require(paths.appPackageJson).proxy;
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
@@ -114,21 +116,36 @@ checkBrowsers(
     );
 
     //console.log('before create DevServer');
-    //console.log(compiler);
-    console.log(serverConfig);
+    //console.log(serverConfig);
 
     const devServer = new WebpackDevServer(compiler, serverConfig);
-    console.log(devServer);
-    
+    // console.log( devServer );
+    // console.log( 'isInteractive = ', isInteractive ); //true
+       
+    //throw new Error('stop dev server');
+
     // Launch WebpackDevServer.
     console.log('after create DevServer');
-    devServer.listen(port, HOST, err => {
+    devServer.listen(port, HOST, (err) => {
       if (err) {
         return console.log(err);
       }
       if (isInteractive) {
         //clearConsole();
       }
+
+      // We used to support resolving modules according to `NODE_PATH`.
+      // This now has been deprecated in favor of jsconfig/tsconfig.json
+      // This lets you use absolute paths in imports inside large monorepos:
+      if (process.env.NODE_PATH) {
+        console.log(
+          chalk.yellow(
+            'Setting NODE_PATH to resolve modules absolutely has been deprecated in favor of setting baseUrl in jsconfig.json (or tsconfig.json if you are using TypeScript) and will be removed in a future major release of create-react-app.'
+          )
+        );
+        console.log();
+      }
+
       console.log(chalk.cyan('Starting the development server...\n'));
       //openBrowser(urls.localUrlForBrowser);
     });

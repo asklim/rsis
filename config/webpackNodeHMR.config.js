@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const resolve = require('resolve');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -165,16 +166,15 @@ module.exports = function(webpackEnv)
       ? shouldUseSourceMap
         ? 'source-map'
         : false
-      : isEnvDevelopment && 'cheap-module-source-map',
-
+      : isEnvDevelopment && 'inline-source-map',
+    devServer: {
+      contentBase: paths.appBuild,
+      hot: true,
+    },
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
-    entry : 
-    /*{
-      app : paths.appIndexJs //'./src/ReactApp.js'
-    }*/
-
-    [
+    entry: [
+      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true',
       // Include an alternative client for WebpackDevServer. A client's job is to
       // connect to WebpackDevServer by a socket and get notified about changes.
       // When you save a file, the client will either apply hot updates (in case
@@ -185,8 +185,8 @@ module.exports = function(webpackEnv)
       // the line below with these two lines if you prefer the stock client:
       //require.resolve('webpack-dev-server/client') + '?/',
       //require.resolve('webpack/hot/dev-server'),
-      isEnvDevelopment &&
-        require.resolve('react-dev-utils/webpackHotDevClient'),
+      //isEnvDevelopment &&
+      //require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       paths.appIndexJs,
       // We include the app code last so that if there is a runtime error during
@@ -574,11 +574,14 @@ module.exports = function(webpackEnv)
       ],
     },
     plugins: [
+      new CleanWebpackPlugin(),
+
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
           {},
           {
+            title: 'HMR Management',
             inject: true,
             template: paths.appHtml,
           },
@@ -630,6 +633,8 @@ module.exports = function(webpackEnv)
        
       // This is necessary to emit hot updates (currently CSS only):
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
+
+      isEnvDevelopment && new webpack.NoEmitOnErrorsPlugin(),
 
       // Watcher doesn't work well if you mistype casing in a path so we use
       // a plugin that prints an error when you attempt to do this.

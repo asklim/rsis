@@ -1,8 +1,12 @@
 // @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
-import AddBox from "@material-ui/icons/AddBoxOutlined";
-import Fingerprint from '@material-ui/icons/Fingerprint';
-
+//import Dashboard from "@material-ui/icons/Dashboard";
+//import AddBox from "@material-ui/icons/AddBoxOutlined";
+//import Fingerprint from '@material-ui/icons/Fingerprint';
+import {
+  AddBoxOutlined,
+  ArrowBack,
+  Fingerprint,
+} from "@material-ui/icons";
 
 // core components/views for Invoice layout
 import DashboardPage from "../views/m-d-r/Dashboard.jsx";
@@ -13,9 +17,9 @@ import ProcurementBoardPage from "../views/ProcurementBoard.jsx";
 const dashboardRoutes = [
   {
     path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "rtl_admin",
-    icon: Dashboard,
+    name: "Back to Dashboard",
+    rtlName: "rtl_Back",
+    icon: ArrowBack,      //Dashboard,
     component: DashboardPage,
     layout: "/admin"
   },
@@ -23,7 +27,7 @@ const dashboardRoutes = [
     path: "/procurement",
     name: "Procurement",
     rtlName: "rtl_procurement",
-    icon: AddBox,
+    icon: AddBoxOutlined,
     component: ProcurementBoardPage,
     layout: "/invoice"
   },

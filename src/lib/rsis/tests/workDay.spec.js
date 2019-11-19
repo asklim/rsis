@@ -1,5 +1,5 @@
 
-const { workDay } = require('../../utils/rsis');
+const { workDay } = require('..');
 
 const 
 //  expect = require('chai').expect,

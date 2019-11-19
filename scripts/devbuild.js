@@ -67,16 +67,13 @@ if (process.env.HOST) {
   console.log();
 }
 
-//console.log('before checkBrowsers');
+console.log( 'before checkBrowsers, isInteractive', isInteractive );
 
 // We require that you explictly set browsers and do not fall back to
 // browserslist defaults.
 const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 
-checkBrowsers(
-  paths.appPath, 
-  isInteractive
-  )
+checkBrowsers( paths.appPath, isInteractive )
   // First, read the current file sizes in build directory.
   // This lets us display how much they changed later.  
   .then(() => {

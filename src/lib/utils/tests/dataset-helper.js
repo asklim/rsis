@@ -1,5 +1,5 @@
 
-const dataSet = [
+const datesSet = [
   ['2019-02-27', 948, 2458542],
   ['2001-01-08', 2, 2451918, 'Mon'],
   ['2001-01-07', 1, 2451917, 'Sun'],
@@ -33,8 +33,7 @@ const dataSet = [
 // Данные раньше 1901 года
 // Требуется доработка функции и правильности данных
 
-const dataSet19c = [ 
-
+const dates19Century = [ 
   ['1900-01-02', -5269, 2415021, 'Tue'],
   ['1900-01-01', -5269, 2415020, 'Mon, First day in Excel'],
   ['1899-12-31', -5270, 2415019, 'Sun'],
@@ -48,35 +47,22 @@ const dataSet19c = [
  // ['-4713-11-23', -350271, 1, 'First Julian day JDN=1']
 ];
 
-function datesAsString() {
 
-  return dataSet.map( 
-    elem => {
-      return [ 
-          elem[0] 
-        , elem[1]
-        , elem[2]
-      ];
-  });         
-}
-
+const datesAsString = (dates) => dates.map( 
+    (elem) => [ elem[0], elem[1], elem[2], ]
+);         
 
 /**
  *  Создаем массив из Date вместо строк
 **/
-function datesAsDate() {
-
-  return dataSet.map( 
-    elem => {
-      return [ 
-        new Date(elem[0])
-        , elem[1]
-        , elem[2]
-      ];
-  });         
-}
+const datesAsDate = (dates) => dates.map( 
+    (elem) => [ new Date( elem[0]), elem[1], elem[2] ]
+);
 
 module.exports = {
-  datesAsString
-  , datesAsDate
+  datesAsString,
+  datesAsDate
+  ,
+  datesSet,
+  dates19Century,
 };
