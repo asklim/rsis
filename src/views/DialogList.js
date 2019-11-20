@@ -13,14 +13,13 @@ import Card from "components/m-d-r/Card/Card.js";
 import CardHeader from "components/m-d-r/Card/CardHeader.js";
 import CardBody from "components/m-d-r/Card/CardBody.js";
 //import Fingerprint from '@material-ui/icons/Fingerprint';
-/*
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-*/
+
 
 import SimpleDialogDemoCC from "components/misc/SimpleDialog/SimpleDialogDemo.CC.js";
 import SimpleDialogDemoRFC from "components/misc/SimpleDialog/SimpleDialogDemo.js";
-import TodosEditor from "components/misc/TodosEditor/TodosEditor.js";
+import TodosInputList from "components/misc/TodosInputList";
 import AlertDialog from "components/misc/AlertDialog/AlertDialog";
 
 import dashboard from "assets/jss/m-d-r/views/dashboardStyle.js";
@@ -85,15 +84,19 @@ export default function DialogList()
 
       <GridItem xs={12} sm={12} md={10} lg={8} xl={6}>
         <Card>
-          <CardHeader color="rose">
-            <h4 className={classes.cardTitleWhite}>Todo List</h4>
-            <p className={classes.cardCategoryWhite}>
+          <CardHeader color ="rose">
+            <h4 className ={classes.cardTitleWhite}>Todo List</h4>
+            <p className ={classes.cardCategoryWhite}>
               Simple sample for todos (input, check/uncheck, delete)
             </p>
           </CardHeader>
 
           <CardBody>
-            <TodosEditor />
+            <Typography component ="h1" variant ="h2">
+              Todos
+            </Typography>
+
+            <TodosInputList classes ={classes} />
           </CardBody>
 
         </Card>

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 // @material-ui/core
-import { makeStyles } from "@material-ui/core/styles";
-import blue from '@material-ui/core/colors/blue';
+import { withStyles } from "@material-ui/core/styles";
+//import blue from '@material-ui/core/colors/blue';
 import TextField from '@material-ui/core/TextField';
 //import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
@@ -13,25 +13,28 @@ import Typography from '@material-ui/core/Typography';
 //import CustomInput from 'components/m-d-r/CustomInput/CustomInput.js';
 import GridContainer from 'components/m-d-r/Grid/GridContainer.js';
 import GridItem from 'components/m-d-r/Grid/GridItem.js';
-import AccountChoicePopUp from 'components/misc/SimpleDialog/SimpleDialog.js';
 
-const accountPopUpStyle = {
+import SimpleDialog from 'components/misc/SimpleDialog/SimpleDialog.js';
+import styles from "assets/jss/misc/todosInputListStyle.js";
+
+/*const accountChooserPopUpStyle = {
   avatar: {
     backgroundColor: blue[100],
     color: blue[600],
   },
 };
-const useStyles = makeStyles( accountPopUpStyle );
-
+const useStyles = makeStyles( accountChooserPopUpStyle );
+*/
 const defaultEmails = ['username@gmail.com', 'user02@gmail.com'];
 
-const TodoForm = ({ saveTodo }) => 
+const TodoForm = ({ saveTodo /*, classes */ }) => 
 {
+  //console.log( 'TodoForm classes', classes );
   const fetchEmails = () => { return defaultEmails; };
   const emails = fetchEmails();
 
   const [ value, setValue ] = useState( '' );
-  const [ selectedValue, setSelectedValue ] = useState( emails[1] );
+  const [ selectedValue, setSelectedValue ] = useState( emails[0] );
   const [ open, setOpen ] = useState( false );
 
 
@@ -45,12 +48,16 @@ const TodoForm = ({ saveTodo }) =>
     setValue( event.target.value );
   };
 
-  const handleDialogClose = dialogValue => {
+  const closeAccountChooserDialog = dialogValue => {
     setOpen( false );
     setSelectedValue( dialogValue );
     setValue( dialogValue );
   };
-  const classes = useStyles(); 
+
+  //const classes = useStyles(); 
+  const style = { ...styles().todosPopUp };
+  //console.log( 'TodoForm style', style );
+  const AccountChooserPopUp = withStyles(style)( SimpleDialog );
 
   return (
     <form onSubmit ={ (event) => {
@@ -81,7 +88,7 @@ const TodoForm = ({ saveTodo }) =>
         {alert('Hello from TodoForm')*/ }
       <GridItem>
         <Fab onClick ={ handleClickOpen }
-          variant ="contained" 
+          variant ="extended" 
           color ="secondary"
         >
           <Fingerprint />
@@ -94,9 +101,12 @@ const TodoForm = ({ saveTodo }) =>
         </Typography>
       </GridItem>
       </GridContainer>         
-          
-        <AccountChoicePopUp open ={open} onClose ={handleDialogClose}     classes ={classes}
-          selectedValue ={selectedValue} 
+
+          { /*classes ={classes}   
+          selectedValue ={selectedValue}*/ }
+        <AccountChooserPopUp 
+          open ={open} 
+          onClose ={closeAccountChooserDialog} 
           emails ={emails}
         />
 
@@ -104,7 +114,15 @@ const TodoForm = ({ saveTodo }) =>
   );
 };
 TodoForm.propTypes = {
-  saveTodo: PropTypes.func.isRequired
+  saveTodo: PropTypes.func.isRequired,
+  classes: PropTypes.object,
 };
-
+/*
+TodoForm.defaultProps = {
+  classes: {
+    avatar: {
+    backgroundColor: blue[100],
+    color: blue[600],
+  }},
+};*/
 export default TodoForm;

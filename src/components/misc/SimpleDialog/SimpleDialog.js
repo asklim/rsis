@@ -36,7 +36,7 @@ const SimpleDialog = (props) =>
   }; 
 
   const handleListItemClick = value => {
-    onClose(value);
+    onClose( value );
   };
 
   return (
@@ -51,7 +51,7 @@ const SimpleDialog = (props) =>
       <DialogTitle id="simple-dialog-title">Set account email</DialogTitle>
       <div>
         <List>
-          {emails.map(email => (
+          {emails.map( email => (
             <ListItem 
               button 
               onClick = {() => handleListItemClick(email)} 
@@ -86,6 +86,7 @@ SimpleDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   emails: PropTypes.array,
+  //selectedValue: PropTypes.string,
   classes: PropTypes.object.isRequired,
 };
 

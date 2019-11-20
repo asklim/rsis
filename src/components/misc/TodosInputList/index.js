@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
 
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
-import './TodosEditor.css';
+import styles from "assets/jss/misc/todosInputListStyle.js";
 
-const TodosEditor = () =>
+const useStyles = makeStyles( styles );
+
+
+export default function TodosInputList () 
 {
+  const classes = useStyles();
   const [ todos, setTodos ] = useState( [] );  
 
   const addTodo = todoText => setTodos( [...todos, todoText] );
@@ -24,17 +29,15 @@ const TodosEditor = () =>
     }
   };
 
-  return ( //className="TodosEditor"
+  return ( 
     <div>
-      <Typography component ="h1" variant ="h2">
-        Todos
-      </Typography>
-
       <TodoForm saveTodo ={saveTodo} />
-
-      <TodoList todos ={todos} deleteTodo ={deleteTodo} />
+      <TodoList todos ={todos} deleteTodo ={deleteTodo} classes ={classes}/>
     </div>
   );
+}
+/*
+TodosInputList.defaultProps = {
+  color: "gray"
 };
-
-export default TodosEditor;
+*/
