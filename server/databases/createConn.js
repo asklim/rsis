@@ -3,40 +3,38 @@ const mongoose = require('mongoose');
 const infoDB = require('./infodb');
 
 
-module.exports.createConn = function( uri, title) {
+module.exports.createConn = function(uri, title) {
 
-  const conn = mongoose.createConnection( uri, 
-    { useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex : true }
-  );
+  const connection = mongoose.createConnection( uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true, 
+  });
+  const { host, port } = connection;
 
   // CONNECTION EVENTS
-  conn.on('connected', () => {
-      console.log(`${title}: connected to ${conn.host}:${conn.port}`);
-      infoDB.log(conn);
+  connection.on( 'connected', () => {
+    console.log( `${title}: connected to ${host}:${port}` );
+    infoDB.log( connection );
   });
-  conn.on('error', (err) => {
-      console.log(title, ': connection error: ', err);
+  connection.on( 'error', (err) => {
+    console.log( title, ': connection error: ', err );
   });
-  conn.on('disconnecting', () => {
-    console.log(`${title} connection closing ...`);
+  connection.on( 'disconnecting', () => {
+    console.log( `${title} connection closing ...` );
   });  
-  conn.on('disconnected', () => {
-      console.log(`${title} disconnected from MongoDB.`);
+  connection.on( 'disconnected', () => {
+    console.log( `${title} disconnected from MongoDB.` );
   });
-  conn.on('close', () => {
-    console.log(`${title} connection closed.`);
+  connection.on( 'close', () => {
+    console.log( `${title} connection closed.` );
   });
 
-  conn.closeConn = () => {    
-    // eslint-disable-next-line no-unused-vars
-    return new Promise( (resolve, reject ) => {
-      conn.close( () => {
-        resolve( title );
-      });
-    });
+  connection.closeConn = () => {
+    return new Promise( (resolve) => 
+      connection.close( () => resolve( title ))
+    );
   };
 
-  return conn;
+  return connection;
 };

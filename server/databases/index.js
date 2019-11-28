@@ -1,11 +1,12 @@
 
-var dbCfg;
-var dbTmp;
-var dbSum;
+//var dbCfg;
+//var dbTmp;
+//var dbSum;
 //var dbWeekNext;
 //var dbWeekCur;
 //var dbWeekPrev;
 
+var dbs = {};
 /**
  * name getDB
  * @memberof /api/models 
@@ -21,37 +22,39 @@ const getDB = dbType =>
   }
   //console.log( 'getDB : ', ); 
   switch( dbType.toLowerCase() ) {
-    case 'config': return dbCfg;
-    case   'temp': return dbTmp;
-    case    'sum': return dbSum;
+    case 'config': return dbs.rsiscfg;
+    case   'temp': return dbs.rsistmp;
+    case    'sum': return dbs.rsissum;
   }
 };
 
 
 const createConns = () => 
 {
-  if( !dbCfg ) { dbCfg = require( './dbrsiscfg' ); }
-  if( !dbSum ) { dbSum = require( './dbrsissum' ); }
-  if( !dbTmp ) { dbTmp = require( './dbrsistmp' ); }
+  if( !dbs.rsiscfg ) { dbs.rsiscfg = require( './dbrsiscfg' ); }
+  if( !dbs.rsissum ) { dbs.rsissum = require( './dbrsissum' ); }
+  if( !dbs.rsistmp ) { dbs.rsistmp = require( './dbrsistmp' ); }
 };
 
 
 // To be called when process is restarted Nodemon or terminated
 const databasesShutdown = (msg, next) => {
-  
-  Promise.all([
+
+  const allDbsClosingPromises = Object.keys( dbs ).map( 
+    dbKey => dbs[ dbKey ].closeConn() );
+
+  Promise.all( allDbsClosingPromises
+    /*[
     dbTmp.closeConn(),
     dbSum.closeConn(),
     dbCfg.closeConn()
-  ])
+  ]*/)
   .then( dbsNames => {
     console.log( 'dbs closed: ', dbsNames );
     console.log( 'Mongoose disconnected through ' + msg );
     next();  
   })
-  .catch( error => {
-    console.log( error.message );
-  });
+  .catch( error => console.log( error.message ));
 };
 
 module.exports = {

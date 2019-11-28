@@ -1,4 +1,4 @@
-require( 'dotenv' ).load();
+require( 'dotenv' ).config();
 const createError = require( 'http-errors' );
 const express = require( 'express' );
 const path = require( 'path' );
@@ -7,17 +7,18 @@ const favicon = require( 'serve-favicon' );
 const cookieParser = require( 'cookie-parser' );
 //const bodyParser = require( 'body-parser' );
 const morgan = require( 'morgan' );
-const icwd = require( 'fs' ).realpathSync( process.cwd() );
+const icwd = require( 'fs' ).realpathSync( process.cwd());
 
 const isProduction = process.env.NODE_ENV === 'production';
 const webpack = isProduction ? null : require( 'webpack' );
 const configFactory = isProduction ? null : require(`${icwd}/config/wdmNodeHMR.config`);
 const webpackDevMiddleware = isProduction ? null : require('webpack-dev-middleware');
 
+
 const passport = require( 'passport' );  //passport must be before dbs-models
 const { 
   createConns,
-  databasesShutdown
+  databasesShutdown,
 } = require( './databases' );
 createConns();
 
@@ -27,7 +28,7 @@ const app = express();
 const apiRouter = require( './routes/api-router' );
 
 // view engine setup
-app.set( 'views', path.join( `${icwd}/server/views` ));
+app.set( 'views', /*path.join(*/ `${icwd}/server/views` );
 app.set( 'view engine', 'ejs' );
 
 /*
@@ -59,7 +60,7 @@ app.use( express.urlencoded({
  }));
 app.use( cookieParser() );
 
-app.use( express.static( path.join( `${icwd}/static` )));
+app.use( express.static( `${icwd}/static` ));
 
 app.use( '/api', apiRouter );
 
@@ -80,7 +81,7 @@ if( !isProduction ) {
 
 app.get( '*', 
   (req, res, next) => {
-    console.log( `server-app dirname is ${__dirname}`);
+    console.log( `server-app dirname is ${__dirname}` );
     res.sendFile( 
       path.resolve( `${icwd}/static/index.html` ),
       (err) => {

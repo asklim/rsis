@@ -4,6 +4,7 @@ const {
 } = require( './app-server' );
 const debug = require( 'debug' )('rsis:www');
 const http = require( 'http' );
+const util = require( 'util' );
 const chalk = require( 'react-dev-utils/chalk' );
 
 const icwd = require( 'fs' ).realpathSync( process.cwd() );
@@ -76,9 +77,9 @@ const serverAppOutput = ( outputMode, appVersion, httpServer ) =>
     : 'port ' + port;
 
   const outputs = {
-    full: () => console.log('Express server = ',  httpServer),
+    full: () => console.log( 'Express server = ',  httpServer ),
     addr: () => {
-            console.log('\tapp version ', chalk.cyan(appVersion));
+            console.log( '\tapp version ', chalk.cyan( appVersion ));
             console.log(
               '\tExpress server = "' + address + '" Family= "' + family +'"\n',
               '\tlistening on ' + bind );
@@ -106,6 +107,19 @@ const serverAppOutput = ( outputMode, appVersion, httpServer ) =>
 };
 
 
+//const icwd = process.env.INIT_CWD; // НЕ РАБОТАЕТ на Heroku: undefined
+let {
+  PWD, USER, NAME,
+} = process.env;
+console.log( chalk.red( '\tINIT_CWD is ', icwd )); // = '/app'
+console.log( chalk.red( '\tPWD is ', PWD ));
+console.log( chalk.red( util.format( '\tUSER@NAME is %s@%s', USER, NAME )));
+//console.log( process.env );
+
+const heroku = require( './helpers/herokuapp' );
+heroku.startReconnectionService( 30 );
+
+
 /*******************************************************
  * Get port from environment and store in Express.
  */
@@ -131,6 +145,7 @@ server.on( 'clientError', (err, socket) => {
 });
 server.on( 'close', () => {
   console.log( 'http-server closing ....' );
+  heroku.stopReconnectionService();
 });
 /**
  * Listen on provided port, on all network interfaces.

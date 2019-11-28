@@ -36,8 +36,8 @@ const App = () => hot(module)(
 */
 
 ReactDOM.render( 
-  <App/>,
-  document.getElementById("react-app")
+  <App />,
+  document.getElementById( "react-app" )
 );
 /*
 console.log(React);

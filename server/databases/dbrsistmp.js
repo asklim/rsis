@@ -1,5 +1,4 @@
 const util = require( 'util' );
-
 const connection = require( './createConn' );
 const { 
   dbName,
@@ -28,7 +27,5 @@ const db = connection.createConn( uri, title );
 //const stafferSchema = require('../models/staffers');
 //db.model('Staffer', stafferSchema, 'staffers'); 
 // last arg - collection`s name in MongoDB
-
-//dbInfo.log(db);
 
 module.exports = db;

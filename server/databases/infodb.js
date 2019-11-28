@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * iDb - mongoose.connection to MongoDB
  */
@@ -21,18 +19,17 @@ module.exports.log = function(iDb) {
 
   models
   .forEach( mdlName => {   
-    let mdl = iDb.model(mdlName);
-    callArr.push( mdl.countDocuments({}, 
-                  (err, count) => { count; }));  
+    let mdl = iDb.model( mdlName );
+    callArr.push( 
+      mdl.countDocuments( {}, (err, count) => count )
+    );  
   });
 
   Promise.all( callArr )
   .then( docsCounts => {  
-    console.log(`${title}: `, models, docsCounts);
+    console.log( `${title}: `, models, docsCounts );
   })
-  .catch( error => {
-    console.log(error.message);
-  });
+  .catch( error => console.log( error.message ));
 
 /*  Object.keys(iDb.collections).forEach(key => {
     let coll = iDb.collection(key);
