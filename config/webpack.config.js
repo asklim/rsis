@@ -409,6 +409,12 @@ module.exports = function(webpackEnv)
           include: paths.appSrc,
         },
         {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: "javascript/auto",
+          use: [],
+        },        
+        {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.

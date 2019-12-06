@@ -1,5 +1,5 @@
 const { week21c } = require('../utils');
-const { nextWorkDayTime } = require('../../config/enumValues');
+const { nextWorkDayTime } = require('../../config/enum-values');
 
 const ONE_DAY = 86400000;
 

@@ -1,10 +1,14 @@
+require( 'dotenv' ).config();
 const {
   app: rsisExpressApp,
-  databasesShutdown
+  databasesShutdown,
+  //ngrok,
 } = require( './app-server' );
 const debug = require( 'debug' )('rsis:www');
 const http = require( 'http' );
+const os = require( 'os' );
 const util = require( 'util' );
+
 const chalk = require( 'react-dev-utils/chalk' );
 
 const icwd = require( 'fs' ).realpathSync( process.cwd() );
@@ -108,13 +112,16 @@ const serverAppOutput = ( outputMode, appVersion, httpServer ) =>
 
 
 //const icwd = process.env.INIT_CWD; // НЕ РАБОТАЕТ на Heroku: undefined
+//console.log( process.env );
 let {
   PWD, USER, NAME,
 } = process.env;
-console.log( chalk.red( '\tINIT_CWD is ', icwd )); // = '/app'
-console.log( chalk.red( '\tPWD is ', PWD ));
-console.log( chalk.red( util.format( '\tUSER@NAME is %s@%s', USER, NAME )));
-//console.log( process.env );
+let userInfo = util.format('%O', os.userInfo());
+console.log( chalk.red( 'package.json dir is ', icwd )); // = '/app'
+console.log( chalk.red( `PWD (${__filename}) is ${PWD}` ));
+console.log( chalk.red( `USER @ NAME is ${USER} @ ${NAME}` ));
+console.log( chalk.cyan( `platform is ${os.platform()}, hostname is ${os.hostname()}` ));
+console.log( chalk.yellow( 'User Info : ', userInfo ));
 
 const heroku = require( './helpers/herokuapp' );
 heroku.startReconnectionService( 30 );
@@ -130,13 +137,15 @@ rsisExpressApp.set( 'port', port );
  * Create HTTP server.
  */
 const server = http.createServer( rsisExpressApp );
-const shutdownTheServer = () => new Promise( 
-  (resolve /*, reject*/) => {  
-    server.close( () => {
+const shutdownTheServer = () => { 
+  return new Promise( 
+    resolve => {  
+      server.close( () => {
       console.log( 'http-server closed now.' );
       resolve();
     });
-});
+  });
+};
 
 server.on( 'error', handleOnError );
 server.on( 'listening', handleOnListening );
@@ -146,14 +155,16 @@ server.on( 'clientError', (err, socket) => {
 server.on( 'close', () => {
   console.log( 'http-server closing ....' );
   heroku.stopReconnectionService();
+  //ngrok.disconnect();
+  //console.log( 'ngrok disconnected.' );
 });
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen( port );
-
-serverAppOutput( 'addr'/*'full'*/, version, server );
-
+server.listen( port,
+() => {
+  serverAppOutput( 'addr'/*'full'*/, version, server );
+});
 
 // CAPTURE APP TERMINATION / RESTART EVENTS
 // For nodemon restarts

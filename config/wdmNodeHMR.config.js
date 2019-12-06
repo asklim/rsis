@@ -346,7 +346,8 @@ module.exports = function(webpackEnv)
       // for React Native Web.
       extensions: paths.moduleFileExtensions
         .map(ext => `.${ext}`)
-        .filter(ext => useTypeScript || !ext.includes('ts')),
+        .filter(ext => useTypeScript || !ext.includes('ts'))
+        ,
       alias: {
         'react-dom': '@hot-loader/react-dom',
         // Support React Native Web
@@ -409,6 +410,12 @@ module.exports = function(webpackEnv)
             },
           ],
           include: paths.appSrc,
+        },
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: "javascript/auto",
+          use: [],
         },
         {
           // "oneOf" will traverse all following loaders until one will

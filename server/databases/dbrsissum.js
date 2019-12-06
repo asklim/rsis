@@ -1,4 +1,4 @@
-const connection = require( './createConn' );
+const connection = require( './create-conn' );
 const { 
   dbName,
   mongoURI 

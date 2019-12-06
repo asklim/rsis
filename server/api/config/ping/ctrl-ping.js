@@ -3,7 +3,7 @@ let db = require(`${icwd}/server/databases`).getDB('config');
 const Agent = db.model('Agent');
 db = require(`${icwd}/server/databases`).getDB('sum');
 const WeekNatural = db.model('WeekNatural');
-const HTTP = require(`${icwd}/src/config/httpResponseCodes`);
+const HTTP = require(`${icwd}/src/config/http-response-codes`);
 
 var debug = require('debug')('api:config:ping');
 

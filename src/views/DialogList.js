@@ -21,6 +21,7 @@ import SimpleDialogDemoCC from "components/misc/SimpleDialog/SimpleDialogDemo.CC
 import SimpleDialogDemoRFC from "components/misc/SimpleDialog/SimpleDialogDemo.js";
 import TodosInputList from "components/misc/TodosInputList";
 import AlertDialog from "components/misc/AlertDialog/AlertDialog";
+import { TelegramUserInfo } from "components/misc/Telegram";
 
 import dashboard from "assets/jss/m-d-r/views/dashboardStyle.js";
 
@@ -77,6 +78,22 @@ export default function DialogList()
 
           <CardBody>
             <SimpleDialogDemoRFC />
+          </CardBody>
+
+        </Card>
+      </GridItem>
+
+      <GridItem xs={12} sm={12} md={8} lg={6} xl={6}>
+        <Card>
+          <CardHeader color="warning">
+            <h4 className={classes.cardTitleWhite}>Viber Info Panel</h4>
+            <p className={classes.cardCategoryWhite}>
+              Simple Telegram Client
+            </p>
+          </CardHeader>
+
+          <CardBody>
+            <TelegramUserInfo />
           </CardBody>
 
         </Card>

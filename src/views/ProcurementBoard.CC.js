@@ -63,7 +63,7 @@ const procurementBoardStyle = {
 
 import {
   procurementPeriods as days
-} from "config/enumValues";
+} from "config/enum-values";
 
 
 

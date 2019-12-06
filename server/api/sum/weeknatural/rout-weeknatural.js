@@ -7,7 +7,7 @@ const {
 } = require('./ctrl-weeknatural');
 
 const icwd = require('fs').realpathSync(process.cwd());
-const { sendToWebApp } = require(`${icwd}/server/helpers/sendToWebApp`);
+const { sendToWebApp } = require(`${icwd}/server/helpers/send-to-webapp`);
 
 /**  
  * api for 1 week summary: /api/sum/weeknatural/<weekId>. 

@@ -2,7 +2,7 @@ var debug = require('debug')('helper:sendToWebApp');
 const request = require('request');
 
 const icwd = require('fs').realpathSync(process.cwd());
-const HTTP = require(`${icwd}/src/config/httpResponseCodes`);
+const HTTP = require(`${icwd}/src/config/http-response-codes`);
 /*
 const HTTP_OK = 200;
 const HTTP_CREATED = 201;

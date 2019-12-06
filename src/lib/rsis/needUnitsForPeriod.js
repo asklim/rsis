@@ -2,7 +2,7 @@
  * @name needUnitsForPeriod
  * @param {Object} item - из списка объектов api/sum/weeknatural
  * @param {Number} period - 12, 24, 36, 96 дней или другое.
- * Настраивается в /src/config/enumValues/procurementPeriods
+ * Настраивается в /src/config/enum-values/procurementPeriods
  * @return {Array(3)} - [unitsForLast, unitsForAverage, unitsForMaximal]
  *  
  * Возвращает массив из трех значений: сколько нужно коробок на период period
