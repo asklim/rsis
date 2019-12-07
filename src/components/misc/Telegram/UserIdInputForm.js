@@ -26,7 +26,7 @@ import styles from "assets/jss/misc/todosInputListStyle.js";
 const useStyles = makeStyles( accountChooserPopUpStyle );
 */
 const defaultUserIds = [
-  '@AndreiKlim', '381573348', '375295228222='
+  '250693603im', '381573348ak', '@asbbroker'
 ];
 
 const UserIdInputForm 

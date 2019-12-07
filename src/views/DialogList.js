@@ -86,7 +86,7 @@ export default function DialogList()
       <GridItem xs={12} sm={12} md={8} lg={6} xl={6}>
         <Card>
           <CardHeader color="warning">
-            <h4 className={classes.cardTitleWhite}>Viber Info Panel</h4>
+            <h4 className={classes.cardTitleWhite}>Telegram Info Panel</h4>
             <p className={classes.cardCategoryWhite}>
               Simple Telegram Client
             </p>

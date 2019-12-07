@@ -13,9 +13,9 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "components/m-d-r/Navbars/Navbar.js";
 import Footer from "components/m-d-r/Footer/Footer.js";
-import Sidebar from "components/m-d-r/Sidebar/Sidebar.js";
 import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
 
+import Sidebar from "components/rsis/Sidebar/Sidebar.js";
 import Whoops404 from "components/misc/Whoops404.js";
 import routes from "./InvoiceRoutes.js";
 

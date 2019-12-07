@@ -11,11 +11,11 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "components/m-d-r/Navbars/Navbar.js";
 import Footer from "components/m-d-r/Footer/Footer.js";
-import Sidebar from "components/m-d-r/Sidebar/Sidebar.js";
 import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
+import routes from "./AdminRoutes.js";
 
+import Sidebar from "components/rsis/Sidebar/Sidebar.js";
 import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
