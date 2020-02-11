@@ -6,6 +6,7 @@ var reconnectInterval;
 
 const { /*NODE_ENV,*/ API_SERVER } = process.env;
 
+class NetworkError extends Error {}
 
 const reconnect 
 = () => {
@@ -20,17 +21,66 @@ const reconnect
     },
     json: {}, qs: {}
   };
+  tryConnectXtimes( 5, options )
+  .then( resBody => {
+    //let nowTime = new Date().toTimeString();
+    //nowTime = nowTime.slice( 0, nowTime.indexOf(' ('));  //Cut ' (<name_of_timezone>)'
+    let nowTime = new Date().toISOString();
+    console.log( `ping Heroku app is Ok at ${nowTime}: `, resBody ); 
+  })
+  .catch( exception => {
+    if( exception instanceof NetworkError ) {
+      console.log( `Network Error: ${exception.message}` );
+    } else {
+      throw exception;
+    }
+  });
+};
+
+
+function tryConnectXtimes(totatAttemps, options)
+{
+  return new Promise( (resolve, reject) => {
+    const attemptInterval = 5000;
+    let done = false;
+    function attempt(n) {
+      request( options, (err, response, resBody) => {
+        done = true;
+        if( err ) { 
+          reject( err );
+        } else {
+          resolve( resBody );
+        }
+      });
+      setTimeout(() => {
+        if( done ) return;
+        if( n < totatAttemps ) {
+          attempt( n+1 );
+        } else { 
+          reject( new NetworkError( 'Ответ сети был не ok.' ));
+        }
+      }, attemptInterval);
+    }
+    attempt( 1 );
+  });
+}
+
+
+/*
+function connectOnce(options) 
+{
   request( options, (err, response, resBody) => {
     if( err ) {
       console.log( `fetch data from ${options.url} is not ok.`, response );
-      throw new Error( 'Ответ сети был не ok.' );   
+      throw new NetworkError( 'Ответ сети был не ok.' );   
     }
     let nowTime = new Date().toTimeString();
     nowTime = nowTime.slice( 0, nowTime.indexOf(' ('));  //Cut ' (<name_of_timezone>)'
     console.log( `ping Heroku app is Ok at ${nowTime}: `, resBody );     
     return resBody.body;          
   });
-};
+}
+*/
 
 
 const startReconnection
