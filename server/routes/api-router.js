@@ -1,6 +1,4 @@
-//const express = require('express');
-//import express from 'express';
-//const router = express.Router();
+var debug = require('debug')('api:router');
 
 const router = require('express').Router();
 
@@ -18,10 +16,11 @@ require('../api/sum/procurement/rout-procurement')( router );
 
 require('../api/sum/weeknatural/rout-weeknatural')( router );
 
-router.get('/*', 
-  (req, res) => {
-     res.status(400);
-     res.json({message: "Bad request in api-router."});
+router.all('/*', 
+    (req, res) => {
+        res.status(400);
+        res.json({message: "Bad request at api-router."});
+        debug(`${__filename}  router.all - unhandled route`);
 });
 
 /*
