@@ -1,18 +1,26 @@
-var debug = require('debug')('api:sum:weeknatural');
+const debug = require( 'debug' )( 'api:sum:weeknatural' );
+
 const {
     readOne,
     create,
     updateOne,
     deleteOne
-} = require('./ctrl-weeknatural');
+} = require( './ctrl-weeknatural' );
 
-const icwd = require('fs').realpathSync(process.cwd());
-const { sendToWebApp } = require(`${icwd}/server/helpers/send-to-webapp`);
+const icwd = require( 'fs' ).realpathSync( process.cwd() );
+const { sendToWebApp } = require( `${icwd}/server/helpers/send-to-webapp` );
 
 /**  
+ * @name rout-weeknatural
+ * @description
  * api for 1 week summary: /api/sum/weeknatural/<weekId>. 
- */
+ * @property {Router} router - Express router
+ * @returns {} undefined
+ * 
+ * 
+**/
 module.exports = function ( router ) {
+
 
     let route = '/sum/weeknatural';
     let routeWithWeekId = route + '/:weekId';
@@ -32,7 +40,7 @@ module.exports = function ( router ) {
     router.put( route, (req, res) => {
         
         updateOne( req, res );
-        debug('in rout-weeknatural router.put');
+        debug( 'in rout-weeknatural router.put' );
         sendToWebApp( '/api' + route, req.body );
     });
 

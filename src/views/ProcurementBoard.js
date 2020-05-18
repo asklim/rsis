@@ -83,7 +83,9 @@ export default function ProcurementBoardPage() {
 
   const [dataServerResponse, setDataServerResponse] = useState( {} );
 
+
   const tableHeader = period => {
+
     const lineCount = {
        sp: shortPeriod.length,
        mp: middlePeriod.length,
@@ -95,14 +97,18 @@ export default function ProcurementBoardPage() {
     ];    
   };
 
+
   const handleFilterByFreqChange = (event /*, value*/) => {
+
     const freq = event.target.value;
     //console.log("filter Freq: ", freq, value ); // is Equal
     updateViewingLists( freq, null );    
     setFilterByFreq( freq );
   };
 
+
   const handleFromFilterClick = from => 
+
     (/*event,oldValue?*/) => {
       const currentIndex = filterByFrom.indexOf( from );
       const newChecked = [ ...filterByFrom ];
@@ -116,21 +122,24 @@ export default function ProcurementBoardPage() {
       setFilterByFrom( newChecked );
       //console.log('FromFilter Click:', newChecked);
   };
-  /*
-  formatValue = ( out, curr ) => {
-    return out + '   ' + curr.toString();
-  }
-  formatUnits = (needUnits) => {
-    return needUnits.reduce(this.formatValue, '');     
-  } */
+      /*
+      formatValue = ( out, curr ) => {
+        return out + '   ' + curr.toString();
+      }
+      formatUnits = (needUnits) => {
+        return needUnits.reduce(this.formatValue, '');     
+      } */
+
 
       const isFromIntersected = (item, fromFilter) => { 
+
         const itemFroms = item.from.split( ',' ).map( x => x.toLowerCase() );
         //console.log('isIntersected : ', itemFroms);
         const result = fromFilter.filter( x => itemFroms.includes( x ));
         return result.length !== 0;
       };
   
+
       const serverDatasetFilter = ( period, freqId, fromFilter ) => {
         return ( 
           item => item[ period ][ freqId ] > 0 &&
@@ -138,8 +147,9 @@ export default function ProcurementBoardPage() {
         );
       };
 
-    const convertToViewList = ( period, freq, from ) => 
-    {
+
+    const convertToViewList = ( period, freq, from ) => {
+
       const freqId = freqValues.indexOf( freq ); // 0|1|2
       const filtering = serverDatasetFilter( period, freqId, from );  
       const viewList = serverDataset
@@ -159,7 +169,10 @@ export default function ProcurementBoardPage() {
       return p;
     };
 
+
+
   const updateViewingLists = ( freq, from ) => {  
+
     //console.log("updateViewLists freq, from ", freq, from);
     if( !freq ) { freq = filterByFreq; }
     if( !from ) { from = filterByFrom; } 
@@ -179,14 +192,17 @@ export default function ProcurementBoardPage() {
     });
   };
 
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchLists = () => {    
+
     let route;
     console.log( 'fetchLists .origin: ', window.location.origin ); 
     route = window.location.origin;  
     route += '/api/sum/procurement/last';
     console.log( 'fetchLists route: ', route ); 
     debug( 'fetchLists route: %s', route );  // не работает !!! ???
+    
     let headers = {
       mode: "cors",
       credentials: "omit",
@@ -194,6 +210,7 @@ export default function ProcurementBoardPage() {
       "Cache-Control" : 'no-cache, no-store',
       charset : "utf-8"
     };
+    
     fetch( route, { headers } )
     .then( response => {
       if( !response.ok ) {

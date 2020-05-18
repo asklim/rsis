@@ -1,12 +1,13 @@
 /* */
 const dbName = {
 
-    rsiscfg: 'rsiscfg',
-    rsistmp: 'rsistmp',
-    rsissum: 'rsissum',
-    rsiswp:  'rsiswp',
-    rsiswc:  'rsiswc',
-    rsiswn:  'rsiswn'
+    rsiscfg:  'rsiscfg',
+    rsisdata: 'rsisdata',
+    rsissum:  'rsissum',
+    rsistmp:  'rsistmp',    
+    //rsiswp:   'rsiswp',
+    //rsiswc:   'rsiswc',
+    //rsiswn:   'rsiswn'
 };
 
 

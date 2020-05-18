@@ -6,7 +6,7 @@ module.exports.log = function(iDb) {
   
   //console.log('dbinfo: Mongoose version %s', mongoose.version);
 
-  var title = `dbinfo: ${iDb.host}:${iDb.port}/${iDb.db.databaseName}`;
+    var title = `dbinfo: ${iDb.host}:${iDb.port}/${iDb.db.databaseName}`;
   
 /*  console.log(`${title}: collection's count = %d`, 
                  Object.keys(iDb.collections).length);
@@ -14,22 +14,22 @@ module.exports.log = function(iDb) {
   console.log(`${title}: `, iDb.modelNames());
   */
 
-  var callArr = [];
-  let models = iDb.modelNames(); //массив имен моделей
+    var callArr = [];
+    let models = iDb.modelNames(); //массив имен моделей
 
-  models
-  .forEach( mdlName => {   
-    let mdl = iDb.model( mdlName );
-    callArr.push( 
-      mdl.countDocuments( {}, (err, count) => count )
-    );  
-  });
+    models
+    .forEach( modelName => {   
+        let theModel = iDb.model( modelName );
+        callArr.push( 
+        theModel.countDocuments( {}, (err, count) => count )
+        );  
+    });
 
-  Promise.all( callArr )
-  .then( docsCounts => {  
-    console.log( `${title}: `, models, docsCounts );
-  })
-  .catch( error => console.log( error.message ));
+    Promise.all( callArr )
+    .then( docsCounts => {  
+        console.log( `${title}: `, models, docsCounts );
+    })
+    .catch( error => console.log( error.message ));
 
 /*  Object.keys(iDb.collections).forEach(key => {
     let coll = iDb.collection(key);
