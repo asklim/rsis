@@ -1,4 +1,4 @@
-/*eslint-disable*/
+/*eslint-disable indent*/
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
@@ -87,7 +87,7 @@ export default function Sidebar(props) {
         className={classNames(classes.logoLink, {
           [classes.logoLinkRTL]: props.rtlActive
         })}
-        target="_blank"
+        target="_blank" rel="noreferrer"
       >
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
@@ -154,7 +154,7 @@ export default function Sidebar(props) {
 Sidebar.propTypes = {
   rtlActive: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,
-  bgColor: PropTypes.oneOf(["purple", "blue", "green", "orange", "red"]),
+  color: PropTypes.oneOf(["purple", "blue", "green", "orange", "red"]),
   logo: PropTypes.string,
   image: PropTypes.string,
   logoText: PropTypes.string,

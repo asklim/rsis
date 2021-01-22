@@ -1,3 +1,6 @@
 !.eslintrc.js
 static/*
 # /node_modules/* -- always ignored
+build/*
+dist/*
+public/*

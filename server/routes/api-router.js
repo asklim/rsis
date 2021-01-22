@@ -16,6 +16,8 @@ require('../api/sum/procurement/rout-procurement')( router );
 
 require('../api/sum/weeknatural/rout-weeknatural')( router );
 
+require('../api/sum/financereport/rout-financereport')( router );
+
 router.all('/*', 
     (req, res) => {
         res.status(400);

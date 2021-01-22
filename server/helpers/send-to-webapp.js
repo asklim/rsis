@@ -40,8 +40,8 @@ function sendTo (apiRoute, verb, reqBody, callback) {
 
 module.exports.sendToWebApp = (apiRoute, reqBody) => 
 {
-  let { id, type } = reqBody;
-  let docMetaInfo = ` - type: ${type} id: ${id}`;
+  let { id, type, pid } = reqBody;
+  let docMetaInfo = ` - type: ${type} id: ${id} pid: ${pid}`;
   debug( docMetaInfo );
 
   sendTo( apiRoute, "POST", reqBody,

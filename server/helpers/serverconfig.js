@@ -22,12 +22,17 @@ const mongoURI = {
 
 const API_SERVER_LOCAL = "http://192.168.0.240:3067";
 
+let { PWD, DYNO } = process.env;
+const isHeroku = DYNO && (PWD === '/app');
 
+const icwd = require( 'fs' ).realpathSync( process.cwd() );
 
 module.exports = {
 
     dbName,
     mongoURI,
     API_SERVER_LOCAL,
+    isHeroku,
+    icwd,
 
 };

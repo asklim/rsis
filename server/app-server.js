@@ -3,22 +3,20 @@ const createError = require( 'http-errors' );
 const express = require( 'express' );
 const path = require( 'path' );
 const cors = require( 'cors' );
-const favicon = require( 'serve-favicon' );
+//const favicon = require( 'serve-favicon' );
 const cookieParser = require( 'cookie-parser' );
 //const bodyParser = require( 'body-parser' );
 const morgan = require( 'morgan' );
 //const uuid = require( 'uuid/v4' );
-const icwd = require( 'fs' ).realpathSync( process.cwd());
+const { icwd } = require( './helpers/serverconfig' );
 
 const {
-  NODE_ENV, 
-  //PORT,
+    NODE_ENV,
+    DEV_MODE,
 } = process.env;
 
 const isProduction = NODE_ENV === 'production';
-const webpack = isProduction ? null : require( 'webpack' );
-const configFactory = isProduction ? null : require( `${icwd}/config/wdmNodeHMR.config` );
-const webpackDevMiddleware = isProduction ? null : require( 'webpack-dev-middleware' );
+const isHMR = DEV_MODE === 'HotModuleReplacement';
 
 
 const passport = require( 'passport' );  //passport must be before dbs-models
@@ -47,14 +45,14 @@ app.use((req,res,next) => {
 app.use( passport.initialize() );
 
 // uncomment after placing your favicon in /public
-app.use( favicon( `${icwd}/public/favicon.ico` ));
+//app.use( favicon( `${icwd}/public/favicon.ico` ));
 
 app.use( cors() );
 
 let loggerTemplate = [
-  '[:date[web]]', ':status',  
-  //':remote-addr', ':remote-user',
-  ':method :url :response-time[0] ms - :res[content-length]'
+    '[:date[web]]', ':status',  
+    //':remote-addr', ':remote-user',
+    ':method :url :response-time[0] ms - :res[content-length]'
 ].join(' ');
 
 app.use( morgan( loggerTemplate )); // dev | common | combined |short
@@ -66,22 +64,25 @@ app.use( express.json({
 app.use( express.urlencoded({ 
     extended: true,
     limit: "5mb",
- }));
+}));
 
 app.use( cookieParser() );
 
-app.use( express.static( `${icwd}/static` ));
-
 app.use( '/api', apiRouter );
 
+app.use( express.static( `${icwd}/static` ));
 
-if( !isProduction ) {
 
-    const webpackConfig = configFactory( 'development' );
+if( !isProduction && isHMR ) {
+        
+    const webpack = require( 'webpack' );
+    const webpackConfig = require( `${icwd}/config/webpack.devhmr` );
+    const webpackDevMiddleware = require( 'webpack-dev-middleware' );
+
+    //const webpackConfig = configFactory( 'HotModuleReplacement' /*'development'*/ );
     const compiler = webpack( webpackConfig );
 
-    const wdmOption = {
-        loglevel: 'debug', //'info' - default
+    const wdmOption = {        
         publicPath: webpackConfig.output.publicPath,
     };
     console.log( 'webpack-dev-middleware (wdm) config: ', wdmOption );
@@ -95,10 +96,16 @@ if( !isProduction ) {
 
 app.get( '*', (req, res, next) => {
     console.log( `server-app dirname is ${__dirname}` );
-    res.sendFile( 
-        path.resolve( `${icwd}/static/index.html` ),
+    console.log( `index.html must be ${icwd}/static/index.html` );
+
+    let indexhtml = path.resolve( `${icwd}/static/index.html` );
+    res.sendFile( indexhtml,
         (err) => {
-            if( err ) next( err );
+            if( err ) {
+                console.log('E: error sending "/static/index.html"');
+                console.log( err );
+                next( err );
+            }
         }
     );
 });
@@ -106,6 +113,7 @@ app.get( '*', (req, res, next) => {
 
 // catch 404 and forward to error handler
 app.use( (req, res, next) => {
+    console.log( 'create Error 404.' );
     next( createError( 404 ), req, res );
 });
 
@@ -116,7 +124,12 @@ app.use( (err, req, res, next) => {
     let runMode = req.app.get( 'env' );
     const isDev = runMode === 'development';
     console.log( `app-server error-handler: env = '${runMode}'` );
-    console.log( isDev ? req.body : "" );    
+    console.log( isDev 
+        ? (req.body && Object.keys( req.body ).length > 0) 
+            ? req.body 
+            : req
+        : "" 
+    );    
 
     // set locals, only providing error in development
     res.locals.message = err.message;

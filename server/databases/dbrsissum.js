@@ -5,13 +5,8 @@ const {
 } = require( '../helpers/serverconfig' );
 const { rsissum: databaseName } = dbName;
 
-let title = 'rsis.sum';
-/*let uri = ( process.env.NODE_ENV === 'production' ) 
-  ? mongoURI.STANDALONE + '/' + dbName.rsissum
-    //'mongodb://hp8710w:36667/rsissum';  
-  : mongoURI.DEV1 + '/' + dbName.rsissum;
-    //'mongodb://hp8710w:27017/rsissum';       
-*/
+let title = `summary-db [${databaseName}]`;
+
 
 //'mongodb://hp8710w:36667 || env.MONGO_DEV1 || hp8710w:27017
 let uri = ( process.env.NODE_ENV === 'production' ) 
@@ -26,11 +21,11 @@ const weekNaturalSchema = require( '../api/sum/weeknatural/schm-weeknatural' );
 db.model( 'WeekNatural', weekNaturalSchema, 'weekNatural' ); 
 // last arg - collection`s name in MongoDB
 
-/*
-var stafferSchema = require('./staffers');
-db.model('Staffer', stafferSchema, 'staffers'); 
-// last arg - collection`s name in MongoDB
-*/
+
+var finReportSchema = require( '../api/sum/financereport/schm-financereport' );
+db.model( 'FinanceReport', finReportSchema, 'financeReport' ); 
+
 
 
 module.exports = db;
+

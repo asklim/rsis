@@ -3,15 +3,11 @@ const {
   dbName,
   mongoURI 
 } = require( '../helpers/serverconfig' );
+
 const { rsiscfg: databaseName } = dbName;
 
-let title = 'rsis.cfg';
-/*let uri = ( process.env.NODE_ENV === 'production' ) 
-  ? mongoURI.STANDALONE + '/' + dbName.rsiscfg
-    //'mongodb://hp8710w:36667/rsiscfg';  
-  : mongoURI.DEV1 + '/' + dbName.rsiscfg;
-    //'mongodb://hp8710w:27017/rsiscfg';     
-*/
+let title = `config-db [${databaseName}]`;
+
 
 //'mongodb://hp8710w:36667 || env.MONGO_DEV1 || hp8710w:27017
 let uri = ( process.env.NODE_ENV === 'production' ) 

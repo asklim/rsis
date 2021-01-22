@@ -20,7 +20,6 @@ let version = require( `${icwd}/package.json` ).version;
 
 // пока работает только через 'npm run compile'
 //import app from '../server/app-server';
-//var debug = require('debug')('rsisexpress:server');
 //import http from 'http';
 
 
@@ -31,7 +30,7 @@ let { PWD, USER, NAME, } = process.env;
 
 let userInfo = util.format('%O', os.userInfo());
 
-console.log( colors.red( 'package.json dir is ', icwd )); // = '/app'
+console.log( colors.red( 'package.json dir is ', icwd )); // = '/app' on Heroku
 console.log( `PWD (${__filename}) is ${PWD}`.red );
 console.log( `USER @ NAME is ${USER} @ ${NAME}`.red );
 console.log( `platform is ${os.platform()}, hostname is ${os.hostname()}`.cyan );
@@ -57,66 +56,69 @@ rsisExpressApp.set( 'port', port );
 const server = http.createServer( rsisExpressApp );
 
 
-    const shutdownTheServer = () => 
-    { 
-        return new Promise( 
-            resolve => {  
-                server.close( () => {
+const shutdownTheServer = () => {
+
+    return new Promise( 
+        resolve => {  
+            server.close( () => {
                 console.log( 'http-server closed now.' );
                 resolve();
             });
         });
-    };
+};
 
 
-    const handleOnError = error => {
-            
-        /**
-         * Event listener for HTTP server "error" event.
-         * 
-         */
+const handleOnError = error => {
+        
+    /**
+     * Event listener for HTTP server "error" event.
+     * 
+     */
 
-        if( error.syscall !== 'listen' ) {
+    if( error.syscall !== 'listen' ) {
 
-            throw error;
-        }
+        throw error;
+    }
 
-        let bind = typeof port === 'string' 
-            ? 'Pipe ' + port
-            : 'Port ' + port;
+    let bind = typeof port === 'string' 
+        ? 'Pipe ' + port
+        : 'Port ' + port;
 
-        // handle specific listen errors with friendly messages
-        switch( error.code ) {
+    // handle specific listen errors with friendly messages
+    switch( error.code ) {
 
-            case 'EACCES':
-                console.error( bind + ' requires elevated privileges' );
-                process.exit(1);
-                break;
+        case 'EACCES':
+            console.error( bind + ' requires elevated privileges' );
+            process.exit(1);
+            break;
 
-            case 'EADDRINUSE':
-                console.error( bind + ' is already in use' );
-                process.exit(1);
-                break;
+        case 'EADDRINUSE':
+            console.error( bind + ' is already in use' );
+            process.exit(1);
+            break;
 
-            default:
-                throw error;
-        }
-    };
+        default:
+            console.log( `E: www-server unhandled error !!!` );
+            console.log( error ); 
+            //throw error;
+    }
+};
 
 
-    const handleOnListening = () => {
+const handleOnListening = () => {
 
-        /**
-         * Event listener for HTTP server "listening" event.
-         */
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
 
-        let addr = server.address();
-        let bind = typeof addr === 'string' 
-            ? 'pipe ' + addr
-            : 'port ' + addr.port;
-            
-        debug( 'Listening on ' + bind );
-    };
+    let addr = server.address();
+    let bind = typeof addr === 'string' 
+        ? 'pipe ' + addr
+        : 'port ' + addr.port
+    ;
+        
+    debug( 'Listening on ' + bind );
+};
 
 
 server.on( 'error', handleOnError );
@@ -151,33 +153,55 @@ server.listen( port,  () => {
 // CAPTURE APP TERMINATION / RESTART EVENTS
 
 
-process.once( 'SIGUSR2', // For nodemon restarts
-    () => {
-    databasesShutdown( 
-        'nodemon restart', 
+process.once( 'SIGUSR2', () => { // For nodemon restarts
+    
+    databasesShutdown( 'nodemon restart', 
         () => { 
-        shutdownTheServer()
-        .then( () => {
-                process.kill( process.pid, 'SIGUSR2' ); 
-        });
-    });
+            shutdownTheServer()
+            .then(   
+                function () {
+                    setTimeout(
+                        () => {
+                            process.kill( process.pid, 'SIGUSR2' ); 
+                        }, 1000
+                    );
+                }            
+            );
+        }
+    );
 });
 
 // For app termination
-process.on( 'SIGINT', () => 
-{ 
-    databasesShutdown( 'app termination', () => 
-    {
-        shutdownTheServer().then( () => { process.exit(0); });
+process.on( 'SIGINT', () => {
+
+    databasesShutdown( 'app termination', () => {
+
+        shutdownTheServer()
+        .then( 
+            function () {
+                setTimeout(
+                    () => { process.exit(0); },
+                    1000
+                );
+            }
+        );
     });
 });
 
 // For Heroku app termination
-process.on( 'SIGTERM', () => 
-{
-    databasesShutdown( 'Heroku app termination', () => 
-    {
-        shutdownTheServer().then( () => { process.exit(0); });
+process.on( 'SIGTERM', () => {
+
+    databasesShutdown( 'Heroku app termination', () => {
+        
+        shutdownTheServer()
+        .then( 
+            function () {
+                setTimeout(
+                    () => { process.exit(0); },
+                    1000
+                );
+            }
+        );
     });
 });
 
@@ -228,15 +252,13 @@ function serverAppOutput( outputMode, appVersion, httpServer ) {
     const outputs = {
         full: () => console.log( 'Express server = ',  httpServer ),
         addr: () => {
-                console.log( 'app version ', appVersion.cyan );
-                console.log(
+            console.log( 'app version ', appVersion.cyan );
+            console.log(
                 'Express server = "' + address.cyan + '" Family= "' + family.cyan,
                 '" listening on ' + bind.cyan );
-            },
+        },
         default: () => console.log( '\n' )
     };  
 
     (outputs[ outputMode.toLowerCase() ] || outputs[ 'default' ])();
 }
-
-

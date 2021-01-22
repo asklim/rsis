@@ -25,20 +25,22 @@ import { TelegramUserInfo } from "components/misc/Telegram";
 
 import dashboard from "assets/jss/m-d-r/views/dashboardStyle.js";
 
+
 const styles = {
-  cardCategoryWhite: {
-    ... dashboard.cardCategoryWhite,
-    "& a,& a:hover,& a:focus": {
-      color: "#FFFFFF"
+
+    cardCategoryWhite: {
+        ... dashboard.cardCategoryWhite,
+        "& a,& a:hover,& a:focus": {
+            color: "#FFFFFF"
+        }
+    },
+    cardTitleWhite: {
+        ... dashboard.cardTitleWhite,
+        "& small": {
+            ... dashboard.cardTitleWhite["& small"],
+            fontSize: "65%"
+        }
     }
-  },
-  cardTitleWhite: {
-    ... dashboard.cardTitleWhite,
-    "& small": {
-      ... dashboard.cardTitleWhite["& small"],
-      fontSize: "65%"
-    }
-  }
 };
 
 //console.log('DialogList styles ', styles);
@@ -46,120 +48,114 @@ const useStyles = makeStyles( styles );
 
 
 
-export default function DialogList() 
-{
-  const classes = useStyles();
+export default function DialogList() {
 
-  return (
-    <GridContainer>
+    const classes = useStyles();
 
-      <GridItem xs={12} sm={8} md={6}>
-        <Card>
-          <CardHeader color="warning">
-            <h4 className={classes.cardTitleWhite}>Simple Dialog Demo</h4>
-            <p className={classes.cardCategoryWhite}>
-              Simple dialog w/React Class Component.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <SimpleDialogDemoCC />
-          </CardBody>
-        </Card>
-      </GridItem>
+    return ( <GridContainer>
 
-      <GridItem xs={12} sm={8} md={6}>
-        <Card>
-          <CardHeader color="rose">
-            <h4 className={classes.cardTitleWhite}>Simple Dialog Demo</h4>
-            <p className={classes.cardCategoryWhite}
-              >Simple dialog w/React Functional Component (Hooks)
-            </p>
-          </CardHeader>
+        <GridItem xs={12} sm={8} md={6}>
+            <Card>
+                <CardHeader color="warning">
+                    <h4 className={classes.cardTitleWhite}>Simple Dialog Demo</h4>
+                    <p className={classes.cardCategoryWhite}>
+                    Simple dialog w/React Class Component.
+                    </p>
+                </CardHeader>
+                <CardBody>
+                    <SimpleDialogDemoCC />
+                </CardBody>
+            </Card>
+        </GridItem>
 
-          <CardBody>
-            <SimpleDialogDemoRFC />
-          </CardBody>
+        <GridItem xs={12} sm={8} md={6}>
+            <Card>
+                <CardHeader color="rose">
+                    <h4 className={classes.cardTitleWhite}>Simple Dialog Demo</h4>
+                    <p className={classes.cardCategoryWhite}
+                    >Simple dialog w/React Functional Component (Hooks)
+                    </p>
+                </CardHeader>
 
-        </Card>
-      </GridItem>
+                <CardBody>
+                    <SimpleDialogDemoRFC />
+                </CardBody>
+            </Card>
+        </GridItem>
 
-      <GridItem xs={12} sm={12} md={8} lg={6} xl={6}>
-        <Card>
-          <CardHeader color="warning">
-            <h4 className={classes.cardTitleWhite}>Telegram Info Panel</h4>
-            <p className={classes.cardCategoryWhite}>
-              Simple Telegram Client
-            </p>
-          </CardHeader>
+        <GridItem xs={12} sm={12} md={8} lg={6} xl={6}>
+            <Card>
+                <CardHeader color="warning">
+                    <h4 className={classes.cardTitleWhite}>Telegram Info Panel</h4>
+                    <p className={classes.cardCategoryWhite}>
+                    Simple Telegram Client
+                    </p>
+                </CardHeader>
 
-          <CardBody>
-            <TelegramUserInfo />
-          </CardBody>
+                <CardBody>
+                    <TelegramUserInfo />
+                </CardBody>
+            </Card>
+        </GridItem>
 
-        </Card>
-      </GridItem>
+        <GridItem xs={12} sm={12} md={10} lg={8} xl={6}>
+            <Card>
+                <CardHeader color ="rose">
+                    <h4 className ={classes.cardTitleWhite}>Todo List</h4>
+                    <p className ={classes.cardCategoryWhite}>
+                    Simple sample for todos (input, check/uncheck, delete)
+                    </p>
+                </CardHeader>
 
-      <GridItem xs={12} sm={12} md={10} lg={8} xl={6}>
-        <Card>
-          <CardHeader color ="rose">
-            <h4 className ={classes.cardTitleWhite}>Todo List</h4>
-            <p className ={classes.cardCategoryWhite}>
-              Simple sample for todos (input, check/uncheck, delete)
-            </p>
-          </CardHeader>
+                <CardBody>
+                    <Typography component ="h1" variant ="h2">
+                    Todos
+                    </Typography>
 
-          <CardBody>
-            <Typography component ="h1" variant ="h2">
-              Todos
-            </Typography>
+                    <TodosInputList classes ={classes} />
+                </CardBody>
+            </Card>
+        </GridItem>
 
-            <TodosInputList classes ={classes} />
-          </CardBody>
+        <GridItem xs={12} sm={12} md={8} lg={6}>
+            <Card>
+                <CardHeader color="warning">
+                    <h4 className={classes.cardTitleWhite}>Alert Dialog</h4>
+                    <p className={classes.cardCategoryWhite}>
+                    Simple Alert dialog w/Hooks
+                    </p>
+                </CardHeader>
 
-        </Card>
-      </GridItem>
+                <CardBody>
+                    <AlertDialog />
+                </CardBody>
+            </Card>
+        </GridItem>
 
-      <GridItem xs={12} sm={12} md={8} lg={6}>
-        <Card>
-          <CardHeader color="warning">
-            <h4 className={classes.cardTitleWhite}>Alert Dialog</h4>
-            <p className={classes.cardCategoryWhite}>
-              Simple Alert dialog w/Hooks
-            </p>
-          </CardHeader>
+        <GridItem xs={12} sm={12} md={10} lg={8}>
+            <Card>
+                <CardHeader color="primary">
+                    <h4 className={classes.cardTitleWhite}>Simple Table</h4>
+                    <p className={classes.cardCategoryWhite}>
+                    Here is a subtitle for this table
+                    </p>
+                </CardHeader>
+                <CardBody>
+                    <Table
+                        tableHeaderColor="primary"
+                        tableHead={["Name", "Country", "City", "Salary"]}
+                        tableData={[
+                            ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
+                            ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
+                            ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
+                            ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
+                            ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
+                            ["Mason Porter", "Chile", "Gloucester", "$78,615"]
+                        ]}
+                    />
+                </CardBody>
+            </Card>
+        </GridItem>
 
-          <CardBody>
-            <AlertDialog />
-          </CardBody>
-
-        </Card>
-      </GridItem>
-
-      <GridItem xs={12} sm={12} md={10} lg={8}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Simple Table</h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["Name", "Country", "City", "Salary"]}
-              tableData={[
-                ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-                ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-                ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-                ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-                ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-                ["Mason Porter", "Chile", "Gloucester", "$78,615"]
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </GridItem>
-
-    </GridContainer>
-  );
+    </GridContainer> );
 }

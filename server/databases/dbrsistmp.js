@@ -4,9 +4,11 @@ const {
   dbName,
   mongoURI 
 } = require( '../helpers/serverconfig' );
+
 const { rsistmp: databaseName } = dbName;
 
-let title = 'rsis.tmp';
+let title = `temp-db [${databaseName}]`;
+
 let uri = ( process.env.NODE_ENV === 'production' ) 
   ? util.format( mongoURI.CLOUDDB_TEMPLATE,
       process.env.ATLAS_CREDENTIALS,
