@@ -20,7 +20,7 @@
 /** */
 const debug = require( 'debug' )('_helper:herokuapp');
 
-const log = require( './logger' );
+const log = require( './logger' )('Heroku: ');
 //require( 'loggis' );
 /*log.configure({
     loglevel: 'info',
@@ -70,7 +70,7 @@ const reconnect = (options) => {
             // Если к этому моменту herokuTimer == null, Ничего не выводим
             //let nowTime = (new Date()).toISOString();
             //console.log( `ping Heroku app is Ok at ${nowTime}: `, resBody ); 
-            log.info( `ping Heroku app is Ok: `, resBody ); 
+            log.info( `app ping is Ok: `, resBody ); 
         }
     })
     .catch( exception => {
@@ -106,13 +106,6 @@ function tryConnectXtimes (options, reqOptions) {
             if( n != 1 ) {
                 log.info(`Connect attempt #${n} to ${reqOptions.url}`);
             }
-            /*if( n == 1 ) {
-                console.log(`Connect attempt #${n} to ${reqOptions.url}`);
-            }
-            else {
-                let nowTime = (new Date()).toISOString();
-                console.log(`Connect attempt #${n} at ${nowTime}`);
-            }*/
             
             request( reqOptions, 
                 (err, response, resBody) => {
@@ -162,7 +155,7 @@ const startReconnection = () => {
         herokuTimer = setInterval( reconnect, reconnectInterval, options);
         //let nowTime = (new Date()).toISOString();
         //console.log( `No-Sleep Heroku-App is started at ${nowTime}.` );
-        log.info( `No-Sleep Heroku-App is started.` );
+        log.info( `No-Sleep-Heroku-App started.` );
         reconnect( options );
     }  
 };
@@ -183,7 +176,7 @@ const stopReconnection = () => {
         herokuTimer = null;
         //let nowTime = (new Date()).toISOString();
         //console.log( `No-Sleep Heroku-App is stopped at ${nowTime}.` );
-        log.info( `No-Sleep Heroku-App is stopped.` );
+        log.info( `No-Sleep-Heroku-App stopped.` );
     }
 };
 

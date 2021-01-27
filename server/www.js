@@ -4,8 +4,8 @@ require( 'dotenv' ).config();
 
 const {
     app: rsisExpressApp,
-    databasesShutdown, } = require( './app-server' )
-;
+    databasesShutdown, 
+} = require( './app-server' );
 
 const debug = require( 'debug' )('rsis:www');
 const http = require( 'http' );
@@ -13,10 +13,10 @@ const os = require( 'os' );
 const util = require( 'util' );
 const colors = require( 'colors' );
 
+const { icwd } = require( './helpers/serverconfig' );
+//const icwd = require( 'fs' ).realpathSync( process.cwd() );
 
-const icwd = require( 'fs' ).realpathSync( process.cwd() );
-
-let version = require( `${icwd}/package.json` ).version;
+const version = require( `${icwd}/package.json` ).version;
 
 // пока работает только через 'npm run compile'
 //import app from '../server/app-server';
@@ -26,9 +26,9 @@ let version = require( `${icwd}/package.json` ).version;
 //const icwd = process.env.INIT_CWD; // НЕ РАБОТАЕТ на Heroku: undefined
 //console.log( process.env );
 
-let { PWD, USER, NAME, } = process.env;
+const { PWD, USER, NAME, } = process.env;
 
-let userInfo = util.format('%O', os.userInfo());
+const userInfo = util.format('%O', os.userInfo());
 
 console.log( colors.red( 'package.json dir is ', icwd )); // = '/app' on Heroku
 console.log( `PWD (${__filename}) is ${PWD}`.red );
@@ -207,36 +207,39 @@ process.on( 'SIGTERM', () => {
 
 
 
-
-function normalizePort( val ) {
-    
-    /**
-     * Normalize a port into a number, string, or false.
-     */
+/**
+ * Normalize a port into a number, string, or false.
+ */
+function normalizePort( val ) {  
 
     let port = parseInt( val, 10 );
 
-    if( isNaN( port ) ) {  // named pipe
-     
+    return isNaN( port )
+        ? val       // named pipe
+        : port >= 0
+            ? port  // port number
+            : false
+    ;
+
+    /*if( isNaN( port ) ) {  // named pipe     
         return val;
     }
-
-    if( port >= 0 ) {     // port number
-        
+    if( port >= 0 ) {     // port number        
         return port;
     }
-    return false;
+    return false;*/
 }
 
 
 
-
+/**
+ * 
+ * @param {*} outputMode 
+ * @param {*} appVersion 
+ * @param {*} httpServer 
+ */
 function serverAppOutput( outputMode, appVersion, httpServer ) {  
-    
-    
-    /**
-     * 
-    */
+
 
     let serverAddress = httpServer.address();
     let { 
