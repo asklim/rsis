@@ -123,7 +123,7 @@
         "react": "^16.14.0",
         "react-bootstrap": "^0.32.4",
         "react-chartist": "^0.13.3",
-        "react-dev-utils": "^11.0.1",
+        "react-dev-utils": "^11.0.4",
         "react-dom": "^16.14.0",
         "react-google-maps": "^9.4.5",
         "react-hot-loader": "^4.12.20",
