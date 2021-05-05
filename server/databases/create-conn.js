@@ -1,53 +1,75 @@
-//import { mongoose } from 'mongoose';
-const mongoose = require( 'mongoose' );
+const debug = require( 'debug' )( 'dbs:connect' );
+const { 
+    createConnection,
+    connections,
+} = require( 'mongoose' );
 const infoDB = require( './infodb' );
+const { consoleLogger, } = require( '../helpers' );
 
 
-module.exports.createConn = function(uri, title) {
-
-
-    const connection = mongoose.createConnection( uri, {
-
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true, 
-    });
-    const { host, port } = connection;
+module.exports = function createConn (uri, title) {
 
     
+    const log = consoleLogger( `${title}:` );
+
+    let dbConnect;
+    try {
+        dbConnect = createConnection( uri, 
+            {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useCreateIndex: true, 
+            }
+        );
+        //debug( 'connection state:', dbConnect.readyState );
+    }
+    catch (error) {
+        log.error( error );
+    }
+    debug( `${title}: connection's count:`, connections.length  );
+    // first 2, then 3, then 4
+
     // CONNECTION EVENTS
-    connection.on( 'connected', () => {
 
-        console.log( `${title}: connected to ${host}:${port}` );
-        infoDB.log( connection );
+    dbConnect.on( 'connected', () => {
+        const { host, port } = dbConnect;
+        log.info( `connected to ${host}:${port}` );
+        infoDB.log( dbConnect );
     });
 
-    connection.on( 'error', (err) => {
 
-        console.log( title, ': connection error: ', err );
+    dbConnect.on( 'error', (err) => {
+        log.error( 'connection error:', err );
     });
 
-    connection.on( 'disconnecting', () => {
 
-        console.log( `${title} connection closing ...` );
+    dbConnect.on( 'disconnecting', () => {
+        log.info( `connection closing ...` );
     });  
 
-    connection.on( 'disconnected', () => {
 
-        console.log( `${title} disconnected from MongoDB.` );
+    dbConnect.on( 'disconnected', () => {
+        log.info( `disconnected from MongoDB.` );
     });
 
-    connection.on( 'close', () => {
 
-        console.log( `${title} connection closed.` );
+    dbConnect.on( 'close', () => {
+        log.info( `connection closed.` );
     });
 
-    connection.closeConn = () => {
-
-        return new Promise( resolve => 
-            connection.close( () => resolve( title ))
+    /*
+    dbConnect.closeConn = () => {
+        return new Promise( 
+            (resolve) => dbConnect.close( 
+                () => resolve( title )
+            )
         );
+    };*/
+
+    dbConnect.closeConn = async () => {
+        await dbConnect.close();
+        return title;
     };
 
-    return connection;
+    return dbConnect;
 };

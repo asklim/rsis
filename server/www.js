@@ -10,11 +10,10 @@ const {
 const debug = require( 'debug' )('rsis:www');
 const http = require( 'http' );
 const os = require( 'os' );
-const util = require( 'util' );
+const { format } = require( 'util' );
 const colors = require( 'colors' );
 
 const { icwd } = require( './helpers/serverconfig' );
-//const icwd = require( 'fs' ).realpathSync( process.cwd() );
 
 const version = require( `${icwd}/package.json` ).version;
 
@@ -28,7 +27,7 @@ const version = require( `${icwd}/package.json` ).version;
 
 const { PWD, USER, NAME, } = process.env;
 
-const userInfo = util.format('%O', os.userInfo());
+const userInfo = format('%o', os.userInfo());
 
 console.log( colors.red( 'package.json dir is ', icwd )); // = '/app' on Heroku
 console.log( `PWD (${__filename}) is ${PWD}`.red );
@@ -255,7 +254,9 @@ function serverAppOutput( outputMode, appVersion, httpServer ) {
     const outputs = {
         full: () => console.log( 'Express server = ',  httpServer ),
         addr: () => {
+            const { NODE_ENV } = process.env;
             console.log( 'app version ', appVersion.cyan );
+            console.log( 'NODE Environment is ', NODE_ENV.cyan );
             console.log(
                 'Express server = "' + address.cyan + '" Family= "' + family.cyan,
                 '" listening on ' + bind.cyan );

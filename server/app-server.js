@@ -21,26 +21,22 @@ const isHMR = DEV_MODE === 'HotModuleReplacement';
 
 const passport = require( 'passport' );  //passport must be before dbs-models
 const { 
-    createConns,
+    createMongoDBConnections,
     databasesShutdown,
 } = require( './databases' );
 
-createConns();
+
+createMongoDBConnections();
+
 
 require( './passport' ); //after db create models
 
 const app = express();
-const apiRouter = require( './routes/api-router' );
+const apiRouter = require( './api-router' );
 
 // view engine setup
 app.set( 'views', `${icwd}/server/views` );
 app.set( 'view engine', 'ejs' );
-
-/*
-app.use((req,res,next) => {
-    requestInfo2console(req);
-    next();
-});*/
 
 app.use( passport.initialize() );
 
@@ -68,10 +64,9 @@ app.use( express.urlencoded({
 
 app.use( cookieParser() );
 
-app.use( '/api', apiRouter );
-
 app.use( express.static( `${icwd}/static` ));
 
+app.use( '/api', apiRouter );
 
 if( !isProduction && isHMR ) {
         
@@ -79,7 +74,6 @@ if( !isProduction && isHMR ) {
     const webpackConfig = require( `${icwd}/config/webpack.devhmr` );
     const webpackDevMiddleware = require( 'webpack-dev-middleware' );
 
-    //const webpackConfig = configFactory( 'HotModuleReplacement' /*'development'*/ );
     const compiler = webpack( webpackConfig );
 
     const wdmOption = {        
@@ -137,7 +131,7 @@ app.use( (err, req, res, next) => {
 
     // render the error page
     res.status( err.status || 500 );
-    res.render( 'error' );
+    //res.render( 'error' );
 });
 
 
@@ -148,10 +142,3 @@ module.exports = {
     databasesShutdown,
 };
 
-
-/*
-function requestInfo2console(req) {
-    console.log(`Received request: ${req.method} ${req.url}`);  
-    //+ ` from ${req.headers['user-agent']}`);
-}
-*/

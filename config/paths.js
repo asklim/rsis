@@ -1,7 +1,7 @@
 
 const path = require( 'path' );
 const fs = require( 'fs' );
-const url = require( 'url' );
+//const url = require( 'url' );
 
 
 
@@ -48,7 +48,9 @@ function getServedPath (appPackageJson) {
 
     const publicUrl = getPublicUrl( appPackageJson );
     const servedUrl = envPublicUrl 
-        || ( publicUrl ? url.parse( publicUrl ).pathname : '/' );
+        || ( publicUrl && publicUrl.startsWith( 'http' )
+            ? (new URL( publicUrl )).pathname 
+            : '/' );
     
     return ensureSlash( servedUrl, true );
 }
@@ -88,7 +90,7 @@ module.exports = {
     appPath : resolveApp('.'),
     appBuild : resolveApp('static'), //('build'),
     appPublic : resolveApp('public'),
-    ejsRoot : resolveApp('src/index.ejs'),
+    ejsRoot : resolveApp('server/views/index.ejs'),
     appHtml : resolveApp('src/index.html'),
     appHtmlTemplate : resolveApp('src/template.html'),
     appIndexJs : resolveModule(resolveApp, 'src/index'),

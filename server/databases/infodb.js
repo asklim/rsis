@@ -1,41 +1,55 @@
-/**
- * iDb - mongoose.connection to MongoDB
- */
+const debug = require( 'debug' )( '-dbs:info' );
+const { formatWithOptions } = require( 'util' );
 
-module.exports.log = function(iDb) {
+module.exports.log = async function (mongooseConnection) {
   
-  //console.log('dbinfo: Mongoose version %s', mongoose.version);
+    //debug( `Mongoose version ${mongooseConnection.base.version}` );
 
-    var title = `dbinfo: ${iDb.host}:${iDb.port}/${iDb.db.databaseName}`;
-  
-/*  console.log(`${title}: collection's count = %d`, 
-                 Object.keys(iDb.collections).length);
-  console.log(`${title}: model's count = ${iDb.modelNames().length}`);  
-  console.log(`${title}: `, iDb.modelNames());
-  */
+    const { host, port, db, id } = mongooseConnection;
 
-    var callArr = [];
-    let models = iDb.modelNames(); //массив имен моделей
+    const title = `dbinfo: ${host}:${port}/${db.databaseName}`;
 
+    const models = mongooseConnection.modelNames(); //массив имен моделей
+    
+    debug( `Mongoose connection id: ${id}` );
+    //debug( `${title}: model's count = ${models.length}` );
+    //debug( `${title}:`, models );
+
+    /*
+    const callAllModelsDocumentsCounting = [];
     models
-    .forEach( modelName => {   
-        let theModel = iDb.model( modelName );
-        callArr.push( 
-        theModel.countDocuments( {}, (err, count) => count )
-        );  
+    .forEach( (modelName) => {
+        let theModel = mongooseConnection.model( modelName );
+
+        callAllModelsDocumentsCounting
+        .push(
+            new Promise( (resolve) => {
+                theModel
+                .countDocuments( {}, 
+                    (err, count) => resolve([ modelName, count ])
+                );
+            })
+        );
     });
 
-    Promise.all( callArr )
-    .then( docsCounts => {  
-        console.log( `${title}: `, models, docsCounts );
-    })
-    .catch( error => console.log( error.message ));
+    Promise
+    .all( callAllModelsDocumentsCounting )
+    .then( 
+        (infoDocs) => {
+            console.log( `${title}:\n`,
+                formatWithOptions( { colors: true }, '%O', infoDocs )
+            );
+        })
+    .catch( (error) => console.log( error.message ));
+    */
+    const infoDocs = [];
+    for( let modelName of models ) {
+        let theModel = mongooseConnection.model( modelName );
+        let count = await theModel.countDocuments({});
+        infoDocs.push([ modelName, count ]);
+    }
 
-/*  Object.keys(iDb.collections).forEach(key => {
-    let coll = iDb.collection(key);
-    coll.countDocuments({}, function(err, count) {
-      console.log(`${title}: In ${key} collection ${count} items.`);
-    });     
-  });
-*/
+    console.log( `${title}:\n`,
+        formatWithOptions( { colors: true }, '%O', infoDocs )
+    );
 };

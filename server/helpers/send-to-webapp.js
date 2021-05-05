@@ -1,77 +1,82 @@
-var debug = require('debug')('helper:sendToWebApp');
-const request = require('request');
+const debug = require( 'debug' )( 'helper:sendToWebApp' );
+const request = require( 'request' );
 
-const icwd = require('fs').realpathSync(process.cwd());
-const HTTP = require(`${icwd}/src/config/http-response-codes`);
-/*
-const HTTP_OK = 200;
-const HTTP_CREATED = 201;
-const HTTP_CONFLICT = 409;
-const HTTP_SERVICE_UNAVAILABLE = 503;
-*/
+const {
+    //icwd,
+    consoleLogger,
+    httpResponseCodes: HTTP,
+} = require(`../helpers`);
+
+const log = consoleLogger( 'toWebApp:' );
 
 function sendTo (apiRoute, verb, reqBody, callback) {
-  let webServerURL = process.env.API_SERVER;
-  
-  const reqOptions = {
-    url : `${webServerURL}${apiRoute}`,
-    method : `${verb}`,
-    headers : {      
-      "Content-Type" : "application/json",
-      "charset" : "utf-8"
-    },
-    json : reqBody,
-    qs : {},
-  }; 
-  //debug('sendTo\n', reqBody);
 
-  request( 
-    reqOptions,
-    (err, res, /*body*/) =>
-    {  
-      if(err) {
-        callback( HTTP.SERVICE_UNAVAILABLE );
-        return;   
-      }
-      callback( res.statusCode ); 
-  });
+    let webServerURL = process.env.API_SERVER;
+
+    const reqOptions = {
+        url : `${webServerURL}${apiRoute}`,
+        method : `${verb}`,
+        headers : {
+            "Content-Type" : "application/json",
+            "charset" : "utf-8"
+        },
+        json : reqBody,
+        qs : {},
+    }; 
+    //debug('sendTo\n', reqBody);
+
+    request( 
+        reqOptions,
+        (err, res, /*body*/) => {
+
+            if( err ) {
+                return callback( HTTP.SERVICE_UNAVAILABLE );
+            }
+            return callback( res.statusCode );
+        });
 }
 
 
-module.exports.sendToWebApp = (apiRoute, reqBody) => 
-{
-  let { id, type, pid } = reqBody;
-  let docMetaInfo = ` - type: ${type} id: ${id} pid: ${pid}`;
-  debug( docMetaInfo );
+module.exports.sendToWebApp = function (apiRoute, reqBody) {
 
-  sendTo( apiRoute, "POST", reqBody,
-    postStatus => 
-    {
-      debug( ' - POST - %d', postStatus );
-      if( postStatus == HTTP.SERVICE_UNAVAILABLE ) {
-        console.log( 'WebApp Service UnAvailable, ' + docMetaInfo );
-        return;
-      }
- 
-      if( postStatus == HTTP.CREATED ) {
-        console.log( 'WebApp document Created, ' + docMetaInfo );
-        return;
-      }
-      
-      if( postStatus == HTTP.CONFLICT ) { //нельзя создать. Уже существует.
-        sendTo( apiRoute, "PUT", reqBody,
-          putStatus => 
-          {
-            debug( 'sendToWebApp - PUT - %d', putStatus );
-            if( putStatus == HTTP.OK ) {
-              console.log( 'WebApp document Updated, ' + docMetaInfo );
-              return;
+    const { id, type, pid } = reqBody;
+   
+    const docMetaInfo = `- type: ${type} id: ${id} pid: ${pid}`;
+    debug( docMetaInfo );
+
+    sendTo( 
+        apiRoute, 
+        "POST", 
+        reqBody,
+        (postStatus) => {
+
+            debug( ' - POST - %d', postStatus );
+            if( postStatus >= HTTP.INTERNAL_SERVICE_ERROR ) {
+                return log.error( 'Service Error, ' + docMetaInfo );
             }
-            console.log( 'WebApp document sending FAILURE, ' + docMetaInfo );
-            return;
-        });
-      }   
-  });
+ 
+            if( postStatus == HTTP.CREATED ) {
+                return log.info( 'SUCCESS: document Created, ' + docMetaInfo );
+            }
+      
+            if( postStatus == HTTP.CONFLICT ) { //нельзя создать. Уже существует.
+
+                sendTo(
+                    apiRoute,
+                    "PUT",
+                    reqBody,
+                    (putStatus) => {
+
+                        debug( 'sendToWebApp - PUT - %d', putStatus );
+                        if( putStatus == HTTP.OK ) {
+                            return log.info( 'SUCCESS: document Updated, ' + docMetaInfo );
+                        }
+                        return log.error( 'document sending FAILURE, ' + docMetaInfo );
+                    }
+                );
+            }
+        }
+    );
 };
 
 /*

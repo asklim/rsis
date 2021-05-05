@@ -1,5 +1,8 @@
+//const debug = require( 'debug' )( 'dbs:index' );
+const { consoleLogger, } = require( '../helpers' );
 
-var dbs = {};
+const log = consoleLogger( `dbs:` );
+const dbs = {};
 
 /**
  * @name getDB
@@ -9,13 +12,13 @@ var dbs = {};
  * @return {Mongoose.Connection} The connection to database
  *
 **/
-const getDB = dbType => {    
+const getDB = (dbType) => {
     
     if( typeof dbType !== 'string' ) {
-        console.log( 'dbType must be a string.' );
+        log.warn( 'dbType must be a string.' );
         return;
     }
-    //console.log( 'getDB : ', ); 
+    //debug( 'getDB : ', ); 
     switch( dbType.toLowerCase() ) {
         case 'config': return dbs.rsiscfg;
         case   'temp': return dbs.rsistmp;
@@ -24,11 +27,13 @@ const getDB = dbType => {
 };
 
 
-const createConns = () => {
+const createMongoDBConnections = () => {
 
     if( !dbs.rsiscfg ) { dbs.rsiscfg = require( './dbrsiscfg' ); }
     if( !dbs.rsissum ) { dbs.rsissum = require( './dbrsissum' ); }
     if( !dbs.rsistmp ) { dbs.rsistmp = require( './dbrsistmp' ); }
+
+    //debug( 'rsiscfg', dbs.rsiscfg );
 };
 
 
@@ -40,31 +45,41 @@ const createConns = () => {
  *                          к базам данных
  *
 **/
-const databasesShutdown = (msg, next) => {
-
+const databasesShutdown = async (msg, next) => {
+    /*
     const allDbsClosingPromises = Object.keys( dbs )
     .map( 
-        dbKey => dbs[ dbKey ].closeConn() 
+        (dbKey) => dbs[ dbKey ].closeConn() 
     );
 
     Promise.all( allDbsClosingPromises
-        /*[
-        dbTmp.closeConn(),
-        dbSum.closeConn(),
-        dbCfg.closeConn()
-        ]*/
+        //[ dbTmp.closeConn(), dbSum.closeConn(), dbCfg.closeConn() ]
     )
-    .then( dbsNames => {
+    .then( (dbsNames) => {
         console.log( 'dbs closed: ', dbsNames );
         console.log( 'Mongoose disconnected through ' + msg );
         next();  
     })
-    .catch( error => console.log( error.message ));
+    .catch( (error) => log.error( error ));
+    */
+
+    try {
+        const dbsTitles = [];
+        for( let dbKey in dbs ) {
+            dbsTitles.push( await dbs[ dbKey ].closeConn() );
+        }
+        console.log( 'dbs closed: ', dbsTitles );
+        console.log( `Mongoose disconnected through ${msg}` );
+        next();
+    }
+    catch (error) {
+        log.error( error );
+    }
 };
 
 
 module.exports = {
     getDB,
-    createConns,
+    createMongoDBConnections,
     databasesShutdown
 };

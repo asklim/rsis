@@ -19,19 +19,20 @@
 
 /** */
 const debug = require( 'debug' )('_helper:herokuapp');
+const { 
+    //icwd, 
+    consoleLogger,
+} = require( '../helpers' );
 
-const log = require( './logger' )('Heroku: ');
-//require( 'loggis' );
-/*log.configure({
-    loglevel: 'info',
-    colorize: true,
-    timestamp: true,
-});*/
+//console.log( 'logger', consoleLogger );
+
+const log = consoleLogger( 'Heroku:' );
+
 const request = require( 'request' );
 
 
 const TOTAL_ATTEMPTS = 5;
-const INTERVAL_BETWEEN_ATTEMPTS = 5000; 
+const MILLISECOND_BETWEEN_ATTEMPTS = 10*1000;
 
 var herokuTimer;
 var allTimeAppTimer;
@@ -59,7 +60,8 @@ const reconnect = (options) => {
             "Cache-Control": 'no-cache, no-store',
             charset: "utf-8"
         },
-        json: {}, qs: {}
+        json: {}, 
+        qs: {}
     };
 
     tryConnectXtimes( options, reqOptions )
@@ -104,7 +106,7 @@ function tryConnectXtimes (options, reqOptions) {
         function attempt (n) {
 
             if( n != 1 ) {
-                log.info(`Connect attempt #${n} to ${reqOptions.url}`);
+                log.info( `Connect attempt #${n} to ${reqOptions.url}` );
             }
             
             request( reqOptions, 
@@ -144,15 +146,15 @@ function tryConnectXtimes (options, reqOptions) {
 
 const startReconnection = () => {
 
-    debug('startReconnection called.');
+    debug( 'startReconnection called.' );
     
     if( !herokuTimer ) {
 
         let options = {
             totalAttempts: TOTAL_ATTEMPTS,
-            interval: INTERVAL_BETWEEN_ATTEMPTS,
+            interval: MILLISECOND_BETWEEN_ATTEMPTS,
         };
-        herokuTimer = setInterval( reconnect, reconnectInterval, options);
+        herokuTimer = setInterval( reconnect, reconnectInterval, options );
         //let nowTime = (new Date()).toISOString();
         //console.log( `No-Sleep Heroku-App is started at ${nowTime}.` );
         log.info( `No-Sleep-Heroku-App started.` );

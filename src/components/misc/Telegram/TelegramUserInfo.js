@@ -35,7 +35,7 @@ const useStyles = makeStyles(
 const TelegramUserInfo = () => {
     
     
-    const bot = useRef( null );
+    const tgBot = useRef( null );
     const [ chatId, setChatId ] = useState( '' );  
     const [ chatDetails, setChatDetails ] = useState( {chat: 'init'} );
     const [ accountInfo, setAccountInfo ] = useState( {bot: 'init'} );
@@ -46,61 +46,67 @@ const TelegramUserInfo = () => {
     const MIKAVBOT_TOKEN = "1004685561:AAHiJB6Vq6ZLmNjedgoz2wshDHacq6sb92w";
 
 
-        const saveChatId = idText => {
+    const saveChatId = idText => {
 
-            console.log('save Chat Id.');
-            let id = idText.trim();
-            if( id ) { setChatId( id ); }
-        };
-
-
-        useEffect( () => {
-
-            function _getToken () { return MIKAVBOT_TOKEN; }
-            
-            function getAccountInfo () {
-
-                bot.current.telegram.getMe()
-                .then( info => setAccountInfo( info ))
-                .catch( error => setAccountInfo( error ));
-            }
-
-            console.log( 'useEffect token' );
-            let theTGBotToken = _getToken();
-
-            if( theTGBotToken ) {  
-
-                //console.log( `botAccount Token: '${theTGBotToken}'` );  
-                bot.current = new Telegraf( theTGBotToken );
-
-                setToken( theTGBotToken );
-                getAccountInfo();
-            }  
-        }, [ token ] );
+        console.log('save Chat Id.');
+        let id = idText.trim();
+        if( id ) { setChatId( id ); }
+    };
 
 
-        useEffect( () => {
+    useEffect( () => {
 
-            function getChatDetails( id ) {
+        function _getToken () { return MIKAVBOT_TOKEN; }
 
-                console.log('get Chat Details.');
-                bot.current.telegram.getChat( id )
-                .then( details => setChatDetails( details ))
-                .catch( error => setChatDetails( error ));
-            }
-            
-            console.log('useEffect chat');
-            if( chatId ) { getChatDetails( chatId ); }
-        }, [ chatId ] );
+        function getAccountInfo () {
+            tgBot.current.telegram
+                .getMe()
+                .then( (info) => setAccountInfo( info ))
+            .catch( (error) => setAccountInfo( error ));
+        }
+
+        console.log( 'useEffect token' );
+        let theTGBotToken = _getToken();
+
+        if( theTGBotToken ) {
+            //console.log( `botAccount Token: '${theTGBotToken}'` );  
+            tgBot.current = new Telegraf( theTGBotToken );
+
+            setToken( theTGBotToken );
+            getAccountInfo();
+        }  
+    }, [ token ] );
 
 
-    return ( 
-        <div>
+    useEffect( () => {
+
+        function getChatDetails( id ) {
+
+            console.log('get Chat Details.');
+            tgBot.current.telegram
+                .getChat( id )
+                .then( (details) => setChatDetails( details ))
+            .catch( (error) => setChatDetails( error ));
+        }
+
+        console.log('useEffect chat');
+        if( chatId ) { getChatDetails( chatId ); }
+    }, [ chatId ] );
+
+
+    return (<div>
         <UserIdInputForm makeSave ={saveChatId} />
-        <InfoPanel title ={`Telegram User ${chatId} Details`} info ={chatDetails} classes ={classes}/>
-        <InfoPanel title ={'Telegram bot Account Details'} info ={accountInfo} classes ={classes}/>
-        </div>
-    );
+        <InfoPanel 
+            title ={`Telegram User ${chatId} Details`} 
+            info ={chatDetails} 
+            classes ={classes}
+        />
+        <InfoPanel 
+            title ={'Telegram bot Account Details'} 
+            info ={accountInfo} 
+            classes ={classes}
+        />
+    </div>);
 };
 
 

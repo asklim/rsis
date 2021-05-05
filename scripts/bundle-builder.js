@@ -55,7 +55,7 @@ const FileSizeReporter = require( 'react-dev-utils/FileSizeReporter' );
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 
-const formatWebpackMessages = require( '../server/helpers/format-webpack5-messages' );
+const formatWebpackMessages = require( './format-webpack5-messages' );
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
@@ -126,7 +126,8 @@ checkBrowsers( paths.appPath, isInteractive )
             const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
             if( tscCompileOnError ) {
                 console.log( chalk.yellow(
-                    'Compiled with the following type errors (you may want to check these before deploying your app):\n'
+                    'Compiled with the following type errors ' +
+                    '(you may want to check these before deploying your app):\n'
                 ));
                 printBuildError( err );
                 process.exit(1);
