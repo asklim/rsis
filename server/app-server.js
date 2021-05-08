@@ -7,7 +7,7 @@ const cors = require( 'cors' );
 const cookieParser = require( 'cookie-parser' );
 //const bodyParser = require( 'body-parser' );
 const morgan = require( 'morgan' );
-//const uuid = require( 'uuid/v4' );
+//const uuid = require( 'uuid' );
 const { icwd } = require( './helpers/serverconfig' );
 
 const {

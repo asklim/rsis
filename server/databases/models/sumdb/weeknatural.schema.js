@@ -1,4 +1,4 @@
-const mongoose = require( 'mongoose' );
+const { Schema } = require( 'mongoose' );
 
 
 
@@ -19,8 +19,8 @@ const mongoose = require( 'mongoose' );
  * @property {Number} valid	- Срок годности в месяцах 
  *
 **/
-// eslint-disable-next-line no-unused-vars
-const WeekNaturalRecord = new mongoose.Schema({
+
+const WeekNaturalRecord = new Schema({
 
     gid: {
         type: String, 
@@ -83,7 +83,7 @@ const WeekNaturalRecord = new mongoose.Schema({
  * @property {Object} body - данные в зависимости от типа агента
  * 
 **/
-const WeekNatural = new mongoose.Schema({
+const WeekNatural = new Schema({
 
     id: {
         type: Number, 
@@ -98,7 +98,7 @@ const WeekNatural = new mongoose.Schema({
     },
 
     body: {
-        type: [ WeekNaturalRecord /*mongoose.Mixed*/]
+        type: [ WeekNaturalRecord ]
     },
 
     host: {

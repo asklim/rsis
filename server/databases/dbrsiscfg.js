@@ -32,8 +32,8 @@ db.model( 'User', userSchema, 'users' );
 const productsCatalogSchema = require( './models/cfgdb/products-catalog.schema' );
 db.model( 'ProductsCatalog', productsCatalogSchema, 'products.catalogs' ); 
 
-const catalogLayoutSchema = require( './models/cfgdb/catalog-layout.schema' );
-db.model( 'CatalogLayout',catalogLayoutSchema, 'catalog.layouts' ); 
+const catalogLayoutsSchema = require( './models/cfgdb/catalog-layouts.schema' );
+db.model( 'CatalogLayouts',catalogLayoutsSchema, 'catalog.layouts' ); 
 
 
 module.exports = db;

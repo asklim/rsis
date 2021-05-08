@@ -4,7 +4,7 @@ const router = require( 'express' ).Router();
 
 require( './api/user/router' )( router );
 
-require( './api/config/catalog-layout/router' )( router );
+require( './api/config/catalog-layouts/router' )( router );
 
 require( './api/config/agents/router' )( router );
 

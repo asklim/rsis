@@ -46,11 +46,11 @@ module.exports = function createOne (req, res) {
     }  
 
     Agent
-    .find( { id, })
+    .find( { id, } )
     .limit( 1 )
     .exec( (err, docs) => { 
 
-        if( err ) {                 
+        if( err ) {
             log.error( err );
             return send500ServerError( res, err );
         }

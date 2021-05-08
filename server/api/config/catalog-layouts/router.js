@@ -4,7 +4,14 @@ const {
     callbackError405,
 } = require( '../../../helpers' );
 
-const ctrlCatalogs = require('./catalogs');
+const 
+    readOne = require( './read-one' )
+    ,createOne = require( './create-one' )
+    //,updateOne = require( './update-one' ),
+    //,deleteOne = require( './delete-one' )
+;
+
+//const ctrlCatalogs = require('./catalogs');
 const ctrlCatalogExcel = require('./catalogs4excel');
 const ctrlCatalogWeb = require('./catalogs4web');
 
@@ -37,10 +44,13 @@ module.exports = function ( router ) {
     **/
 
     const catalogs = `${catalog}s`;
+    const catalogsWithId = `${catalogs}/:catalogId`;
 
-    router.get( catalogs, ctrlCatalogs.catalogsAllClients );
+    router.get( catalogsWithId, readOne );
+
+    router.get( catalogs, readOne );
     router.post( catalogs, callbackError405 );
-    router.put( catalogs, callbackError405 );
+    router.put( catalogs, createOne );
     router.delete( catalogs, callbackError405 );
 
 

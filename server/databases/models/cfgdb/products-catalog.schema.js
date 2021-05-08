@@ -1,17 +1,14 @@
 const { Schema, } = require( 'mongoose' );
 
-const {
-    GID_PATH_DEFINITION,
-    LID_PATH_DEFINITION,
-} = require( '../schema.paths-definitions' );
+const PATH_DEFINITION = require( '../schema.paths-definitions' );
 
 
 
 const productCatalogItem = new Schema({
 
     /* FIELDS FROM CATALOG LAYOUT*/
-    lid: LID_PATH_DEFINITION,
-    gid: GID_PATH_DEFINITION,
+    lid: PATH_DEFINITION.ITEM_LID,
+    gid: PATH_DEFINITION.ITEM_GID,
     grp: {
         // ExcelClient Group (sort) Index
         // Используется для сортировки позиций
@@ -43,12 +40,13 @@ const productCatalogItem = new Schema({
     fhl: {
         // force highlight
         // Обязательное выделение позиции при печати
+        // 0 - Нет Выделения
         // 0b01 - Названия
         // 0b10 - цены
         type: Schema.Types.Number,
-        min: 1,
+        min: 0,
         max: 3,
-        required: true,
+        default: 0,
         set: v => Math.round(v),
     },
     part: {
@@ -139,6 +137,7 @@ const productsCatalog = new Schema({
     },
     since: {
         // С какого момента действует
+        // null - для первого каталога
         type: Schema.Types.Date,
     },
     until: {

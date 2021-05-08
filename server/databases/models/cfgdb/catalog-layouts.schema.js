@@ -1,15 +1,15 @@
-const { Schema } = require( 'mongoose' );
+const debug = require( 'debug' )( 'api:config:catalogLayouts' );
 
-const {
-    GID_PATH_DEFINITION,
-    LID_PATH_DEFINITION,
-} = require( '../schema.paths-definitions' );
+const { Schema } = require( 'mongoose' );
+const uuid = require( 'uuid' );
+
+const PATH_DEFINITION = require( '../schema.paths-definitions' );
 
 
 const xlGroup = new Schema({
 
-    lid: LID_PATH_DEFINITION,
-    gid: GID_PATH_DEFINITION,
+    lid: PATH_DEFINITION.GROUP_LID,
+    gid: PATH_DEFINITION.GROUP_GID,
     title: {
         type: Schema.Types.String,
         required: true,
@@ -26,8 +26,8 @@ const xlGroup = new Schema({
 
 const xlLayoutItem = new Schema({
 
-    lid: LID_PATH_DEFINITION,
-    gid: GID_PATH_DEFINITION,
+    lid: PATH_DEFINITION.ITEM_LID,
+    gid: PATH_DEFINITION.ITEM_GID,
     grp: {
         // ExcelClient Group (sort) Index
         // Используется для сортировки позиций
@@ -59,12 +59,13 @@ const xlLayoutItem = new Schema({
     fhl: {
         // force highlight
         // Обязательное выделение позиции при печати
+        // 0 - Нет выделения
         // 0b01 - Названия
         // 0b10 - цены
         type: Schema.Types.Number,
-        min: 1,
+        min: 0,
         max: 3,
-        required: true,
+        default: 0,
         set: v => Math.round(v),
     },
     part: {
@@ -114,18 +115,12 @@ const catalogLayout = new Schema({
         enum: [ 'coffeeTea' ],
         default: 'coffeeTea',
     },
-    type: {
+    /*type: {
         // Вариант каталога
         type: Schema.Types.String, 
         required: true,
-        enum: [ 
-            'lid2gid', 
-            'main', 
-            'short', 
-            'photo', 
-            'extra'
-        ]
-    },
+        enum: [ 'products' ],
+    },*/
     caption: {
         // Заголовок/Название каталога
         type: Schema.Types.String, 
@@ -138,6 +133,7 @@ const catalogLayout = new Schema({
     },
     since: {
         // С какого момента действует
+        // null - для первого каталога
         type: Schema.Types.Date,
     },
     until: {
@@ -172,6 +168,15 @@ const catalogLayout = new Schema({
         type: Schema.Types.Date, 
         default: Date.now,
     }
+});
+
+catalogLayout.pre( 'save', async function (/*next*/) {
+    // Pre middleware function
+    if( !this.uuid ) {
+        this.uuid = uuid.v4();
+        debug( `pre(save): ${this.uuid}` );
+    }
+    //return next();
 });
 
 

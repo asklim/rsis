@@ -15,7 +15,7 @@ const WeekNatural = db.model( 'WeekNatural' );
 
 
 /** 
- * @name create
+ * @name createOne
  * @description Create a new week Natural
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
@@ -27,7 +27,7 @@ const WeekNatural = db.model( 'WeekNatural' );
  * 
 **/
 
-const create = (req, res)  => {
+const createOne = (req, res)  => {
 
     log.info( `try create, sum-week-natural body.id: ${req.body.id}` ); 
     
@@ -80,4 +80,4 @@ const create = (req, res)  => {
 };
 
 
-module.exports = create;
+module.exports = createOne;

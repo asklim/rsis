@@ -5,16 +5,16 @@ const jwt = require( 'jsonwebtoken' );
 
 const userSchema = new Schema({
     email: {
-        type: String,
+        type: Schema.Types.String,
         unique: true,
         required: true
     },
     name: {
-        type: String,
+        type: Schema.Types.String,
         required: true
     },
-    hash: String,
-    salt: String
+    hash: Schema.Types.String,
+    salt: Schema.Types.String
 });
 
 
