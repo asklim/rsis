@@ -31,7 +31,7 @@ module.exports = async function createOne (req, res) {
 
 
     if( !req.body 
-        || Object.keys( req.body ).length == 0 ) {
+        || !Object.keys( req.body ).length ) {
         return send400BadRequest( res, 'Bad request, req.body is empty.' );
     }
 
@@ -59,7 +59,7 @@ module.exports = async function createOne (req, res) {
 
         const catalog = await CatalogLayouts.create( req.body );
 
-        let { uuid } = catalog;
+        const { uuid } = catalog;
         if( lastdoc ) {
             lastdoc.next = catalog._id;
             let saved = await lastdoc.save();

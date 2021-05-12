@@ -49,8 +49,8 @@ module.exports = function ( router ) {
     router.get( catalogsWithId, readOne );
 
     router.get( catalogs, readOne );
-    router.post( catalogs, callbackError405 );
-    router.put( catalogs, createOne );
+    router.post( catalogs, createOne );
+    router.put( catalogs, callbackError405 );
     router.delete( catalogs, callbackError405 );
 
 
