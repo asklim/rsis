@@ -28,25 +28,25 @@ const Agent = db.model( 'Agent' );
  */
 
 module.exports = function updateOne (req, res) {
-    
-    
+
+
     if( !req.body 
         || Object.keys( req.body ).length == 0 ) {
         return send400BadRequest( res, 'Bad request, body is empty' );
     }
     //console.log(req.body);
-    
+
     const { id } = req.body;
-    
-    if( !id ) {    
+
+    if( !id ) {
         return send400BadRequest( res, 'Bad request, <.id> field is required.' );
     }
 
     Agent.findOne(
         { id, },
         (err, findedAgent) => {
-            
-            if( err ) {                
+
+            if( err ) {
                 log.error( err );
                 return send500ServerError( res, err );
             }
@@ -61,15 +61,15 @@ module.exports = function updateOne (req, res) {
 
             findedAgent
             .save( (err, savedAgent) => {
-                
+
                 if( err ) {
                     return send500ServerError( res, err );
                 }
 
                 log.info( `SUCCESS: agent ${savedAgent.id} updated.` );
                 return send200Ok( res, savedAgent );
-                
+
             });
         }
     );
-};      
+};

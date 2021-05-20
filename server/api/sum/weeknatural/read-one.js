@@ -40,7 +40,7 @@ const readOne = (req, res) => {
         `\nI: finding weekNatural's params:`, req.params,
         `\nI: finding weekNatural's query :`, req.query
     );
-    
+
     const { weekId } = req.params;
 
     if( !req.params || !weekId ) {
@@ -52,7 +52,7 @@ const readOne = (req, res) => {
     let finding, sorting, weekNumber;
 
     if( weekId.toLowerCase() === 'last' ) {
-        
+
         finding = {};
         sorting = { id: -1 };
     }
@@ -66,7 +66,7 @@ const readOne = (req, res) => {
         }
 
         finding =  { id: weekNumber };
-        sorting =  {};            
+        sorting =  {};
     }
 
 
@@ -76,7 +76,7 @@ const readOne = (req, res) => {
         .limit(1)
         .exec( (err, docs) => {
 
-            if( err ) {                 
+            if( err ) {
                 log.error( err );
                 return send500ServerError( res, err );
             } 

@@ -20,7 +20,6 @@ const CatalogLayouts = db.model( 'CatalogLayouts' );
  * @name createOne
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
- * @fires 409 Conflict    & message
  * @fires 500 Server Error & error object
  * @returns {} undefined
  * @usage

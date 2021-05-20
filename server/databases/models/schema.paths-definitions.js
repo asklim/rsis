@@ -6,7 +6,7 @@ const ITEM_GID = {
     // Firma`s Global Product Catalog
     type: Schema.Types.Number,
     min: 2000000001,
-    max: 2009999999,
+    max: 2100999999,
     required: true,
     set: v => Math.round(v),
 };

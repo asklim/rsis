@@ -30,10 +30,10 @@ const userSchema = require( './models/cfgdb/user.schema' );
 db.model( 'User', userSchema, 'users' ); 
 
 const productsCatalogSchema = require( './models/cfgdb/products-catalog.schema' );
-db.model( 'ProductsCatalog', productsCatalogSchema, 'products.catalogs' ); 
+db.model( 'ProductsCatalogs', productsCatalogSchema, 'products.catalogs' ); 
 
-const catalogLayoutsSchema = require( './models/cfgdb/catalog-layouts.schema' );
-db.model( 'CatalogLayouts',catalogLayoutsSchema, 'catalog.layouts' ); 
+const catalogLayoutSchema = require( './models/cfgdb/catalog-layout.schema' );
+db.model( 'CatalogLayouts',catalogLayoutSchema, 'catalog.layouts' ); 
 
 
 module.exports = db;
