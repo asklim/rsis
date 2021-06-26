@@ -23,16 +23,16 @@ const db = createConn( `${uri}/${databaseName}`, title );
 // BRING IN YOUR SCHEMAS & MODELS
 // last (3rd) arg - collection`s name in MongoDB
 
-const agentSchema = require( './models/cfgdb/agent.schema' );
+const agentSchema = require( './mongodb/cfgdb/agent.schema' );
 db.model( 'Agent', agentSchema, 'agents' ); 
 
-const userSchema = require( './models/cfgdb/user.schema' );
+const userSchema = require( './mongodb/cfgdb/user.schema' );
 db.model( 'User', userSchema, 'users' ); 
 
-const productsCatalogSchema = require( './models/cfgdb/products-catalog.schema' );
+const productsCatalogSchema = require( './mongodb/cfgdb/products-catalog.schema' );
 db.model( 'ProductsCatalogs', productsCatalogSchema, 'products.catalogs' ); 
 
-const catalogLayoutSchema = require( './models/cfgdb/catalog-layout.schema' );
+const catalogLayoutSchema = require( './mongodb/cfgdb/catalog-layout.schema' );
 db.model( 'CatalogLayouts',catalogLayoutSchema, 'catalog.layouts' ); 
 
 

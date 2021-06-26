@@ -39,22 +39,22 @@ module.exports = function deleteOne (req, res) {
     }
 
     const weekNumber  = Number.parseInt( weekId, 10 );
-    
+
     if( !weekNumber ) {
         log.warn( `[weekNatural.deleteOne] bad parameter <:weekId> specified.` );
-        return send400BadRequest( res, 'Bad parameter <:weekId> in request.' );        
+        return send400BadRequest( res, 'Bad parameter <:weekId> in request.' );
     }
 
-    WeekNatural
-    .findOneAndDelete( 
+    WeekNatural.
+    findOneAndDelete(
         { id: weekNumber },
-        (err, doc) => { 
+        (err, doc) => {
 
             if( err ) {
                 log.error( err );
                 return send500ServerError( res, err );
             }
-            
+
             if( !doc ) {
                 return send404NotFound( res, doc );
             }

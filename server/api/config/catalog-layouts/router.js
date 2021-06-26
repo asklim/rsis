@@ -5,29 +5,24 @@ const {
 } = require( '../../../helpers' );
 
 const 
-    readOne = require( './read-one' ),
-    createOne = require( './create-one' )
-    //,updateOne = require( './update-one' ),
-    //,deleteOne = require( './delete-one' )
+    handlerGET = require( './handler-get' ),
+    handlerPOST = require( './handler-post' ),
+    handlerDELETE = require( './handler-delete' )
 ;
 
 const catalog = '/config/catalog-layout';
 
 module.exports = function ( router ) {
 
-    /** 
-     * get all catalogs (list?) 
-    **/
-
     const catalogs = `${catalog}s`;
     const catalogsWithId = `${catalogs}/:catalogId`;
 
-    router.get( catalogsWithId, readOne );
+    router.get( catalogsWithId, handlerGET );
 
-    router.get( catalogs, readOne );
-    router.post( catalogs, createOne );
+    router.get( catalogs, handlerGET );
+    router.post( catalogs, handlerPOST );
     router.put( catalogs, callbackError405 );
-    router.delete( catalogs, callbackError405 );
+    router.delete( catalogs, handlerDELETE );
 
 
     router.all( `${catalog}/*`, callbackError400 );

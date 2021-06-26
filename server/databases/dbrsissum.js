@@ -18,12 +18,12 @@ const db = createConn( `${uri}/${databaseName}`, title );
 
 // BRING IN YOUR SCHEMAS & MODELS
 
-const weekNaturalSchema = require( './models/sumdb/weeknatural.schema' );
+const weekNaturalSchema = require( './mongodb/sumdb/weeknatural.schema' );
 db.model( 'WeekNatural', weekNaturalSchema, 'weekNatural' ); 
 // last (3rd) arg - collection`s name in MongoDB
 
 
-const finReportSchema = require( './models/sumdb/financereport.schema' );
+const finReportSchema = require( './mongodb/sumdb/financereport.schema' );
 db.model( 'FinanceReport', finReportSchema, 'financeReport' ); 
 
 

@@ -30,7 +30,7 @@ const WeekNatural = db.model( 'WeekNatural' );
 const createOne = (req, res)  => {
 
     log.info( `try create, sum-week-natural body.id: ${req.body.id}` ); 
-    
+
     if( !req.body || 
         !Object.keys( req.body ).length ) { // == 0
         return send400BadRequest( res, 'Bad request, body is required' );
@@ -44,39 +44,37 @@ const createOne = (req, res)  => {
   
     const finding = { id };
 
-    WeekNatural
-        .find( finding )
-        .limit( 1 )
-        .exec( (err, docs) => { 
+    WeekNatural.
+    find( finding ).
+    limit( 1 ).
+    exec( (err, docs) => { 
+
+        if( err ) {
+            log.error( err );
+            return send500ServerError( res, err );
+        }
+
+        if( docs && 
+            docs.length ) {
+            return send409Conflict( res, 
+                `Summary data for week ${id} already exists.` 
+            );
+        }
+
+        WeekNatural.
+        create( req.body, (err, doc) => {
 
             if( err ) {
-                log.error( err );
+                log.error( 'weekNatural.create err: ', err );
                 return send500ServerError( res, err );
-            }
+            } 
 
-            if( docs && 
-                docs.length ) {
-                return send409Conflict( res, 
-                    `Summary data for week ${id} already exists.` 
-                );
-            }
-
-            WeekNatural
-            .create( 
-                req.body, 
-                (err, doc) => {
-
-                    if( err ) {
-                        log.error( 'weekNatural.create err: ', err );
-                        return send500ServerError( res, err );
-                    } 
-
-                    log.info( `SUCCESS: weekNatural ${doc.id} created.`);
-                    return send201Created( res, 
-                        `Summary data for week ${doc.id} created successfull.`
-                    );
-                });
-        });    
+            log.info( `SUCCESS: weekNatural ${doc.id} created.`);
+            return send201Created( res, 
+                `Summary data for week ${doc.id} created successfull.`
+            );
+        });
+    });
 };
 
 
