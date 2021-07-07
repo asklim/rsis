@@ -13,17 +13,27 @@ const dbs = {};
  *
 **/
 const getDB = (dbType) => {
-    
+
     if( typeof dbType !== 'string' ) {
-        log.warn( 'dbType must be a string.' );
-        return;
+        return log.warn( 'dbType must be a string.' );
     }
-    //debug( 'getDB : ', ); 
+
+    let dbName;
+    
     switch( dbType.toLowerCase() ) {
-        case 'config': return dbs.rsiscfg;
-        case   'temp': return dbs.rsistmp;
-        case    'sum': return dbs.rsissum;
+        case 'config': dbName = 'rsiscfg'; break;
+        case   'temp': dbName = 'rsistmp'; break;
+        case    'sum': dbName = 'rsissum'; break;
     }
+
+    if( !dbs[dbName] ) {
+        createMongoDBConnections();
+    }
+    //debug( 'getDB:', dbs[ dbName ], '\ntypeof .model: ',typeof dbs[ dbName ].model );
+
+    return dbs[ dbName ];
+    //Если getDB = async (), то ломается там где используется.
+    //Надо переделывать под await, т.к. возвращается Promise??? 
 };
 
 

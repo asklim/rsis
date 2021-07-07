@@ -1,34 +1,27 @@
 
-const debug = require( 'debug' )( 'api:config:catalogLayouts' );
-const { 
-    icwd,
+const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
+const {
     httpResponseCodes: HTTP,
-} = require( '../../helpers' );
+} = require( '../../../../helpers' );
 
-const db = require( `${icwd}/server/databases` ).getDB( 'config' );
-const CatalogLayouts = db.model( 'CatalogLayouts' );
+let db;
+db = require( `../../../../databases` ).getDB( 'config' );
+
+const ModelCatalogLayouts = db.model( 'CatalogLayouts' );
 
 
 /** 
  * Create a new catalog-layout at end of linked list
  * @returns
- * @statusCode 201 Created & { message, uuid }
- * @statusCode 400 Bad Request & message
- * @statusCode 500 Server Error & error object
+ * - statusCode 201 Created & response= { message, uuid }
+ * - statusCode 400 Bad Request & response= message
+ * - statusCode 500 Server Error & response= error object
  */
 
 module.exports = async function createOne (body) {
 
 
     const { client, list, since } = body;
-
-    if( !client || !list ) {
-        return ({
-            statusCode: HTTP.BAD_REQUEST,
-            logMessage: 'calalog-layouts.createOne: No body.client or body.list.',
-            response: 'Bad request, No body.client or body.list.'
-        });
-    }
 
     //const session = await db.startSession();
     // Транзакции не работают на обычных базах ???
@@ -37,7 +30,7 @@ module.exports = async function createOne (body) {
         let catalog;
         //await session.withTransaction( async () => {
 
-        const lastdoc = await CatalogLayouts.findOne({ client, list, until: null })
+        const lastdoc = await ModelCatalogLayouts.findOne({ client, list, until: null })
         //    .session( session )
         ;
         const isoDatetime = (new Date).toISOString();
@@ -51,7 +44,7 @@ module.exports = async function createOne (body) {
             body.prev = null;
         }
 
-        catalog = await CatalogLayouts.create( body );
+        catalog = await ModelCatalogLayouts.create( body );
         //catalog = await CatalogLayouts.create([ req.body ], { session: session });
 
         if( lastdoc ) {

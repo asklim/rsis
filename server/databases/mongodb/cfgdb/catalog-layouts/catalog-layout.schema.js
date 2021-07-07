@@ -3,7 +3,7 @@ const debug = require( 'debug' )( 'api:config:catalogLayouts' );
 const { Schema } = require( 'mongoose' );
 const UUID = require( 'uuid' );
 
-const PATH_DEFINITION = require( '../schema.paths-definitions' );
+const PATH_DEFINITION = require( '../../schema.paths-definitions' );
 
 
 const xlGroup = new Schema({

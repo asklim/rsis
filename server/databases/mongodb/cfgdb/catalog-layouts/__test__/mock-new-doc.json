@@ -1,0 +1,34 @@
+{
+    "client": "excel",
+    "list": "coffeeTea",
+    "caption": "test-caption",
+    "notes": "test-notes",
+    "host": "KANote",
+    "xlGroups": [
+        {
+            "lid": "1010",
+            "gid": "2101000000",
+            "title": "ЧАЙ",
+            "index": "1"
+        },
+        {
+            "lid": "1020",
+            "gid": "2103000000",
+            "title": "ЧАЙ/НАБОРЫ",
+            "index": "2"
+        },
+        {
+            "lid": "1030",
+            "gid": "2103000000",
+            "title": "КОФЕ",
+            "index": "3"
+        }
+    ],
+    "items": [
+        {
+            "lid": "1000",
+            "gid": "2007073007",
+            "grp": 1
+        }
+    ]
+}

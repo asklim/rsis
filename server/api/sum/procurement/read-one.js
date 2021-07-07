@@ -14,7 +14,9 @@ const log = consoleLogger( 'api-SUM:' );
 
 
 const { procurementPeriods: period } = require( `${icwd}/src/config/enum-values` );
-const { needUnitsForPeriod } = require( `${icwd}/src/lib/rsis` );
+//const { needUnitsForPeriod } = require( `${icwd}/src/lib/rsis` );
+
+const { needUnitsForPeriod } = require( 'asklim/rsis' );
 
 const { NODE_ENV, API_SERVER } = process.env;
 const { API_SERVER_LOCAL } = require( `../../../helpers` );

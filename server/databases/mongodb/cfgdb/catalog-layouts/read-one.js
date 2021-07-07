@@ -1,42 +1,31 @@
 const { format } = require( 'util' );
-//const UUID = require( 'uuid' );
 const {
     httpResponseCodes: HTTP,
     //consoleLogger,
-} = require( '../../helpers' );
+} = require( '../../../../helpers' );
 
-const debug = require( 'debug' )( 'api:config:catalogLayouts' );
-//const log = consoleLogger( 'api-config:' );
+const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
+//const log = consoleLogger( 'dbs-cfg:' );
 
-const db = require( '../../databases' ).getDB( 'config' );
+const db = require( '../../..' ).getDB( 'config' );
 
 const CatalogLayoutsModel = db.model( 'CatalogLayouts' );
 
-const CatalogLayout = require( '../catalog-layout' );
+const CatalogLayout = require( '../../../../applogic/catalog-layout' );
 
 
 /** 
  * Read a agent info by the id
- * @fires 200 OK          & document
- * @fires 400 Bad Request & message
- * @fires 404 Not Found   & message
- * @fires 500 Server Error & error object
- * @usage var.1 |
- * GET /api/config/catalog-layouts/:catalogId
- * @usage var.2 |
- * GET /api/config/catalog-layouts?queryString
- * @usage var.2 |
- * GET /api/config/catalog-layouts/?queryString
- * @usage queryString: 
- * client=clientId &
- * list=listId &
- * listType=listtype &
- * type=typeId &
- * date=isoDate
+ * - filtering - передается в Mongoose для отбора элементов
+ * - listType (необязательный) - тип возвращаемого списка (набора данных)
+ * по умолчанию - 'main' (meta, lid2gid, extra, ...)
+ * @returns
+ * - statusCode 200 OK & response= { ...doc, listType }
+ * - statusCode 400 Bad Request & response= message
+ * - statusCode 404 Not Found   & response= message
+ * - statusCode 500 Server Error & response= error object
  **/
-
 module.exports = async function readOne (filtering, listType) {
-
 
     try {
 

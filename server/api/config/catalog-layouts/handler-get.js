@@ -1,7 +1,6 @@
 //const debug = require( 'debug' )( 'api:config:catalogLayouts' );
 
-const { 
-    icwd, 
+const {
     consoleLogger,
     httpResponseCodes: HTTP,
     send200Ok,
@@ -10,10 +9,8 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const CatalogLayouts = require( `${icwd}/server/applogic/catalog-layouts` );
-//const catalogLayoutReadOne = require( '../../../applogic/catalog-layouts/read-one' );
-
 const log = consoleLogger( 'api-config:' );
+const CatalogLayouts = require( `../../../../server/applogic/catalog-layouts` );
 
 
 /** 
@@ -69,16 +66,24 @@ module.exports = async function catalogLayoutHandler_GET (req, res) {
         }
     };
 
-    const { catalogId } = req.params;
+    try {
+        const { catalogId } = req.params;
 
-    const readResult = ( catalogId )
-        ? await CatalogLayouts.readById( catalogId )
-        : await CatalogLayouts.readByQuery( req.query );
+        const readResult = ( catalogId )
+            ? await CatalogLayouts.readById( catalogId )
+            : await CatalogLayouts.readByQuery( req.query );
 
-    const { statusCode } = readResult;
+        const { statusCode } = readResult;
 
-    if( statusCode in STATE_HANDLERS ) {
-        return STATE_HANDLERS[ statusCode ]( readResult );
+        if( statusCode in STATE_HANDLERS ) {
+            return STATE_HANDLERS[ statusCode ]( readResult );
+        }
+
+        throw new Error( `Handler of ${statusCode} not implemented.`);
+    }
+    catch (err) {
+        log.error( err );
+        return send500ServerError( res, err );
     }
 };
 

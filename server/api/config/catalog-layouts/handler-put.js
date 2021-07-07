@@ -1,32 +1,33 @@
 
 //const debug = require( 'debug' )( 'api:config:catalogLayouts' );
 const { 
-    icwd, 
+    //icwd, 
     consoleLogger,
     httpResponseCodes: HTTP,
+    send200Ok,
     send201Created,
     send400BadRequest,
     //send409Conflict,
     send500ServerError,
 } = require( '../../../helpers' );
 
-const CatalogLayouts = require( `${icwd}/server/applogic/catalog-layouts` );
+const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
 
 const log = consoleLogger( 'api-config:' );
 
 
 /** 
- * Create a new catalog layout
- * @name createOne
+ * Update catalog layout
+ * @fires 200 OK     & message
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
  * @fires 500 Server Error & error object
  * @returns {} undefined
  * @usage
- * POST /api/config/catalog-layouts
+ * PUT /api/config/catalog-layouts
  */
 
-module.exports = async function catalogLayoutsHandler_POST (req, res) {
+module.exports = async function catalogLayoutsHandler_PUT (req, res) {
 
     let client, list;
 
@@ -34,14 +35,14 @@ module.exports = async function catalogLayoutsHandler_POST (req, res) {
         client = req.body.client;
         list = req.body.list;
     }
-    log.info( `try create, config/catalog-layouts: client=${client}, list=${list}` );
+    log.info( `try update last config/catalog-layouts: client=${client}, list=${list}` );
 
 
     if( !req.body 
         || !Object.keys( req.body ).length ) {
         let result = {
             statusCode: HTTP.BAD_REQUEST,
-            logMessage: 'calalog-layouts.createOne: req.body is empty.',
+            logMessage: 'calalog-layouts.handler-put: req.body is empty.',
             response: 'Bad request, req.body is empty.'
         };
         log.warn( result.logMessage );
@@ -50,6 +51,11 @@ module.exports = async function catalogLayoutsHandler_POST (req, res) {
 
 
     const STATE_HANDLERS = {
+
+        [HTTP.OK]: (result) => {
+            log.info( result.logMessage );
+            return send200Ok( res, result.response );
+        },
 
         [HTTP.CREATED]: (result) => {
             log.info( result.logMessage );
@@ -68,11 +74,11 @@ module.exports = async function catalogLayoutsHandler_POST (req, res) {
     };
 
     try {
-        const createResult = await CatalogLayouts.createOne( req.body );
-        const { statusCode } = createResult;
+        const updateResult = await CatalogLayouts.updateLastOrCreate( req.body );
+        const { statusCode } = updateResult;
 
         if( statusCode in STATE_HANDLERS ) {
-            return STATE_HANDLERS[ statusCode ]( createResult );
+            return STATE_HANDLERS[ statusCode ]( updateResult );
         }
 
         throw new Error( `Handler of ${statusCode} not implemented.`);

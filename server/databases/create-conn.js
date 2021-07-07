@@ -9,7 +9,7 @@ const { consoleLogger, } = require( '../helpers' );
 
 module.exports = function createConn (uri, title) {
 
-    
+
     const log = consoleLogger( `${title}:` );
 
     let dbConnect;
@@ -18,7 +18,8 @@ module.exports = function createConn (uri, title) {
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                useCreateIndex: true, 
+                useCreateIndex: true,
+                useFindAndModify: false,
             }
         );
         //debug( 'connection state:', dbConnect.readyState );
@@ -26,7 +27,7 @@ module.exports = function createConn (uri, title) {
     catch (error) {
         log.error( error );
     }
-    debug( `${title}: connection's count:`, connections.length  );
+    debug( `${title} connected. Total connection's count:`, connections.length  );
     // first 2, then 3, then 4
 
     // CONNECTION EVENTS

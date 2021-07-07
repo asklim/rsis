@@ -1,7 +1,6 @@
-//const debug = require( 'debug' )( 'api:config:catalogLayouts' );
+//const debug = require( 'debug' )( 'api:config:catalogLayouts handler-delete:' );
 
-const { 
-    icwd, 
+const {
     consoleLogger,
     httpResponseCodes: HTTP,
     send204NoContent,
@@ -10,7 +9,7 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const CatalogLayouts = require( `${icwd}/server/applogic/catalog-layouts` );
+const CatalogLayouts = require( `../../../../server/applogic/catalog-layouts` );
 
 const log = consoleLogger( 'api-config:' );
 
@@ -56,6 +55,8 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
 
         [HTTP.NO_CONTENT]: (result) => {
             log.info( result.logMessage );
+            //debug( result.response );
+            //TODO: Client не получает тело json-ответа
             return send204NoContent( res, result.response );
         },
 
@@ -75,14 +76,22 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
         }
     };
 
-    const deleteResult = 'last' == catalogId.toLowerCase()
-        ? await CatalogLayouts.deleteLastItem( req.query )
-        : await CatalogLayouts.deleteById( catalogId );
+    try {
+        const deleteResult = 'last' == catalogId.toLowerCase()
+            ? await CatalogLayouts.deleteLast( req.query )
+            : await CatalogLayouts.deleteById( catalogId );
 
-    const { statusCode } = deleteResult;
+        const { statusCode } = deleteResult;
 
-    if( statusCode in STATE_HANDLERS ) {
-        return STATE_HANDLERS[ statusCode ]( deleteResult );
+        if( statusCode in STATE_HANDLERS ) {
+            return STATE_HANDLERS[ statusCode ]( deleteResult );
+        }
+
+        throw new Error( `Handler of ${statusCode} not implemented.`);
+    }
+    catch (err) {
+        log.error( err );
+        return send500ServerError( res, err );
     }
 };
 

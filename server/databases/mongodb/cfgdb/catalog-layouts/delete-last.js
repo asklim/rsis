@@ -2,15 +2,15 @@ const { format } = require( 'util' );
 
 const {
     httpResponseCodes: HTTP,
-    //consoleLogger,
-} = require( '../../helpers' );
+    consoleLogger,
+} = require( '../../../../helpers' );
 
-//const debug = require( 'debug' )( 'api:config:catalogLayouts' );
-//const log = consoleLogger( 'api-config:' );
+const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts deleteLast:' );
+const log = consoleLogger( 'db-cfg:catalogLayouts delete:' );
 
-const db = require( '../../databases' ).getDB( 'config' );
+const db = require( '../../..' ).getDB( 'config' );
 
-const CatalogLayouts = db.model( 'CatalogLayouts' );
+const ModelCatalogLayouts = db.model( 'CatalogLayouts' );
 
 
 
@@ -18,34 +18,26 @@ const CatalogLayouts = db.model( 'CatalogLayouts' );
  * Удаляет последний документ в связанном списке
  * и обновляет поля until, next у предыдущего документа
  * Delete last catalog-layout by client & list
- * @statusCode 204 No Content  & { uuid, message}
- * @statusCode 400 Bad Request & message
- * @statusCode 404 Not Found   & message
- * @statusCode 500 Server Error & error object
+ * @returns
+ * - statusCode 204 No Content  & response= { message, uuid }
+ * - statusCode 400 Bad Request & response= message
+ * - statusCode 404 Not Found & response= message
+ * - statusCode 500 Server Error & response= error object
  **/
-
 module.exports = async function deleteLast ({ client, list }) {
 
-
-    if( !client && !list ) {
-        // Если оба undefined - то ошибка
-        return ({
-            statusCode: HTTP.BAD_REQUEST,
-            logMessage: 'calalog-layouts.deleteOne: No queryString specified.',
-            response: 'Bad request. No queryString specified.'
-        });
-    }
-
-    const finding = { client, list, until: { $eq: null } };
+    const filtering = { client, list, until: { $eq: null } };
 
     try {
-        const lastDoc = await CatalogLayouts.findOneAndDelete( finding );
+        const lastDoc = await ModelCatalogLayouts.findOneAndDelete( filtering );
+
+        debug( 'lastDoc uuid', lastDoc?.uuid );
 
         if( !lastDoc ) {
             let msg = `Catalog-layout not found.`;
             return ({
                 statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg}\nwith finding: ` + format( '%o', finding ),
+                logMessage: `${msg} w/filter: ` + format( '%o', filtering ),
                 response: msg 
             });
         }
@@ -55,10 +47,12 @@ module.exports = async function deleteLast ({ client, list }) {
             const update = {
                 $set: { next: null, until: null }
             };
-            await CatalogLayouts.findOneAndUpdate( { _id: lastDoc.prev }, update );
+            await ModelCatalogLayouts.findByIdAndUpdate( lastDoc.prev, update );
         }
 
-        const { uuid } = lastDoc;
+        const { uuid, prev } = lastDoc;
+        log.info( `new link: ${prev} -> null` );
+
         return ({
             statusCode: HTTP.NO_CONTENT,
             logMessage: `SUCCESS: catalog-layout uuid:${uuid} deleted.`,
