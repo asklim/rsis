@@ -1,0 +1,17 @@
+openapi: '3.0.2'
+info:
+  title: config/catalog-layouts API
+  version: '1.0'
+  description: catalog-layout это документ описывающий какие товарные позиции может использовать клиент
+
+servers:
+  - url: http://kanote:3006/api
+    description: development server
+  - url: http://hp8710w:3067/api
+    description: local production server
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
