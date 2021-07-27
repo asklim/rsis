@@ -9,7 +9,7 @@ const {
     //send500ServerError,
 } = require( '../../../helpers' );
 
-//const CatalogLayouts = require( `${icwd}/server/applogic/catalog-layouts` );
+//const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
 
 //const log = consoleLogger( 'api-config:' );
 

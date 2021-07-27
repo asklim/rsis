@@ -10,7 +10,7 @@ const {
 } = require( '../../../helpers' );
 
 const log = consoleLogger( 'api-config:' );
-const CatalogLayouts = require( `../../../../server/applogic/catalog-layouts` );
+const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
 
 
 /** 
