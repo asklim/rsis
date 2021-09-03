@@ -42,11 +42,30 @@ const GROUP_LID = {
     set: v => Math.round(v),
 };
 
+const STANDART_XL_GROUP = {
+    // ExcelClient Group (sort) Index
+    // Используется для сортировки позиций
+    // 1 - ЧАЙ - листовой, пакетированный
+    // 2 - ЧАЙ/НАБОРЫ/Эксклюзив
+    // 3 - КОФЕ порошок, гранулир, кристалл, зерно, молотый
+    // 4 - КОФЕ > 1000г
+    // 5 - КОФЕ/НАБОРЫ
+    // 6 - Кофейные Напитки, Цикорий
+    // 7 - Какао/Горячий Шоколад
+    // 8 - РАЗНОЕ: Сливки, Сахар, Шоколад
+    // 9 - БРАК (развакуум)
+    type: Schema.Types.Number,
+    min: 1,
+    max: 9,
+    required: true,
+    set: v => Math.round(v),
+};
 
 module.exports = {
-    
+
     ITEM_GID,
     ITEM_LID,
     GROUP_GID,
     GROUP_LID,
+    STANDART_XL_GROUP,
 };

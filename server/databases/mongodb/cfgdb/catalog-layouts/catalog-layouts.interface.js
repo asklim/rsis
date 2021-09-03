@@ -3,14 +3,14 @@
 
 module.exports = class ICatalogLayouts {
 
-    static createOne = require( './create-one' );
+    static createOne = require( './cl-create-one' );
 
-    static readById = require( './read-by-id' );
-    static readByQuery = require( './read-by-query' );
+    static readById = require( './cl-read-by-id' );
+    static readByQuery = require( './cl-read-by-query' );
 
-    static updateOne = require( './update-one' );
+    static updateOne = require( './cl-update-one' );
 
-    static deleteLast = require( './delete-last' );
-    static deleteById = require( './delete-by-id' );
+    static deleteLast = require( './cl-delete-last' );
+    static deleteById = require( './cl-delete-by-id' );
 
 };

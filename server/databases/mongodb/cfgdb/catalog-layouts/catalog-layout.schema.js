@@ -27,28 +27,14 @@ const xlGroup = new Schema({
 const xlLayoutItem = new Schema({
 
     lid: PATH_DEFINITION.ITEM_LID,
+
     gid: PATH_DEFINITION.ITEM_GID,
-    grp: {
-        // ExcelClient Group (sort) Index
-        // Используется для сортировки позиций
-        // 1 - ЧАЙ - листовой, пакетированный
-        // 2 - ЧАЙ/НАБОРЫ/Эксклюзив
-        // 3 - КОФЕ порошок, гранулир, кристалл, зерно, молотый
-        // 4 - КОФЕ > 1000г
-        // 5 - КОФЕ/НАБОРЫ
-        // 6 - Кофейные Напитки, Цикорий
-        // 7 - Какао/Горячий Шоколад
-        // 8 - РАЗНОЕ: Сливки, Сахар, Шоколад
-        // 9 - БРАК (развакуум)
-        type: Schema.Types.Number,
-        min: 1,
-        max: 9,
-        required: true,
-        set: v => Math.round(v),
-    },
+
+    grp: PATH_DEFINITION.STANDART_XL_GROUP,
+
     qpul: {
         // quantity per unit local (складской)
-        // Для оперативного измененния количества 
+        // Для оперативного измененния количества
         // в коробке, не затрагивая Nomenklature
         // Если !qpu - то используем основной qpu
         type: Schema.Types.Number,
@@ -102,33 +88,33 @@ const catalogLayout = new Schema({
     },
     client: {
         // Для какого клиента каталог
-        type: String, 
-        required: true, 
+        type: String,
+        required: true,
         enum: [ 'excel', 'web' ],
         default: 'web',
     },
     list: {
-        // вид (вариант) списка 
+        // вид (вариант) списка
         // тип торговой точки: 'cofeeTea',
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
         enum: [ 'coffeeTea' ],
         default: 'coffeeTea',
     },
     /*type: {
         // Вариант каталога
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
         enum: [ 'products' ],
     },*/
     caption: {
         // Заголовок/Название каталога
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: false,
     },
     notes: {
         // Описание каталога
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: false,
     },
     since: {
@@ -160,12 +146,12 @@ const catalogLayout = new Schema({
     },
     host: {
         // Откуда сохранен каталог
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
     },
     updatedAt: {
         // Когда сохранен
-        type: Schema.Types.Date, 
+        type: Schema.Types.Date,
         default: Date.now,
     }
 });

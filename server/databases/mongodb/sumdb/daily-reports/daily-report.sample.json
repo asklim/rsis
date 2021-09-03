@@ -1,0 +1,575 @@
+{
+    "datetime": "2021-08-23T07:44:35Z",
+    "onDate": "2021-08-22",
+    "summary": {
+        "usdRate": 2.6,
+        "revenue": 2636,
+        "invoices": 2263.36,
+        "profit": 288.34,
+        "netCost": 603.87,
+        "salePlaces": [
+            {
+                "place": "office",
+                "seller": "Office",
+                "revenue": 0,
+                "invoices": 0,
+                "profit": 6.64,
+                "netCost": 14.65
+            },
+            {
+                "place": "6.d",
+                "seller": "Колокольчикова Е.В.",
+                "revenue": 500,
+                "profit": 50.21,
+                "netCost": 107.74
+            },
+            {
+                "place": "4.a",
+                "seller": "Полякова М.Р.",
+                "revenue": 400,
+                "profit": 38.88,
+                "netCost": 75.74
+            },
+            {
+                "place": "9.a",
+                "seller": "Толстая О.В.",
+                "revenue": 636,
+                "profit": 78.91,
+                "netCost": 163.85
+            },
+            {
+                "place": "20.d",
+                "seller": "Резерв",
+                "revenue": 0,
+                "profit": 0,
+                "netCost": 0
+            },
+            {
+                "place": "1.b",
+                "seller": "Боровая О.Г.",
+                "revenue": 8000,
+                "profit": 79.18,
+                "netCost": 168.35
+            },
+            {
+                "place": "1.a",
+                "seller": "Дубинская Н.В.",
+                "revenue": 300,
+                "profit": 34.51,
+                "netCost": 73.52
+            }
+        ]
+    },
+    "topSales": [
+        {
+            "gid": 2021053001,
+            "name": "Lipton п._25.ся !ФРУКТОВЫЙ*1,5г",
+            "group": 1,
+            "revenue": 7.8,
+            "daySold": 4,
+            "soldBy": {
+                "06.d": 1,
+                "04.a": 0,
+                "09.a": 1,
+                "01.b": 2,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "ГрФилд \/п._25 ЭрлГрэй",
+            "group": 1,
+            "itemCash": 11.96,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 2,
+                "09.a": 0,
+                "01.b": 1,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "ГрФилд \/п._25ФРУКТОВЫЙ",
+            "group": 1,
+            "itemCash": 44.85,
+            "totalSaled": 15,
+            "daySales": {
+                "06.d": 5,
+                "04.a": 2,
+                "09.a": 1,
+                "01.b": 6,
+                "01.a": 0,
+                "Offc": 1
+            }
+        },
+        {
+            "itemName": "ГрФилд \/п.100 ч.КенианСанрайз",
+            "group": 1,
+            "itemCash": 39.8,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 2,
+                "09.a": 1,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "ГрФилд.лч Г.Цейлон 100г",
+            "group": 1,
+            "itemCash": 14,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 1,
+                "09.a": 2,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "ГрФилд.лч Г.Цейлон 200г",
+            "group": 1,
+            "itemCash": 84.5,
+            "totalSaled": 13,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 1,
+                "09.a": 12,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Лисма.лч му.300г",
+            "group": 1,
+            "itemCash": 18,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 4,
+                "09.a": 0,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Пр. Гита п.100.БЯ",
+            "group": 1,
+            "itemCash": 12.2,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 0,
+                "09.a": 3,
+                "01.b": 1,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Пр. Канди.лч карт.250г",
+            "group": 1,
+            "itemCash": 27.65,
+            "totalSaled": 7,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 1,
+                "09.a": 5,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Пр. Нури \/п._25ся \/Фруктов.",
+            "group": 1,
+            "itemCash": 23.88,
+            "totalSaled": 12,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 0,
+                "09.a": 5,
+                "01.b": 5,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Пр. Нури Букет Цейлон 200г",
+            "group": 1,
+            "itemCash": 23.96,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 1,
+                "09.a": 0,
+                "01.b": 0,
+                "01.a": 3,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Ричард \/п.100ся*2г черн.Royal",
+            "group": 1,
+            "itemCash": 38,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 0,
+                "09.a": 2,
+                "01.b": 1,
+                "01.a": 1,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Ричард.лч 90г Grey\/\/Royal",
+            "group": 1,
+            "itemCash": 15,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 1,
+                "09.a": 1,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Тесс \/пак.100 Санрайз*1,8г",
+            "group": 1,
+            "itemCash": 30,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 0,
+                "09.a": 0,
+                "01.b": 2,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Тесс:Cera.MUG+Лист.3*100г Pl.EG.Fl",
+            "group": 2,
+            "itemCash": 32.85,
+            "totalSaled": 3,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 1,
+                "09.a": 0,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "GEVALIA му.200г",
+            "group": 3,
+            "itemCash": 75,
+            "totalSaled": 5,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 0,
+                "09.a": 2,
+                "01.b": 3,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Jacobs Monarh .ст.190г",
+            "group": 3,
+            "itemCash": 66,
+            "totalSaled": 6,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 2,
+                "09.a": 1,
+                "01.b": 1,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Jacobs Monarh му.240г РФ",
+            "group": 3,
+            "itemCash": 27,
+            "totalSaled": 2,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 0,
+                "09.a": 1,
+                "01.b": 1,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Jacobs Monarh му.500г",
+            "group": 3,
+            "itemCash": 26.5,
+            "totalSaled": 1,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 0,
+                "09.a": 0,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Nesc.Classic му..500г с\/молотым",
+            "group": 3,
+            "itemCash": 59.6,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 1,
+                "09.a": 1,
+                "01.b": 2,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Nesc.Gold му.220г а!-а!-а!",
+            "group": 3,
+            "itemCash": 43.96,
+            "totalSaled": 4,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 0,
+                "09.a": 4,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Nesc.GOLD му.500г",
+            "group": 3,
+            "itemCash": 126,
+            "totalSaled": 6,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 0,
+                "09.a": 1,
+                "01.b": 2,
+                "01.a": 1,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Nesc.Gold Ст\/Б.190г",
+            "group": 3,
+            "itemCash": 30,
+            "totalSaled": 3,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 0,
+                "09.a": 0,
+                "01.b": 1,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Жокей.Зерно 900г Традиционн.",
+            "group": 3,
+            "itemCash": 29.9,
+            "totalSaled": 2,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 0,
+                "09.a": 1,
+                "01.b": 1,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Жокей.мол Восточн.450г",
+            "group": 3,
+            "itemCash": 40,
+            "totalSaled": 5,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 1,
+                "09.a": 2,
+                "01.b": 0,
+                "01.a": 0,
+                "Offc": 1
+            }
+        },
+        {
+            "itemName": "ФРЕСКО му.190г",
+            "group": 3,
+            "itemCash": 45,
+            "totalSaled": 6,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 0,
+                "09.a": 2,
+                "01.b": 2,
+                "01.a": 0,
+                "Offc": 1
+            }
+        },
+        {
+            "itemName": "IDEE зерно.1кг CREMA",
+            "group": 4,
+            "itemCash": 34,
+            "totalSaled": 1,
+            "daySales": {
+                "06.d": 0,
+                "04.a": 0,
+                "09.a": 0,
+                "01.b": 1,
+                "01.a": 0,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Шоколад Milka мол._90г",
+            "group": 8,
+            "itemCash": 12.5,
+            "totalSaled": 5,
+            "daySales": {
+                "06.d": 2,
+                "04.a": 0,
+                "09.a": 0,
+                "01.b": 0,
+                "01.a": 3,
+                "Offc": 0
+            }
+        },
+        {
+            "itemName": "Шоколад rs.100г.RitterSport",
+            "group": 8,
+            "itemCash": 35.1,
+            "totalSaled": 9,
+            "daySales": {
+                "06.d": 1,
+                "04.a": 1,
+                "09.a": 0,
+                "01.b": 0,
+                "01.a": 7,
+                "Offc": 0
+            }
+        }
+    ],
+    "topProfit": [
+        {
+            "gid": 2021053002,
+            "name": "ГрФилд \/п._25ФРУКТОВЫЙ",
+            "group": 1,
+            "profit": 6.01
+        },
+        {
+            "itemName": "ГрФилд \/п.100 ч.КенианСанрайз",
+            "group": 1,
+            "profit": 5.71
+        },
+        {
+            "itemName": "ГрФилд.лч Г.Цейлон 200г",
+            "group": 1,
+            "profit": 11.7
+        },
+        {
+            "itemName": "МЭРИ \/п.100ся +Ложка",
+            "group": 1,
+            "profit": 3.26
+        },
+        {
+            "itemName": "Пр. Канди.лч карт.250г",
+            "group": 1,
+            "profit": 3.57
+        },
+        {
+            "itemName": "Пр. Нури \/п._25ся \/Фруктов.",
+            "group": 1,
+            "profit": 3.53
+        },
+        {
+            "itemName": "Ричард \/п.100ся*2г черн.Royal",
+            "group": 1,
+            "profit": 6.67
+        },
+        {
+            "itemName": "Тесс \/пак.100 Санрайз*1,8г",
+            "group": 1,
+            "profit": 4.31
+        },
+        {
+            "itemName": "Тесс:Cera.MUG+Лист.3*100г Pl.EG.Fl",
+            "group": 2,
+            "profit": 6.81
+        },
+        {
+            "itemName": "GEVALIA му.200г",
+            "group": 3,
+            "profit": 7.05
+        },
+        {
+            "itemName": "Jacobs Monarh .ст.190г",
+            "group": 3,
+            "profit": 5.98
+        },
+        {
+            "itemName": "Jacobs Monarh му.240г РФ",
+            "group": 3,
+            "profit": 3.29
+        },
+        {
+            "itemName": "Nesc.Clas.рф ЖБ.230г с\/МОЛОТЫМ",
+            "group": 3,
+            "profit": 3.54
+        },
+        {
+            "itemName": "Nesc.Classic му..500г с\/молотым",
+            "group": 3,
+            "profit": 8.45
+        },
+        {
+            "itemName": "Nesc.Gold му.220г а!-а!-а!",
+            "group": 3,
+            "profit": 5.05
+        },
+        {
+            "itemName": "Nesc.GOLD му.500г",
+            "group": 3,
+            "profit": 10.21
+        },
+        {
+            "itemName": "Жокей.Зерно 900г Традиционн.",
+            "group": 3,
+            "profit": 4.05
+        },
+        {
+            "itemName": "Жокей.мол Восточн.450г",
+            "group": 3,
+            "profit": 4.78
+        },
+        {
+            "itemName": "IDEE зерно.1кг CREMA",
+            "group": 4,
+            "profit": 3.5
+        },
+        {
+            "itemName": "Шоколад rs.100г.RitterSport",
+            "group": 8,
+            "profit": 5.36
+        }
+    ]
+}

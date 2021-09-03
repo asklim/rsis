@@ -12,6 +12,8 @@ require( './api/config/ping/router' )( router );
 
 require( './api/processenv/router' )( router );
 
+require( './api/reports/daily/router' )( router );
+
 require( './api/sum/procurement/router' )( router );
 
 require( './api/sum/weeknatural/router' )( router );
@@ -19,8 +21,8 @@ require( './api/sum/weeknatural/router' )( router );
 require( './api/sum/financereport/router' )( router );
 
 
-router.all( 
-    '/*', 
+router.all(
+    '/*',
     (_req, res) => {
         res.status( 400 );
         res.json( { message: "Bad request at api-router." });

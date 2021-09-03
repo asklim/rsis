@@ -5,12 +5,12 @@ const {
 } = require( '../../../../helpers' );
 
 let db;
-db = require( `../../../../databases` ).getDB( 'config' );
+db = require( `../../..` ).getDB( 'config' );
 
 const ModelCatalogLayouts = db.model( 'CatalogLayouts' );
 
 
-/** 
+/**
  * Create a new catalog-layout at end of linked list
  * @returns
  * - statusCode 201 Created & response= { message, uuid }

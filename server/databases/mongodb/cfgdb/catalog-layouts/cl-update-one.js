@@ -1,7 +1,7 @@
 
 const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
 const UUID = require( 'uuid' );
-const { 
+const {
     icwd,
     httpResponseCodes: HTTP,
     //consoleLogger,
@@ -12,7 +12,7 @@ const CatalogLayouts = db.model( 'CatalogLayouts' );
 
 //const log = consoleLogger( 'db-cfg:catalog-layouts update:' );
 
-/** 
+/**
  * Update a catalog-layout by uuid or ObjId
  * @returns
  * - statusCode 200 OK & response= { message, uuid }
@@ -25,13 +25,17 @@ module.exports = async function updateOne (catalogId, body) {
 
     const { xlGroups, items, host } = body;
 
-    const filtering = UUID.validate( catalogId ) 
+    const filtering = UUID.validate( catalogId )
         ? { uuid: catalogId }
         : { _id: catalogId };
 
     try {
 
-        const $set = { xlGroups, items, host, updatedAt: Date.now() };
+        const $set = Object.assign({},{
+            xlGroups, items,
+            host,
+            updatedAt: Date.now()
+        });
         const $inc = { __v: 1 };
 
         debug( 'filtering:', filtering );

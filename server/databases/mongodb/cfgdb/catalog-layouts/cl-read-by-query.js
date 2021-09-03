@@ -2,9 +2,9 @@
 //const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
 //const log = consoleLogger( 'dbs-cfg:' );
 
-const readOne = require( './read-one' );
+const readOne = require( './cl-read-one' );
 
-/** 
+/**
  * Read a catalog-layout by parameters
  * - if date - возвращается документ, в который попадает date
  * - if date == '' - возвращается первый документ
@@ -22,22 +22,22 @@ module.exports = async function readByQuery ({ client, list, listType, date }) {
 
     if( date ) {
         const theDate = (new Date( date )).toISOString();
-        const $or = [ 
-            { until: { $gt: theDate }}, 
+        const $or = [
+            { until: { $gt: theDate }},
             { until: { $eq: null }}
         ];
-        Object.assign( filtering, { 
+        Object.assign( filtering, {
             $or,
             since: { $lte: theDate }
         });
     }
     else if( date == '' ) {
-        Object.assign( filtering, { 
+        Object.assign( filtering, {
             prev: { $eq: null }
         });
     }
     else {
-        Object.assign( filtering, { 
+        Object.assign( filtering, {
             until: { $eq: null }
         });
     }

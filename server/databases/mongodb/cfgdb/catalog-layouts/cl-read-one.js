@@ -1,10 +1,11 @@
+const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
+
 const { format } = require( 'util' );
 const {
     httpResponseCodes: HTTP,
     //consoleLogger,
 } = require( '../../../../helpers' );
 
-const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
 //const log = consoleLogger( 'dbs-cfg:' );
 
 const db = require( '../../..' ).getDB( 'config' );
@@ -14,7 +15,7 @@ const CatalogLayoutsModel = db.model( 'CatalogLayouts' );
 const CatalogLayout = require( '../../../../applogic/catalog-layout' );
 
 
-/** 
+/**
  * Read a agent info by the id
  * - filtering - передается в Mongoose для отбора элементов
  * - listType (необязательный) - тип возвращаемого списка (набора данных)
@@ -45,7 +46,7 @@ module.exports = async function readOne (filtering, listType) {
             return ({
                 statusCode: HTTP.NOT_FOUND,
                 logMessage: `${msg}\nwith filtering: ` + format( '%o', filtering ),
-                response: msg 
+                response: msg
             });
         }
         //debug( 'docs isArray:', Array.isArray(docs), /* true */
