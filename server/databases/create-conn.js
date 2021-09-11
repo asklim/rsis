@@ -1,5 +1,5 @@
 const debug = require( 'debug' )( 'dbs:connect' );
-const { 
+const {
     createConnection,
     connections,
 } = require( 'mongoose' );
@@ -14,7 +14,7 @@ module.exports = function createConn (uri, title) {
 
     let dbConnect;
     try {
-        dbConnect = createConnection( uri, 
+        dbConnect = createConnection( uri,
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
@@ -46,7 +46,7 @@ module.exports = function createConn (uri, title) {
 
     dbConnect.on( 'disconnecting', () => {
         log.info( `connection closing ...` );
-    });  
+    });
 
 
     dbConnect.on( 'disconnected', () => {
@@ -57,15 +57,6 @@ module.exports = function createConn (uri, title) {
     dbConnect.on( 'close', () => {
         log.info( `connection closed.` );
     });
-
-    /*
-    dbConnect.closeConn = () => {
-        return new Promise( 
-            (resolve) => dbConnect.close( 
-                () => resolve( title )
-            )
-        );
-    };*/
 
     dbConnect.closeConn = async () => {
         await dbConnect.close();

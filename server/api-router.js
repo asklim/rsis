@@ -8,7 +8,7 @@ require( './api/config/catalog-layouts/router' )( router );
 
 require( './api/config/agents/router' )( router );
 
-require( './api/config/ping/router' )( router );
+require( './api/health/router' )( router );
 
 require( './api/processenv/router' )( router );
 
