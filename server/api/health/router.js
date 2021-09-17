@@ -7,6 +7,7 @@ const { callbackError405 } = require( '../../helpers' );
 /**
  * Return status of app or DBs
  * @usage GET /api/health/app
+ * @usage GET /api/health/databases
  * @usage GET /api/health/mongocfg
  * @usage GET /api/health/mongosum
  */

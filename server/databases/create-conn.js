@@ -14,17 +14,18 @@ module.exports = function createConn (uri, title) {
 
     let dbConnect;
     try {
-        dbConnect = createConnection( uri,
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                useCreateIndex: true,
-                useFindAndModify: false,
-            }
-        );
-        //debug( 'connection state:', dbConnect.readyState );
+        dbConnect = createConnection( uri, {} );
+        // Deprecated in Mongoose v6.0
+        //useNewUrlParser: true,
+        //useUnifiedTopology: true,
+        //useCreateIndex: true,
+        //useFindAndModify: false,
+
+        //debug( `${title} connection state:`, dbConnect.readyState );
+        // =2, если нормальное подключение
     }
     catch (error) {
+        debug( 'create-conn.js - catch block');
         log.error( error );
     }
     debug( `${title} connected. Total connection's count:`, connections.length  );
