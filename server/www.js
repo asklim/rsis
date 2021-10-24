@@ -4,7 +4,7 @@ require( 'dotenv' ).config();
 
 const {
     app: rsisExpressApp,
-    databasesShutdown, 
+    databasesShutdown,
 } = require( './app-server' );
 
 const debug = require( 'debug' )('rsis:www');
@@ -57,8 +57,8 @@ const server = http.createServer( rsisExpressApp );
 
 const shutdownTheServer = () => {
 
-    return new Promise( 
-        resolve => {  
+    return new Promise(
+        resolve => {
             server.close( () => {
                 console.log( 'http-server closed now.' );
                 resolve();
@@ -68,10 +68,10 @@ const shutdownTheServer = () => {
 
 
 const handleOnError = error => {
-        
+
     /**
      * Event listener for HTTP server "error" event.
-     * 
+     *
      */
 
     if( error.syscall !== 'listen' ) {
@@ -79,7 +79,7 @@ const handleOnError = error => {
         throw error;
     }
 
-    let bind = typeof port === 'string' 
+    let bind = typeof port === 'string'
         ? 'Pipe ' + port
         : 'Port ' + port;
 
@@ -98,7 +98,7 @@ const handleOnError = error => {
 
         default:
             console.log( `E: www-server unhandled error !!!` );
-            console.log( error ); 
+            console.log( error );
             //throw error;
     }
 };
@@ -111,11 +111,11 @@ const handleOnListening = () => {
      */
 
     let addr = server.address();
-    let bind = typeof addr === 'string' 
+    let bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port
     ;
-        
+
     debug( 'Listening on ' + bind );
 };
 
@@ -153,18 +153,18 @@ server.listen( port,  () => {
 
 
 process.once( 'SIGUSR2', () => { // For nodemon restarts
-    
-    databasesShutdown( 'nodemon restart', 
-        () => { 
+
+    databasesShutdown( 'nodemon restart',
+        () => {
             shutdownTheServer()
-            .then(   
+            .then(
                 function () {
                     setTimeout(
                         () => {
-                            process.kill( process.pid, 'SIGUSR2' ); 
+                            process.kill( process.pid, 'SIGUSR2' );
                         }, 1000
                     );
-                }            
+                }
             );
         }
     );
@@ -176,7 +176,7 @@ process.on( 'SIGINT', () => {
     databasesShutdown( 'app termination', () => {
 
         shutdownTheServer()
-        .then( 
+        .then(
             function () {
                 setTimeout(
                     () => { process.exit(0); },
@@ -191,9 +191,9 @@ process.on( 'SIGINT', () => {
 process.on( 'SIGTERM', () => {
 
     databasesShutdown( 'Heroku app termination', () => {
-        
+
         shutdownTheServer()
-        .then( 
+        .then(
             function () {
                 setTimeout(
                     () => { process.exit(0); },
@@ -209,7 +209,7 @@ process.on( 'SIGTERM', () => {
 /**
  * Normalize a port into a number, string, or false.
  */
-function normalizePort( val ) {  
+function normalizePort( val ) {
 
     let port = parseInt( val, 10 );
 
@@ -220,10 +220,10 @@ function normalizePort( val ) {
             : false
     ;
 
-    /*if( isNaN( port ) ) {  // named pipe     
+    /*if( isNaN( port ) ) {  // named pipe
         return val;
     }
-    if( port >= 0 ) {     // port number        
+    if( port >= 0 ) {     // port number
         return port;
     }
     return false;*/
@@ -232,22 +232,22 @@ function normalizePort( val ) {
 
 
 /**
- * 
- * @param {*} outputMode 
- * @param {*} appVersion 
- * @param {*} httpServer 
+ *
+ * @param {*} outputMode
+ * @param {*} appVersion
+ * @param {*} httpServer
  */
-function serverAppOutput( outputMode, appVersion, httpServer ) {  
+function serverAppOutput( outputMode, appVersion, httpServer ) {
 
 
     let serverAddress = httpServer.address();
-    let { 
-        address, 
-        family, 
-        port 
+    let {
+        address,
+        family,
+        port
     } = serverAddress;
 
-    let bind = typeof serverAddress === 'string' 
+    let bind = typeof serverAddress === 'string'
         ? 'pipe ' + serverAddress
         : 'port ' + port;
 
@@ -262,7 +262,7 @@ function serverAppOutput( outputMode, appVersion, httpServer ) {
                 '" listening on ' + bind.cyan );
         },
         default: () => console.log( '\n' )
-    };  
+    };
 
     (outputs[ outputMode.toLowerCase() ] || outputs[ 'default' ])();
 }

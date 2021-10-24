@@ -12,6 +12,8 @@ require( './api/health/router' )( router );
 
 require( './api/processenv/router' )( router );
 
+require( './api/registr/items-balances/router' )( router );
+
 require( './api/reports/daily/router' )( router );
 
 require( './api/sum/procurement/router' )( router );

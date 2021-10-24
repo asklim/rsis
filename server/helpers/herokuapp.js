@@ -1,14 +1,14 @@
 /****************************************************************************
  **
- **  1. На все время работы приложения запускается таймер allTimeAppTimer 
+ **  1. На все время работы приложения запускается таймер allTimeAppTimer
  **     с интервалом reconnectInterval. Функция startStopReconnect проверяет
  **     если время в рабочем диапазоне 04..21UTC (07..24 BY), то создается
  **     или сохраняется таймер herokuTimer с интервалом reconnectInterval,
  **     иначе таймер удаляется и сервис засыпает до 04UTC
  **
- **  2. Функция reconnect, пока существует Таймер herokuTimer, пытается с 
+ **  2. Функция reconnect, пока существует Таймер herokuTimer, пытается с
  **     интервалом reconnectInterval подключиться к rsis-webapp.herokuapp.com
- **     На каждом цикле используется до TOTAL_ATTEMPTS попыток включительно, 
+ **     На каждом цикле используется до TOTAL_ATTEMPTS попыток включительно,
  **     с интервалом между попытками INTERVAL_BETWEEN_ATTEMPTS.
  **     Если попытки не удались, то через reconnectInterval - повтор попыток
  **
@@ -19,8 +19,8 @@
 
 /** */
 const debug = require( 'debug' )('_helper:herokuapp');
-const { 
-    //icwd, 
+const {
+    //icwd,
     consoleLogger,
 } = require( '../helpers' );
 
@@ -46,7 +46,7 @@ class NetworkError extends Error {}
 /**
  * @description Функция ПОПЫТОК подключения к rsis-webapp/api
  * @param {Object} options - передается в tryConnectXtimes
- * @returns {undefined} - undefined 
+ * @returns {undefined} - undefined
 **/
 
 const reconnect = (options) => {
@@ -60,7 +60,7 @@ const reconnect = (options) => {
             "Cache-Control": 'no-cache, no-store',
             charset: "utf-8"
         },
-        json: {}, 
+        json: {},
         qs: {}
     };
 
@@ -71,8 +71,8 @@ const reconnect = (options) => {
         if( herokuTimer ) {
             // Если к этому моменту herokuTimer == null, Ничего не выводим
             //let nowTime = (new Date()).toISOString();
-            //console.log( `ping Heroku app is Ok at ${nowTime}: `, resBody ); 
-            log.info( `app ping is Ok: `, resBody ); 
+            //console.log( `ping Heroku app is Ok at ${nowTime}: `, resBody );
+            log.info( `app ping is Ok: `, resBody );
         }
     })
     .catch( exception => {
@@ -80,7 +80,7 @@ const reconnect = (options) => {
         if( exception instanceof NetworkError ) {
             //console.log( `Network Error: ${exception.message}` );
             log.info( `Network Error: ${exception.message}` );
-        } 
+        }
         else {
             throw exception;
         }
@@ -93,7 +93,7 @@ const reconnect = (options) => {
  * @param {Number} options.totalAttempts - число попыток
  * @param {Number} options.interval - число миллисекунд между попытками
  * @param {Object} reqOptions - Параметры для http-запроса
- * 
+ *
  * @returns {Promise} - [object Error] OR [object Response Body]
 **/
 
@@ -108,27 +108,27 @@ function tryConnectXtimes (options, reqOptions) {
             if( n != 1 ) {
                 log.info( `Connect attempt #${n} to ${reqOptions.url}` );
             }
-            
-            request( reqOptions, 
+
+            request( reqOptions,
                 (err, response, resBody) => {
-                
+
                     done = true;
-                    if( err ) { 
+                    if( err ) {
                         reject( err );
-                    } 
+                    }
                     else {
                         resolve( resBody );
                     }
                 }
             );
-            
+
             setTimeout( () => {
-                
+
                 if( done ) return;
                 if( n < options.totalAttempts ) {
                     attempt( n+1 );
-                } 
-                else { 
+                }
+                else {
                     reject( new NetworkError( 'Ответ сети был не ok.' ));
                 }
             }, options.interval );
@@ -141,13 +141,13 @@ function tryConnectXtimes (options, reqOptions) {
 
 /**
  * @description Создает herokuTimer, если не существует.
- * 
+ *
 **/
 
 const startReconnection = () => {
 
     debug( 'startReconnection called.' );
-    
+
     if( !herokuTimer ) {
 
         let options = {
@@ -159,7 +159,7 @@ const startReconnection = () => {
         //console.log( `No-Sleep Heroku-App is started at ${nowTime}.` );
         log.info( `No-Sleep-Heroku-App started.` );
         reconnect( options );
-    }  
+    }
 };
 
 
@@ -168,10 +168,10 @@ const stopReconnection = () => {
 
     /**
      * @description Останавливает и удаляет herokuTimer
-     *  
+     *
     **/
     debug( 'stopReconnection called.' );
-    
+
     if( herokuTimer ) {
 
         clearInterval( herokuTimer );
@@ -197,16 +197,16 @@ const startStopReconnect = () => {
         let hours = (new Date()).getUTCHours();
         return ( hours > 4 && hours < 21 );
     };
-    
-    return ( isNowInWorkTime() 
+
+    return ( isNowInWorkTime()
         ? startReconnection()
-        : stopReconnection() 
+        : stopReconnection()
     );
 };
 
 
 
-function startReconnectionService( reconnectMinutes = 30 ) {  
+function startReconnectionService( reconnectMinutes = 30 ) {
 
     debug( 'startReconnection Service.' );
 
@@ -222,7 +222,7 @@ function stopReconnectionService() {
     debug( 'stopReconnection Service.' );
 
     stopReconnection();
-    clearInterval( allTimeAppTimer );  
+    clearInterval( allTimeAppTimer );
 }
 
 

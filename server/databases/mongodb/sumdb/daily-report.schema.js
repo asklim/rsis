@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'api:tmp:dailyReport' );
+const debug = require( 'debug' )( 'api:reports:dailyReport' );
 
 const { Schema } = require( 'mongoose' );
 const UUID = require( 'uuid' );
@@ -131,12 +131,26 @@ const dailyReport = new Schema({
     uuid: {
         type: Schema.Types.String,
     },
+    onDate: {
+        // На какую дату отчет (ISO 8601)
+        type: Schema.Types.String,
+        required: true,
+    },
     filial: {
-        // Для какого клиента каталог
+        // Для какого клиента report
         type: String,
         required: true,
         enum: [ 'filial1', 'filial2' ],
         default: 'filial1',
+    },
+    creator: {
+        // Какой клиент создал report
+        // На переходном периоде может быть два отчёта от
+        // разных <creator>, в том числе для сравнения
+        type: String,
+        required: true,
+        enum: [ 'mainsm', 'rsisjs' ],
+        default: 'mainsm',
     },
     caption: {
         // title of report
@@ -147,11 +161,6 @@ const dailyReport = new Schema({
         // description of report
         type: Schema.Types.String,
         required: false,
-    },
-    onDate: {
-        // На какую дату отчет (ISO 8601)
-        type: Schema.Types.String,
-        required: true,
     },
     created: {
         // Когда создан на клиенте (ISO 8601)

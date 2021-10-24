@@ -11,6 +11,24 @@ const ITEM_GID = {
     set: v => Math.round(v),
 };
 
+
+const ITEM_GID_KEY = {
+    // String using for key in Dictionary
+    // (g)lobal id - id of product in Nomenklature
+    type: Schema.Types.String,
+    match: /^2\d{9}$/,
+    required: true,
+    validate: {
+        validator: function (v) {
+            const minv = 2000000001;
+            const maxv = 2100999999;
+            return (v >= minv) && (v <= maxv);
+        },
+        message: (props) => `${props.value} is not in range 2,000,000,001 .. 2,100,999,999!`
+    }
+};
+
+
 const GROUP_GID = {
     // (g)lobal id - id of product`s GROUP in Nomenklature -
     // Firma`s Global Product Catalog
@@ -64,6 +82,7 @@ const STANDART_XL_GROUP = {
 module.exports = {
 
     ITEM_GID,
+    ITEM_GID_KEY,
     ITEM_LID,
     GROUP_GID,
     GROUP_LID,

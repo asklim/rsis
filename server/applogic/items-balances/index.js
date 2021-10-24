@@ -1,17 +1,18 @@
-const debug = require( 'debug' )( 'reports:daily' );
+const debug = require( 'debug' )( 'docs:itemsBalances' );
 
 const {
     httpResponseCodes: HTTP,
     //consoleLogger,
 } = require( '../../helpers' );
 
-const IStorage = require( '../../databases/mongodb/sumdb/daily-reports/daily-reports.interface' );
+//const IStorage = require( './storage.interface-abstract' );
+const IStorage = require( '../../databases/mongodb/sumdb/items-balances/ib.interface' );
 
 
-class DailyReports {
+exports = module.exports = class ItemsBalances {
 
     /**
-     * Create a new daily report
+     * Create a new items balance doc
      * @returns
      * @statusCode 201 Created & { message, uuid }
      * @statusCode 400 Bad Request & message
@@ -19,11 +20,13 @@ class DailyReports {
      **/
     static createOne = async function (body) {
 
-        if( !body.onDate  ) {
+        const { agent, onDate, items } = body;
+
+        if( !onDate || !agent || !items  ) {
             return ({
                 statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'daily-report.createOne: No body.onDate.',
-                response: 'Bad request, No body.onDate.'
+                logMessage: 'items-balances.createOne: No .onDate, .agent, .items fields.',
+                response: 'Bad request, No .onDate, .agent, .items fields.'
             });
         }
 
@@ -32,8 +35,8 @@ class DailyReports {
 
 
     /**
-     * Update daily-report by Query (filial & onDate)
-     * - Если и filial и onDate и creator совпадает,
+     * Update items-balance by Query (filial & onDate & agent & creator)
+     * - Если и filial и onDate и creator и agent совпадает,
      * то обновляем запись, иначе создаем новую
      * @returns
      * - statusCode 200 OK & response = { message, uuid }
@@ -44,24 +47,24 @@ class DailyReports {
     static updateOrCreate = async function (body) {
 
         const {
-            filial, creator, onDate,
+            filial, agent, creator, onDate,
         } = body;
 
-        if( !filial || !onDate ) {
+        if( !filial || !onDate || !agent) {
             return ({
                 statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'daily-report.update: No body.filial or body.onDate.',
-                response: 'Bad request, No body.filial or body.onDate.'
+                logMessage: 'items-balances.update: No .filial or .onDate or .agent fields.',
+                response: 'Bad request, No .filial or .onDate or .agent fields.'
             });
         }
 
-        const result = await DailyReports.readByQuery({ filial, creator, onDate });
+        const result = await ItemsBalances.readByQuery({ filial, agent, creator, onDate });
         debug( 'updateOrCreate: statusCode is', result.statusCode );
 
         if( result.statusCode == HTTP.OK ) {
             // response - это документ
-            const { response: report } = result;
-            return await IStorage.updateOne( report._id, body );
+            const { response: document } = result;
+            return await IStorage.updateOne( document._id, body );
         }
 
         return await IStorage.createOne( body );
@@ -70,44 +73,44 @@ class DailyReports {
 
 
     /**
-     * Read a daily-report by the objId or uuid
+     * Read a items-balance by the objId or uuid
      * @returns
      * - statusCode 200 OK          & document
      * - statusCode 400 Bad Request & message
      * - statusCode 404 Not Found   & message
      * - statusCode 500 Server Error & error object
      * @usage var.1 |
-     * GET /api/reports/daily/:reportId
+     * GET /api/ *** /:documentId
      **/
-    static readById = async function (reportId) {
+    static readById = async function (documentId) {
 
-        return await IStorage.readById( reportId );
+        return await IStorage.readById( documentId );
     }
 
 
     /**
-     * Read a daily-report by the id
+     * Read a items-balance by the id
      * @fires 200 OK          & document
      * @fires 400 Bad Request & message
      * @fires 404 Not Found   & message
      * @fires 500 Server Error & error object
      * @usage var.2 |
-     * GET /api/reports/daily?queryString
+     * GET /api/ *** ?queryString
      * @usage var.2 |
-     * GET /api/reports/daily/?queryString
+     * GET /api/ *** /?queryString
      * @usage queryString:
      * filial=filialId & creator=rsisjs
-     * onDate=isoDate as YYYY-MM-DD
+     * onDate=isoDate as YYYY-MM-DD & agent=agentId
      **/
     static readByQuery = async function (query) {
 
-        const { onDate } = query;
+        const { filial, agent, onDate, creator } = query;
 
-        if( !onDate ) {
-            // Если оба undefined - то ошибка
+        if( !filial && !onDate && !agent && !creator ) {
+            // Если какой-либо undefined - то ошибка
             return ({
                 statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'daily-reports.readByQuery: No query specified.',
+                logMessage: 'items-balances.readByQuery: No query specified.',
                 response: 'No query in request.'
             });
         }
@@ -126,16 +129,15 @@ class DailyReports {
 
 
     /**
-     * Delete daily-report by uuid or ObjId
+     * Delete items-balance by uuid or ObjId
      * @statusCode 204 No Content & { uuid, message }
      * @statusCode 404 Not Found & message
      * @statusCode 500 Server Error & error object
      **/
-    static deleteById = async function (reportId) {
+    static deleteById = async function (documentId) {
 
-        return await IStorage.deleteById( reportId );
+        return await IStorage.deleteById( documentId );
     }
 
-}
+};
 
-exports = module.exports = DailyReports;

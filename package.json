@@ -1,6 +1,6 @@
 {
     "name": "rsislocal",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "description": "standalone rsis (R Stock-In System) (on MERN)",
     "private": true,
     "homepage": ".",

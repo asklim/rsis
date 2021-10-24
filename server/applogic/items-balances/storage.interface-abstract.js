@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
-const ERR_MSG = "daily-report storage class: method not implemented.";
+const ERR_MSG = "items-balances storage class: method not implemented.";
 
 
-module.exports = class IA_DailyReports {
+module.exports = class IA_ItemBalances {
 
     static createOne = async function (body) { throw new Error( ERR_MSG ); }
 

@@ -1,62 +1,53 @@
-const debug = require( 'debug' )( 'reports:daily handler-PUT:' );
+const debug = require( 'debug' )( 'registr:items-balances handler-POST:' );
 const {
-    //icwd,
     consoleLogger,
     httpResponseCodes: HTTP,
-    send200Ok,
     send201Created,
     send400BadRequest,
-    //send409Conflict,
+    send409Conflict,
     send500ServerError,
 } = require( '../../../helpers' );
 
-const DailyReports = require( `../../../applogic/daily-reports` );
+const ItemsBalances = require( `../../../applogic/items-balances` );
 
-const log = consoleLogger( 'api-reports:' );
+const log = consoleLogger( 'api-registr:' );
 
 
 /**
- * Update daily report document
- * @fires 200 OK     & message
+ * Create a new items-balance
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
+ * @fires 409 Conflict & message
  * @fires 500 Server Error & error object
  * @returns {} undefined
  * @usage
- * PUT /api/reports/daily
+ * POST /api/registr/items-balances
  */
 
-module.exports = async function dailyReportsHandler_PUT (req, res) {
+module.exports = async function itemBalancesHandler_POST (req, res) {
 
-
-    debug(`start, reportId is "${req.params.reportId}"`);
     let filial, onDate;
+    const agent = req.body?.agent;
 
     if( req.body ) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    log.info( `try update daily-reports: filial=${filial}, onDate=${onDate}` );
+    debug( `try create: filial=${filial}, onDate=${onDate}, agent=${agent}` );
 
 
     if( !req.body
         || !Object.keys( req.body ).length ) {
         let result = {
             statusCode: HTTP.BAD_REQUEST,
-            logMessage: 'daily-report.PUT: req.body is empty.',
+            logMessage: 'items-balances.POST: req.body is empty.',
             response: 'Bad request, req.body is empty.'
         };
         log.warn( result.logMessage );
         return send400BadRequest( res, result.response );
     }
 
-
     const STATE_HANDLERS = {
-
-        [HTTP.OK]: (result) => {
-            log.info( result.logMessage );
-            return send200Ok( res, result.response );
-        },
 
         [HTTP.CREATED]: (result) => {
             log.info( result.logMessage );
@@ -68,21 +59,25 @@ module.exports = async function dailyReportsHandler_PUT (req, res) {
             return send400BadRequest( res, result.response );
         },
 
+        [HTTP.CONFLICT]: (result) => {
+            log.warn( result.logMessage );
+            return send409Conflict( res, result.response );
+        },
+
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
             log.error( result.logMessage );
-            debug( 'result.response', result.response ); //
-
-            return send500ServerError( res, result.logMessage /*.response*/ );
-            // Когда .logMessage - На клиенте более информативное сообщение
+            return send500ServerError( res, result.response );
         }
     };
 
+
     try {
-        const updateResult = await DailyReports.updateOrCreate( req.body );
-        const { statusCode } = updateResult;
+        const createResult = await ItemsBalances.createOne( req.body );
+        const { statusCode } = createResult;
 
         if( statusCode in STATE_HANDLERS ) {
-            return STATE_HANDLERS[ statusCode ]( updateResult );
+
+            return STATE_HANDLERS[ statusCode ]( createResult );
         }
 
         throw new Error( `Handler of ${statusCode} not implemented.`);

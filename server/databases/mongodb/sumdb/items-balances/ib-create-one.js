@@ -1,14 +1,14 @@
-const debug = require( 'debug' )( 'reports:daily' );
+const debug = require( 'debug' )( 'registr:items-balances' );
 
 const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
 
 const db = require( `../../..` ).getDB( 'sum' );
 
-const ModelDailyReports = db.model( 'DailyReports' );
+const ModelItemsBalances = db.model( 'ItemsBalances' );
 
 
 /**
- * Create a new daily-report
+ * Create a new items-balance document
  * @returns
  * - statusCode 201 Created & response= { message, uuid }
  * - statusCode 400 Bad Request & response= message
@@ -19,14 +19,14 @@ const ModelDailyReports = db.model( 'DailyReports' );
 module.exports = async function createOne (body) {
 
 
-    const { filial, creator, onDate } = body;
+    const { filial, agent, creator, onDate } = body;
 
     try {
 
-        const finded = await ModelDailyReports.findOne({ filial, creator, onDate });
+        const finded = await ModelItemsBalances.findOne({ filial, agent, creator, onDate });
 
         if( finded ) {
-            let msg = `Conflict: daily-report ${onDate} for ${filial} by ${creator} exist.`;
+            let msg = `Conflict: items-balance ${onDate} for ${agent} from ${filial} by ${creator} exist.`;
             return ({
                 statusCode: HTTP.CONFLICT,
                 logMessage: msg,
@@ -34,7 +34,7 @@ module.exports = async function createOne (body) {
             });
         }
 
-        const report = await ModelDailyReports.create( body );
+        const report = await ModelItemsBalances.create( body );
 
         const { uuid } = report;
         //const uuid = '12345678-1234-1234-1234-123456789012';

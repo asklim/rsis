@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'reports:daily handler-PUT:' );
+const debug = require( 'debug' )( 'registr:items-balances handler-PUT:' );
 const {
     //icwd,
     consoleLogger,
@@ -10,40 +10,41 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const DailyReports = require( `../../../applogic/daily-reports` );
+const ItemsBalances = require( `../../../applogic/items-balances` );
 
-const log = consoleLogger( 'api-reports:' );
+const log = consoleLogger( 'api-registr:' );
 
 
 /**
- * Update daily report document
+ * Update items-balance document
  * @fires 200 OK     & message
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
  * @fires 500 Server Error & error object
  * @returns {} undefined
  * @usage
- * PUT /api/reports/daily
+ * PUT /api/registr/items-balances
  */
 
-module.exports = async function dailyReportsHandler_PUT (req, res) {
+module.exports = async function itemsBalancesHandler_PUT (req, res) {
 
 
-    debug(`start, reportId is "${req.params.reportId}"`);
+    debug(`start, documentId is "${req.params?.documentId}"`);
     let filial, onDate;
+    const agent = req.body?.agent;
 
     if( req.body ) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    log.info( `try update daily-reports: filial=${filial}, onDate=${onDate}` );
+    log.info( `try update items-balances: filial=${filial}, onDate=${onDate}, agent=${agent}` );
 
 
     if( !req.body
         || !Object.keys( req.body ).length ) {
         let result = {
             statusCode: HTTP.BAD_REQUEST,
-            logMessage: 'daily-report.PUT: req.body is empty.',
+            logMessage: 'items-balances.PUT: req.body is empty.',
             response: 'Bad request, req.body is empty.'
         };
         log.warn( result.logMessage );
@@ -78,7 +79,7 @@ module.exports = async function dailyReportsHandler_PUT (req, res) {
     };
 
     try {
-        const updateResult = await DailyReports.updateOrCreate( req.body );
+        const updateResult = await ItemsBalances.updateOrCreate( req.body );
         const { statusCode } = updateResult;
 
         if( statusCode in STATE_HANDLERS ) {

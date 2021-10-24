@@ -20,7 +20,7 @@ const isHMR = DEV_MODE === 'HotModuleReplacement';
 
 
 const passport = require( 'passport' );  //passport must be before dbs-models
-const { 
+const {
     createMongoDBConnections,
     databasesShutdown,
 } = require( './databases' );
@@ -46,7 +46,7 @@ app.use( passport.initialize() );
 app.use( cors() );
 
 let loggerTemplate = [
-    '[:date[web]]', ':status',  
+    '[:date[web]]', ':status',
     //':remote-addr', ':remote-user',
     ':method :url :response-time[0] ms - :res[content-length]'
 ].join(' ');
@@ -57,7 +57,7 @@ app.use( express.json({
     limit: "5mb",
 }));
 
-app.use( express.urlencoded({ 
+app.use( express.urlencoded({
     extended: true,
     limit: "5mb",
 }));
@@ -69,14 +69,14 @@ app.use( express.static( `${icwd}/static` ));
 app.use( '/api', apiRouter );
 
 if( !isProduction && isHMR ) {
-        
+
     const webpack = require( 'webpack' );
     const webpackConfig = require( `${icwd}/config/webpack.devhmr` );
     const webpackDevMiddleware = require( 'webpack-dev-middleware' );
 
     const compiler = webpack( webpackConfig );
 
-    const wdmOption = {        
+    const wdmOption = {
         publicPath: webpackConfig.output.publicPath,
     };
     console.log( 'webpack-dev-middleware (wdm) config: ', wdmOption );
@@ -89,14 +89,16 @@ if( !isProduction && isHMR ) {
 
 
 app.get( '*', (req, res, next) => {
-    console.log( `server-app dirname is ${__dirname}` );
-    console.log( `index.html must be ${icwd}/static/index.html` );
 
-    let indexhtml = path.resolve( `${icwd}/static/index.html` );
-    res.sendFile( indexhtml,
+    const INDEX_HTML_PFN = `${icwd}/static/index.html`;
+
+    console.log( `server__dirname is ${__dirname}` );
+    console.log( `index.html must be ${INDEX_HTML_PFN}` );
+
+    res.sendFile( path.resolve( INDEX_HTML_PFN ),
         (err) => {
             if( err ) {
-                console.log('E: error sending "/static/index.html"');
+                console.log( `E: error sending '${INDEX_HTML_PFN}'`);
                 console.log( err );
                 next( err );
             }
@@ -113,17 +115,17 @@ app.use( (req, res, next) => {
 
 // error handler
 // eslint-disable-next-line no-unused-vars
-app.use( (err, req, res, next) => { 
+app.use( (err, req, res, next) => {
     // must be 4 args
     let runMode = req.app.get( 'env' );
     const isDev = runMode === 'development';
     console.log( `app-server error-handler: env = '${runMode}'` );
-    console.log( isDev 
-        ? (req.body && Object.keys( req.body ).length > 0) 
-            ? req.body 
+    console.log( isDev
+        ? (req.body && Object.keys( req.body ).length > 0)
+            ? req.body
             : req
-        : "" 
-    );    
+        : ""
+    );
 
     // set locals, only providing error in development
     res.locals.message = err.message;
@@ -137,7 +139,7 @@ app.use( (err, req, res, next) => {
 
 
 module.exports = {
-    
+
     app,
     databasesShutdown,
 };

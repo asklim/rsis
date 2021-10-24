@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'reports:daily' );
+//const debug = require( 'debug' )( 'registr:items-balances' );
 
 const { format } = require( 'util' );
 const UUID = require( 'uuid' );
@@ -6,28 +6,28 @@ const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
 
 const db = require( '../../..' ).getDB( 'sum' );
 
-const ModelDailyReports = db.model( 'DailyReports' );
+const ModelItemsBalances = db.model( 'ItemsBalances' );
 
 
 /**
- * Delete daily-report by uuid or ObjId
+ * Delete items-balance document by uuid or ObjId
  * @returns
  * - statusCode 204 No Content & { message, uuid }
  * - statusCode 404 Not Found & message
  * - statusCode 500 Server Error & error object
  **/
 
-module.exports = async function deleteById (reportId) {
+module.exports = async function deleteById (documentId) {
 
     try {
-        const filtering = UUID.validate( reportId )
-            ? { uuid: reportId }
-            : { _id: reportId };
+        const filtering = UUID.validate( documentId )
+            ? { uuid: documentId }
+            : { _id: documentId };
 
-        const doc = await ModelDailyReports.findOne( filtering );
+        const doc = await ModelItemsBalances.findOne( filtering );
 
         if( !doc ) {
-            let msg = `Daily Report not found.`;
+            let msg = `Items-Balance not found.`;
             return ({
                 statusCode: HTTP.NOT_FOUND,
                 logMessage: `${msg} w/filter: ` + format( '%o', filtering ),
@@ -35,13 +35,13 @@ module.exports = async function deleteById (reportId) {
             });
         }
 
-        const { uuid } = await ModelDailyReports.findOneAndDelete( filtering );
+        const { uuid } = await ModelItemsBalances.findOneAndDelete( filtering );
 
         return ({
             statusCode: HTTP.NO_CONTENT,
-            logMessage: `SUCCESS: daily-report w/uuid:${uuid} deleted.`,
+            logMessage: `SUCCESS: items-balance document w/uuid:${uuid} deleted.`,
             response: {
-                message: `daily-report w/uuid:${uuid} deleted successful.`,
+                message: `items-balance document w/uuid:${uuid} deleted successful.`,
                 uuid,
             }
         });

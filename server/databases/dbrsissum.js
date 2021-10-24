@@ -23,11 +23,16 @@ db.model( 'WeekNatural', weekNaturalSchema, 'weekNatural' );
 // last (3rd) arg - collection`s name in MongoDB
 
 
-const finReportSchema = require( './mongodb/sumdb/financereport.schema' );
+const finReportSchema = require( './mongodb/sumdb/finance-report.schema' );
 db.model( 'FinanceReport', finReportSchema, 'financeReport' );
 
 
 const daylyReportSchema = require( './mongodb/sumdb/daily-report.schema' );
 db.model( 'DailyReports', daylyReportSchema, 'dailyReport' );
+
+
+const itemsBalanceSchema = require( './mongodb/sumdb/items-balance.schema' );
+db.model( 'ItemsBalances', itemsBalanceSchema, 'itemsBalances' );
+
 
 module.exports = db;
