@@ -1,6 +1,6 @@
-//const debug = require( 'debug' )( 'api:sum:weeknatural' );
-const { 
-    icwd, 
+//const debug = require( 'debug' )( 'reports:week-natural' );
+const {
+    icwd,
     consoleLogger,
     send201Created,
     send400BadRequest,
@@ -8,13 +8,13 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'ctrl-SUM:' );
+const log = consoleLogger( 'api-SUM:reports:week-natural:' );
 
 const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
 const WeekNatural = db.model( 'WeekNatural' );
 
 
-/** 
+/**
  * @name createOne
  * @description Create a new week Natural
  * @fires 201 Created     & message
@@ -24,14 +24,14 @@ const WeekNatural = db.model( 'WeekNatural' );
  * @returns {} undefined
  * @example
  * POST /api/sum/weeknatural
- * 
+ *
 **/
 
 const createOne = (req, res)  => {
 
-    log.info( `try create, sum-week-natural body.id: ${req.body.id}` ); 
+    log.info( `try create, sum-week-natural body.id: ${req.body.id}` );
 
-    if( !req.body || 
+    if( !req.body ||
         !Object.keys( req.body ).length ) { // == 0
         return send400BadRequest( res, 'Bad request, body is required' );
     }
@@ -40,24 +40,24 @@ const createOne = (req, res)  => {
 
     if( !id ) {
         return send400BadRequest( res, 'Bad request, body.id number is required' );
-    }  
-  
+    }
+
     const finding = { id };
 
     WeekNatural.
     find( finding ).
     limit( 1 ).
-    exec( (err, docs) => { 
+    exec( (err, docs) => {
 
         if( err ) {
             log.error( err );
             return send500ServerError( res, err );
         }
 
-        if( docs && 
+        if( docs &&
             docs.length ) {
-            return send409Conflict( res, 
-                `Summary data for week ${id} already exists.` 
+            return send409Conflict( res,
+                `Summary data for week ${id} already exists.`
             );
         }
 
@@ -67,10 +67,10 @@ const createOne = (req, res)  => {
             if( err ) {
                 log.error( 'weekNatural.create err: ', err );
                 return send500ServerError( res, err );
-            } 
+            }
 
             log.info( `SUCCESS: weekNatural ${doc.id} created.`);
-            return send201Created( res, 
+            return send201Created( res,
                 `Summary data for week ${doc.id} created successfull.`
             );
         });

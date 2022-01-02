@@ -12,6 +12,7 @@ module.exports = function (api) {
                 }
             }
         ],
+        "@babel/preset-typescript",
         [ "@babel/react",
             {
                 "pragma": "dom",          // default pragma is React.createElement
@@ -26,7 +27,7 @@ module.exports = function (api) {
         "@babel/plugin-proposal-object-rest-spread",
         "@babel/plugin-syntax-dynamic-import",
         "react-hot-loader/babel",
-        [ "module-resolver", 
+        [ "module-resolver",
             {
                 "root": ["./src"]
             }
@@ -34,7 +35,7 @@ module.exports = function (api) {
     ];
 
     api.cache.forever();
-    
+
     return {
         presets,
         plugins

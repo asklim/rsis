@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'reports:daily handler-POST:' );
+const debug = require( 'debug' )( 'reports:daily:' );
 const {
     consoleLogger,
     httpResponseCodes: HTTP,
@@ -10,7 +10,7 @@ const {
 
 const DailyReports = require( `../../../applogic/daily-reports` );
 
-const log = consoleLogger( 'api-reports:' );
+const log = consoleLogger( 'api-reports:daily:' );
 
 
 /**
@@ -32,7 +32,7 @@ module.exports = async function dailyReportsHandler_POST (req, res) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    debug( `try create: filial=${filial}, onDate=${onDate}` );
+    debug( `[h-POST] try create: filial=${filial}, onDate=${onDate}` );
 
 
     if( !req.body

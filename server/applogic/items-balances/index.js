@@ -31,7 +31,7 @@ exports = module.exports = class ItemsBalances {
         }
 
         return await IStorage.createOne( body );
-    }
+    };
 
 
     /**
@@ -69,7 +69,7 @@ exports = module.exports = class ItemsBalances {
 
         return await IStorage.createOne( body );
 
-    }
+    };
 
 
     /**
@@ -85,7 +85,7 @@ exports = module.exports = class ItemsBalances {
     static readById = async function (documentId) {
 
         return await IStorage.readById( documentId );
-    }
+    };
 
 
     /**
@@ -125,7 +125,7 @@ exports = module.exports = class ItemsBalances {
 
         return await IStorage.readByQuery( query );
 
-    }
+    };
 
 
     /**
@@ -137,7 +137,7 @@ exports = module.exports = class ItemsBalances {
     static deleteById = async function (documentId) {
 
         return await IStorage.deleteById( documentId );
-    }
+    };
 
 };
 

@@ -1,11 +1,14 @@
+const logdebug = require( 'debug' )( 'dbs:connect' );
+const debug = (...args) => logdebug( '\b:[sum]', ...args );
+
 const createConn = require( './create-conn' );
 const {
     dbName,
     mongoURI
-} = require( '../helpers/serverconfig' );
+} = require( '../rsis-config.js' );
 const { rsissum: databaseName } = dbName;
 
-const title = `summary-db [${databaseName}]`;
+const title = `[${databaseName}] summary-db`;
 
 
 //'mongodb://hp8710w:36667 || env.MONGO_DEV1 || hp8710w:27017
@@ -16,6 +19,7 @@ const uri = ( process.env.NODE_ENV === 'production' )
 
 const db = createConn( `${uri}/${databaseName}`, title );
 
+debug( 'dbsum, create connection.', /*db*/ );
 // BRING IN YOUR SCHEMAS & MODELS
 
 const weekNaturalSchema = require( './mongodb/sumdb/weeknatural.schema' );

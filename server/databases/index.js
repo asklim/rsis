@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'dbs:index' );
+//const debug = require( 'debug' )( 'dbs:connect' );
 const { consoleLogger, } = require( '../helpers' );
 
 const log = consoleLogger( `dbs:` );
@@ -6,7 +6,7 @@ const dbs = {};
 
 /**
  * @name getDB
- * @memberof /api/models 
+ * @memberof /api/models
  * @summary Возвращает указанную базу данных
  * @param {String} dbType The database type
  * @return {Mongoose.Connection} The connection to database
@@ -19,7 +19,7 @@ const getDB = (dbType) => {
     }
 
     let dbName;
-    
+
     switch( dbType.toLowerCase() ) {
         case 'config': dbName = 'rsiscfg'; break;
         case   'temp': dbName = 'rsistmp'; break;
@@ -33,7 +33,7 @@ const getDB = (dbType) => {
 
     return dbs[ dbName ];
     //Если getDB = async (), то ломается там где используется.
-    //Надо переделывать под await, т.к. возвращается Promise??? 
+    //Надо переделывать под await, т.к. возвращается Promise???
 };
 
 
@@ -50,16 +50,16 @@ const createMongoDBConnections = () => {
 
 /**
  * @description To be called when process is restarted Nodemon or terminated
- * @param {String} msg - message for output to console 
- * @param {Function} next - Функция вызывается после закрытия всех подключений 
+ * @param {String} msg - message for output to console
+ * @param {Function} next - Функция вызывается после закрытия всех подключений
  *                          к базам данных
  *
 **/
 const databasesShutdown = async (msg, next) => {
     /*
     const allDbsClosingPromises = Object.keys( dbs )
-    .map( 
-        (dbKey) => dbs[ dbKey ].closeConn() 
+    .map(
+        (dbKey) => dbs[ dbKey ].closeConn()
     );
 
     Promise.all( allDbsClosingPromises
@@ -68,7 +68,7 @@ const databasesShutdown = async (msg, next) => {
     .then( (dbsNames) => {
         console.log( 'dbs closed: ', dbsNames );
         console.log( 'Mongoose disconnected through ' + msg );
-        next();  
+        next();
     })
     .catch( (error) => log.error( error ));
     */

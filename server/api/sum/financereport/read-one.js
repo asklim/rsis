@@ -1,6 +1,6 @@
-//const debug = require( 'debug' )( 'api:sum:financereport' );
-const { 
-    icwd, 
+//const debug = require( 'debug' )( 'reports:finance' );
+const {
+    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
@@ -8,7 +8,7 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-SUM:' );
+const log = consoleLogger( 'api-SUM:reports:finance' );
 
 const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
 const FinanceReport = db.model( 'FinanceReport' );
@@ -16,9 +16,9 @@ const FinanceReport = db.model( 'FinanceReport' );
 //const workdate = require( `${icwd}/imports/utils/workdate` );
 
 
-/** 
- * Read a financials summary report 
- * by the XXI century week or calendar quarter or ???'last' 
+/**
+ * Read a financials summary report
+ * by the XXI century week or calendar quarter or ???'last'
  * @name readOne
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
@@ -44,30 +44,30 @@ const FinanceReport = db.model( 'FinanceReport' );
 module.exports = function readOne (req, res) {
 
 
-    console.log( 
+    console.log(
         `I: try readOne sum-finance-report document`,
         '\nI: finding financeReport\'s params:', req.params,
         '\nI: finding financeReport\'s query:', req.query
     );
     //console.log(req.hostname);
-    
+
     const { periodId } = req.params;
 
     if( !periodId ) {
 
         log.warn( 'financeReport.readOne: No periodId specified.' );
-        return send400BadRequest( res, 'No periodId in request.' );  
+        return send400BadRequest( res, 'No periodId in request.' );
     }
 
-    let finding, 
-        sorting, 
+    let finding,
+        sorting,
         periodNumber
     ;
     const periodIdLow = periodId.toLowerCase();
 
     if( periodIdLow.startWith('last') ) {
-        
-        let period = periodIdLow.split( 'last' )[0]; 
+
+        let period = periodIdLow.split( 'last' )[0];
         finding = { period };
         sorting = { id: -1 };
     }
@@ -77,10 +77,10 @@ module.exports = function readOne (req, res) {
         if( !periodNumber ) {
 
             log.warn( 'financeReport.readOne: wrong periodId specified.' );
-            return send400BadRequest( res, 'Wrong periodId in request.' );    
+            return send400BadRequest( res, 'Wrong periodId in request.' );
         }
         finding =  { pid: periodNumber };
-        sorting =  {};            
+        sorting =  {};
     }
 
 
@@ -90,10 +90,10 @@ module.exports = function readOne (req, res) {
     .limit(1)
     .exec( (err, docs) => {
 
-        if( err ) {                 
+        if( err ) {
             log.error( err );
             return send500ServerError( res, err );
-        } 
+        }
 
         if( !docs || docs.length < 1 ) {
 

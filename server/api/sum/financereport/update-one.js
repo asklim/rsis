@@ -1,6 +1,6 @@
-//const debug = require( 'debug' )( 'api:sum:financereport' );
-const { 
-    icwd, 
+//const debug = require( 'debug' )( 'reports:finance:' );
+const {
+    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
@@ -8,7 +8,7 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-SUM:' );
+const log = consoleLogger( 'api-SUM:reports:finance:' );
 
 const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
 const FinanceReport = db.model( 'FinanceReport' );
@@ -17,8 +17,8 @@ const FinanceReport = db.model( 'FinanceReport' );
 
 
 
-/** 
- * Update Finance Report doc 
+/**
+ * Update Finance Report doc
  * @name updateOne
  * @fires 200 OK          & updated document
  * @fires 400 Bad Request & message
@@ -32,8 +32,8 @@ const FinanceReport = db.model( 'FinanceReport' );
 module.exports = function updateOne (req, res) {
 
 
-    if( !req.body 
-        || Object.keys( req.body ).length == 0 ) {        
+    if( !req.body
+        || Object.keys( req.body ).length == 0 ) {
         return send400BadRequest( res, 'Bad request, body is required' );
     }
 
@@ -44,26 +44,26 @@ module.exports = function updateOne (req, res) {
         return send400BadRequest( res, 'Bad request, body.pid is required or wrong.' );
     }
 
-    FinanceReport.find({ 
+    FinanceReport.find({
         period,
-        pid: periodNumber 
+        pid: periodNumber
     })
     .limit( 1 )
     .exec( (err, docs) => {
 
-        if( err ) {                
+        if( err ) {
             log.error( err );
             return send500ServerError( res, err );
         }
 
         if( !docs || docs.length < 1 ) {
-            return send404NotFound( res, 
+            return send404NotFound( res,
                 `Summary data for ${period}/${periodNumber} not found.`
             );
         }
- 
-        Object.assign( 
-            docs[0], 
+
+        Object.assign(
+            docs[0],
             req.body,
             { updatedAt: Date.now() }
         );
@@ -72,7 +72,7 @@ module.exports = function updateOne (req, res) {
 
             if( err ) {
                 return send500ServerError( res, err );
-            } 
+            }
             else {
 
                 let { period, pid } = savedDoc;
@@ -81,5 +81,5 @@ module.exports = function updateOne (req, res) {
             }
         });
     });
-};   
+};
 

@@ -5,40 +5,28 @@ require( 'dotenv' ).config();
 const {
     app: rsisExpressApp,
     databasesShutdown,
-} = require( './app-server' );
+} = require( './rsis-app.js' );
 
 const debug = require( 'debug' )('rsis:www');
 const http = require( 'http' );
 const os = require( 'os' );
-const { format } = require( 'util' );
+const util = require( 'util' );
 const colors = require( 'colors' );
 
-const { icwd } = require( './helpers/serverconfig' );
+const {
+    icwd,
+    getProcessEnvWithout,
+} = require( './helpers/' );
 
 const version = require( `${icwd}/package.json` ).version;
 
-// пока работает только через 'npm run compile'
-//import app from '../server/app-server';
-//import http from 'http';
+outputStartServerInfo();
 
 
-//const icwd = process.env.INIT_CWD; // НЕ РАБОТАЕТ на Heroku: undefined
-//console.log( process.env );
+const heroku = require( './heroku-no-sleep/' );
+const EVERY_30_MINUTE = 30;
 
-const { PWD, USER, NAME, } = process.env;
-
-const userInfo = format('%o', os.userInfo());
-
-console.log( colors.red( 'package.json dir is ', icwd )); // = '/app' on Heroku
-console.log( `PWD (${__filename}) is ${PWD}`.red );
-console.log( `USER @ NAME is ${USER} @ ${NAME}`.red );
-console.log( `platform is ${os.platform()}, hostname is ${os.hostname()}`.cyan );
-console.log( 'User Info : ', userInfo.yellow );
-
-
-const heroku = require( './helpers/herokuapp' );
-
-heroku.startReconnectionService( 30 );
+heroku.startReconnectionService( EVERY_30_MINUTE );
 
 
 /*******************************************************
@@ -55,19 +43,18 @@ rsisExpressApp.set( 'port', port );
 const server = http.createServer( rsisExpressApp );
 
 
-const shutdownTheServer = () => {
+const shutdownTheServer = async() => {
 
-    return new Promise(
-        resolve => {
-            server.close( () => {
-                console.log( 'http-server closed now.' );
-                resolve();
-            });
+    return new Promise( (resolve) => {
+        server.close( () => {
+            console.log( 'http-server closed now.' );
+            resolve();
         });
+    });
 };
 
 
-const handleOnError = error => {
+const handlerOnError = error => {
 
     /**
      * Event listener for HTTP server "error" event.
@@ -104,7 +91,7 @@ const handleOnError = error => {
 };
 
 
-const handleOnListening = () => {
+const handlerOnListening = () => {
 
     /**
      * Event listener for HTTP server "listening" event.
@@ -120,11 +107,11 @@ const handleOnListening = () => {
 };
 
 
-server.on( 'error', handleOnError );
+server.on( 'error', handlerOnError );
 
-server.on( 'listening', handleOnListening );
+server.on( 'listening', handlerOnListening );
 
-server.on( 'clientError', (err, socket) => {
+server.on( 'clientError', (_err, socket) => {
 
     socket.end( 'HTTP/1.1 400 Bad Request\r\n\r\n' );
 });
@@ -142,10 +129,12 @@ server.on( 'close', () => {
 /**
  * Listen on provided port, on all network interfaces.
  */
-server.listen( port,  () => {
-
-    serverAppOutput( 'addr'/*'full'*/, version, server );
-});
+server.listen(
+    port,
+    () => {
+        serverAppOutput( 'addr'/*'full'*/, version, server );
+    }
+);
 
 
 // *************************************************************
@@ -153,55 +142,36 @@ server.listen( port,  () => {
 
 
 process.once( 'SIGUSR2', () => { // For nodemon restarts
-
-    databasesShutdown( 'nodemon restart',
-        () => {
-            shutdownTheServer()
-            .then(
-                function () {
-                    setTimeout(
-                        () => {
-                            process.kill( process.pid, 'SIGUSR2' );
-                        }, 1000
-                    );
-                }
-            );
+    databasesShutdown(
+        'SIGUSR2, nodemon restart',
+        async () => {
+            await shutdownTheServer();
+            setTimeout( process.kill, 500, process.pid, 'SIGUSR2' );
         }
     );
 });
 
 // For app termination
 process.on( 'SIGINT', () => {
-
-    databasesShutdown( 'app termination', () => {
-
-        shutdownTheServer()
-        .then(
-            function () {
-                setTimeout(
-                    () => { process.exit(0); },
-                    1000
-                );
-            }
-        );
-    });
+    console.log('!');
+    databasesShutdown(
+        'SIGINT, app termination',
+        async () => {
+            await shutdownTheServer();
+            setTimeout( process.exit, 500, 0 );
+        }
+    );
 });
 
 // For Heroku app termination
 process.on( 'SIGTERM', () => {
-
-    databasesShutdown( 'Heroku app termination', () => {
-
-        shutdownTheServer()
-        .then(
-            function () {
-                setTimeout(
-                    () => { process.exit(0); },
-                    1000
-                );
-            }
-        );
-    });
+    databasesShutdown(
+        'SIGTERM, app termination',
+        async () => {
+            await shutdownTheServer();
+            setTimeout( process.exit, 500, 0 );
+        }
+    );
 });
 
 
@@ -209,24 +179,16 @@ process.on( 'SIGTERM', () => {
 /**
  * Normalize a port into a number, string, or false.
  */
-function normalizePort( val ) {
-
+function normalizePort(
+    val
+) {
     let port = parseInt( val, 10 );
-
     return isNaN( port )
         ? val       // named pipe
         : port >= 0
             ? port  // port number
             : false
     ;
-
-    /*if( isNaN( port ) ) {  // named pipe
-        return val;
-    }
-    if( port >= 0 ) {     // port number
-        return port;
-    }
-    return false;*/
 }
 
 
@@ -237,9 +199,11 @@ function normalizePort( val ) {
  * @param {*} appVersion
  * @param {*} httpServer
  */
-function serverAppOutput( outputMode, appVersion, httpServer ) {
-
-
+function serverAppOutput(
+    outputMode,
+    appVersion,
+    httpServer
+) {
     let serverAddress = httpServer.address();
     let {
         address,
@@ -252,17 +216,41 @@ function serverAppOutput( outputMode, appVersion, httpServer ) {
         : 'port ' + port;
 
     const outputs = {
-        full: () => console.log( 'Express server = ',  httpServer ),
+        full: () => console.log( 'Express server = ',  httpServer, '\n' ),
         addr: () => {
-            const { NODE_ENV } = process.env;
+            const node_env = process.env.NODE_ENV || 'undefined';
             console.log( 'app version ', appVersion.cyan );
-            console.log( 'NODE Environment is ', NODE_ENV.cyan );
+            console.log( 'NODE Environment is ', node_env.cyan );
             console.log(
-                'Express server = "' + address.cyan + '" Family= "' + family.cyan,
-                '" listening on ' + bind.cyan );
+                'Express server = "' + address.cyan
+                + '" Family= "' + family.cyan
+                + '" listening on ' + bind.cyan, '\n'
+            );
         },
         default: () => console.log( '\n' )
     };
 
     (outputs[ outputMode.toLowerCase() ] || outputs[ 'default' ])();
 }
+
+
+async function outputStartServerInfo() {
+
+    getProcessEnvWithout( 'npm_, XDG, LESS' ).
+    then( (envList) => {
+        console.log( envList );
+
+        const { PWD, USER, NAME, } = process.env;
+        const userInfo = util.format( '%O', os.userInfo() );
+
+        console.log( `stdout.isTTY is ${process.stdout.isTTY}`.yellow );
+        // true - in terminal, undefined - in service journal
+
+        console.log( `package.json dir is ${icwd}`.red ); // = '/app'
+        console.log( `PWD (${__filename}) is ${PWD}`.red );
+        console.log( `USER @ NAME is ${USER} @ ${NAME}`.red );
+        console.log( `platform is ${os.platform()}, hostname is ${os.hostname()}`.cyan );
+        console.log( colors.yellow( 'User Info : ', userInfo ), '\n' );
+    });
+}
+

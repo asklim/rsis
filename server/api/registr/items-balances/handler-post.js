@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'registr:items-balances handler-POST:' );
+const debug = require( 'debug' )( 'registr:items-balances:' );
 const {
     consoleLogger,
     httpResponseCodes: HTTP,
@@ -33,7 +33,7 @@ module.exports = async function itemBalancesHandler_POST (req, res) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    debug( `try create: filial=${filial}, onDate=${onDate}, agent=${agent}` );
+    debug( `[h-POST] try create: filial=${filial}, onDate=${onDate}, agent=${agent}` );
 
 
     if( !req.body

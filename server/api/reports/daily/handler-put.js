@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'reports:daily handler-PUT:' );
+const debug = require( 'debug' )( 'reports:daily:' );
 const {
     //icwd,
     consoleLogger,
@@ -12,7 +12,7 @@ const {
 
 const DailyReports = require( `../../../applogic/daily-reports` );
 
-const log = consoleLogger( 'api-reports:' );
+const log = consoleLogger( 'api-reports:daily:' );
 
 
 /**
@@ -29,7 +29,7 @@ const log = consoleLogger( 'api-reports:' );
 module.exports = async function dailyReportsHandler_PUT (req, res) {
 
 
-    debug(`start, reportId is "${req.params.reportId}"`);
+    debug( `[h-PUT] start, reportId is "${req.params.reportId}"` );
     let filial, onDate;
 
     if( req.body ) {
@@ -70,7 +70,7 @@ module.exports = async function dailyReportsHandler_PUT (req, res) {
 
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
             log.error( result.logMessage );
-            debug( 'result.response', result.response ); //
+            debug( '[h-PUT] result.response', result.response ); //
 
             return send500ServerError( res, result.logMessage /*.response*/ );
             // Когда .logMessage - На клиенте более информативное сообщение

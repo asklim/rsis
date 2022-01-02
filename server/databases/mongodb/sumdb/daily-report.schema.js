@@ -140,7 +140,7 @@ const dailyReport = new Schema({
         // Для какого клиента report
         type: String,
         required: true,
-        enum: [ 'filial1', 'filial2' ],
+        enum: [ 'frm', 'filial1', 'filial2' ],
         default: 'filial1',
     },
     creator: {

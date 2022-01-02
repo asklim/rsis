@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )('sapp:sapp');
+//const debug = require( 'debug' )('rsis:app');
 const createError = require( 'http-errors' );
 const express = require( 'express' );
 const path = require( 'path' );
@@ -8,7 +8,6 @@ const cookieParser = require( 'cookie-parser' );
 //const bodyParser = require( 'body-parser' );
 const morgan = require( 'morgan' );
 //const uuid = require( 'uuid' );
-const { icwd } = require( './helpers/serverconfig' );
 
 const {
     NODE_ENV,
@@ -35,7 +34,7 @@ const app = express();
 const apiRouter = require( './api-router' );
 
 // view engine setup
-app.set( 'views', `${icwd}/server/views` );
+app.set( 'views', './views' );
 app.set( 'view engine', 'ejs' );
 
 app.use( passport.initialize() );
@@ -45,12 +44,11 @@ app.use( passport.initialize() );
 
 app.use( cors() );
 
-let loggerTemplate = [
+const loggerTemplate = [
     '[:date[web]]', ':status',
     //':remote-addr', ':remote-user',
     ':method :url :response-time[0] ms - :res[content-length]'
 ].join(' ');
-
 app.use( morgan( loggerTemplate )); // dev | common | combined |short
 
 app.use( express.json({
@@ -63,15 +61,15 @@ app.use( express.urlencoded({
 }));
 
 app.use( cookieParser() );
-
-app.use( express.static( `${icwd}/static` ));
+app.use( express.static( '../static' ));
 
 app.use( '/api', apiRouter );
+
 
 if( !isProduction && isHMR ) {
 
     const webpack = require( 'webpack' );
-    const webpackConfig = require( `${icwd}/config/webpack.devhmr` );
+    const webpackConfig = require( '../config/webpack.devhmr.js' );
     const webpackDevMiddleware = require( 'webpack-dev-middleware' );
 
     const compiler = webpack( webpackConfig );
@@ -88,14 +86,14 @@ if( !isProduction && isHMR ) {
 }
 
 
-app.get( '*', (req, res, next) => {
+app.get( '*', (_req, res, next) => {
 
-    const INDEX_HTML_PFN = `${icwd}/static/index.html`;
+    const INDEX_HTML_PFN = path.resolve( `../static/index.html` );
 
     console.log( `server__dirname is ${__dirname}` );
     console.log( `index.html must be ${INDEX_HTML_PFN}` );
 
-    res.sendFile( path.resolve( INDEX_HTML_PFN ),
+    res.sendFile( INDEX_HTML_PFN,
         (err) => {
             if( err ) {
                 console.log( `E: error sending '${INDEX_HTML_PFN}'`);
@@ -115,7 +113,7 @@ app.use( (req, res, next) => {
 
 // error handler
 // eslint-disable-next-line no-unused-vars
-app.use( (err, req, res, next) => {
+app.use( (err, req, res, _next) => {
     // must be 4 args
     let runMode = req.app.get( 'env' );
     const isDev = runMode === 'development';
@@ -139,7 +137,6 @@ app.use( (err, req, res, next) => {
 
 
 module.exports = {
-
     app,
     databasesShutdown,
 };

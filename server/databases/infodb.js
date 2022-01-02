@@ -1,4 +1,6 @@
-const debug = require( 'debug' )( '-dbs:info' );
+const logdebug = require( 'debug' )( 'dbs:connect' );
+const debug = (...args) => logdebug( '\b:[info]', ...args );
+
 const { formatWithOptions } = require( 'util' );
 const { consoleLogger, } = require( '../helpers' );
 

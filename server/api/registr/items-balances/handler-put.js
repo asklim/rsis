@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'registr:items-balances handler-PUT:' );
+const debug = require( 'debug' )( 'registr:items-balances:' );
 const {
     //icwd,
     consoleLogger,
@@ -12,7 +12,7 @@ const {
 
 const ItemsBalances = require( `../../../applogic/items-balances` );
 
-const log = consoleLogger( 'api-registr:' );
+const log = consoleLogger( 'api-registr:items-balances:' );
 
 
 /**
@@ -29,7 +29,7 @@ const log = consoleLogger( 'api-registr:' );
 module.exports = async function itemsBalancesHandler_PUT (req, res) {
 
 
-    debug(`start, documentId is "${req.params?.documentId}"`);
+    debug( `[h-PUT] start, documentId is "${req.params?.documentId}"` );
     let filial, onDate;
     const agent = req.body?.agent;
 
@@ -37,7 +37,7 @@ module.exports = async function itemsBalancesHandler_PUT (req, res) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    log.info( `try update items-balances: filial=${filial}, onDate=${onDate}, agent=${agent}` );
+    log.info( `try update for filial=${filial}, onDate=${onDate}, agent=${agent}` );
 
 
     if( !req.body
@@ -71,7 +71,7 @@ module.exports = async function itemsBalancesHandler_PUT (req, res) {
 
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
             log.error( result.logMessage );
-            debug( 'result.response', result.response ); //
+            debug( '[h-PUT] result.response', result.response ); //
 
             return send500ServerError( res, result.logMessage /*.response*/ );
             // Когда .logMessage - На клиенте более информативное сообщение

@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'registr:items-balances handler-DELETE:' );
+const debug = require( 'debug' )( 'registr:items-balances:' );
 
 const {
     consoleLogger,
@@ -11,7 +11,7 @@ const {
 
 const ItemsBalances = require( `../../../applogic/items-balances` );
 
-const log = consoleLogger( 'api-registr:' );
+const log = consoleLogger( 'api-registr:items-balances:' );
 
 
 /**
@@ -31,7 +31,7 @@ module.exports = async function itemsBalancesHandler_DELETE (req, res) {
 
 
     debug(
-        'I: try delete document',
+        '[h-DELETE] try delete document',
         '\nI: items-balance`s delete params:', req.params,
         '\nI: items-balance`s delete query:', req.query
     );
@@ -53,7 +53,7 @@ module.exports = async function itemsBalancesHandler_DELETE (req, res) {
 
         [HTTP.NO_CONTENT]: (result) => {
             log.info( result.logMessage );
-            debug( 'result.response', result.response );
+            debug( '[h-DELETE] result.response', result.response );
 
             //TODO: Client не получает тело json-ответа
             return send204NoContent( res, result.response );

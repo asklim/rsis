@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'registr:items-balances handler-GET:' );
+const debug = require( 'debug' )( 'registr:items-balances:' );
 
 const {
     consoleLogger,
@@ -36,7 +36,7 @@ module.exports = async function itemsBalancesHandler_GET (req, res) {
 
 
     debug(
-        'try read document',
+        '[h-GET] try read document',
         '\nI: finding items-balance`s params:', req.params,
         '\nI: finding items-balance`s query:', req.query
     );

@@ -25,7 +25,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
-const WatchMissingNodeModulesPlugin = 
+const WatchMissingNodeModulesPlugin =
       require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ForkTsCheckerWebpackPlugin =
       require('react-dev-utils/ForkTsCheckerWebpackPlugin');
@@ -37,7 +37,7 @@ const postcssNormalize = require( 'postcss-normalize' );
 //const appPackageJson = require( paths.appPackageJson );
 
 
-// Source maps are resource heavy 
+// Source maps are resource heavy
 // and can cause out of memory issue
 // for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -48,7 +48,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 
 const imageInlineSizeLimit = parseInt(
-    process.env.IMAGE_INLINE_SIZE_LIMIT || '10000' 
+    process.env.IMAGE_INLINE_SIZE_LIMIT || '10000'
 );
 
 // Check if TypeScript is setup
@@ -61,10 +61,10 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 // This is the production and development configuration.
-// It is focused on developer experience, 
+// It is focused on developer experience,
 //fast rebuilds, and a minimal bundle.
 
-module.exports = function(webpackEnv) 
+module.exports = function(webpackEnv)
 {
     // Это конфигурации только для разработки. Есть два варианта:
     // development - построения билда в папке paths.appBuild и запуска
@@ -172,11 +172,11 @@ module.exports = function(webpackEnv)
                 ? 'source-map'
                 : false
             : isEnvDevelopment && 'inline-source-map',
-        devServer: isHMR 
+        devServer: isHMR
             ? {
                 contentBase: paths.appBuild,
                 hot: true,
-            } 
+            }
             : undefined,
         // These are the "entry points" to our application.
         // This means they will be the "root" imports that are included in JS bundle.
@@ -210,29 +210,29 @@ module.exports = function(webpackEnv)
             // Add /* filename */ comments to generated require()s in the output.
             pathinfo: isEnvDevelopment,
 
-            // There will be one main bundle, 
+            // There will be one main bundle,
             // and one file per asynchronous chunk.
             // In development, it does not produce real files.
             filename: /*'js/[name].bundle.js'*/
                 isEnvProduction
                     ? 'js/[name].[contenthash].js'
                     : isEnvDevelopment && 'js/[name].bundle.js',
-            
+
             // remove this when upgrading to webpack 5
             // futureEmitAssets: true,
-            
-            // There are also additional JS chunk files 
+
+            // There are also additional JS chunk files
             // if you use code splitting.
             chunkFilename: isEnvProduction
                 ? 'js/[name].[contenthash].chunk.js'
                 : isEnvDevelopment && 'js/[name].chunk.js',
 
-            // We inferred the "public path" 
+            // We inferred the "public path"
             // (such as / or /my-project) from homepage.
             // We use "/" in development.
             publicPath: publicPath,
 
-            // Point sourcemap entries 
+            // Point sourcemap entries
             // to original disk location (format as URL on Windows)
             devtoolModuleFilenameTemplate: isEnvProduction
                 ? info =>
@@ -241,7 +241,7 @@ module.exports = function(webpackEnv)
                     .replace( /\\/g, '/' )
                 : isEnvDevelopment &&
                 (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
-            
+
             // this defaults to 'window', but by setting it to 'this' then
             // module chunks which are built will work in web workers as well.
             globalObject: 'this',
@@ -249,7 +249,7 @@ module.exports = function(webpackEnv)
         optimization: {
             minimize: isEnvProduction,
             minimizer: [],
-      
+
             // Automatically split vendor and commons
             // https://twitter.com/wSokra/status/969633336732905474
             // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
@@ -278,7 +278,7 @@ module.exports = function(webpackEnv)
             modules: [
                 paths.appSrc,
                 'node_modules',
-                paths.appNodeModules 
+                paths.appNodeModules
             ]
                 .concat( modules.additionalModulePaths || []
                     // It is guaranteed to exist because we tweak it in `env.js`
@@ -304,21 +304,21 @@ module.exports = function(webpackEnv)
                     'react-dom$': 'react-dom/profiling',
                     'scheduler/tracing': 'scheduler/tracing-profiling',
                 }),
-                ...( modules.webpackAliases || {} ),        
+                ...( modules.webpackAliases || {} ),
             },
             plugins: [
-            // Adds support for installing with Plug'n'Play, 
+            // Adds support for installing with Plug'n'Play,
             // leading to faster installs and adding
             // guards against forgotten dependencies and such.
             // PnpWebpackPlugin,
 
                 // Prevents users from importing files from outside
-                // of src/ (or node_modules/). This often causes confusion 
+                // of src/ (or node_modules/). This often causes confusion
                 // because we only process files within src/ with babel.
                 // To fix this, we prevent you from importing files out
-                // of src/ -- if you'd like to, please link the files 
+                // of src/ -- if you'd like to, please link the files
                 // into your node_modules/ and let module-resolution kick in.
-                // Make sure your source files are compiled, 
+                // Make sure your source files are compiled,
                 // as they will not be processed in any way.
                 new ModuleScopePlugin( paths.appSrc, [ paths.appPackageJson ]),
             ],
@@ -333,11 +333,12 @@ module.exports = function(webpackEnv)
                 "fs" : false,
                 "net": false,
                 "module": false,
+                "util": require.resolve("util/"),
             }
         },
         resolveLoader: {
             plugins: [
-            // Also related to Plug'n'Play, but this time 
+            // Also related to Plug'n'Play, but this time
             // it tells Webpack to load its loaders
             // from the current package.
             // PnpWebpackPlugin.moduleLoader( module ),
@@ -396,14 +397,14 @@ module.exports = function(webpackEnv)
                         // The preset includes JSX, Flow, TypeScript, and some ESnext features.
                         {
                             test: /\.(js|mjs|jsx|ts|tsx)$/,
-                            include: paths.appSrc,                    
+                            include: paths.appSrc,
                             loader: require.resolve( 'babel-loader' ),
                             options: {
                                 presets: [ '@babel/preset-env', '@babel/preset-react' ],
-                                // webpack5 FIX: 
+                                // webpack5 FIX:
                                 /*customize: require.resolve(
                             'babel-preset-react-app/webpack-overrides'
-                        ),                
+                        ),
                         plugins: [
                             'react-hot-loader/babel',
                         [
@@ -417,7 +418,7 @@ module.exports = function(webpackEnv)
                             },
                             },
                         ],
-                        ],                
+                        ],
                         // This is a feature of `babel-loader` for webpack (not Babel itself).
                         // It enables caching results in ./node_modules/.cache/babel-loader/
                         // directory for faster rebuilds.
@@ -447,7 +448,7 @@ module.exports = function(webpackEnv)
                                 cacheDirectory: true,
                                 // See #6846 for context on why cacheCompression is disabled
                                 cacheCompression: false,             //isEnvProduction,
-                        
+
                                 // If an error happens in a package, it's possible to be
                                 // because it was compiled. Thus, we don't want the browser
                                 // debugger to show the original code. Instead, the code
@@ -544,12 +545,12 @@ module.exports = function(webpackEnv)
             ],
         },
         plugins: [
-        // The ProgressPlugin provides a way to customize how progress is 
+        // The ProgressPlugin provides a way to customize how progress is
         // reported during a compilation.
             new webpack.ProgressPlugin(),
-        
-            // By default, this plugin will remove all files inside webpack's 
-            // output.path directory, as well as all unused webpack assets after 
+
+            // By default, this plugin will remove all files inside webpack's
+            // output.path directory, as well as all unused webpack assets after
             // every successful rebuild.
             new CleanWebpackPlugin(),
 
@@ -564,10 +565,10 @@ module.exports = function(webpackEnv)
                     },
                     isEnvProduction
                         ? {
-                            minify: {                        
+                            minify: {
                                 collapseWhitespace: true,
                                 removeComments: true,
-                                removeRedundantAttributes: true,                        
+                                removeRedundantAttributes: true,
                                 removeEmptyAttributes: true,
                                 removeStyleLinkTypeAttributes: true,
                                 useShortDoctype: true,
@@ -580,8 +581,8 @@ module.exports = function(webpackEnv)
                         : undefined
                 )
             ),
-      
-            // Inlines the webpack runtime script. 
+
+            // Inlines the webpack runtime script.
             // This script is too small to warrant a network request.
             // https://github.com/facebook/create-react-app/issues/5358
             isEnvProduction &&
@@ -596,18 +597,18 @@ module.exports = function(webpackEnv)
             // In development, this will be an empty string.
             new InterpolateHtmlPlugin( HtmlWebpackPlugin, env.raw ),
 
-            // This gives some necessary context 
-            // to module not found errors, 
-            // such as the requesting resource.      
+            // This gives some necessary context
+            // to module not found errors,
+            // such as the requesting resource.
             new ModuleNotFoundPlugin( paths.appPath ),
 
             // Makes some environment variables available to the JS code, for example:
             // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
             // It is absolutely essential that NODE_ENV is set to production
             // during a production build.
-            // Otherwise React will be compiled in the very slow development mode.      
+            // Otherwise React will be compiled in the very slow development mode.
             new webpack.DefinePlugin( env.stringified ),
-        
+
             // This is necessary to emit hot updates (currently CSS only):
             isHMR && new webpack.HotModuleReplacementPlugin(),
 
@@ -622,7 +623,7 @@ module.exports = function(webpackEnv)
             // See https://github.com/facebook/create-react-app/issues/186
             isEnvDevelopment &&
             new WatchMissingNodeModulesPlugin( paths.appNodeModules ),
-            
+
             isEnvProduction &&
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
@@ -675,7 +676,7 @@ module.exports = function(webpackEnv)
                 new RegExp( '/[^/?]+\\.[^/]+$' ),
             ],
         }),
-    
+
             // TypeScript type checking
             useTypeScript &&
         new ForkTsCheckerWebpackPlugin({
@@ -701,7 +702,7 @@ module.exports = function(webpackEnv)
                 '!**/src/setupTests.*',
             ],
             //watch: paths.appSrc,
-            silent: true, 
+            silent: true,
             // The formatter is invoked directly in WebpackDevServerUtils during development
             formatter: isEnvProduction ? typescriptFormatter : undefined,
         }),
@@ -716,8 +717,8 @@ module.exports = function(webpackEnv)
         //net: 'empty',
         //module: 'empty',
             /*dgram: 'empty',
-            dns: 'mock',        
-            http2: 'empty',        
+            dns: 'mock',
+            http2: 'empty',
             tls: 'empty',
             child_process: 'empty',
             */

@@ -1,6 +1,6 @@
-//const debug = require( 'debug' )( 'api:sum:weeknatural' );
-const { 
-    icwd, 
+//const debug = require( 'debug' )( 'reports:week-natural' );
+const {
+    icwd,
     consoleLogger,
     send204NoContent,
     send400BadRequest,
@@ -8,13 +8,13 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-SUM:' );
+const log = consoleLogger( 'api-SUM:reports:week-natural:' );
 
 const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
 const WeekNatural = db.model( 'WeekNatural' );
 
 
-/** 
+/**
  * Delete week Natural summary
  * @name deleteOne
  * @fires 204 No Content  & deleted document
@@ -23,7 +23,7 @@ const WeekNatural = db.model( 'WeekNatural' );
  * @fires 500 Server Error & error object
  * @returns {} undefined
  * @usage
- * DELETE /api/sum/weeknatural/:weekId 
+ * DELETE /api/sum/weeknatural/:weekId
  * @example
  * DELETE /api/sum/weeknatural/956
  * DELETE /api/sum/weeknatural/1011
@@ -62,6 +62,6 @@ module.exports = function deleteOne (req, res) {
             log.info( `Week ${weekId} natural summary deleted.` );
             return send204NoContent( res, doc );
         }
-    );  
+    );
 };
 

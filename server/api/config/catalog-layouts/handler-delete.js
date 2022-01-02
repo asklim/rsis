@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'api:config:catalogLayouts handler-delete:' );
+//const debug = require( 'debug' )( 'api:config:catalogLayouts' );
 
 const {
     consoleLogger,
@@ -14,7 +14,7 @@ const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
 const log = consoleLogger( 'api-config:' );
 
 
-/** 
+/**
  * Delete catalog-layout by uuid, ObjId or 'last'
  * @fires 204 No Content  & deleted document
  * @fires 400 Bad Request & message
@@ -55,7 +55,7 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
 
         [HTTP.NO_CONTENT]: (result) => {
             log.info( result.logMessage );
-            //debug( result.response );
+            //debug( '[h-DELETE]:', result.response );
             //TODO: Client не получает тело json-ответа
             return send204NoContent( res, result.response );
         },

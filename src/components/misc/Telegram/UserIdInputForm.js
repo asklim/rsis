@@ -26,77 +26,77 @@ import styles from "assets/jss/misc/todosInputListStyle.js";
 const useStyles = makeStyles( accountChooserPopUpStyle );
 */
 const defaultUserIds = [
-  '250693603im', '381573348ak', '@asbbroker'
+    '250693603im', '381573348ak', '@asbbroker'
 ];
 
-const UserIdInputForm 
-= ({ makeSave /*, classes */ }) => 
+const UserIdInputForm
+= ({ makeSave /*, classes */ }) =>
 {
-  const fetchAccountIds = () => { return defaultUserIds; };
-  const accountIds = fetchAccountIds();
+    const fetchAccountIds = () => { return defaultUserIds; };
+    const accountIds = fetchAccountIds();
 
-  const [ value, setValue ] = useState( '' );
-  const [ open, setOpen ] = useState( false );
+    const [ value, setValue ] = useState( '' );
+    const [ open, setOpen ] = useState( false );
 
 
-  //const resetValue = () => setValue( '' );
+    //const resetValue = () => setValue( '' );
 
-  const handleClickOpen = () => {
-    setOpen( true );
-  };
+    const handleClickOpen = () => {
+        setOpen( true );
+    };
 
-  const handleOnChange = event => {
-    setValue( event.target.value );
-  };
+    const handleOnChange = event => {
+        setValue( event.target.value );
+    };
 
-  const closeAccountChooserDialog = dialogValue => {
-    setOpen( false );
-    setValue( dialogValue );
-  };
+    const closeAccountChooserDialog = dialogValue => {
+        setOpen( false );
+        setValue( dialogValue );
+    };
 
-  //const classes = useStyles(); 
-  const style = { ...styles().todosPopUp };
-  //console.log( 'TodoForm style', style );
-  const AccountChooserPopUp = withStyles(style)( SimpleDialog );
+    //const classes = useStyles();
+    const style = { ...styles().todosPopUp };
+    //console.log( 'TodoForm style', style );
+    const AccountChooserPopUp = withStyles(style)( SimpleDialog );
 
-  return (
-    <form onSubmit ={ (event) => {
+    return (
+        <form onSubmit ={ (event) => {
         //console.log('onSubmit');
-        event.preventDefault();
-        makeSave( value );
+            event.preventDefault();
+            makeSave( value );
         /*resetValue();*/}}
-    >
-      <GridContainer  spacing ={8}>
-      <GridItem>
-        <TextField onChange ={ handleOnChange }
-          variant ="outlined"
-          placeholder ="input user Id"
-          margin ="normal"
-          value ={value}
-        />
-      </GridItem>  
-      <GridItem>
-        <Fab onClick ={ handleClickOpen }
-          variant ="extended" 
-          color ="secondary"
         >
-          <Fingerprint />
-        </Fab>  
-      </GridItem> 
-      </GridContainer>         
+            <GridContainer  spacing ={8}>
+                <GridItem>
+                    <TextField onChange ={ handleOnChange }
+                        variant ="outlined"
+                        placeholder ="input user Id"
+                        margin ="normal"
+                        value ={value}
+                    />
+                </GridItem>
+                <GridItem>
+                    <Fab onClick ={ handleClickOpen }
+                        variant ="extended"
+                        color ="secondary"
+                    >
+                        <Fingerprint />
+                    </Fab>
+                </GridItem>
+            </GridContainer>
 
-        <AccountChooserPopUp 
-          open ={open} 
-          onClose ={closeAccountChooserDialog} 
-          emails ={accountIds}
-        />
+            <AccountChooserPopUp
+                open ={open}
+                onClose ={closeAccountChooserDialog}
+                emails ={accountIds}
+            />
 
-    </form>
-  );
+        </form>
+    );
 };
 UserIdInputForm.propTypes = {
-  makeSave: PropTypes.func.isRequired,
-  classes: PropTypes.object,
+    makeSave: PropTypes.func.isRequired,
+    classes: PropTypes.object,
 };
 /*
 TodoForm.defaultProps = {

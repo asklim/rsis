@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'api:tmp:dailyReport' );
+const debug = require( 'debug' )( 'registr:items-balances:[schema]:' );
 
 const { Schema } = require( 'mongoose' );
 const UUID = require( 'uuid' );
@@ -82,7 +82,7 @@ const itemsBalance = new Schema({
         // Для какого клиента document
         type: String,
         required: true,
-        enum: [ 'filial1', 'filial2' ],
+        enum: [ 'frm', 'filial1', 'filial2' ],
         default: 'filial1',
     },
     creator: {

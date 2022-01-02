@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'api:router' );
+const debug = require( 'debug' )( 'router:api' );
 
 const router = require( 'express' ).Router();
 

@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'reports:daily handler-GET:' );
+const debug = require( 'debug' )( 'reports:daily:' );
 
 const {
     consoleLogger,
@@ -10,7 +10,7 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-reports:' );
+const log = consoleLogger( 'api-reports:daily:' );
 const DailyReports = require( `../../../applogic/daily-reports` );
 
 
@@ -36,7 +36,7 @@ module.exports = async function dailyReportsHandler_GET (req, res) {
 
 
     debug(
-        'try read document',
+        '[h-GET] try read document',
         '\nI: finding daily-report`s params:', req.params,
         '\nI: finding daily-report`s query:', req.query
     );

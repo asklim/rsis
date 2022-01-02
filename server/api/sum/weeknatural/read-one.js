@@ -1,6 +1,6 @@
-//const debug = require( 'debug' )( 'api:sum:weeknatural' );
-const { 
-    icwd, 
+//const debug = require( 'debug' )( 'reports:week-natural' );
+const {
+    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
@@ -8,17 +8,17 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-SUM:' );
+const log = consoleLogger( 'api-SUM:reports:week-natural:' );
 
 const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
 const WeekNatural = db.model( 'WeekNatural' );
 
 
-/** 
+/**
  * @name readOne
- * @description 
- * Read a week summary Natural info 
- * by the XXI century weekId or 'last' 
+ * @description
+ * Read a week summary Natural info
+ * by the XXI century weekId or 'last'
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
@@ -29,13 +29,13 @@ const WeekNatural = db.model( 'WeekNatural' );
  * @example
  * GET /api/sum/weeknatural/960
  * GET /api/sum/weeknatural/1011
- * GET /api/sum/weeknatural/last 
- * 
+ * GET /api/sum/weeknatural/last
+ *
 **/
 const readOne = (req, res) => {
 
 
-    console.log( 
+    console.log(
         `I: try readOne sum-week-natural document`,
         `\nI: finding weekNatural's params:`, req.params,
         `\nI: finding weekNatural's query :`, req.query
@@ -79,7 +79,7 @@ const readOne = (req, res) => {
             if( err ) {
                 log.error( err );
                 return send500ServerError( res, err );
-            } 
+            }
 
             if( !docs || docs.length < 1 ) {
 

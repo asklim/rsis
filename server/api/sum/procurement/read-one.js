@@ -1,8 +1,8 @@
 const debug = require( 'debug' )( 'api:sum:procurement' );
 const request = require( 'request' );
 
-const { 
-    icwd, 
+const {
+    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
@@ -16,40 +16,43 @@ const log = consoleLogger( 'api-SUM:' );
 const { procurementPeriods: period } = require( `${icwd}/src/config/enum-values` );
 //const { needUnitsForPeriod } = require( `${icwd}/src/lib/rsis` );
 
-const { needUnitsForPeriod } = require( 'asklim/rsis' );
+const { needUnitsForPeriod } = require( 'asklim/rsis' )();
+
+// console.log( "typeof needUnitsForPeriod", typeof needUnitsForPeriod );
+// console.log( "needUnitsForPeriod", needUnitsForPeriod );
 
 const { NODE_ENV, API_SERVER } = process.env;
 const { API_SERVER_LOCAL } = require( `../../../helpers` );
 
-const apiServer = NODE_ENV === 'production' 
+const apiServer = NODE_ENV === 'production'
     ? API_SERVER                   //'https://rsis-webapp.herokuapp.com'
     : API_SERVER_LOCAL
 ;
 
 
 
-/** 
- * Read a procurement dataset by the week id 
+/**
+ * Read a procurement dataset by the week id
  * @type router middleware
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
  * @returns {} undefined
  * @usage
- * GET /api/sum/procurements/:weekId 
+ * GET /api/sum/procurements/:weekId
  * @example
  * GET /api/sum/procurement/960
  * GET /api/sum/procurement/1011
- * GET /api/sum/procurement/last 
+ * GET /api/sum/procurement/last
  **/
 
 module.exports = function readOne (req, res) {
 
 
-    if( !req.params ) { 
+    if( !req.params ) {
         return send400BadRequest( res, 'No req.param in request.' );
     }
 
@@ -58,18 +61,18 @@ module.exports = function readOne (req, res) {
         'procurement.readOne: Finding query:  ', req.query
     );
     debug( `hostname is ${req.hostname}` );
-  
-    const { weekId } = req.params;  
+
+    const { weekId } = req.params;
 
     if( !weekId ) {
         log.warn( 'procurement.readOne: No weekId specified.' );
-        return send400BadRequest( res, 'No weekId in request.' );  
+        return send400BadRequest( res, 'No weekId in request.' );
     }
 
     debug( 'procurement.readOne: before fetch Dataset ...' );
 
-    makeProcurementDataSet( 
-        apiServer, 
+    makeProcurementDataSet(
+        apiServer,
         weekId,
         (err, data) => {
 
@@ -108,7 +111,7 @@ function makeProcurementDataSet (hostname, weekId, callback) {
         const TEST_DATASET = require( `${icwd}/server/sample-datasets/procurement` );
         return callback( null, TEST_DATASET );
     }
-    
+
 
     const summa = (accum, current) => accum + current;
 
@@ -135,9 +138,9 @@ function makeProcurementDataSet (hostname, weekId, callback) {
         json: {}, qs: {},
     };
 
-    request( 
+    request(
         requestOptions,
-        (err, _res, resBody) => { // '{id, type, ..., body:[{}, ..., {}]}' 
+        (err, _res, resBody) => { // '{id, type, ..., body:[{}, ..., {}]}'
 
             //debug( 'makeProcurementDataset: week-natural data got.' ));
             if( err ) {
@@ -158,13 +161,13 @@ function makeProcurementDataSet (hostname, weekId, callback) {
             debug( 'make--Dataset: convert week-natural-body to procurement dataset.' );
 
             //Преобразование в Procurement DataSet
-            callback( null, 
+            callback( null,
                 weekNaturalItems
                 .map( convertToProcurement )
-                .filter( onlyItemsXtraLongGTZero ) 
+                .filter( onlyItemsXtraLongGTZero )
                 // Клиент получает только те позиции которые нужны на закупку
                 // на xtraLong период
-                // т.e. хотя-бы один элемент больше 0, => их сумма >0, а не [0,0,0]   
+                // т.e. хотя-бы один элемент больше 0, => их сумма >0, а не [0,0,0]
             );
         }
     );

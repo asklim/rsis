@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, } from 'react';
-import Telegraf from 'telegraf';
+import { Telegraf } from 'telegraf';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -33,10 +33,10 @@ const useStyles = makeStyles(
 
 
 const TelegramUserInfo = () => {
-    
-    
+
+
     const tgBot = useRef( null );
-    const [ chatId, setChatId ] = useState( '' );  
+    const [ chatId, setChatId ] = useState( '' );
     const [ chatDetails, setChatDetails ] = useState( {chat: 'init'} );
     const [ accountInfo, setAccountInfo ] = useState( {bot: 'init'} );
     const [ token, setToken ] = useState( '' );
@@ -69,12 +69,12 @@ const TelegramUserInfo = () => {
         let theTGBotToken = _getToken();
 
         if( theTGBotToken ) {
-            //console.log( `botAccount Token: '${theTGBotToken}'` );  
+            //console.log( `botAccount Token: '${theTGBotToken}'` );
             tgBot.current = new Telegraf( theTGBotToken );
 
             setToken( theTGBotToken );
             getAccountInfo();
-        }  
+        }
     }, [ token ] );
 
 
@@ -96,14 +96,14 @@ const TelegramUserInfo = () => {
 
     return (<div>
         <UserIdInputForm makeSave ={saveChatId} />
-        <InfoPanel 
-            title ={`Telegram User ${chatId} Details`} 
-            info ={chatDetails} 
+        <InfoPanel
+            title ={`Telegram User ${chatId} Details`}
+            info ={chatDetails}
             classes ={classes}
         />
-        <InfoPanel 
-            title ={'Telegram bot Account Details'} 
-            info ={accountInfo} 
+        <InfoPanel
+            title ={'Telegram bot Account Details'}
+            info ={accountInfo}
             classes ={classes}
         />
     </div>);

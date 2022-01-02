@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'api:health:handler-get' );
+const debug = require( 'debug' )( 'api:health:' );
 const {
     send200Ok,
     send400BadRequest,

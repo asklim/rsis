@@ -1,6 +1,6 @@
-//const debug = require( 'debug' )( 'api:sum:weeknatural' );
-const { 
-    icwd, 
+//const debug = require( 'debug' )( 'reports:week-natural' );
+const {
+    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
@@ -8,13 +8,13 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-SUM:' );
+const log = consoleLogger( 'api-SUM:reports:week-natural:' );
 
 const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
 const WeekNatural = db.model( 'WeekNatural' );
 
 
-/** 
+/**
  * Update week Natural summary
  * @name updateOne
  * @fires 200 OK          & updated document
@@ -24,21 +24,21 @@ const WeekNatural = db.model( 'WeekNatural' );
  * @returns {} undefined
  * @example
  * PUT /api/sum/weeknatural
- * 
- *  
+ *
+ *
 **/
 
 const updateOne = ( req, res ) => {
 
 
-    if( !req.body 
+    if( !req.body
         || Object.keys( req.body ).length == 0 ) {
         return send400BadRequest( res, 'Bad request, body is empty' );
     }
 
     const weekNumber  = Number.parseInt( req.body.id, 10 ); // or NaN
 
-    if( !weekNumber ) {    
+    if( !weekNumber ) {
         return send400BadRequest( res, 'Bad request, body.id is required or wrong.' );
     }
 
@@ -47,19 +47,19 @@ const updateOne = ( req, res ) => {
         .limit( 1 )
         .exec( (err, docs) => {
 
-            if( err ) {                
+            if( err ) {
                 log.error( err );
                 return send500ServerError( res, err );
             }
 
             if( !docs || docs.length < 1 ) {
-                return send404NotFound( res, 
-                    `Summary data for week ${weekNumber} not found.` 
+                return send404NotFound( res,
+                    `Summary data for week ${weekNumber} not found.`
                 );
             }
-    
-            Object.assign( 
-                docs[0], 
+
+            Object.assign(
+                docs[0],
                 req.body,
                 { updatedAt: Date.now() }
             );
@@ -77,7 +77,7 @@ const updateOne = ( req, res ) => {
                 return send200Ok( res, savedDoc );
             });
         });
-};   
+};
 
 
 module.exports = updateOne;
