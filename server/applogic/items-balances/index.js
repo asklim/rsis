@@ -58,7 +58,9 @@ exports = module.exports = class ItemsBalances {
             });
         }
 
-        const result = await ItemsBalances.readByQuery({ filial, agent, creator, onDate });
+        const result = await ItemsBalances.
+        readByQuery({ filial, agent, creator, onDate });
+
         debug( 'updateOrCreate: statusCode is', result.statusCode );
 
         if( result.statusCode == HTTP.OK ) {
@@ -67,8 +69,7 @@ exports = module.exports = class ItemsBalances {
             return await IStorage.updateOne( document._id, body );
         }
 
-        return await IStorage.createOne( body );
-
+        return await /*IStorage*/ ItemsBalances.createOne( body );
     };
 
 
@@ -94,31 +95,30 @@ exports = module.exports = class ItemsBalances {
      * @fires 400 Bad Request & message
      * @fires 404 Not Found   & message
      * @fires 500 Server Error & error object
-     * @usage var.2 |
-     * GET /api/ *** ?queryString
-     * @usage var.2 |
-     * GET /api/ *** /?queryString
+     * @param {String} query.filial - Level1: filial1 or frm
+     * @param {String} query.agent - Level2: f1, wh1, wh0
+     * @param {String} query.onDate - isoDate as "YYYY-MM-DD"
+     * @usage GET /api/registr/items-balances/?queryString
      * @usage queryString:
-     * filial=filialId & creator=rsisjs
-     * onDate=isoDate as YYYY-MM-DD & agent=agentId
+     * filial=filialId & onDate=isoDate & agent=agentId
      **/
     static readByQuery = async function (query) {
 
-        const { filial, agent, onDate, creator } = query;
+        const { /*filial, agent,*/ onDate, } = query;
 
-        if( !filial && !onDate && !agent && !creator ) {
+        /*if( !filial && !onDate && !agent ) {
             // Если какой-либо undefined - то ошибка
             return ({
                 statusCode: HTTP.BAD_REQUEST,
                 logMessage: 'items-balances.readByQuery: No query specified.',
                 response: 'No query in request.'
             });
-        }
+        }*/
 
         if( onDate && !Date.parse( onDate )) {
             return ({
                 statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'daily-reports.readByQuery: Bad query.date specified.',
+                logMessage: 'items-balances.readByQuery: Bad query.date specified.',
                 response: 'Bad query.date in request.'
             });
         }

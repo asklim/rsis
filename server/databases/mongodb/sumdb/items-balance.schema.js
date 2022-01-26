@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'registr:items-balances:[schema]:' );
+const debug = require( 'debug' )( 'registr:items-balances' );
 
 const { Schema } = require( 'mongoose' );
 const UUID = require( 'uuid' );
@@ -128,7 +128,7 @@ itemsBalance.pre( 'save', async function () {
     // Pre middleware function
     if( !this.uuid ) {
         this.uuid = UUID.v4();
-        debug( `pre(save): ${this.uuid}` );
+        debug( `[schema] pre(save): ${this.uuid}` );
     }
     //if( !this.updatedAt ) {
     //    this.updatedAt = Date.now();

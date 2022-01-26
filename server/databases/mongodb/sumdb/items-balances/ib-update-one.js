@@ -33,12 +33,12 @@ module.exports = async function updateOne (documentId, body) {
             ? { uuid: documentId }
             : { _id: documentId };
 
-        debug( 'filtering:', filtering );
+        debug( '[update-one] filtering:', filtering );
 
         const { uuid } = await ModelItemsBalances.
             findOneAndUpdate( filtering, { $set, $inc }, { new: true } );
 
-        debug( 'updated-doc`s uuid:', uuid );
+        debug( '[update-one] updated-doc`s uuid:', uuid );
 
         return ({
             statusCode: HTTP.OK,

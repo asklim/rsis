@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'registr:items-balances:' );
+const debug = require( 'debug' )( 'registr:items-balances' );
 const {
     //icwd,
     consoleLogger,

@@ -1,36 +1,36 @@
-
+const log = require( 'loglevel' );
 const isHeroku = process.env.DYNO && (process.env.PWD === '/app');
 const isSystemdService = (process.stdout.isTTY == undefined);
 
 module.exports = function createLogger (ticker = '') {
 
-    // Замыкаем suffix, но не prefix, иначе
+    // Замыкаем tickerfix, но не datefix, иначе
     // будет одно и то же время на момент вызова logger.Function()
-    const suffix = ticker == ''
+    const tickerfix = ticker == ''
         ? ''
         : ' ' + ticker
     ;
 
-    function log (type, ...args) { // Все аргументы = массив аргументов
+    function logPrefix (level) {
 
-        const prefix = isHeroku || isSystemdService
+        const datefix = isHeroku || isSystemdService
             ? ''
             : `[${(new Date()).toUTCString()}] `
         ;
-        console.log(
-            `${prefix}${type}${suffix}`,
-            ...args
-            // Распаковка массива в значения
-        );  // После `suffix` есть пробел. `,` вставляет пробел.
+        return `${datefix}${level}${tickerfix}`;
     }
 
-    const info = (...args) => log( 'I:', ...args );
+    const debug = (...args) => log.debug( logPrefix( 'DBG' ), ...args );
 
-    const warn = (...args) => log( 'W:', ...args );
+    const info = (...args) => log.info( logPrefix( 'INF' ), ...args );
 
-    const error = (...args) => log( 'E:', ...args );
+    const warn = (...args) => log.warn( logPrefix( 'WRN' ), ...args );
+
+    const error = (...args) => log.error( logPrefix( 'ERR' ), ...args );
 
     return ({
+        trace: (...args) => log.trace( logPrefix( 'TRC' ), ...args ),
+        debug,
         info,
         warn,
         error,

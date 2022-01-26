@@ -47,7 +47,7 @@ app.use( cors() );
 const loggerTemplate = [
     '[:date[web]]', ':status',
     //':remote-addr', ':remote-user',
-    ':method :url :response-time[0] ms - :res[content-length]'
+    ':method', ':url', ':response-time[0] ms -', ':res[content-length]'
 ].join(' ');
 app.use( morgan( loggerTemplate )); // dev | common | combined |short
 
@@ -61,7 +61,7 @@ app.use( express.urlencoded({
 }));
 
 app.use( cookieParser() );
-app.use( express.static( '../static' ));
+app.use( express.static( 'static' ));
 
 app.use( '/api', apiRouter );
 
@@ -88,7 +88,7 @@ if( !isProduction && isHMR ) {
 
 app.get( '*', (_req, res, next) => {
 
-    const INDEX_HTML_PFN = path.resolve( `../static/index.html` );
+    const INDEX_HTML_PFN = path.resolve( __dirname, `../static/index.html` );
 
     console.log( `server__dirname is ${__dirname}` );
     console.log( `index.html must be ${INDEX_HTML_PFN}` );
@@ -130,7 +130,7 @@ app.use( (err, req, res, _next) => {
     res.locals.error = isDev ? err : {};
 
     // render the error page
-    res.status( err.status || 500 );
+    res.status( err.status || 500 ).end();
     //res.render( 'error' );
 });
 

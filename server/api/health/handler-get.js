@@ -1,10 +1,11 @@
-const debug = require( 'debug' )( 'api:health:' );
+//const debug = require( 'debug' )( 'api:health:' );
 const {
     send200Ok,
     send400BadRequest,
     send500ServerError,
+    consoleLogger,
 } = require( '../../helpers' );
-
+const log = consoleLogger( 'api:health:' );
 
 const cfgdb = require( '../../databases' ).getDB( 'config' );
 const sumdb = require( `../../databases` ).getDB( 'sum' );
@@ -32,8 +33,7 @@ module.exports = async function (req, res) {
 
     //params.pingId : {'app' | 'databases' | 'mongocfg' | 'mongosum'}
     let count = Object.keys( req.params ).length;
-    debug( 'params: %O count: %d', req.params, count );
-    //debug('query: %O', req.query);
+    log.debug( `params.count=${count},`, req.params );
 
     if( !count ) {
         // При отсутствии параметра: проверка приложения (app)
@@ -121,4 +121,24 @@ async function totalDocumentsInDB (mongodb) {
         total += count;
     }
     return total;
+
+    /*
+        reduce не обрабатывает Promise !!!
+        Возвращает: "[object Promise]116", вместо "133" для
+        dbinfo: 192.168.0.240:27017/rsiscfg: [
+            [ 'Agent', 17 ],
+            [ 'User', 0 ],
+            [ 'ProductsCatalogs', 0 ],
+            [ 'CatalogLayouts', 116 ]
+        ]
+    */
+    /*
+    return mongodb.modelNames().reduce(
+        async (accum, name) => {
+            let theModel = mongodb.model( name );
+            let count = await theModel.estimatedDocumentCount();
+            return accum + count;
+        },
+        0
+    );*/
 }

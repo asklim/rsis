@@ -42,9 +42,9 @@ module.exports = async function createOne (body) {
 
         return ({
             statusCode: HTTP.CREATED,
-            logMessage: `SUCCESS: daily-report uuid:${uuid} created.`,
+            logMessage: `SUCCESS: doc w/uuid:${uuid} created.`,
             response: {
-                message: `daily-report uuid:${uuid} created successful.`,
+                message: `doc w/uuid:${uuid} created successful.`,
                 uuid,
             }
         });

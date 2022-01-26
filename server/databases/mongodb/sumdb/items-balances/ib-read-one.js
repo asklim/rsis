@@ -27,7 +27,7 @@ module.exports = async function readOne (filtering) {
 
     try {
 
-        debug( 'filtering:', filtering );
+        debug( '[read-one] filtering:', filtering );
 
         const docs = await ModelItemsBalances.find( filtering );
         // .find возвращает Array, даже если 0 или 1 документ

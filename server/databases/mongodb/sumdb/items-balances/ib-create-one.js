@@ -38,13 +38,13 @@ module.exports = async function createOne (body) {
 
         const { uuid } = report;
         //const uuid = '12345678-1234-1234-1234-123456789012';
-        debug( `create-one: ${uuid}` );
+        debug( `[create-one]: ${uuid}` );
 
         return ({
             statusCode: HTTP.CREATED,
-            logMessage: `SUCCESS: daily-report uuid:${uuid} created.`,
+            logMessage: `SUCCESS: doc w/uuid:${uuid} created.`,
             response: {
-                message: `daily-report uuid:${uuid} created successful.`,
+                message: `doc w/uuid:${uuid} created successful.`,
                 uuid,
             }
         });

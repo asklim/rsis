@@ -2,6 +2,10 @@
 
 require( 'dotenv' ).config();
 
+const log = require( 'loglevel' );
+const isProduction = process.env.NODE_ENV === 'production';
+log.setLevel( isProduction ? log.levels.DEBUG : log.levels.TRACE );
+
 const {
     app: rsisExpressApp,
     databasesShutdown,

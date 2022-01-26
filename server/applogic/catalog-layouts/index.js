@@ -9,7 +9,7 @@ const {
 const IStorage = require( '../../databases/mongodb/cfgdb/catalog-layouts/catalog-layouts.interface' );
 class CatalogLayouts {
 
-    /** 
+    /**
      * Create a new catalog-layout at end of linked list
      * @returns
      * @statusCode 201 Created & { message, uuid }
@@ -29,10 +29,10 @@ class CatalogLayouts {
         }
 
         return await IStorage.createOne( body );
-    }
+    };
 
 
-    /** 
+    /**
      * Update catalog-layout at end of linked list
      * - Если и client и list и caption и notes совпадает,
      * то обновляем запись, иначе создаем новую
@@ -44,7 +44,7 @@ class CatalogLayouts {
      **/
     static updateLastOrCreate = async function (body) {
 
-        const { 
+        const {
             client, list,   // обязательные поля
             caption, notes  // необязательные
         } = body;
@@ -71,10 +71,10 @@ class CatalogLayouts {
         }
 
         return await IStorage.createOne( body );
-    }
+    };
 
 
-    /** 
+    /**
      * Read a catalog-layout by the id
      * @returns
      * - statusCode 200 OK          & document
@@ -87,10 +87,10 @@ class CatalogLayouts {
     static readById = async function readById (catalogId) {
 
         return await IStorage.readById( catalogId );
-    }
+    };
 
 
-    /** 
+    /**
      * Read a catalog-layout by the id
      * @fires 200 OK          & document
      * @fires 400 Bad Request & message
@@ -100,7 +100,7 @@ class CatalogLayouts {
      * GET /api/config/catalog-layouts?queryString
      * @usage var.2 |
      * GET /api/config/catalog-layouts/?queryString
-     * @usage queryString: 
+     * @usage queryString:
      * client=clientId &
      * list=listId &
      * listType=listtype &
@@ -130,16 +130,15 @@ class CatalogLayouts {
             return ({
                 statusCode: HTTP.BAD_REQUEST,
                 logMessage: 'calalog-layouts.readOne: Bad query.date specified.',
-                response: 'Bad query.date in request.' 
+                response: 'Bad query.date in request.'
             });
         }
 
         return await IStorage.readByQuery({ client, list, listType, date });
+    };
 
-    }
 
-
-    /** 
+    /**
      * Read a first catalog-layout by client & list
      * @fires 200 OK          & document
      * @fires 400 Bad Request & message
@@ -150,18 +149,18 @@ class CatalogLayouts {
 
         const DATE_BEFORE_ALL = '';
         return await IStorage.readByQuery({ client, list, date: DATE_BEFORE_ALL });
-    }
+    };
 
 
     /**
      * Удаляет из последовательности документы относящиеся к одной дате,
      * оставляет только последний. А надо ли?
-     * После реализации updateLastOrCreate, дубликатов с незначительными 
+     * После реализации updateLastOrCreate, дубликатов с незначительными
      * изменениями быть не должно.
     **/
     static compressList = async function (/*{ client, list }*/) {
 
-    }
+    };
 
 
     /**
@@ -185,10 +184,10 @@ class CatalogLayouts {
         }
 
         return await IStorage.deleteLast({ client, list });
-    }
+    };
 
 
-    /** 
+    /**
      * Delete catalog-layout by uuid or ObjId
      * @statusCode 204 No Content & { uuid, message }
      * @statusCode 404 Not Found & message
@@ -197,7 +196,7 @@ class CatalogLayouts {
     static deleteById = async function deleteById (catalogId) {
 
         return await IStorage.deleteById( catalogId );
-    }
+    };
 
 }
 
