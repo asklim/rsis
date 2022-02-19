@@ -1,7 +1,7 @@
 //const debug = require( 'debug' )( 'dbs:connect' );
 const { consoleLogger, } = require( '../helpers' );
 
-const log = consoleLogger( `dbs:` );
+const log = consoleLogger( `[mongo-dbs]` );
 const dbs = {};
 
 /**
@@ -78,12 +78,12 @@ const databasesShutdown = async (msg, next) => {
         for( let dbKey in dbs ) {
             dbsTitles.push( await dbs[ dbKey ].closeConn() );
         }
-        console.log( 'dbs closed: ', dbsTitles );
+        log.info( 'dbs closed: ', dbsTitles );
         console.log( `Mongoose disconnected through ${msg}` );
-        next();
+        next && await next();
     }
     catch (error) {
-        log.error( error );
+        log.error( 'databases shutdown error', error );
     }
 };
 

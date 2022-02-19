@@ -5,9 +5,11 @@ const path = require( 'path' );
 const cors = require( 'cors' );
 //const favicon = require( 'serve-favicon' );
 const cookieParser = require( 'cookie-parser' );
-//const bodyParser = require( 'body-parser' );
 const morgan = require( 'morgan' );
 //const uuid = require( 'uuid' );
+const passport = require( 'passport' );
+//const LocalStrategy = require( 'passport-local' ).Strategy;
+
 
 const {
     NODE_ENV,
@@ -18,31 +20,16 @@ const isProduction = NODE_ENV === 'production';
 const isHMR = DEV_MODE === 'HotModuleReplacement';
 
 
-const passport = require( 'passport' );  //passport must be before dbs-models
-const {
-    createMongoDBConnections,
-    databasesShutdown,
-} = require( './databases' );
-
-
-createMongoDBConnections();
-
-
-require( './passport' ); //after db create models
-
 const app = express();
 const apiRouter = require( './api-router' );
+
 
 // view engine setup
 app.set( 'views', './views' );
 app.set( 'view engine', 'ejs' );
 
-app.use( passport.initialize() );
-
 // uncomment after placing your favicon in /public
 //app.use( favicon( `${icwd}/public/favicon.ico` ));
-
-app.use( cors() );
 
 const loggerTemplate = [
     '[:date[web]]', ':status',
@@ -51,17 +38,17 @@ const loggerTemplate = [
 ].join(' ');
 app.use( morgan( loggerTemplate )); // dev | common | combined |short
 
-app.use( express.json({
-    limit: "5mb",
-}));
-
-app.use( express.urlencoded({
-    extended: true,
-    limit: "5mb",
-}));
-
+app.use( express.json({ limit: "5mb" }));
+app.use( express.urlencoded({ extended: true, limit: "5mb" }));
 app.use( cookieParser() );
+
+app.use( passport.initialize() );
+//app.use( passport.session() );
+
 app.use( express.static( 'static' ));
+
+app.use( cors() );
+app.options( '*', cors() );
 
 app.use( '/api', apiRouter );
 
@@ -138,6 +125,6 @@ app.use( (err, req, res, _next) => {
 
 module.exports = {
     app,
-    databasesShutdown,
+    //databasesShutdown,
 };
 

@@ -1,5 +1,11 @@
 const debug = require( 'debug' )( 'reports:week-natural' );
 
+const { consoleLogger, } = require( '../../../helpers' );
+const log = consoleLogger( '[week-natural:api]' );
+const {
+    httpResponseCodes: HTTP,
+} = require( '../../../helpers' );
+
 const
     readOne = require( './read-one' ),
     createOne = require( './create-one' ),
@@ -30,18 +36,24 @@ module.exports = function (router) {
 
     router.post( route, (req, res) => {
 
-        Promise.resolve( createOne( req, res ))
-        .then( () => {
+        /*Promise.resolve(*/ createOne( req, res ).
+        then( (result) => {
+            debug( 'result from .post', result );
             // Отсылаем ТОЛЬКО, если создано.
-            debug( 'in rout-weeknatural router.post' );
-            sendToWebApp( '/api' + route, req.body );
+            log.debug( 'router.post - send To WebApp' );
+            if( result == HTTP.CREATED ) {
+                sendToWebApp( '/api' + route, req.body );
+            }
+        }).
+        catch( (e) => {
+            log.warn( 'Error:', e );
         });
     });
 
     router.put( route, (req, res) => {
 
         updateOne( req, res );
-        debug( 'in rout-weeknatural router.put' );
+        log.debug( 'router.put - send To WebApp' );
         sendToWebApp( '/api' + route, req.body );
     });
 

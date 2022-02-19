@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'api:sum:procurement' );
+//const debug = require( 'debug' )( 'api:sum:procurement' );
 const request = require( 'request' );
 
 const {
@@ -10,16 +10,15 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-SUM:' );
+const log = consoleLogger( '[api:procurement]' );
 
 
 const { procurementPeriods: period } = require( `${icwd}/src/config/enum-values` );
-//const { needUnitsForPeriod } = require( `${icwd}/src/lib/rsis` );
 
 const { needUnitsForPeriod } = require( 'asklim/rsis' )();
 
-// console.log( "typeof needUnitsForPeriod", typeof needUnitsForPeriod );
-// console.log( "needUnitsForPeriod", needUnitsForPeriod );
+// debug( "typeof needUnitsForPeriod", typeof needUnitsForPeriod );
+// debug( "needUnitsForPeriod", needUnitsForPeriod );
 
 const { NODE_ENV, API_SERVER } = process.env;
 const { API_SERVER_LOCAL } = require( `../../../helpers` );
@@ -60,7 +59,7 @@ module.exports = function readOne (req, res) {
         'procurement.readOne: Finding params: ', req.params, '\n',
         'procurement.readOne: Finding query:  ', req.query
     );
-    debug( `hostname is ${req.hostname}` );
+    log.debug( `hostname is ${req.hostname}` );
 
     const { weekId } = req.params;
 
@@ -69,9 +68,9 @@ module.exports = function readOne (req, res) {
         return send400BadRequest( res, 'No weekId in request.' );
     }
 
-    debug( 'procurement.readOne: before fetch Dataset ...' );
+    log.debug( 'procurement.readOne: before fetch Dataset ...' );
 
-    makeProcurementDataSet(
+    makeProcurementDataset(
         apiServer,
         weekId,
         (err, data) => {
@@ -103,7 +102,7 @@ module.exports = function readOne (req, res) {
  * @returns - callback invoke with err or data
  */
 
-function makeProcurementDataSet (hostname, weekId, callback) {
+function makeProcurementDataset (hostname, weekId, callback) {
 
 
     if( !hostname ) {
@@ -156,15 +155,15 @@ function makeProcurementDataSet (hostname, weekId, callback) {
             if( !Array.isArray( weekNaturalItems )) {
                 return callback( null, null );
             }
-
-            debug( 'make--Dataset: week-natural data got: %d items', weekNaturalItems.length );
-            debug( 'make--Dataset: convert week-natural-body to procurement dataset.' );
+            const count = weekNaturalItems?.length;
+            log.debug( `makeDataset, got ${count} items in week-natural data.` );
+            log.debug( 'makeDataset, convert to procurement dataset.' );
 
             //Преобразование в Procurement DataSet
             callback( null,
-                weekNaturalItems
-                .map( convertToProcurement )
-                .filter( onlyItemsXtraLongGTZero )
+                weekNaturalItems.
+                map( convertToProcurement ).
+                filter( onlyItemsXtraLongGTZero )
                 // Клиент получает только те позиции которые нужны на закупку
                 // на xtraLong период
                 // т.e. хотя-бы один элемент больше 0, => их сумма >0, а не [0,0,0]

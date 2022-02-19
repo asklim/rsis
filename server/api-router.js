@@ -1,4 +1,8 @@
-const debug = require( 'debug' )( 'router:api' );
+//const debug = require( 'debug' )( 'router:api' );
+const { consoleLogger } = require(`./helpers/`);
+
+const log = consoleLogger( '[rsis:api-router]' );
+
 
 const router = require( 'express' ).Router();
 
@@ -28,7 +32,7 @@ router.all(
     (_req, res) => {
         res.status( 400 );
         res.json( { message: "Bad request at api-router." });
-        debug( `${__filename} - api-router.js - unhandled route` );
+        log.warn( `${__filename} - api-router.js - unhandled route` );
     }
 );
 

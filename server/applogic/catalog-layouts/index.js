@@ -1,9 +1,10 @@
-const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
+//const debug = require( 'debug' )( 'docs:catalogLayouts' );
 
 const {
     httpResponseCodes: HTTP,
-    //consoleLogger,
+    consoleLogger,
 } = require( '../../helpers' );
+const log = consoleLogger( '[catalog-layouts:logic]' );
 
 //const IStorage = require( './storage.interface-contract' );
 const IStorage = require( '../../databases/mongodb/cfgdb/catalog-layouts/catalog-layouts.interface' );
@@ -57,11 +58,11 @@ class CatalogLayouts {
             });
         }
 
-        debug( `class/catalog-layouts: client=${client}, list=${list}` );
+        log.debug( `updateLastOrCreate, client=${client}, list=${list}` );
 
         const { response: last } = await CatalogLayouts.readByQuery({ client, list });
 
-        debug( 'last uuid:', last.uuid );
+        log.debug( 'last uuid:', last.uuid );
         //debug( last );
 
         if( client == last.client && list == last.list

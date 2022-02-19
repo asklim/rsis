@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'api:processenv:' );
+const debug = require( 'debug' )( '-api:processenv:' );
 const {
     //icwd,
     consoleLogger,
@@ -7,7 +7,7 @@ const {
     send404NotFound,
 } = require( '../../helpers/' );
 
-const log = consoleLogger( 'api:processenv' );
+const log = consoleLogger( '[api:processenv]' );
 
 // debug( 'log is', typeof log, log );
 // api:processenv:handler-get log is object {
@@ -26,49 +26,58 @@ module.exports = async function handler_GET (
     req,
     res
 ) {
-    debug( 'req.query:', req.query );
-    //console.log( 'console.log - api/processenv/handler-get [handler]' );
+    try {
+        log.debug( 'req.query:', req.query );
+        //console.log( 'console.log - api/processenv/handler-get [handler]' );
 
-    log.info(
-        'handler-get - req.params:', req.params,
-        'count:', req.params && Object.keys( req.params ).length
-    );
-    log.info( 'handler-get - req.query:', req.query );
+        debug( 'typeof req.app is', typeof req.app );  // function
+        debug( 'typeof getMyDB is', typeof req.app?.getMyDB );  // function
+        req.app.getMyDB();
 
-    const count = req.params
-        ? Object.keys( req.params ).length
-        : 0
-    ;
+        log.info(
+            'handler-get - req.params:', req.params,
+            'count:', req.params && Object.keys( req.params ).length
+        );
+        log.info( 'handler-get - req.query:', req.query );
 
-    if( count !== 0) {
-        // не должно быть
-        return send400BadRequest( res, '.params not allowed' );
+        const count = req.params
+            ? Object.keys( req.params ).length
+            : 0
+        ;
+
+        if( count !== 0) {
+            // не должно быть
+            return send400BadRequest( res, '.params not allowed' );
+        }
+
+        if( !req.query ) {
+            // req.query должен быть
+            return send400BadRequest( res, '.query not present' );
+        }
+
+        const { name } = req.query;
+
+        if( !name ) {
+            // req.query.name должен быть
+            return send400BadRequest( res, '.name not present' );
+        }
+
+        const envVarValue = process.env[ name ];
+
+        log.info( `name: ${name} value:`, envVarValue );
+
+        if( !envVarValue ) {
+            // Нет такой переменной в окружении
+            return send404NotFound( res, 'invalid .name' );
+        }
+
+        send200Ok( res, {
+            ok: true,
+            name,
+            value: envVarValue
+        });
     }
-
-    if( !req.query ) {
-        // req.query должен быть
-        return send400BadRequest( res, '.query not present' );
+    catch (err) {
+        log.trace( 'catch, error:', err );
     }
-
-    const { name } = req.query;
-
-    if( !name ) {
-        // req.query.name должен быть
-        return send400BadRequest( res, '.name not present' );
-    }
-
-    const envVarValue = process.env[ name ];
-
-    log.info( `name: ${name} value:`, envVarValue );
-
-    if( !envVarValue ) {
-        // Нет такой переменной в окружении
-        return send404NotFound( res, 'invalid .name' );
-    }
-
-    send200Ok( res, {
-        ok: true,
-        name,
-        value: envVarValue
-    });
 };

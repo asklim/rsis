@@ -1,5 +1,5 @@
 //const debug = require( 'debug' )('heroku:');
-const log = require( '../helpers' ).consoleLogger( 'Heroku:[safe-getter]:' );
+const log = require( '../helpers' ).consoleLogger( '[heroku:safe-getter]' );
 
 const axios = require( 'axios' ).default;
 

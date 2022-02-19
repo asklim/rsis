@@ -8,7 +8,7 @@ const {
 } = require( '../rsis-config.js' );
 const { rsissum: databaseName } = dbName;
 
-const title = `[${databaseName}] summary-db`;
+const title = `${databaseName}-db`;
 
 
 //'mongodb://hp8710w:36667 || env.MONGO_DEV1 || hp8710w:27017

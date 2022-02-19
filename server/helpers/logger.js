@@ -13,23 +13,35 @@ module.exports = function createLogger (ticker = '') {
 
     function logPrefix (level) {
 
-        const datefix = isHeroku || isSystemdService
-            ? ''
+        const datefix = isHeroku || isSystemdService ? ''
             : `[${(new Date()).toUTCString()}] `
         ;
         return `${datefix}${level}${tickerfix}`;
     }
 
-    const debug = (...args) => log.debug( logPrefix( 'DBG' ), ...args );
+    const color = '\u001B[0;33;40m';
+    const end = '\u001B[0m';
+
+    function debugPrefix (level) {
+
+        const datefix = isHeroku || isSystemdService ? ''
+            : `[${(new Date()).toISOString()}]`
+        ;
+        const color = '\u001B[1;33;40m';
+        return `${color}${level}${end} ${datefix}${color}${tickerfix}${end}`;
+    }
+
+
+    const debug = (...args) => log.debug( debugPrefix( 'DEBUG' ), color, ...args, end );
 
     const info = (...args) => log.info( logPrefix( 'INF' ), ...args );
 
-    const warn = (...args) => log.warn( logPrefix( 'WRN' ), ...args );
+    const warn = (...args) => log.warn( logPrefix( 'WARN' ), ...args );
 
-    const error = (...args) => log.error( logPrefix( 'ERR' ), ...args );
+    const error = (...args) => log.error( logPrefix( 'ERROR' ), ...args );
 
     return ({
-        trace: (...args) => log.trace( logPrefix( 'TRC' ), ...args ),
+        trace: (...args) => log.trace( debugPrefix( 'TRACE' ), ...args ),
         debug,
         info,
         warn,

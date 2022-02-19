@@ -12,7 +12,7 @@ module.exports.log = async function (mongooseConnection) {
     debug( `Mongoose connection id: ${id}` );
 
     const title = `dbinfo: ${host}:${port}/${db.databaseName}`;
-    const log = consoleLogger( `${title}:` );
+    const log = consoleLogger( `[${title}]` );
 
     try {
         const models = mongooseConnection.modelNames();
@@ -27,7 +27,7 @@ module.exports.log = async function (mongooseConnection) {
             infoDocs.push([ modelName, count ]);
         }
 
-        console.log( `${title}:\n`,
+        log.info( '\n',
             formatWithOptions( { colors: true }, '%O', infoDocs )
         );
     }

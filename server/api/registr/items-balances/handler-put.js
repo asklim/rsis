@@ -12,7 +12,7 @@ const {
 
 const ItemsBalances = require( `../../../applogic/items-balances` );
 
-const log = consoleLogger( 'api-registr:items-balances:' );
+const log = consoleLogger( '[items-balances:api]' );
 
 
 /**

@@ -8,7 +8,7 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-SUM:reports:week-natural:' );
+const log = consoleLogger( '[week-natural:api:h-DELETE]' );
 
 const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
 const WeekNatural = db.model( 'WeekNatural' );

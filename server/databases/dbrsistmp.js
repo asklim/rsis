@@ -10,7 +10,7 @@ const {
 
 const { rsistmp: databaseName } = dbName;
 
-const title = `[${databaseName}] temp-db`;
+const title = `${databaseName}-db`;
 
 const uriWithDbName = ( process.env.NODE_ENV === 'production' )
     ? format( mongoURI.CLOUDDB_TEMPLATE,

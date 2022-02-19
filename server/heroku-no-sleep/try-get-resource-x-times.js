@@ -1,6 +1,6 @@
 
-const debug = require( 'debug' )( 'heroku:' );
-//const log = require( '../helpers' ).consoleLogger( 'Heroku:[try-get]:' );
+//const debug = require( 'debug' )( 'heroku:' );
+const log = require( '../helpers' ).consoleLogger( '[heroku:try-get]' );
 
 const createSafeGetter = require( './create-safe-getter.js' );
 
@@ -31,7 +31,7 @@ module.exports = async function tryConnectXtimes ({
         (async function attempt (n) {
 
             if( n != 1 ) {
-                debug( `Connection attempt #${n} to ${apiUrl}` );
+                log.debug( `Connection attempt #${n} to ${apiUrl}` );
             }
             let t0;
             try {

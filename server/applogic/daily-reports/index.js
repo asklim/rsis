@@ -1,9 +1,10 @@
-const debug = require( 'debug' )( 'reports:daily' );
+//const debug = require( 'debug' )( 'reports:daily' );
 
 const {
     httpResponseCodes: HTTP,
-    //consoleLogger,
+    consoleLogger,
 } = require( '../../helpers' );
+const log = consoleLogger( '[daily-reports:logic]' );
 
 const IStorage = require( '../../databases/mongodb/sumdb/daily-reports/daily-reports.interface' );
 
@@ -28,7 +29,7 @@ class DailyReports {
         }
 
         return await IStorage.createOne( body );
-    }
+    };
 
 
     /**
@@ -56,7 +57,7 @@ class DailyReports {
         }
 
         const result = await DailyReports.readByQuery({ filial, creator, onDate });
-        debug( 'updateOrCreate: statusCode is', result.statusCode );
+        log.debug( 'updateOrCreate, statusCode is', result.statusCode );
 
         if( result.statusCode == HTTP.OK ) {
             // response - это документ
@@ -65,8 +66,7 @@ class DailyReports {
         }
 
         return await IStorage.createOne( body );
-
-    }
+    };
 
 
     /**
@@ -82,7 +82,7 @@ class DailyReports {
     static readById = async function (reportId) {
 
         return await IStorage.readById( reportId );
-    }
+    };
 
 
     /**
@@ -121,8 +121,7 @@ class DailyReports {
         }
 
         return await IStorage.readByQuery( query );
-
-    }
+    };
 
 
     /**
@@ -134,8 +133,7 @@ class DailyReports {
     static deleteById = async function (reportId) {
 
         return await IStorage.deleteById( reportId );
-    }
-
+    };
 }
 
 exports = module.exports = DailyReports;

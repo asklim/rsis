@@ -5,7 +5,7 @@ const {
     send500ServerError,
     consoleLogger,
 } = require( '../../helpers' );
-const log = consoleLogger( 'api:health:' );
+const log = consoleLogger( '[api:health]' );
 
 const cfgdb = require( '../../databases' ).getDB( 'config' );
 const sumdb = require( `../../databases` ).getDB( 'sum' );
@@ -100,7 +100,6 @@ module.exports = async function (req, res) {
             );
         }
     }
-
     send400BadRequest( res, `parameter '${pingId}' is invalid.` );
 };
 

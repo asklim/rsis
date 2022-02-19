@@ -10,7 +10,7 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-registr:' );
+const log = consoleLogger( '[items-balances:api]' );
 const ItemsBalances = require( `../../../applogic/items-balances` );
 
 

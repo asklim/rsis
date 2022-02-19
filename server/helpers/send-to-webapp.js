@@ -7,7 +7,54 @@ const {
     httpResponseCodes: HTTP,
 } = require(`../helpers`);
 
-const log = consoleLogger( 'toWebApp:' );
+const log = consoleLogger( '[rsis:toWebApp]' );
+
+
+module.exports.sendToWebApp = function (apiRoute, reqBody) {
+
+    const { id, type, pid } = reqBody;
+
+    const docMetaInfo = `- type: ${type} id: ${id} pid: ${pid}`;
+    debug( docMetaInfo );
+
+    sendTo(
+        apiRoute,
+        "POST",
+        reqBody,
+        (postStatus) => {
+
+            log.debug( `- POST status = ${postStatus}` );
+            if( postStatus >= HTTP.INTERNAL_SERVICE_ERROR ) {
+                return log.error( 'Service Error, ' + docMetaInfo );
+            }
+
+            if( postStatus == HTTP.CREATED ) {
+                return log.info( 'SUCCESS: document Created, ' + docMetaInfo );
+            }
+
+            if( postStatus == HTTP.CONFLICT ) {
+            // нельзя создать. Уже существует.
+                sendTo(
+                    apiRoute,
+                    "PUT",
+                    reqBody,
+                    (putStatus) => {
+
+                        log.debug( `- PUT status = ${putStatus}` );
+                        if( putStatus == HTTP.OK ) {
+                            log.info( 'SUCCESS: document Updated, ' + docMetaInfo );
+                        }
+                        else {
+                            log.error( 'document sending FAILURE, ' + docMetaInfo );
+                        }
+                    }
+                );
+            }
+        }
+    );
+};
+
+
 
 function sendTo (apiRoute, verb, reqBody, callback) {
 
@@ -22,10 +69,10 @@ function sendTo (apiRoute, verb, reqBody, callback) {
         },
         json : reqBody,
         qs : {},
-    }; 
+    };
     //debug('sendTo\n', reqBody);
 
-    request( 
+    request(
         reqOptions,
         (err, res, /*body*/) => {
 
@@ -33,53 +80,7 @@ function sendTo (apiRoute, verb, reqBody, callback) {
                 return callback( HTTP.SERVICE_UNAVAILABLE );
             }
             return callback( res.statusCode );
-        });
-}
-
-
-module.exports.sendToWebApp = function (apiRoute, reqBody) {
-
-    const { id, type, pid } = reqBody;
-   
-    const docMetaInfo = `- type: ${type} id: ${id} pid: ${pid}`;
-    debug( docMetaInfo );
-
-    sendTo( 
-        apiRoute, 
-        "POST", 
-        reqBody,
-        (postStatus) => {
-
-            debug( ' - POST - %d', postStatus );
-            if( postStatus >= HTTP.INTERNAL_SERVICE_ERROR ) {
-                return log.error( 'Service Error, ' + docMetaInfo );
-            }
- 
-            if( postStatus == HTTP.CREATED ) {
-                return log.info( 'SUCCESS: document Created, ' + docMetaInfo );
-            }
-      
-            if( postStatus == HTTP.CONFLICT ) { //нельзя создать. Уже существует.
-
-                sendTo(
-                    apiRoute,
-                    "PUT",
-                    reqBody,
-                    (putStatus) => {
-
-                        debug( 'sendToWebApp - PUT - %d', putStatus );
-                        if( putStatus == HTTP.OK ) {
-                            return log.info( 'SUCCESS: document Updated, ' + docMetaInfo );
-                        }
-                        return log.error( 'document sending FAILURE, ' + docMetaInfo );
-                    }
-                );
-            }
         }
     );
-};
+}
 
-/*
-module.export = {
-  sendToWebApp,
-};*/

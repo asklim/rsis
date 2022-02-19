@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'dbs:connect' );
+//const debug = require( 'debug' )( 'dbs:connect' );
 const {
     createConnection,
     connections,
@@ -10,7 +10,7 @@ const { consoleLogger, } = require( '../helpers' );
 module.exports = function createConn (uri, title) {
 
 
-    const log = consoleLogger( `${title}:` );
+    const log = consoleLogger( `[${title}]` );
 
     let dbConnect;
     try {
@@ -25,10 +25,10 @@ module.exports = function createConn (uri, title) {
         // =2, если нормальное подключение
     }
     catch (error) {
-        debug( 'create-conn.js - catch block');
-        log.error( error );
+        log.error( 'create-conn.js - catch block', error );
     }
-    debug( `${title} connected. Total connection's count:`, connections.length  );
+
+    log.debug( `connected. Total connection's count:`, connections.length );
     // first 2, then 3, then 4
 
     // CONNECTION EVENTS

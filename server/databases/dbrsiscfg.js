@@ -9,7 +9,7 @@ const {
 
 const { rsiscfg: databaseName } = dbName;
 
-const title = `[${databaseName}] config-db`;
+const title = `${databaseName}-db`;
 
 const prodDbURI = process.env.MONGO_STANDALONE || mongoURI.STANDALONE;
 const devDbURI = process.env.MONGO_DEV1 || mongoURI.DEV1;

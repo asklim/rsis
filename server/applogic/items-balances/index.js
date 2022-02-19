@@ -1,9 +1,10 @@
-const debug = require( 'debug' )( 'docs:itemsBalances' );
+//const debug = require( 'debug' )( 'docs:itemsBalances' );
 
 const {
     httpResponseCodes: HTTP,
-    //consoleLogger,
+    consoleLogger,
 } = require( '../../helpers' );
+const log = consoleLogger( '[items-balances:logic]' );
 
 //const IStorage = require( './storage.interface-abstract' );
 const IStorage = require( '../../databases/mongodb/sumdb/items-balances/ib.interface' );
@@ -61,7 +62,7 @@ exports = module.exports = class ItemsBalances {
         const result = await ItemsBalances.
         readByQuery({ filial, agent, creator, onDate });
 
-        debug( 'updateOrCreate: statusCode is', result.statusCode );
+        log.debug( 'updateOrCreate, statusCode is', result.statusCode );
 
         if( result.statusCode == HTTP.OK ) {
             // response - это документ
