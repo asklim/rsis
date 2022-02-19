@@ -29,8 +29,8 @@ const postcssNormalize = require( 'postcss-normalize' );
 const InterpolateHtmlPlugin = require( 'react-dev-utils/InterpolateHtmlPlugin' );
 const ModuleScopePlugin = require( 'react-dev-utils/ModuleScopePlugin' );
 const ModuleNotFoundPlugin = require( 'react-dev-utils/ModuleNotFoundPlugin' );
-const WatchMissingNodeModulesPlugin =
-      require( 'react-dev-utils/WatchMissingNodeModulesPlugin');
+//const WatchMissingNodeModulesPlugin =
+//      require( 'react-dev-utils/WatchMissingNodeModulesPlugin');
 const { WebpackManifestPlugin } = require( 'webpack-manifest-plugin' );
 
 
@@ -584,8 +584,8 @@ module.exports = function( webpackEnv ) {
             // to restart the development server for Webpack to discover it. This plugin
             // makes the discovery automatic so you don't have to restart.
             // See https://github.com/facebook/create-react-app/issues/186
-            isEnvDevelopment &&
-                new WatchMissingNodeModulesPlugin( paths.appNodeModules ),
+            //isEnvDevelopment &&
+            //    new WatchMissingNodeModulesPlugin( paths.appNodeModules ),
 
             isEnvProduction &&
             new MiniCssExtractPlugin({

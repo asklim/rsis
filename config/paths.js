@@ -13,7 +13,7 @@ const appDirectory = fs.realpathSync( process.cwd() );
 //console.log('paths: appDirectory is ', appDirectory);
 //console.log('paths: __dirname is ', __dirname);
 
-const resolveApp = relativePath => path.resolve( appDirectory, relativePath );
+const resolveApp = (relativePath) => path.resolve( appDirectory, relativePath );
 
 const envPublicUrl = process.env.PUBLIC_URL;
 
@@ -22,13 +22,13 @@ const envPublicUrl = process.env.PUBLIC_URL;
 function ensureSlash (inputPath, needsSlash) {
 
     const hasSlash = inputPath.endsWith('/');
-    
+
     if( hasSlash && !needsSlash ) {
         return inputPath.substr(0, inputPath.length - 1);
-    } 
+    }
     else if( !hasSlash && needsSlash ) {
         return `${inputPath}/`;
-    } 
+    }
     else {
         return inputPath;
     }
@@ -47,11 +47,11 @@ const getPublicUrl = appPackageJson => envPublicUrl || require( appPackageJson )
 function getServedPath (appPackageJson) {
 
     const publicUrl = getPublicUrl( appPackageJson );
-    const servedUrl = envPublicUrl 
+    const servedUrl = envPublicUrl
         || ( publicUrl && publicUrl.startsWith( 'http' )
-            ? (new URL( publicUrl )).pathname 
+            ? (new URL( publicUrl )).pathname
             : '/' );
-    
+
     return ensureSlash( servedUrl, true );
 }
 
@@ -86,24 +86,24 @@ const resolveModule = (resolveFn, filePath) =>  {
 // config after eject: we're in ./config/
 module.exports = {
 
-    dotenv : resolveApp('.env'),
-    appPath : resolveApp('.'),
-    appBuild : resolveApp('static'), //('build'),
-    appPublic : resolveApp('public'),
-    ejsRoot : resolveApp('server/views/index.ejs'),
-    appHtml : resolveApp('src/index.html'),
-    appHtmlTemplate : resolveApp('src/template.html'),
-    appIndexJs : resolveModule(resolveApp, 'src/index'),
-    appPackageJson : resolveApp('package.json'),
-    appSrc : resolveApp('src'),
-    appTsConfig : resolveApp('tsconfig.json'),
-    appJsConfig: resolveApp('jsconfig.json'),
-    yarnLockFile : resolveApp('yarn.lock'),
-    testsSetup : resolveModule(resolveApp, 'src/setupTests'),
-    proxySetup : resolveApp('src/setupProxy.js'),
-    appNodeModules : resolveApp('node_modules'),
-    publicUrl : getPublicUrl(resolveApp('package.json')),
-    servedPath : getServedPath(resolveApp('package.json')),
+    dotenv : resolveApp( '.env' ),
+    appPath : resolveApp( '.' ),
+    appBuild : resolveApp( 'static' ), //('build'),
+    appPublic : resolveApp( 'public' ),
+    //ejsRoot : resolveApp('server/views/index.ejs'),
+    appHtml : resolveApp( 'src/index-template.html' ),
+    appHtmlTemplate : resolveApp( 'src/index-template.html' ),
+    appIndexJs : resolveModule( resolveApp, 'src/index' ), // without extension !!!
+    appPackageJson : resolveApp( 'package.json' ),
+    appSrc : resolveApp( 'src' ),
+    appTsConfig : resolveApp( 'tsconfig.json' ),
+    appJsConfig: resolveApp( 'jsconfig.json' ),
+    yarnLockFile : resolveApp( 'yarn.lock' ),
+    testsSetup : resolveModule( resolveApp, 'src/setupTests' ),
+    proxySetup : resolveApp( 'src/setupProxy.js' ),
+    appNodeModules : resolveApp( 'node_modules' ),
+    publicUrl : getPublicUrl( resolveApp( 'package.json' )),
+    servedPath : getServedPath( resolveApp( 'package.json' )),
 };
 
 module.exports.moduleFileExtensions = moduleFileExtensions;
