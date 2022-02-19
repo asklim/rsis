@@ -15,7 +15,7 @@ import {
     hexToRgb
 } from "assets/jss/m-d-r/material-dashboard-react.js";
 
-const sidebarStyle = theme => ({
+const sidebarStyle = (theme) => ({
     drawerPaper: {
         border: "none",
         position: "fixed",

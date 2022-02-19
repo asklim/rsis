@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types*/
 import React from "react";
 //import PropTypes from "prop-types";
-import { Switch, Route /*, Redirect*/ } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -15,41 +15,43 @@ import Navbar from "components/m-d-r/Navbars/Navbar.js";
 import Footer from "components/m-d-r/Footer/Footer.js";
 import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
 
-import Sidebar from "components/rsis/Sidebar/Sidebar.js";
-import Whoops404 from "components/misc/Whoops404.js";
-import routes from "./InvoiceRoutes.js";
-
 import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png"; // must be an image
 
+import Sidebar from "components/rsis/Sidebar/Sidebar.js";
+import Whoops404 from "components/misc/Whoops404.js";
+import routes from "./invoice-routes.js";
+
+
 let ps;
 
 const switchRoutes = (
-    <Switch>
-        {routes.map( (prop, key) => {
-            if( prop.layout === "/invoice" ) {
+    <Routes>
+        {routes.map( (route, key) => {
+            if( route.layout === "/invoice" ) {
                 return (
                     <Route
-                        path={prop.layout + prop.path}
-                        component={prop.component}
+                        path={/*prop.layout +*/ route.path}
+                        element /*component*/ ={<route.component />}
                         key={key}
                     />
                 );
             }
             return null;
         })}
-        <Route component={Whoops404} />
-    </Switch>
+        <Route path="*" element={<Whoops404 />} />
+    </Routes>
 );
 
 const useStyles = makeStyles( styles );
 
-export default function InvoiceBoard( {...rest} )
+export default function InvoiceBoard({ ...rest })
 {
     // styles
     const classes = useStyles();
+
     // ref to help us initialize PerfectScrollbar on windows devices
     const mainPanel = React.createRef();
     // states and functions
@@ -59,18 +61,18 @@ export default function InvoiceBoard( {...rest} )
     const [mobileOpen, setMobileOpen] = React.useState( false );
     //hasImage: true
 
-    const handleImageClick = image => {
+    const handleImageClick = (image) => {
         setImage( image );
     };
 
-    const handleColorClick = color => {
+    const handleColorClick = (color) => {
         setColor( color );
     };
 
     const handleFixedClick = () => {
         if( fixedClasses === "dropdown" ) {
             setFixedClasses( "dropdown show" );
-        } 
+        }
         else {
             setFixedClasses( "dropdown" );
         }
@@ -88,7 +90,8 @@ export default function InvoiceBoard( {...rest} )
 
     // initialize and destroy the PerfectScrollbar plugin
     React.useEffect(() => {
-        if (navigator.platform.indexOf("Win") > -1) {
+        const isWinPlatform = navigator.platform.indexOf("Win") > -1;
+        if( isWinPlatform ) {
             ps = new PerfectScrollbar( mainPanel.current, {
                 suppressScrollX: true,
                 suppressScrollY: false
@@ -98,26 +101,13 @@ export default function InvoiceBoard( {...rest} )
         window.addEventListener( "resize", resizeFunction );
         // Specify how to clean up after this effect:
         return function cleanup() {
-            if (navigator.platform.indexOf("Win") > -1) {
-                ps.destroy();
+            if( isWinPlatform ) {
+                ps?.destroy();
             }
-            window.removeEventListener("resize", resizeFunction);
-        };  
+            window.removeEventListener( "resize", resizeFunction );
+        };
     }, [mainPanel]);
-    /*
-  componentDidUpdate(e) {
-    if (e.history.location.pathname !== e.location.pathname) {
-      // eslint-disable-next-line react/no-string-refs
-      this.refs.mainPanel.scrollTop = 0;
-      if (this.state.mobileOpen) {
-        this.setState({ mobileOpen: false });
-      }
-    }
-  }
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeFunction);
-  }
-*/
+
 
     return (
         <div className={classes.wrapper}>
@@ -144,7 +134,7 @@ export default function InvoiceBoard( {...rest} )
                         {switchRoutes}
                     </div>
                 </div>
-      
+
                 <Footer />
                 <FixedPlugin
                     handleImageClick={handleImageClick}

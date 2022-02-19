@@ -1,6 +1,6 @@
 
-import { createBrowserHistory } from "history";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+//import { createBrowserHistory } from "history";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import React from "react";
 
@@ -8,36 +8,35 @@ import React from "react";
 import Admin from "layouts/Admin.js";
 import Invoice from "layouts/Invoice.js";
 import RTL from "layouts/RTL.js";
+import ProcurementBoardPage from "views/ProcurementBoard.js";
+import Whoops404 from "components/misc/Whoops404.js";
+
 //import Whoops404 from "components/misc/Whoops404.js";
+
+import "index.css";
 
 //import "assets/css/material-dashboard-react.css?v=1.8.0";
 
-const browserHistory = createBrowserHistory();
+//const browserHistory = createBrowserHistory();
 
 //console.log('running ReactApp');
 
 const App = () =>
 
-    <Router history ={browserHistory}>
-        <Switch>
-            <Redirect exact from ="/" to ="/admin/dashboard" />  
+    <BrowserRouter>
+        <Routes>
+            <Route path="/*" element={<Admin />} />
 
-            <Route path ="/admin">
-                <Admin />
-            </Route>
+            <Route path="/admin/*" element={<Admin />} />
 
-            <Route path ="/invoice">
-                <Invoice />
-            </Route>       
-            
-            <Route path ="/rtl">
-                <RTL />       
-            </Route>
-            
-            <Redirect from ="/i" to ="/invoice/dashboard" /> 
-            {/*<Route component ={Whoops404} />*/}
-        </Switch>
-    </Router>
+            <Route path="/invoice/*" element={<Invoice />} />
+
+            <Route path="/rtl/*" element={<RTL />} />
+
+            <Route path="/i" element={<ProcurementBoardPage />} />
+            <Route path="*" element={<Whoops404 />} />
+        </Routes>
+    </BrowserRouter>
 ;
 
 export default App;

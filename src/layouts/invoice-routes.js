@@ -13,7 +13,7 @@ import ProcurementBoardPage from "../views/ProcurementBoard.js";
 
 const dashboardRoutes = [
     {
-        path: "/dashboard",
+        path: "dashboard",
         name: "Back to Dashboard",
         rtlName: "rtl_Back",
         icon: ArrowBack,      //Dashboard,
@@ -21,7 +21,7 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/procurement",
+        path: "procurement",
         name: "Procurement",
         rtlName: "rtl_procurement",
         icon: AddBoxOutlined,
@@ -29,7 +29,7 @@ const dashboardRoutes = [
         layout: "/invoice"
     },
     {
-        path: "/dialogs",
+        path: "dialogs",
         name: "Dialog List",
         rtlName: "rtl_dialogs",
         icon: Fingerprint,

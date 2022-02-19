@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -13,7 +13,8 @@ import Navbar from "components/m-d-r/Navbars/Navbar.js";
 import Footer from "components/m-d-r/Footer/Footer.js";
 import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
 
-import routes from "./AdminRoutes.js";
+import routes from "./admin-routes.js";
+import DashboardPage from "views/m-d-r/Dashboard.js";
 
 import Sidebar from "components/rsis/Sidebar/Sidebar.js";
 import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
@@ -24,52 +25,52 @@ import logo from "assets/img/reactlogo.png";
 let ps;
 
 const switchRoutes = (
-    <Switch>
-        {routes.map( (prop, key) => {
-            if( prop.layout === "/admin" ) {
+    <Routes>
+        {routes.map( (route, key) => {
+            if( route.layout === "/admin" ) {
                 return (
                     <Route
-                        path = {prop.layout + prop.path}
-                        component = {prop.component}
+                        path = {/*prop.layout +*/ route.path}
+                        element /*component*/ = {<route.component />}
                         key = {key}
                     />
                 );
             }
             return null;
         })}
-        <Redirect from="/admin" to="/admin/dashboard" />
-    </Switch>
+        <Route path="" render={<DashboardPage />} />
+    </Routes>
 );
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles( styles );
 
 
 export default function Admin ({ ...rest }) {
 
     // styles
     const classes = useStyles();
-    
+
     // ref to help us initialize PerfectScrollbar on windows devices
     const mainPanel = React.createRef();
-    
+
     // states and functions
     const [ image, setImage ] = React.useState( bgImage );
     const [ color, setColor ] = React.useState( "blue" );
     const [ fixedClasses, setFixedClasses ] = React.useState( "dropdown" );
     const [ mobileOpen, setMobileOpen ] = React.useState( false );
 
-    const handleImageClick = image => {
+    const handleImageClick = (image) => {
         setImage( image );
     };
 
-    const handleColorClick = color => {
+    const handleColorClick = (color) => {
         setColor( color );
     };
 
     const handleFixedClick = () => {
-        if ( fixedClasses === "dropdown" ) {
+        if( fixedClasses === "dropdown" ) {
             setFixedClasses( "dropdown show" );
-        } 
+        }
         else {
             setFixedClasses( "dropdown" );
         }
@@ -84,19 +85,20 @@ export default function Admin ({ ...rest }) {
     };
 
     const resizeFunction = () => {
-        if ( window.innerWidth >= 960 ) {
+        if( window.innerWidth >= 960 ) {
             setMobileOpen( false );
         }
     };
 
-    
+
     React.useEffect( () => {
 
         /**
          *  initialize and destroy the PerfectScrollbar plugin
          */
 
-        if( navigator.platform.indexOf( "Win" ) > -1 ) {
+        const isWinPlatform = navigator.platform.indexOf("Win") > -1;
+        if( isWinPlatform ) {
 
             ps = new PerfectScrollbar( mainPanel.current, {
                 suppressScrollX: true,
@@ -108,12 +110,12 @@ export default function Admin ({ ...rest }) {
         // Specify how to clean up after this effect:
         return function cleanup() {
 
-            if( navigator.platform.indexOf( "Win" ) > -1 ) {
-                ps.destroy();
+            if( isWinPlatform ) {
+                ps?.destroy();
             }
             window.removeEventListener( "resize", resizeFunction );
         };
-    }, 
+    },
     [ mainPanel ]);
 
     return (

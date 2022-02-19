@@ -3,21 +3,23 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import AddBox from "@material-ui/icons/AddBoxOutlined";
 import Person from "@material-ui/icons/Person";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import BubbleChart from "@material-ui/icons/BubbleChart";
-import LocationOn from "@material-ui/icons/LocationOn";
+//import BubbleChart from "@material-ui/icons/BubbleChart";
+//import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 import Fingerprint from '@material-ui/icons/Fingerprint';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 
 // core components/views for Admin layout
 import DashboardPage from "../views/m-d-r/Dashboard.js";
 import ProcurementBoardPage from "../views/ProcurementBoard.js";
+import LoginSignupPage from "../views/LoginSignup/LoginSignup.js";
 import UserProfile from "../views/m-d-r/UserProfile.js";
 import TableList from "../views/m-d-r/TableList.js";
 import Typography from "../views/m-d-r/Typography.js";
-import Icons from "../views/m-d-r/Icons.js";
-import Maps from "../views/m-d-r/Maps.js";
+//import Icons from "../views/m-d-r/Icons.js";
+//import Maps from "../views/m-d-r/Maps.js";
 import NotificationsPage from "../views/m-d-r/Notifications.js";
 import UpgradeToPro from "../views/m-d-r/UpgradeToPro.js";
 
@@ -29,7 +31,7 @@ import DialogList from "../views/DialogList.js";
 
 const dashboardRoutes = [
     {
-        path: "/dashboard",
+        path: "dashboard",
         name: "Dashboard",
         rtlName: "لوحة القيادة",
         icon: Dashboard,
@@ -37,15 +39,15 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/procurement",
+        path: "procurement",
         name: "Procurement",
         rtlName: "rtl_procurement",
         icon: AddBox,
         component: ProcurementBoardPage,
         layout: "/invoice"
-    },  
+    },
     {
-        path: "/user",
+        path: "user",
         name: "User Profile",
         rtlName: "ملف تعريفي للمستخدم",
         icon: Person,
@@ -53,7 +55,7 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/dialogs",
+        path: "dialogs",
         name: "Dialog List",
         rtlName: "قائمة الجدول",
         icon: Fingerprint,
@@ -61,7 +63,7 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/table",
+        path: "table",
         name: "Table List",
         rtlName: "قائمة الجدول",
         icon: "content_paste",
@@ -69,15 +71,15 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/typography",
+        path: "typography",
         name: "Typography",
         rtlName: "طباعة",
         icon: LibraryBooks,
         component: Typography,
         layout: "/admin"
     },
-    {
-        path: "/icons",
+    /*{
+        path: "icons",
         name: "Icons",
         rtlName: "الرموز",
         icon: BubbleChart,
@@ -85,15 +87,15 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/maps",
+        path: "maps",
         name: "Maps",
         rtlName: "خرائط",
         icon: LocationOn,
         component: Maps,
         layout: "/admin"
-    },
+    },*/
     {
-        path: "/notifications",
+        path: "notifications",
         name: "Notifications",
         rtlName: "إخطارات",
         icon: Notifications,
@@ -101,7 +103,15 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/upgrade-to-pro",
+        path: "login",
+        name: "Log In / Sign Up",
+        rtlName: "rtlLogIn",
+        icon: ExitToApp,
+        component: LoginSignupPage,
+        layout: "/admin"
+    },
+    {
+        path: "upgrade-to-pro",
         name: "Upgrade To PRO",
         rtlName: "التطور للاحترافية",
         icon: Unarchive,
@@ -109,13 +119,13 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/rtl-page",
+        path: "rtl-page",
         name: "RTL Support",
         rtlName: "پشتیبانی از راست به چپ",
         icon: Language,
         component: RTLPage,
         layout: "/rtl"
-    },  
+    },
 ];
 
 export default dashboardRoutes;

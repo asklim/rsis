@@ -22,21 +22,22 @@ const useStyles = makeStyles(styles);
 export default function Header (props) {
 
     const classes = useStyles();
-    
+
     function makeBrand() {
 
         let name;
-        
-        props.routes.map( prop => {
-            if( window.location.href.indexOf( prop.layout + prop.path ) !== -1 ) {
-                name = props.rtlActive ? prop.rtlName : prop.name;
+
+        props.routes.map( (route) => {
+            const fullroute = route.layout + '/' + route.path;
+            if( window.location.href.indexOf( fullroute ) !== -1 ) {
+                name = props.rtlActive ? route.rtlName : route.name;
             }
             return null;
         });
         console.log('makeBrand returns: ', name );
         return name;
     }
-    
+
     const { color } = props;
     const appBarClasses = classNames({
         [" " + classes[color]]: color

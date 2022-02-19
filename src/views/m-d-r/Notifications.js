@@ -17,55 +17,57 @@ import CardHeader from "components/m-d-r/Card/CardHeader.js";
 import CardBody from "components/m-d-r/Card/CardBody.js";
 
 const styles = {
-  cardCategoryWhite: {
-    "&,& a,& a:hover,& a:focus": {
-      color: "rgba(255,255,255,.62)",
-      margin: "0",
-      fontSize: "14px",
-      marginTop: "0",
-      marginBottom: "0"
+    cardCategoryWhite: {
+        "&,& a,& a:hover,& a:focus": {
+            color: "rgba(255,255,255,.62)",
+            margin: "0",
+            fontSize: "14px",
+            marginTop: "0",
+            marginBottom: "0"
+        },
+        "& a,& a:hover,& a:focus": {
+            color: "#FFFFFF"
+        }
     },
-    "& a,& a:hover,& a:focus": {
-      color: "#FFFFFF"
+    cardTitleWhite: {
+        color: "#FFFFFF",
+        marginTop: "0px",
+        minHeight: "auto",
+        fontWeight: "300",
+        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+        marginBottom: "3px",
+        textDecoration: "none",
+        "& small": {
+            color: "#777",
+            fontSize: "65%",
+            fontWeight: "400",
+            lineHeight: "1"
+        }
     }
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none",
-    "& small": {
-      color: "#777",
-      fontSize: "65%",
-      fontWeight: "400",
-      lineHeight: "1"
-    }
-  }
 };
 
 const useStyles = makeStyles(styles);
 
+
 export default function Notifications() {
-  const classes = useStyles();
-  const [tl, setTL] = React.useState(false);
-  const [tc, setTC] = React.useState(false);
-  const [tr, setTR] = React.useState(false);
-  const [bl, setBL] = React.useState(false);
-  const [bc, setBC] = React.useState(false);
-  const [br, setBR] = React.useState(false);
-  React.useEffect(() => {
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      // to stop the warning of calling setState of unmounted component
-      var id = window.setTimeout(null, 0);
-      while (id--) {
-        window.clearTimeout(id);
-      }
-    };
-  });
+
+    const classes = useStyles();
+    const [tl, setTL] = React.useState(false);
+    const [tc, setTC] = React.useState(false);
+    const [tr, setTR] = React.useState(false);
+    const [bl, setBL] = React.useState(false);
+    const [bc, setBC] = React.useState(false);
+    const [br, setBR] = React.useState(false);
+    React.useEffect(() => {
+        // Specify how to clean up after this effect:
+        return function cleanup() {
+        // to stop the warning of calling setState of unmounted component
+        var id = window.setTimeout(null, 0);
+        while (id--) {
+            window.clearTimeout(id);
+        }
+        };
+    });
   const showNotification = place => {
     switch (place) {
       case "tl":
@@ -211,7 +213,7 @@ export default function Notifications() {
         </GridContainer>
         <br />
         <br />
-        <GridContainer justify="center">
+        <GridContainer justifyContent="center">
           <GridItem xs={12} sm={12} md={6} style={{ textAlign: "center" }}>
             <h5>
               Notifications Places
@@ -220,7 +222,7 @@ export default function Notifications() {
             </h5>
           </GridItem>
         </GridContainer>
-        <GridContainer justify="center">
+        <GridContainer justifyContent="center">
           <GridItem xs={12} sm={12} md={10} lg={8}>
             <GridContainer>
               <GridItem xs={12} sm={12} md={4}>
@@ -280,7 +282,7 @@ export default function Notifications() {
             </GridContainer>
           </GridItem>
         </GridContainer>
-        <GridContainer justify={"center"}>
+        <GridContainer justifyContent={"center"}>
           <GridItem xs={12} sm={12} md={10} lg={8}>
             <GridContainer>
               <GridItem xs={12} sm={12} md={4}>

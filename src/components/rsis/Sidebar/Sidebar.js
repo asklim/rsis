@@ -19,73 +19,74 @@ import RTLNavbarLinks from "components/m-d-r/Navbars/RTLNavbarLinks.js";
 
 import styles from "./sidebarStyle.js";
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles( styles );
 
 
 export default function Sidebar (props) {
 
     const classes = useStyles();
-    
-    // verifies if routeName is the one active (in browser input)    
+
+    // verifies if routeName is the one active (in browser input)
     function activeRoute (routeName) {
         return window.location.href.includes( routeName );
-        //indexOf( routeName ) > -1 ? true : false;
     }
-    
-    const { 
-        color, logo, 
-        image, logoText, 
-        routes 
+
+    const {
+        color, logo,
+        image, logoText,
+        routes
     } = props;
 
-    var links = (
+    const links = (
         <List className = { classes.list }>
-            {routes.map( (prop, key) => {
-                
+
+            {routes.map( (route, key) => {
+
                 let activePro = " ";
                 let listItemClasses;
+                const fullroute = route.layout + '/' + route.path;
 
-                if( ["/upgrade-to-pro", "/uis-dash"].includes( prop.path )) {
+                if( ["upgrade-to-pro", "uis-dash"].includes( route.path )) {
                     activePro = classes.activePro + " ";
                     listItemClasses = classNames({
                         [ " "+classes[color] ]: true
                     });
-                } 
+                }
                 else {
                     listItemClasses = classNames({
-                        [ " "+classes[color] ]: activeRoute( prop.layout + prop.path )
+                        [ " "+classes[color] ]: activeRoute( fullroute )
                     });
                 }
 
                 const whiteFontClasses = classNames({
-                    [ " "+classes.whiteFont ]: activeRoute( prop.layout + prop.path )
+                    [ " "+classes.whiteFont ]: activeRoute( fullroute )
                 });
-                
+
                 return (
                     <NavLink
-                        to = { prop.layout + prop.path }
+                        to = { fullroute }
                         className = { activePro + classes.item }
-                        activeClassName = "active"
+                        /*activeClassName = "active"*/
                         key = { key }
                     >
-                        <ListItem button className = { classes.itemLink + listItemClasses }>
-                            {typeof prop.icon === "string" ? (
+                        <ListItem button className={ classes.itemLink + listItemClasses }>
+                            {typeof route.icon === "string" ? (
                                 <Icon
-                                    className = { classNames( 
-                                        classes.itemIcon, 
-                                        whiteFontClasses, 
+                                    className = { classNames(
+                                        classes.itemIcon,
+                                        whiteFontClasses,
                                         {
                                             [ classes.itemIconRTL ]: props.rtlActive
                                         }
                                     )}
                                 >
-                                    { prop.icon }
+                                    { route.icon }
                                 </Icon>
                             ) : (
-                                <prop.icon
+                                <route.icon
                                     className={classNames(
-                                        classes.itemIcon, 
-                                        whiteFontClasses, 
+                                        classes.itemIcon,
+                                        whiteFontClasses,
                                         {
                                             [ classes.itemIconRTL ]: props.rtlActive
                                         }
@@ -93,10 +94,10 @@ export default function Sidebar (props) {
                                 />
                             )}
                             <ListItemText
-                                primary = { props.rtlActive ? prop.rtlName : prop.name }
+                                primary = { props.rtlActive ? route.rtlName : route.name }
                                 className = { classNames(
-                                    classes.itemText, 
-                                    whiteFontClasses, 
+                                    classes.itemText,
+                                    whiteFontClasses,
                                     {
                                         [ classes.itemTextRTL ]: props.rtlActive
                                     }
@@ -109,11 +110,12 @@ export default function Sidebar (props) {
             })}
         </List>
     );
+
     var brand = (
         <div className = { classes.logo }>
             <a
                 href = { window.location.origin }
-                className = { classNames( classes.logoLink, 
+                className = { classNames( classes.logoLink,
                     {
                         [ classes.logoLinkRTL ]: props.rtlActive
                     }
@@ -136,8 +138,8 @@ export default function Sidebar (props) {
                 anchor = { props.rtlActive ? "left" : "right" }
                 open = { props.open }
                 classes = {{
-                    paper: classNames( 
-                        classes.drawerPaper, 
+                    paper: classNames(
+                        classes.drawerPaper,
                         {
                             [ classes.drawerPaperRTL ]: props.rtlActive
                         }
@@ -157,20 +159,20 @@ export default function Sidebar (props) {
                     <div
                         className = { classes.background }
                         style ={{ backgroundImage: "url(" + image + ")" }}
-                    />) 
-                    : null 
+                    />)
+                    : null
                 }
             </Drawer>
         </Hidden>
 
         <Hidden smDown implementation = "css">
-            <Drawer 
+            <Drawer
                 anchor = { props.rtlActive ? "right" : "left" }
                 variant = "permanent"
                 open
                 classes = {{
                     paper: classNames(
-                        classes.drawerPaper, 
+                        classes.drawerPaper,
                         {
                             [classes.drawerPaperRTL]: props.rtlActive
                         }
@@ -181,13 +183,13 @@ export default function Sidebar (props) {
                 <div className = { classes.sidebarWrapper }>
                     { links }
                 </div>
-                {image !== undefined 
+                {image !== undefined
                     ? (
                         <div
                             className = { classes.background }
                             style ={{ backgroundImage: "url(" + image + ")" }}
                         />
-                    ) 
+                    )
                     : null
                 }
             </Drawer>
