@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'api:config:catalogLayouts' );
+//const debug = require( 'debug' )( 'api:catalogLayouts' );
 
 const {
     consoleLogger,
@@ -11,7 +11,7 @@ const {
 
 const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
 
-const log = consoleLogger( 'api-config:' );
+const log = consoleLogger( '[catalogLayouts:api]' );
 
 
 /**
@@ -77,8 +77,8 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
     };
 
     try {
-        const deleteResult = 'last' == catalogId.toLowerCase()
-            ? await CatalogLayouts.deleteLast( req.query )
+        const deleteResult = 'last' == catalogId.toLowerCase() ?
+            await CatalogLayouts.deleteLast( req.query )
             : await CatalogLayouts.deleteById( catalogId );
 
         const { statusCode } = deleteResult;

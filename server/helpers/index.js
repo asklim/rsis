@@ -4,6 +4,7 @@ const helpers = require( 'asklim' );
 
 const consoleLogger = require( './logger.js' );
 const getProcessEnvWithout = require( './get-process-env-without.js' );
+const makeResults = require( './make-results.js' );
 
 //console.log( 'helpers\n', helpers ); // {}
 
@@ -16,4 +17,5 @@ module.exports = {
     icwd,
     getProcessEnvWithout,
     consoleLogger, // переопределяет из 'asklim'
+    ... makeResults,
 };

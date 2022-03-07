@@ -1,12 +1,12 @@
-const debug = require( 'debug' )( 'registr:items-balances:' );
+//const debug = require( 'debug' )( 'api:items-balances:' );
 
 const {
     consoleLogger,
-    httpResponseCodes: HTTP,
+    /*httpResponseCodes: HTTP,
     send200Ok,
     send400BadRequest,
     send404NotFound,
-    send409Conflict,
+    send409Conflict,*/
     send500ServerError,
 } = require( '../../../helpers' );
 
@@ -31,58 +31,22 @@ const ItemsBalances = require( `../../../applogic/items-balances` );
  * filial=filialId & creator=rsisjs
  * onDate=isoDate as YYYY-MM-DD & agent=agentId
  **/
-
 module.exports = async function itemsBalancesHandler_GET (req, res) {
 
 
-    debug(
-        '[h-GET] try read document',
-        '\nI: finding items-balance`s params:', req.params,
-        '\nI: finding items-balance`s query:', req.query
-    );
+    const { documentId } = req.params;
 
-    const STATE_HANDLERS = {
-
-        [HTTP.OK]: (result) => {
-            log.info( result.logMessage );
-            return send200Ok( res, result.response );
-        },
-
-        [HTTP.BAD_REQUEST]: (result) => {
-            log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
-        },
-
-        [HTTP.NOT_FOUND]: (result) => {
-            log.warn( result.logMessage );
-            return send404NotFound( res, result.response );
-        },
-
-        [HTTP.CONFLICT]: (result) => {
-            log.warn( result.logMessage );
-            return send409Conflict( res, result.response );
-        },
-
-        [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
-            log.error( result.logMessage );
-            return send500ServerError( res, result.response );
-        }
-    };
+    documentId ?
+        log.debug( '[h-GET] try read document, req.params:', req.params )
+        : log.debug( '[h-GET] try read document, req.query:', req.query )
+    ;
 
     try {
-        const { documentId } = req.params;
-
-        const readResult = ( documentId )
-            ? await ItemsBalances.readById( documentId )
+        const readResult = ( documentId ) ?
+            await ItemsBalances.readById( documentId )
             : await ItemsBalances.readByQuery( req.query );
 
-        const { statusCode } = readResult;
-
-        if( statusCode in STATE_HANDLERS ) {
-            return STATE_HANDLERS[ statusCode ]( readResult );
-        }
-
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        req.app.getStateHandler( res, log )( readResult );
     }
     catch (err) {
         log.error( err );

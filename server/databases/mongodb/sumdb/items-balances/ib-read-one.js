@@ -1,12 +1,14 @@
-const debug = require( 'debug' )( 'registr:items-balances' );
+const debug = require( 'debug' )( 'items-balances' );
 
 const { format } = require( 'util' );
 const {
     httpResponseCodes: HTTP,
     //consoleLogger,
+    makeResult,
+    makeErrorResult,
 } = require( '../../../../helpers' );
 
-//const log = consoleLogger( 'dbs-sum:' );
+//const log = consoleLogger( '[items-balances:dbs]' );
 
 const db = require( '../../..' ).getDB( 'sum' );
 
@@ -26,37 +28,32 @@ const ModelItemsBalances = db.model( 'ItemsBalances' );
 module.exports = async function readOne (filtering) {
 
     try {
-
-        debug( '[read-one] filtering:', filtering );
+        debug( '[dbs.read-one] filtering:', filtering );
 
         const docs = await ModelItemsBalances.find( filtering );
         // .find возвращает Array, даже если 0 или 1 документ
 
         if( !docs || docs.length < 1 ) {
-            let msg = `Items-Balance not found.`;
-            return ({
-                statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg}\nw/filtering: ` + format( '%o', filtering ),
-                response: msg
-            });
+            let msg = `[storage] ItemsBalance not found.`;
+            return makeResult(
+                HTTP.NOT_FOUND,
+                `${msg}\nw/filtering: ` + format( '%o', filtering ),
+                msg
+            );
         }
 
         const doc = docs[0];
         // doc - структура MongoDB: Query? { $__, _doc, $init, isNew ...}
 
-        return ({
-            statusCode: HTTP.OK,
-            logMessage: `SUCCESS: readOne: items-balance document w/uuid:${doc.uuid}.`,
-            response: { ...doc._doc, }
-        });
+        return makeResult(
+            HTTP.OK,
+            `[storage] ItemsBalance got (${doc.uuid}).`,
+            { ...doc._doc, }
+        );
 
     }
     catch (err) {
-        return ({
-            statusCode: HTTP.INTERNAL_SERVER_ERROR,
-            logMessage: err.message,
-            response: err
-        });
+        return makeErrorResult( err );
     }
 };
 

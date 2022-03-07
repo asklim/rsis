@@ -1,6 +1,6 @@
-const debug = require( 'debug' )( 'api:config:catalogLayouts:post-action' );
-const { 
-    //icwd, 
+const debug = require( 'debug' )( 'api:catalogLayouts:post-id-action' );
+const {
+    //icwd,
     //consoleLogger,
     httpResponseCodes: HTTP,
     //send201Created,
@@ -15,7 +15,7 @@ const {
 
 
 
-/** 
+/**
  * Make action with catalog layout by uuid or ObjId
  * @fires 200 Ok     & message
  * @fires 400 Bad Request & message

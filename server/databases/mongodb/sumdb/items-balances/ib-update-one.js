@@ -1,7 +1,11 @@
-const debug = require( 'debug' )( 'registr:items-balances' );
+const debug = require( 'debug' )( 'items-balances' );
 const UUID = require( 'uuid' );
 
-const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
+const {
+    httpResponseCodes: HTTP,
+    makeResult,
+    makeErrorResult,
+} = require( '../../../../helpers' );
 
 const db = require( `../../..` ).getDB( 'sum' );
 const ModelItemsBalances = db.model( 'ItemsBalances' );
@@ -38,23 +42,18 @@ module.exports = async function updateOne (documentId, body) {
         const { uuid } = await ModelItemsBalances.
             findOneAndUpdate( filtering, { $set, $inc }, { new: true } );
 
-        debug( '[update-one] updated-doc`s uuid:', uuid );
+        debug( '[update-one] doc updated, uuid:', uuid );
 
-        return ({
-            statusCode: HTTP.OK,
-            logMessage: `SUCCESS: items-balance with uuid:${uuid} updated.`,
-            response: {
-                message: `items-balance with uuid:${uuid} updated successful.`,
+        return makeResult( HTTP.OK,
+            `[storage] ItemsBalance updated (${uuid}).`,
+            {
+                message: `ItemsBalance updated successful (${uuid}).`,
                 uuid,
             }
-        });
+        );
     }
     catch (err) {
-        return ({
-            statusCode: HTTP.INTERNAL_SERVER_ERROR,
-            logMessage: err.message,
-            response: err
-        });
+        return makeErrorResult( err );
     }
 
 };

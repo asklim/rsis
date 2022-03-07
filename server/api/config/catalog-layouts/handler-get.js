@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'api:config:catalogLayouts' );
+//const debug = require( 'debug' )( 'api:catalogLayouts' );
 
 const {
     consoleLogger,
@@ -9,11 +9,11 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const log = consoleLogger( 'api-config:' );
+const log = consoleLogger( '[catalogLayouts:api]' );
 const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
 
 
-/** 
+/**
  * Read a catalog-layout
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
@@ -26,21 +26,19 @@ const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
  * GET /api/config/catalog-layouts?queryString
  * @usage var.2 |
  * GET /api/config/catalog-layouts/?queryString
- * @usage queryString: 
+ * @usage queryString:
  * client=clientId &
  * list=listId &
  * listType=listtype &
  * type=typeId &
  * date=isoDate
  **/
-
 module.exports = async function catalogLayoutHandler_GET (req, res) {
 
 
-    console.log(
-        'I: try read config/catalog-layout document',
-        '\nI: finding catalog-layout`s params:', req.params,
-        '\nI: finding catalog-layout`s query:', req.query
+    log.info(
+        'try read config/catalog-layout document',
+        '\nreq.params:', req.params, 'req.query:', req.query
     );
 
     const STATE_HANDLERS = {
@@ -69,8 +67,8 @@ module.exports = async function catalogLayoutHandler_GET (req, res) {
     try {
         const { catalogId } = req.params;
 
-        const readResult = ( catalogId )
-            ? await CatalogLayouts.readById( catalogId )
+        const readResult = ( catalogId ) ?
+            await CatalogLayouts.readById( catalogId )
             : await CatalogLayouts.readByQuery( req.query );
 
         const { statusCode } = readResult;

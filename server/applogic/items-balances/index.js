@@ -1,8 +1,9 @@
-//const debug = require( 'debug' )( 'docs:itemsBalances' );
+//const debug = require( 'debug' )( 'logic:itemsBalances' );
 
 const {
     httpResponseCodes: HTTP,
     consoleLogger,
+    makeResult,
 } = require( '../../helpers' );
 const log = consoleLogger( '[items-balances:logic]' );
 
@@ -21,16 +22,17 @@ exports = module.exports = class ItemsBalances {
      **/
     static createOne = async function (body) {
 
-        const { agent, onDate, items } = body;
+        const {
+            agent, onDate, items
+        } = body;
 
         if( !onDate || !agent || !items  ) {
-            return ({
-                statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'items-balances.createOne: No .onDate, .agent, .items fields.',
-                response: 'Bad request, No .onDate, .agent, .items fields.'
-            });
+            return makeResult(
+                HTTP.BAD_REQUEST,
+                'items-balances.createOne: No .onDate, .agent, .items fields.',
+                'Bad request, No .onDate, .agent, .items fields.'
+            );
         }
-
         return await IStorage.createOne( body );
     };
 
@@ -52,17 +54,17 @@ exports = module.exports = class ItemsBalances {
         } = body;
 
         if( !filial || !onDate || !agent) {
-            return ({
-                statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'items-balances.update: No .filial or .onDate or .agent fields.',
-                response: 'Bad request, No .filial or .onDate or .agent fields.'
-            });
+            return makeResult(
+                HTTP.BAD_REQUEST,
+                'items-balances.update: No .filial or .onDate or .agent fields.',
+                'Bad request, No .filial or .onDate or .agent fields.'
+            );
         }
 
         const result = await ItemsBalances.
         readByQuery({ filial, agent, creator, onDate });
 
-        log.debug( 'updateOrCreate, statusCode is', result.statusCode );
+        log.debug( '[updateOrCreate] statusCode is', result.statusCode );
 
         if( result.statusCode == HTTP.OK ) {
             // response - это документ
@@ -117,11 +119,11 @@ exports = module.exports = class ItemsBalances {
         }*/
 
         if( onDate && !Date.parse( onDate )) {
-            return ({
-                statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'items-balances.readByQuery: Bad query.date specified.',
-                response: 'Bad query.date in request.'
-            });
+            return makeResult(
+                HTTP.BAD_REQUEST,
+                'items-balances.readByQuery: Bad query.date specified.',
+                'Bad query.date in request.'
+            );
         }
 
         return await IStorage.readByQuery( query );

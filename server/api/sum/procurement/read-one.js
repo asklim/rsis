@@ -20,15 +20,6 @@ const { needUnitsForPeriod } = require( 'asklim/rsis' )();
 // debug( "typeof needUnitsForPeriod", typeof needUnitsForPeriod );
 // debug( "needUnitsForPeriod", needUnitsForPeriod );
 
-const { NODE_ENV, API_SERVER } = process.env;
-const { API_SERVER_LOCAL } = require( `../../../helpers` );
-
-const apiServer = NODE_ENV === 'production'
-    ? API_SERVER                   //'https://rsis-webapp.herokuapp.com'
-    : API_SERVER_LOCAL
-;
-
-
 
 /**
  * Read a procurement dataset by the week id
@@ -47,28 +38,21 @@ const apiServer = NODE_ENV === 'production'
  * GET /api/sum/procurement/1011
  * GET /api/sum/procurement/last
  **/
-
 module.exports = function readOne (req, res) {
 
-
-    if( !req.params ) {
-        return send400BadRequest( res, 'No req.param in request.' );
-    }
-
-    console.log(
-        'procurement.readOne: Finding params: ', req.params, '\n',
-        'procurement.readOne: Finding query:  ', req.query
+    log.debug(
+        'readOne - req.params:', req.params, 'req.query:', req.query
     );
-    log.debug( `hostname is ${req.hostname}` );
 
     const { weekId } = req.params;
 
     if( !weekId ) {
-        log.warn( 'procurement.readOne: No weekId specified.' );
-        return send400BadRequest( res, 'No weekId in request.' );
+        log.warn( 'readOne: No or bad <weekId> specified.' );
+        return send400BadRequest( res, 'No or bad <:weekId> in request.' );
     }
 
-    log.debug( 'procurement.readOne: before fetch Dataset ...' );
+    const apiServer = req.app.get( 'apiServer' );
+    log.debug( `readOne: before fetch Dataset from ${apiServer} ...` );
 
     makeProcurementDataset(
         apiServer,
@@ -81,13 +65,13 @@ module.exports = function readOne (req, res) {
             }
 
             if( !data ) {
-
                 let msg = `procurement data for week ${weekId} not found.`;
                 log.warn( msg );
-
                 return send404NotFound( res, msg );
             }
-            log.info( `SUCCESS: procurement.readOne (week: ${weekId}) is Ok.` );
+
+            const count = data.length;
+            log.info( `SUCCESS: readOne (week: ${weekId}) sent ${count} items.` );
             return send200Ok( res, data );
         }
     );
@@ -101,7 +85,6 @@ module.exports = function readOne (req, res) {
  * @param {*} callback - data handler: (err, data) {}
  * @returns - callback invoke with err or data
  */
-
 function makeProcurementDataset (hostname, weekId, callback) {
 
 
@@ -157,17 +140,17 @@ function makeProcurementDataset (hostname, weekId, callback) {
             }
             const count = weekNaturalItems?.length;
             log.debug( `makeDataset, got ${count} items in week-natural data.` );
-            log.debug( 'makeDataset, convert to procurement dataset.' );
 
             //Преобразование в Procurement DataSet
-            callback( null,
-                weekNaturalItems.
+            const result = weekNaturalItems.
                 map( convertToProcurement ).
-                filter( onlyItemsXtraLongGTZero )
-                // Клиент получает только те позиции которые нужны на закупку
-                // на xtraLong период
-                // т.e. хотя-бы один элемент больше 0, => их сумма >0, а не [0,0,0]
-            );
+                filter( onlyItemsXtraLongGTZero );
+            // Клиент получает только те позиции которые нужны на закупку
+            // на xtraLong период
+            // т.e. хотя-бы один элемент больше 0, => их сумма >0, а не [0,0,0]
+
+            log.debug( 'makeDataset, converted to procurement dataset.' );
+            callback( null, result );
         }
     );
 }

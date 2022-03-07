@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'registr:items-balances' );
+//const debug = require( 'debug' )( 'items-balances' );
 
 const readOne = require( './ib-read-one' );
 
@@ -11,11 +11,13 @@ const readOne = require( './ib-read-one' );
  * - statusCode 500 Server Error & response= error object
  **/
 
-module.exports = async function readByQuery ({ agent, onDate, filial='filial1', creator='mainsm' }) {
-
+module.exports = async function readByQuery ({
+    agent,
+    onDate,
+    filial = 'filial1',
+    creator = 'mainsm'
+}) {
     let filtering = { agent, onDate, filial, creator };
-
     return await readOne( filtering );
-
 };
 

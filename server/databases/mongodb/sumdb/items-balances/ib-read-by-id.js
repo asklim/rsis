@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'registr:items-balances' );
+//const debug = require( 'debug' )( 'items-balances' );
 const UUID = require( 'uuid' );
 
 const readOne = require( './ib-read-one' );
@@ -15,7 +15,7 @@ const readOne = require( './ib-read-one' );
  * - await Storage.readById( objId );
  **/
 
-module.exports = async function readById ( reportId ) {
+module.exports = async function readById (reportId) {
 
     let filtering = UUID.validate( reportId )
         ? { uuid: reportId }

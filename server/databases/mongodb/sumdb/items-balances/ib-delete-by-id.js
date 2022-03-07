@@ -1,8 +1,12 @@
-//const debug = require( 'debug' )( 'registr:items-balances' );
+//const debug = require( 'debug' )( 'items-balances' );
 
 const { format } = require( 'util' );
 const UUID = require( 'uuid' );
-const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
+const {
+    httpResponseCodes: HTTP,
+    makeResult,
+    makeErrorResult,
+} = require( '../../../../helpers' );
 
 const db = require( '../../..' ).getDB( 'sum' );
 
@@ -27,31 +31,27 @@ module.exports = async function deleteById (documentId) {
         const doc = await ModelItemsBalances.findOne( filtering );
 
         if( !doc ) {
-            let msg = `Items-Balance not found.`;
-            return ({
-                statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg} w/filter: ` + format( '%o', filtering ),
-                response: msg
-            });
+            let msg = `[storage] ItemsBalance not found`;
+            return makeResult(
+                HTTP.NOT_FOUND,
+                `${msg} w/filter: ` + format( '%o', filtering ),
+                `${msg}.`
+            );
         }
 
         const { uuid } = await ModelItemsBalances.findOneAndDelete( filtering );
 
-        return ({
-            statusCode: HTTP.NO_CONTENT,
-            logMessage: `SUCCESS: items-balance document w/uuid:${uuid} deleted.`,
-            response: {
-                message: `items-balance document w/uuid:${uuid} deleted successful.`,
+        return makeResult(
+            HTTP.NO_CONTENT,
+            `[storage] ItemsBalance deleted (${uuid}).`,
+            {
+                message: `ItemsBalance deleted successful (${uuid}).`,
                 uuid,
             }
-        });
+        );
     }
     catch (err) {
-        return ({
-            statusCode: HTTP.INTERNAL_SERVER_ERROR,
-            logMessage: err.message,
-            response: err
-        });
+        return makeErrorResult( err );
     }
 
 };

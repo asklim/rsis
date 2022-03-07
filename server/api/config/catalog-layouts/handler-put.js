@@ -1,7 +1,7 @@
 
-//const debug = require( 'debug' )( 'api:config:catalogLayouts' );
-const { 
-    //icwd, 
+//const debug = require( 'debug' )( 'api:catalogLayouts' );
+const {
+    //icwd,
     consoleLogger,
     httpResponseCodes: HTTP,
     send200Ok,
@@ -13,10 +13,10 @@ const {
 
 const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
 
-const log = consoleLogger( 'api-config:' );
+const log = consoleLogger( '[catalogLayouts:api]' );
 
 
-/** 
+/**
  * Update catalog layout
  * @fires 200 OK     & message
  * @fires 201 Created     & message
@@ -38,7 +38,7 @@ module.exports = async function catalogLayoutsHandler_PUT (req, res) {
     log.info( `try update last config/catalog-layouts: client=${client}, list=${list}` );
 
 
-    if( !req.body 
+    if( !req.body
         || !Object.keys( req.body ).length ) {
         let result = {
             statusCode: HTTP.BAD_REQUEST,

@@ -26,13 +26,16 @@ require( './api/sum/weeknatural/router' )( router );
 
 require( './api/sum/financereport/router' )( router );
 
+require( './api/dataset/router.cjs' )( router );
+
 
 router.all(
     '/*',
     (_req, res) => {
-        res.status( 400 );
-        res.json( { message: "Bad request at api-router." });
         log.warn( `${__filename} - api-router.js - unhandled route` );
+        res.status( 400 );
+        const tstamp = (new Date).toUTCString();
+        res.json( { message: `Bad request at api-router (${tstamp}).` });
     }
 );
 

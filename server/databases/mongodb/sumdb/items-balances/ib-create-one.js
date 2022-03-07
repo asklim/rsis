@@ -1,6 +1,10 @@
-const debug = require( 'debug' )( 'registr:items-balances' );
+const debug = require( 'debug' )( 'items-balances' );
 
-const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
+const {
+    httpResponseCodes: HTTP,
+    makeResult,
+    makeErrorResult,
+} = require( '../../../../helpers' );
 
 const db = require( `../../..` ).getDB( 'sum' );
 
@@ -26,12 +30,8 @@ module.exports = async function createOne (body) {
         const finded = await ModelItemsBalances.findOne({ filial, agent, creator, onDate });
 
         if( finded ) {
-            let msg = `Conflict: items-balance ${onDate} for ${agent} from ${filial} by ${creator} exist.`;
-            return ({
-                statusCode: HTTP.CONFLICT,
-                logMessage: msg,
-                response: msg
-            });
+            let msg = `[storage] ItemsBalance ${onDate} for ${agent} from ${filial} by ${creator} exist.`;
+            return makeResult( HTTP.CONFLICT, msg, msg );
         }
 
         const report = await ModelItemsBalances.create( body );
@@ -40,21 +40,17 @@ module.exports = async function createOne (body) {
         //const uuid = '12345678-1234-1234-1234-123456789012';
         debug( `[create-one]: ${uuid}` );
 
-        return ({
-            statusCode: HTTP.CREATED,
-            logMessage: `SUCCESS: doc w/uuid:${uuid} created.`,
-            response: {
-                message: `doc w/uuid:${uuid} created successful.`,
+        return makeResult(
+            HTTP.CREATED,
+            `[storage] ItemsBalance created (${uuid}).`,
+            {
+                message: `ItemsBalance created successful (${uuid}).`,
                 uuid,
             }
-        });
+        );
     }
     catch (err) {
-        return ({
-            statusCode: HTTP.INTERNAL_SERVER_ERROR,
-            logMessage: err.message,
-            response: err
-        });
+        return makeErrorResult( err );
     }
 
 };

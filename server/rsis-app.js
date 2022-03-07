@@ -1,4 +1,7 @@
 //const debug = require( 'debug' )('rsis:app');
+
+const log = require( './helpers/' ).consoleLogger( '[rsis:app]' );
+
 const createError = require( 'http-errors' );
 const express = require( 'express' );
 const path = require( 'path' );
@@ -10,20 +13,28 @@ const morgan = require( 'morgan' );
 const passport = require( 'passport' );
 //const LocalStrategy = require( 'passport-local' ).Strategy;
 
+const { API_SERVER_LOCAL } = require( `./rsis-config.js` );
 
 const {
     NODE_ENV,
     DEV_MODE,
+    API_SERVER: API_WWW_SERVER
 } = process.env;
 
 const isProduction = NODE_ENV === 'production';
 const isHMR = DEV_MODE === 'HotModuleReplacement';
 
 
-const app = express();
+
+
+const app = require( './rsis-express' );
+
 const apiRouter = require( './api-router' );
 
-
+app.set( 'apiServer', NODE_ENV === 'production' ?
+    API_WWW_SERVER  //'https://rsis-webapp.herokuapp.com'
+    : API_SERVER_LOCAL
+);
 // view engine setup
 app.set( 'views', './views' );
 app.set( 'view engine', 'ejs' );
@@ -77,8 +88,8 @@ app.get( '*', (_req, res, next) => {
 
     const INDEX_HTML_PFN = path.resolve( __dirname, `../static/index.html` );
 
-    console.log( `server__dirname is ${__dirname}` );
-    console.log( `index.html must be ${INDEX_HTML_PFN}` );
+    log.info( `server __dirname is ${__dirname}` );
+    log.info( `sending 'index.html' from ${INDEX_HTML_PFN}` );
 
     res.sendFile( INDEX_HTML_PFN,
         (err) => {
