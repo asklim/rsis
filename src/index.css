@@ -1,10 +1,14 @@
 
+@import "assets/css/material-dashboard-react.css"; /* ?v=1.8.0";*/
+@import "assets/css/fixed-plugin.css";
+
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
-@tailwind base;
+/*** @tailwind base; ***/
 @tailwind components;
 @tailwind utilities;
 
+/*
 html {
     font-family: sans-serif;
     height: 100%;
@@ -12,16 +16,16 @@ html {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-
+*/
 body {
     /*background: rgba(0, 102, 255, 0.38);*/
-    background-color: #1f2029;
+    /*background-color: #1f2029;
     height: 100%;
 	line-height: 1.7;
     margin: 0;
     min-width: 992px !important;
     padding: 0;
-	overflow-x: hidden;
+	overflow-x: hidden;*/
     text-align: left;
     /*width: 1920px;*/
 }

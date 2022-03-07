@@ -27,7 +27,7 @@ export default function Sidebar (props) {
     const classes = useStyles();
 
     // verifies if routeName is the one active (in browser input)
-    function activeRoute (routeName) {
+    function isActiveRoute (routeName) {
         return window.location.href.includes( routeName );
     }
 
@@ -54,12 +54,12 @@ export default function Sidebar (props) {
                 }
                 else {
                     listItemClasses = classNames({
-                        [ " "+classes[color] ]: activeRoute( fullroute )
+                        [ " "+classes[color] ]: isActiveRoute( fullroute )
                     });
                 }
 
                 const whiteFontClasses = classNames({
-                    [ " "+classes.whiteFont ]: activeRoute( fullroute )
+                    [ " "+classes.whiteFont ]: isActiveRoute( fullroute )
                 });
 
                 return (
@@ -111,8 +111,8 @@ export default function Sidebar (props) {
         </List>
     );
 
-    var brand = (
-        <div className = { classes.logo }>
+    var brandLogo = (
+        <div className={ classes.logo }>
             <a
                 href = { window.location.origin }
                 className = { classNames( classes.logoLink,
@@ -122,17 +122,16 @@ export default function Sidebar (props) {
                 )}
                 target = ""//"_blank"
             >
-                <div className = { classes.logoImage }>
-                    <img src = { logo } alt = "logo" className = { classes.img } />
+                <div className={ classes.logoImage }>
+                    <img src={ logo } alt="logo" className={ classes.img } />
                 </div>
                 { logoText }
             </a>
         </div>
     );
 
-    return ( <div>
-
-        <Hidden mdUp implementation ="css">
+    return (<>
+        <Hidden mdUp implementation="css">
             <Drawer
                 variant = "temporary"
                 anchor = { props.rtlActive ? "left" : "right" }
@@ -150,7 +149,7 @@ export default function Sidebar (props) {
                     keepMounted: true // Better open performance on mobile.
                 }}
             >
-                { brand }
+                { brandLogo }
                 <div className = { classes.sidebarWrapper }>
                     { props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks /> }
                     { links }
@@ -158,14 +157,14 @@ export default function Sidebar (props) {
                 { image !== undefined ? (
                     <div
                         className = { classes.background }
-                        style ={{ backgroundImage: "url(" + image + ")" }}
+                        style = {{ backgroundImage: "url(" + image + ")" }}
                     />)
                     : null
                 }
             </Drawer>
         </Hidden>
 
-        <Hidden smDown implementation = "css">
+        <Hidden smDown implementation="css">
             <Drawer
                 anchor = { props.rtlActive ? "right" : "left" }
                 variant = "permanent"
@@ -179,7 +178,7 @@ export default function Sidebar (props) {
                     )
                 }}
             >
-                { brand }
+                { brandLogo }
                 <div className = { classes.sidebarWrapper }>
                     { links }
                 </div>
@@ -194,8 +193,7 @@ export default function Sidebar (props) {
                 }
             </Drawer>
         </Hidden>
-
-    </div> );
+    </>);
 }
 
 Sidebar.propTypes = {

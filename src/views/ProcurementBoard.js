@@ -1,4 +1,6 @@
-const debug = require( 'debug' )( 'front:views:invoice' );
+//const debug = require( 'debug' )( 'invoice:procurement' );
+import * as debugFactory from "debug";
+const debug = debugFactory( 'invoice:procurement');
 
 import React, {
     useState,
@@ -8,17 +10,20 @@ import React, {
 //import PropTypes from "prop-types";
 
 // @material-ui/core
-import { makeStyles } from "@material-ui/core/styles";
+//import { makeStyles } from "@material-ui/core/styles";
 import {
+    Card, CardContent, CardHeader,
     Checkbox,
+    Grid,
+    Paper,
     Radio,
     RadioGroup,
     FormControlLabel,
-    FormControl,
-    FormLabel,
+    //FormControl,
+    //FormLabel,
     FormGroup,
     //Icon,
-} from '@material-ui/core';
+} from '@mui/material';
 
 // @material-ui/icons
 import {
@@ -27,10 +32,10 @@ import {
     Battery80 as LongPeriod,
     BatteryFull as XtraLongPeriod,
     //AddAlert,
-    Check,
+    //Check,
     //Store, Warning, DateRange, LocalOffer,
     //Update, ArrowUpward, AccessTime,  Accessibility
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 // core components
 import GridItem from "components/m-d-r/Grid/GridItem.js";
@@ -55,22 +60,30 @@ import {
     procurementPeriods as days,
 } from "config/enum-values";
 
-import dashboardStyle from "assets/jss/m-d-r/views/dashboardStyle.js";
-import checkboxAdnRadioStyle from "assets/jss/m-d-r/checkboxAdnRadioStyle.js";
+//import dashboardStyle from "assets/jss/m-d-r/views/dashboardStyle.js";
+//import checkboxAndRadioStyle from "assets/jss/m-d-r/checkboxAndRadioStyle.js";
 
-const useStyles = makeStyles( {
-    ...dashboardStyle,
-    ...checkboxAdnRadioStyle,
-});
+//const useStyles = makeStyles( {} );
+/*    ...dashboardStyle,
+    ...checkboxAndRadioStyle,
+});*/
 
 
 export default function ProcurementBoardPage() {
 
-    const freqValues = ['last', 'avrg', 'max'];
-    const fromValues = ['ru', 'by', 'eu'];
+    const FREQ_VALUES = ['last', 'avrg', 'max'];
+    const FREQ_LAST = 0;
+    const FREQ_AVRG = 1;
+    const FREQ_MAX = 2;
 
-    const [filterByFreq, setFilterByFreq] = useState( freqValues[0] );
-    const [filterByFrom, setFilterByFrom] = useState( fromValues );
+    const SUPPLY_FROM = ['ru', 'by', 'eu'];
+    const FROM_RU = 0;
+    const FROM_BY = 1;
+    const FROM_EU = 2;
+
+    const [filterByFreq, setFilterByFreq] = useState( FREQ_VALUES[ FREQ_LAST ]);
+    const [filterByFrom, setFilterByFrom] = useState( SUPPLY_FROM );
+
     const [isLoaded, setIsLoaded] = useState( false );
     const [isDataLoadingError, setIsDataLoadingError] = useState( false );
     const [serverDataset, setServerDataset] = useState( [] );        // Array of Hash
@@ -98,19 +111,20 @@ export default function ProcurementBoardPage() {
     };
 
 
-    const handleFilterByFreqChange = (event /*, value*/) => {
+    const handleFilterByFreqChange = (event) => {
 
         const freq = event.target.value;
-        //console.log("filter Freq: ", freq, value ); // is Equal
-        updateViewingLists( freq, null );
+        updateViewingLists( freq, undefined );
         setFilterByFreq( freq );
+        debug( 'handle_FREQ_filterChange:', freq );
     };
 
 
     const handleFromFilterClick = (from) =>
 
-        (/*event,oldValue?*/) => {
+        (event) => {
             const currentIndex = filterByFrom.indexOf( from );
+            debug( 'event.target', event.target.checked, currentIndex, from );
             const newChecked = [ ...filterByFrom ];
 
             if( currentIndex === -1 ) {
@@ -118,64 +132,55 @@ export default function ProcurementBoardPage() {
             } else {
                 newChecked.splice( currentIndex, 1 );
             }
-            updateViewingLists( null, newChecked );
+            debug( 'handle_FROM_filterClick:', newChecked );
+            updateViewingLists( undefined, newChecked );
             setFilterByFrom( newChecked );
-            //console.log('FromFilter Click:', newChecked);
         };
-    /*
-      formatValue = ( out, curr ) => {
-        return out + '   ' + curr.toString();
-      }
-      formatUnits = (needUnits) => {
-        return needUnits.reduce(this.formatValue, '');
-      } */
 
 
     const isFromIntersected = (item, fromFilter) => {
 
-        const itemFroms = item.from.split( ',' ).map( x => x.toLowerCase() );
-        //console.log('isIntersected : ', itemFroms);
+        const itemFroms = item.from.
+            split( ',' ).
+            map( x => x.trim().toLowerCase() );
+        //debug( 'isIntersected, itemFroms ', itemFroms );
         const result = fromFilter.filter( x => itemFroms.includes( x ));
         return result.length !== 0;
     };
 
 
-    const serverDatasetFilter = (period, freqId, fromFilter) => {
+    const serverDatasetFilter = (period, freq, fromFilter) => {
+        const freqId = FREQ_VALUES.indexOf( freq ); // 0|1|2
         return (
-            (item) => item[ period ][ freqId ] > 0 &&
-          isFromIntersected( item, fromFilter )
+            (item) => item[ period ][ freqId ] > 0
+                && isFromIntersected( item, fromFilter )
         );
     };
 
 
-    const convertToViewList = (period, freq, from) => {
-
-        const freqId = freqValues.indexOf( freq ); // 0|1|2
-        const filtering = serverDatasetFilter( period, freqId, from );
-        const viewList = serverDataset
-        .filter( filtering ) // item => item[period][freqId] > 0 )
-        .map( (item, key) => {
-            return [
-                ( key+1 ).toString(),
-                item[ period ][0].toString(), // last
-                item[ period ][1].toString(), // average
-                item[ period ][2].toString(), // max
-                item.name
-            ];
-        });
-        //console.log("convertToView : ", freqId, hashs.length, viewList.length );
-        const p = Promise.resolve( viewList );
-        //console.log( "convertToView : ", p );
-        return p;
-    };
+    const convertToViewList = (period, freq, from) => new Promise(
+        (resolve) => {
+            const filtering = serverDatasetFilter( period, freq, from );
+            const viewList = serverDataset.
+                filter( filtering ).
+                map( (item, key) => {
+                    return [
+                        ( key+1 ).toString(),
+                        item[ period ][FREQ_LAST].toString(),
+                        item[ period ][FREQ_AVRG].toString(),
+                        item[ period ][FREQ_MAX].toString(),
+                        item.name
+                    ];
+                });
+            //debug( 'convertToView:', freqId, viewList.length );
+            resolve( viewList );
+        })
+    ;
 
 
-    const updateViewingLists = (freq, from) => {
+    const updateViewingLists = (freq=filterByFreq, from=filterByFrom) => {
 
-        //console.log("updateViewLists freq, from ", freq, from);
-        if( !freq ) { freq = filterByFreq; }
-        if( !from ) { from = filterByFrom; }
-        //console.log("updateViewLists oldState ", oldState);
+        debug( '!!! updateViewLists freq=', freq, 'from=', from );
         Promise.all([
             convertToViewList( 'sp', freq, from ),
             convertToViewList( 'mp', freq, from ),
@@ -187,7 +192,7 @@ export default function ProcurementBoardPage() {
             setMiddlePeriod( lists[1] );
             setLongPeriod( lists[2] );
             setXtraLongPeriod( lists[3] );
-        //console.log( "updateViewLists ", lists.map( item => item.length ));
+            debug( 'updateViewingLists', lists.map( l => l.length ));
         }).catch( (err) => {
             console.log( 'Error convert to ViewList', err );
         });
@@ -200,16 +205,15 @@ export default function ProcurementBoardPage() {
         const { origin } = window.location;
         const route = `${origin}/api/sum/procurement/last`;
 
-        console.log( 'fetchLists window.location.origin: ', origin );
-        console.log( 'fetchLists route:', route );
-        debug( 'fetchLists route:', route );  // не работает !!! ???
+        //debug( 'fetchLists window.location.origin: ', origin );
+        console.log( 'fetch Lists from:', route );
 
         let headers = {
             mode: "cors",
             credentials: "omit",
-            "Content-Type" : "application/json",
-            "Cache-Control" : 'no-cache, no-store',
-            charset : "utf-8"
+            "Content-Type": "application/json",
+            "Cache-Control": 'no-cache, no-store',
+            charset: "utf-8"
         };
 
         fetch( route, { headers }).
@@ -222,26 +226,24 @@ export default function ProcurementBoardPage() {
             }
             return response.json();
         }).  // '[{}, ..., {}]'
-        then( hashs => {
-            //console.log('fetch Lists hash Length: ', hashs.length);
+        then( (hashs) => {
+            console.log( 'fetch Lists has length:', hashs.length );
             //is Ok: 444
-            //return Promise.resolve(
             setServerDataset( hashs );
-            //console.log(filterByFreq, filterByFrom);
             setIsLoaded( true );
             setIsDataLoadingError( false );
         }).
         catch( (err) => {
             setIsLoaded( false );
             setIsDataLoadingError( true );
-            console.log( 'ProcBoard.fetch catch ', err );
-            debug( 'fetch in catch.' );
+            console.log( 'ProcurementBoard.fetchLists catch', err );
         });
     };
 
     //Эффект применяется после рендеринга и только 1 раз
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect( () => fetchLists(), []);
+    // esl--int-disable-next-line react-hooks/exhaustive-deps
+    useEffect( fetchLists, [] );
+    //useEffect( () => fetchLists(), [] );
 
     useEffect(
         () => {
@@ -252,9 +254,9 @@ export default function ProcurementBoardPage() {
     );
 
     const isFilterByFromChecked = (index) =>
-        filterByFrom.includes( fromValues[ index ] );
+        filterByFrom.includes( SUPPLY_FROM[ index ]);
 
-    const classes = useStyles();
+    //const classes = useStyles();
 
     if( isDataLoadingError ) {
         return (
@@ -266,85 +268,88 @@ export default function ProcurementBoardPage() {
 
     return (<>
         <GridContainer>
-            <GridItem xs={5} sm={4} md={3} lg={2}>
-                <FormControl
-                    component = "fieldset"
-                    className = {classes.formControl}
-                >
-                    <FormLabel component="legend">По продажам</FormLabel>
-                    <RadioGroup
-                        aria-label = "SelectOnFreq"
-                        name = "FilterByFreq"
-                        className = {classes.group}
-                        value = {filterByFreq}
-                        onChange = {handleFilterByFreqChange}
-                    >
-                        <FormControlLabel
-                            value = {freqValues[0]}
-                            control = {<Radio />}
-                            label = "Last"
-                        />
-                        <FormControlLabel
-                            value = {freqValues[1]}
-                            control = {<Radio />}
-                            label = "Средние"
-                        />
-                        <FormControlLabel
-                            value = {freqValues[2]}
-                            control = {<Radio />}
-                            label = "Maximal"
-                        />
-                    </RadioGroup>
-                </FormControl>
-            </GridItem>
-            <GridItem xs={5} sm={4} md={3} lg={2}>
-                <FormControl
-                    component = "fieldset"
-                    className = {classes.formControl}
-                >
-                    <FormLabel component="legend">Откуда</FormLabel>
-                    <FormGroup>
-                        <FormControlLabel
-                            control = {
-                                <Checkbox
-                                    checked = {isFilterByFromChecked(0)}
-                                    tabIndex = {-1}
-                                    onClick = {handleFromFilterClick( fromValues[0] )}
-                                    checkedIcon = {<Check className = {classes.checkedIcon}/>}
-                                    icon = {<Check className = {classes.uncheckedIcon}/>}
-                                    classes = {{ checked: classes.checked }}
-                                />
-                            }
-                            label="RU"
-                        />
-                        <FormControlLabel
-                            control = {
-                                <Checkbox
-                                    checked = {isFilterByFromChecked(1)}
-                                    tabIndex = {-1}
-                                    onClick = {handleFromFilterClick( fromValues[1] )}
-                                    checkedIcon = {<Check className={classes.checkedIcon}/>}
-                                    icon = {<Check className={classes.uncheckedIcon}/>}
-                                    classes = {{ checked: classes.checked }}
-                                />
-                            }
-                            label = "BY"
-                        />
-                        <FormControlLabel
-                            control = {
-                                <Checkbox
-                                    checked = {isFilterByFromChecked(2)}
-                                    tabIndex = {-1}
-                                    onClick = {handleFromFilterClick( fromValues[2] )}
-                                    checkedIcon = {<Check className={classes.checkedIcon}/>}
-                                    icon = {<Check className={classes.uncheckedIcon}/>}
-                                    classes = {{ checked: classes.checked }}
-                                />
-                            }
-                            label="EU"
-                        />
-                    </FormGroup>
-                </FormControl>
+            <GridItem xs={12} sm={10} md={8} lg={6}>
+                <Paper elevation={1}>
+                    <Grid container>
+                        <Grid item xs={4}><Card>
+                            <CardHeader
+                                title = "По продажам"
+                                subheader = "выбор по частоте"
+                            />
+                            <CardContent>
+                                <RadioGroup
+                                    aria-labelledby = "select-items-by-sales-freq"
+                                    name = "filter-by-sales-frequency"
+                                    value = {filterByFreq}
+                                    onChange = {handleFilterByFreqChange}
+                                >
+                                    <FormControlLabel
+                                        value = {FREQ_VALUES[ FREQ_LAST ]}
+                                        control = {<Radio
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                        label = "Last"
+                                    />
+                                    <FormControlLabel
+                                        value = {FREQ_VALUES[ FREQ_AVRG ]}
+                                        control = {<Radio
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                        label = "Средние"
+                                    />
+                                    <FormControlLabel
+                                        value = {FREQ_VALUES[ FREQ_MAX ]}
+                                        control = {<Radio
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                        label = "Maximal"
+                                    />
+                                </RadioGroup>
+                            </CardContent>
+                        </Card></Grid>
+                        <Grid item xs={4}><Card>
+                            <CardHeader
+                                title = "Откуда"
+                                subheader = "выбор по источнику"
+                            />
+                            <CardContent>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        label = "RU"
+                                        control = {<Checkbox
+                                            checked = {isFilterByFromChecked( FROM_RU )}
+                                            onChange = {handleFromFilterClick( "ru" )}
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                    />
+                                    <FormControlLabel
+                                        label = "BY"
+                                        control = {<Checkbox
+                                            checked = {isFilterByFromChecked( FROM_BY )}
+                                            onChange = {handleFromFilterClick( "by" )}
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                    />
+                                    <FormControlLabel
+                                        label = "EU"
+                                        control = {<Checkbox
+                                            checked = {isFilterByFromChecked( FROM_EU )}
+                                            tabIndex = {-1}
+                                            onChange = {handleFromFilterClick( "eu" )}
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                    />
+                                </FormGroup>
+                            </CardContent>
+                        </Card></Grid>
+                        <Grid item xs={4}><Card>
+                            <CardHeader
+                                title = "Дней"
+                                subheader = "how many sales days"
+                            />
+                        </Card></Grid>
+                    </Grid>
+                </Paper>
             </GridItem>
         </GridContainer>
 

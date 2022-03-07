@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types*/
 import React from "react";
 //import PropTypes from "prop-types";
-import { Routes, Route } from "react-router-dom";
+import {
+    //Routes, Route,
+    Outlet,
+} from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -21,29 +24,11 @@ import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png"; // must be an image
 
 import Sidebar from "components/rsis/Sidebar/Sidebar.js";
-import Whoops404 from "components/misc/Whoops404.js";
+//import Whoops404 from "components/misc/Whoops404.js";
 import routes from "./invoice-routes.js";
 
 
 let ps;
-
-const switchRoutes = (
-    <Routes>
-        {routes.map( (route, key) => {
-            if( route.layout === "/invoice" ) {
-                return (
-                    <Route
-                        path={/*prop.layout +*/ route.path}
-                        element /*component*/ ={<route.component />}
-                        key={key}
-                    />
-                );
-            }
-            return null;
-        })}
-        <Route path="*" element={<Whoops404 />} />
-    </Routes>
-);
 
 const useStyles = makeStyles( styles );
 
@@ -131,7 +116,7 @@ export default function InvoiceBoard({ ...rest })
 
                 <div className={classes.content}>
                     <div className={classes.container}>
-                        {switchRoutes}
+                        <Outlet />
                     </div>
                 </div>
 

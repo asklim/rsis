@@ -1,5 +1,8 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import {
+    //Routes, Route,
+    Outlet,
+} from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -13,8 +16,6 @@ import Navbar from "components/m-d-r/Navbars/Navbar.js";
 import Footer from "components/m-d-r/Footer/Footer.js";
 import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
 
-import routes from "./admin-routes.js";
-import DashboardPage from "views/m-d-r/Dashboard.js";
 
 import Sidebar from "components/rsis/Sidebar/Sidebar.js";
 import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
@@ -24,23 +25,7 @@ import logo from "assets/img/reactlogo.png";
 
 let ps;
 
-const switchRoutes = (
-    <Routes>
-        {routes.map( (route, key) => {
-            if( route.layout === "/admin" ) {
-                return (
-                    <Route
-                        path = {/*prop.layout +*/ route.path}
-                        element /*component*/ = {<route.component />}
-                        key = {key}
-                    />
-                );
-            }
-            return null;
-        })}
-        <Route path="" render={<DashboardPage />} />
-    </Routes>
-);
+import routes from "./admin-routes.js";
 
 const useStyles = makeStyles( styles );
 
@@ -139,10 +124,16 @@ export default function Admin ({ ...rest }) {
                 {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
                 {getRoute() ? (
                     <div className = {classes.content}>
-                        <div className = {classes.container}>{switchRoutes}</div>
+                        <div className = {classes.container}>
+                            <Outlet />
+                            {/*switchRoutes*/}
+                        </div>
                     </div>
                 ) : (
-                    <div className = {classes.map}>{switchRoutes}</div>
+                    <div className = {classes.map}>
+                        <Outlet />
+                        {/*switchRoutes*/}
+                    </div>
                 )}
                 {getRoute() ? <Footer /> : null}
                 <FixedPlugin

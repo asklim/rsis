@@ -1,22 +1,27 @@
 //import "react-hot-loader";
 
-import React from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
+
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import App from 'components/rsis/App/App';
 
-
-import "assets/css/material-dashboard-react.css"; //?v=1.8.0";
-import "assets/css/fixed-plugin.css";
+import "index.css";
 
 //console.log( 'running ReactApp' );
 
-console.log( "I: before rendering react-app." );
+console.log( "[INFO] before rendering react-app." );
 
-ReactDOM.render( 
-    <App />,
+const theme = createTheme({});
+
+ReactDOM.render(
+    <ThemeProvider theme={theme}>
+        <App />
+    </ThemeProvider>,
     document.getElementById( "react-app" )
 );
 
 //console.log( React );
-console.log( ReactDOM );
+localStorage.debug = 'invoice:*';
+console.log( theme /*ReactDOM*/ );
