@@ -1,3 +1,5 @@
+console.time( 'build time is' );
+
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
@@ -69,79 +71,80 @@ console.log( 'before checkBrowsers, isInteractive', isInteractive );
 // browserslist defaults.
 const { checkBrowsers } = require( 'react-dev-utils/browsersHelper' );
 
-checkBrowsers( paths.appPath, isInteractive )
-    .then(() => {
+checkBrowsers( paths.appPath, isInteractive ).
+    then(() => {
         // First, read the current file sizes in build directory.
         // This lets us display how much they changed later.
         return measureFileSizesBeforeBuild( paths.appBuild );
-    })
-    .then( 
-        (previousFileSizes) => {
-            // Start the webpack build
-            return build( previousFileSizes );
-        })
-    .then(
-        ({ stats, previousFileSizes, warnings }) => 
-        {
-            if( warnings.length ) {
-                console.log( chalk.yellow( 'Compiled with warnings.\n' ));
-                console.log( warnings.join( '\n\n' ));
-                console.log(
-                    '\nSearch for the ' +
-                    chalk.underline( chalk.yellow( 'keywords' )) +
-                    ' to learn more about each warning.'
-                );
-                console.log(
-                    'To ignore, add ' +
-                    chalk.cyan( '// eslint-disable-next-line' ) +
-                    ' to the line before.\n'
-                );
-            } 
-            else {
-                console.log( chalk.green( 'Compiled successfully.\n' ));
-            }
-
-            console.log( 'File sizes after gzip:\n' );
-            printFileSizesAfterBuild(
-                stats,
-                previousFileSizes,
-                paths.appBuild,
-                WARN_AFTER_BUNDLE_GZIP_SIZE,
-                WARN_AFTER_CHUNK_GZIP_SIZE
+    }).
+    then( (previousFileSizes) => {
+        // Start the webpack build
+        return build( previousFileSizes );
+    }).
+    then( ({ stats, previousFileSizes, warnings }) => {
+        if(
+            warnings.length
+        ){
+            console.log( chalk.yellow( 'Compiled with warnings.\n' ));
+            console.log( warnings.join( '\n\n' ));
+            console.log(
+                '\nSearch for the ' +
+                chalk.underline( chalk.yellow( 'keywords' )) +
+                ' to learn more about each warning.'
             );
-            console.log();
-
-            const appPackage = require( paths.appPackageJson );
-            const publicUrl = paths.publicUrl;
-            const publicPath = webpackConfiguration.output.publicPath;
-            const buildFolder = path.relative( process.cwd(), paths.appBuild );
-            printHostingInstructions(
-                appPackage,
-                publicUrl,
-                publicPath,
-                buildFolder,
+            console.log(
+                'To ignore, add ' +
+                chalk.cyan( '// eslint-disable-next-line' ) +
+                ' to the line before.\n'
             );
-        },
-        err => {
-            const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
-            if( tscCompileOnError ) {
-                console.log( chalk.yellow(
-                    'Compiled with the following type errors ' +
-                    '(you may want to check these before deploying your app):\n'
-                ));
-                printBuildError( err );
-                process.exit(1);
-            } 
-            else {
-                console.log( chalk.red( 'Failed to compile.\n' ));
-                printBuildError( err );
-                process.exit(1);
-            }
         }
-    )
-    .catch( err => {
+        else {
+            console.log( chalk.green( 'Compiled successfully.\n' ));
+        }
+
+        console.log( 'File sizes after gzip:\n' );
+        printFileSizesAfterBuild(
+            stats,
+            previousFileSizes,
+            paths.appBuild,
+            WARN_AFTER_BUNDLE_GZIP_SIZE,
+            WARN_AFTER_CHUNK_GZIP_SIZE
+        );
+        console.log();
+
+        const appPackage = require( paths.appPackageJson );
+        const publicUrl = paths.publicUrl;
+        const publicPath = webpackConfiguration.output.publicPath;
+        const buildFolder = path.relative( process.cwd(), paths.appBuild );
+        printHostingInstructions(
+            appPackage,
+            publicUrl,
+            publicPath,
+            buildFolder,
+        );
+    },
+    (err) => {
+        const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
+        if( tscCompileOnError ) {
+            console.log( chalk.yellow(
+                'Compiled with the following type errors ' +
+                '(you may want to check these before deploying your app):\n'
+            ));
+            printBuildError( err );
+            process.exit(1);
+        }
+        else {
+            console.log( chalk.red( 'Failed to compile.\n' ));
+            printBuildError( err );
+            process.exit(1);
+        }
+    }).
+    then( () => {
+        console.timeEnd( 'build time is' );
+    }).
+    catch( (err) => {
         if( err && err.message ) {
-            console.log(err.message);
+            console.log( err.message );
         }
         process.exit(1);
     });
@@ -152,16 +155,15 @@ checkBrowsers( paths.appPath, isInteractive )
 
 // Create the webpack build and print the deployment instructions.
 //
-function build (previousFileSizes) 
-{
-    console.log( `Creating an ${ENV_MODE} build...` );
+function build (previousFileSizes) {
 
-    return new Promise( (resolve, reject) => 
-    {
-        compiler.run( (err, stats) => 
-        {
+    console.log( `Creating an ${ENV_MODE} build...` );
+    return new Promise( (resolve, reject) => {
+
+        compiler.run( (err, stats) => {
+
             let messages;
-            
+
             if( err ) {
                 if( !err.message ) {
                     return reject( err );
@@ -170,22 +172,19 @@ function build (previousFileSizes)
                     errors: [err.message],
                     warnings: [],
                 });
-            } 
+            }
             else {
-                let statistics = stats.toJson(
-                    'errors-warnings'
-                );
+                let statistics = stats.toJson( 'errors-warnings' );
+
                 console.log( 'Stats.toJson:\n', statistics );
                 //Replaced on helper.formatWebpack5Messages
                 messages = formatWebpackMessages( statistics );
             }
 
-            if( messages.errors.length ) {
+            if( messages?.errors?.length ) {
                 // Only keep the first error. Others are often indicative
                 // of the same problem, but confuse the reader with noise.
-                if( messages.errors.length > 1 ) {
-                    messages.errors.length = 1;
-                }
+                messages.errors.length = 1;
                 return reject( new Error( messages.errors.join( '\n\n' )));
             }
 
@@ -194,7 +193,7 @@ function build (previousFileSizes)
                 previousFileSizes,
                 warnings: messages.warnings,
             };
-            
+
             /*if( writeStatsJson ) {
                 // ЗАВИСАЕТ ПРИ ЗАПИСИ.
                 return bfj
