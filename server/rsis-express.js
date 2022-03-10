@@ -1,4 +1,4 @@
-
+// const debug = require( 'debug' )('rsis:express');
 const express = require( 'express' );
 
 const {
@@ -50,8 +50,18 @@ app.getStateHandler = function getStateHandler(
         },
 
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
-            logger.error( result.logMessage );
-            return send500ServerError( res, result.response );
+            const { logMessage, response } = result;
+            // debug( 'typeof response is', typeof result.response );// 'object'
+            // debug( Object.keys( result.response )); // []
+            // debug( 'response instanceof Error', response instanceof Error ); //true
+            // debug( response );
+            logger.error( logMessage );
+            // debug( 'err.name:', err.name );
+            // debug( 'err.message:', err.message );
+            // debug( 'err.toString():', err.toString() );
+            const len = response?.stack.split('\n').length;
+            logger.debug( `err.stack (${len}):`, response?.stack );
+            return send500ServerError( res, response );
         }
     };
 

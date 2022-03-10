@@ -118,7 +118,8 @@ const itemsBalance = new Schema({
         type: Schema.Types.String,
         required: true,
     }
-}, {
+},
+{
     timestamps: {}
 });
 

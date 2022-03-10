@@ -1,18 +1,50 @@
-/* eslint-disable no-unused-vars */
 
-const ERR_MSG = "items-balances storage class: method not implemented.";
+const UUID = require( 'uuid' );
 
-const IA_ItemsBalances = require("../../../../applogic/items-balances/storage.interface-abstract");
+const injectedCreateOne = require( './ib-create-one.js' );
+const injectedReadOne = require( './ib-read-one.js' );
+const injectedUpdateOne = require( './ib-update-one' );
+const injectedDeleteById = require( './ib-delete-by-id' );
+
+const IA_ItemsBalances = require('../../../../applogic/items-balances/storage.interface-abstract');
+
+const db = require( '../../..' ).getDB( 'sum' );
+let MongoModel = db.model( 'ItemsBalances' );
 
 module.exports = class IItemsBalances extends IA_ItemsBalances {
 
-    static createOne = require( './ib-create-one' );
+    static setModel (modelInterface=MongoModel) {
+        MongoModel = modelInterface;
+    }
+    static getModel () {
+        return MongoModel;
+    }
 
-    static readById = require( './ib-read-by-id' );
-    static readByQuery = require( './ib-read-by-query' );
+    static createOne = injectedCreateOne( IItemsBalances );
 
-    static updateOne = require( './ib-update-one' );
+    static readOne = injectedReadOne( IItemsBalances );
 
-    static deleteById = require( './ib-delete-by-id' );
+    static async readById (reportId) {
+
+        let filtering = UUID.validate( reportId )
+            ? { uuid: reportId }
+            : { _id: reportId };
+
+        return await IItemsBalances.readOne( filtering );
+    }
+
+    static async readByQuery ({
+        agent,
+        onDate,
+        filial = 'filial1',
+        creator = 'mainsm'
+    }) {
+        let filtering = { agent, onDate, filial, creator };
+        return await IItemsBalances.readOne( filtering );
+    }
+
+    static updateOne = injectedUpdateOne( IItemsBalances );
+
+    static deleteById = injectedDeleteById( IItemsBalances );
 
 };

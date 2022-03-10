@@ -20,7 +20,7 @@
         "hmr:start": "DEV_MODE=HotModuleReplacement npm run start",
         "hmr:debug": "DEV_MODE=HotModuleReplacement npm run debug",
         "hmr:all": "DEV_MODE=HotModuleReplacement npm run debug:all",
-        "debug": "DEBUG=rsis:*,api:*,dbs:*,registr:*,reports:* npm run start",
+        "debug": "DEBUG=rsis:*,api:*,dbg:*,dbs:*,registr:*,reports:* npm run start",
         "debugger": "git branch && DEBUG=* npm run start",
         "debug:all": "DEBUG=* npm run start",
         "/4 - webpack builder/": "     *** for 'static' build development ***",

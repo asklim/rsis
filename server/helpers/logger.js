@@ -19,7 +19,9 @@ module.exports = function createLogger (ticker = '') {
         return `${datefix}${level}${tickerfix}`;
     }
 
-    const color = '\u001B[0;33;40m';
+    const yellowDark = '\u001B[0;33;40m'; // dark-yellow
+    const yellowBright = '\u001B[1;33;40m'; // bright-yellow
+    const msgColor = yellowDark;
     const end = '\u001B[0m';
 
     function debugPrefix (level) {
@@ -27,12 +29,12 @@ module.exports = function createLogger (ticker = '') {
         const datefix = isHeroku || isSystemdService ? ''
             : `[${(new Date()).toISOString()}]`
         ;
-        const color = '\u001B[1;33;40m';
-        return `${color}${level}${end} ${datefix}${color}${tickerfix}${end}`;
+        const color = yellowBright;
+        return `${color}${level}${end} ${datefix}${msgColor}${tickerfix}${end}`;
     }
 
 
-    const debug = (...args) => log.debug( debugPrefix( 'DEBUG' ), color, ...args, end );
+    const debug = (...args) => log.debug( debugPrefix( 'DEBUG' )+msgColor, ...args, end );
 
     const info = (...args) => log.info( logPrefix( 'INF' ), ...args );
 

@@ -7,11 +7,15 @@ const {
 } = require( '../../helpers' );
 const log = consoleLogger( '[items-balances:logic]' );
 
-//const IStorage = require( './storage.interface-abstract' );
-const IStorage = require( '../../databases/mongodb/sumdb/items-balances/ib.interface' );
-
+const MongoStorage = require( '../../databases/mongodb/sumdb/items-balances/ib.interface' );
+//const AbstractStorage = require( './storage.interface-abstract' );
+let IStorage = MongoStorage;
 
 exports = module.exports = class ItemsBalances {
+
+    static setStorage = function (storageInterface=MongoStorage) {
+        IStorage = storageInterface;
+    };
 
     /**
      * Create a new items balance doc
@@ -29,7 +33,7 @@ exports = module.exports = class ItemsBalances {
         if( !onDate || !agent || !items  ) {
             return makeResult(
                 HTTP.BAD_REQUEST,
-                'items-balances.createOne: No .onDate, .agent, .items fields.',
+                'ItemsBalances.createOne: No .onDate, .agent, .items fields.',
                 'Bad request, No .onDate, .agent, .items fields.'
             );
         }
@@ -56,7 +60,7 @@ exports = module.exports = class ItemsBalances {
         if( !filial || !onDate || !agent) {
             return makeResult(
                 HTTP.BAD_REQUEST,
-                'items-balances.update: No .filial or .onDate or .agent fields.',
+                'ItemsBalances.update: No .filial or .onDate or .agent fields.',
                 'Bad request, No .filial or .onDate or .agent fields.'
             );
         }
@@ -121,7 +125,7 @@ exports = module.exports = class ItemsBalances {
         if( onDate && !Date.parse( onDate )) {
             return makeResult(
                 HTTP.BAD_REQUEST,
-                'items-balances.readByQuery: Bad query.date specified.',
+                'ItemsBalances.readByQuery: Bad query.date specified.',
                 'Bad query.date in request.'
             );
         }
