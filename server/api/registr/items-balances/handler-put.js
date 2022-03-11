@@ -1,16 +1,11 @@
-const debug = require( 'debug' )( 'registr:items-balances' );
+//const debug = require( 'debug' )( '-dbg:items-balances:api' );
 const {
-    //icwd,
     consoleLogger,
-    httpResponseCodes: HTTP,
-    send200Ok,
-    send201Created,
     send400BadRequest,
-    //send409Conflict,
     send500ServerError,
 } = require( '../../../helpers' );
 
-const ItemsBalances = require( `../../../applogic/items-balances` );
+const ItemsBalances = require( `../../../applogic/items-balances/` );
 
 const log = consoleLogger( '[items-balances:api]' );
 
@@ -22,14 +17,10 @@ const log = consoleLogger( '[items-balances:api]' );
  * @fires 400 Bad Request & message
  * @fires 500 Server Error & error object
  * @returns {} undefined
- * @usage
- * PUT /api/registr/items-balances
+ * @usage PUT /api/registr/items-balances
  */
-
 module.exports = async function itemsBalancesHandler_PUT (req, res) {
 
-
-    debug( `[h-PUT] start, documentId is "${req.params?.documentId}"` );
     let filial, onDate;
     const agent = req.body?.agent;
 
@@ -37,56 +28,22 @@ module.exports = async function itemsBalancesHandler_PUT (req, res) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    log.info( `try update for filial=${filial}, onDate=${onDate}, agent=${agent}` );
+    const { documentId } = req.params;
 
+    log.debug( '[h-PUT] ' + documentId ?
+        `try update, documentId is '${documentId}'`
+        : `try update for filial=${filial}, onDate=${onDate}, agent=${agent}`
+    );
 
-    if( !req.body
-        || !Object.keys( req.body ).length ) {
-        let result = {
-            statusCode: HTTP.BAD_REQUEST,
-            logMessage: 'items-balances.PUT: req.body is empty.',
-            response: 'Bad request, req.body is empty.'
-        };
-        log.warn( result.logMessage );
-        return send400BadRequest( res, result.response );
+    if( !req.body || !Object.keys( req.body ).length ) {
+        log.warn( '[h-PUT] req.body is empty.' );
+        return send400BadRequest( res, 'Bad request, req.body is empty.' );
     }
-
-
-    const STATE_HANDLERS = {
-
-        [HTTP.OK]: (result) => {
-            log.info( result.logMessage );
-            return send200Ok( res, result.response );
-        },
-
-        [HTTP.CREATED]: (result) => {
-            log.info( result.logMessage );
-            return send201Created( res, result.response );
-        },
-
-        [HTTP.BAD_REQUEST]: (result) => {
-            log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
-        },
-
-        [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
-            log.error( result.logMessage );
-            debug( '[h-PUT] result.response', result.response ); //
-
-            return send500ServerError( res, result.logMessage /*.response*/ );
-            // Когда .logMessage - На клиенте более информативное сообщение
-        }
-    };
 
     try {
         const updateResult = await ItemsBalances.updateOrCreate( req.body );
-        const { statusCode } = updateResult;
 
-        if( statusCode in STATE_HANDLERS ) {
-            return STATE_HANDLERS[ statusCode ]( updateResult );
-        }
-
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        req.app.getStateHandler( res, log )( updateResult );
     }
     catch (err) {
         log.error( err );

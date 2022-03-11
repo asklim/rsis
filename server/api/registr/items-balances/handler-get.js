@@ -1,17 +1,12 @@
-//const debug = require( 'debug' )( 'api:items-balances:' );
+//const debug = require( 'debug' )( '-dbg:items-balances:api' );
 
 const {
     consoleLogger,
-    /*httpResponseCodes: HTTP,
-    send200Ok,
-    send400BadRequest,
-    send404NotFound,
-    send409Conflict,*/
     send500ServerError,
-} = require( '../../../helpers' );
+} = require( '../../../helpers/' );
 
 const log = consoleLogger( '[items-balances:api]' );
-const ItemsBalances = require( `../../../applogic/items-balances` );
+const ItemsBalances = require( `../../../applogic/items-balances/` );
 
 
 /**
@@ -21,18 +16,14 @@ const ItemsBalances = require( `../../../applogic/items-balances` );
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
  * @returns {} undefined
- * @usage var.1 |
- * GET /api/registr/items-balances/:documentId
- * @usage var.2 |
- * GET /api/registr/items-balances?queryString
- * @usage var.2 |
- * GET /api/registr/items-balances/?queryString
+ * @usage GET /api/registr/items-balances/:documentId
+ * @usage GET /api/registr/items-balances?queryString
+ * @usage GET /api/registr/items-balances/?queryString
  * @usage queryString:
  * filial=filialId & creator=rsisjs
  * onDate=isoDate as YYYY-MM-DD & agent=agentId
  **/
 module.exports = async function itemsBalancesHandler_GET (req, res) {
-
 
     const { documentId } = req.params;
 

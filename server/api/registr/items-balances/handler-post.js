@@ -1,16 +1,12 @@
-const debug = require( 'debug' )( 'registr:items-balances:' );
+//const debug = require( 'debug' )( '-dbg:items-balances:api' );
 const {
     consoleLogger,
-    httpResponseCodes: HTTP,
-    send201Created,
     send400BadRequest,
-    send409Conflict,
     send500ServerError,
-} = require( '../../../helpers' );
-
-const ItemsBalances = require( `../../../applogic/items-balances` );
+} = require( '../../../helpers/' );
 
 const log = consoleLogger( '[items-balances:api]' );
+const ItemsBalances = require( `../../../applogic/items-balances/` );
 
 
 /**
@@ -23,7 +19,6 @@ const log = consoleLogger( '[items-balances:api]' );
  * @usage
  * POST /api/registr/items-balances
  */
-
 module.exports = async function itemBalancesHandler_POST (req, res) {
 
     let filial, onDate;
@@ -33,54 +28,19 @@ module.exports = async function itemBalancesHandler_POST (req, res) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    debug( `[h-POST] try create: filial=${filial}, onDate=${onDate}, agent=${agent}` );
+    log.debug( '[h-POST] ' +
+        `try create: filial=${filial}, onDate=${onDate}, agent=${agent}`
+    );
 
 
-    if( !req.body
-        || !Object.keys( req.body ).length ) {
-        let result = {
-            statusCode: HTTP.BAD_REQUEST,
-            logMessage: 'items-balances.POST: req.body is empty.',
-            response: 'Bad request, req.body is empty.'
-        };
-        log.warn( result.logMessage );
-        return send400BadRequest( res, result.response );
+    if( !req.body || !Object.keys( req.body ).length ) {
+        log.warn( '[h-POST] req.body is empty.' );
+        return send400BadRequest( res, 'Bad request, req.body is empty.' );
     }
-
-    const STATE_HANDLERS = {
-
-        [HTTP.CREATED]: (result) => {
-            log.info( result.logMessage );
-            return send201Created( res, result.response );
-        },
-
-        [HTTP.BAD_REQUEST]: (result) => {
-            log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
-        },
-
-        [HTTP.CONFLICT]: (result) => {
-            log.warn( result.logMessage );
-            return send409Conflict( res, result.response );
-        },
-
-        [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
-            log.error( result.logMessage );
-            return send500ServerError( res, result.response );
-        }
-    };
-
 
     try {
         const createResult = await ItemsBalances.createOne( req.body );
-        const { statusCode } = createResult;
-
-        if( statusCode in STATE_HANDLERS ) {
-
-            return STATE_HANDLERS[ statusCode ]( createResult );
-        }
-
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        req.app.getStateHandler( res, log )( createResult );
     }
     catch (err) {
         log.error( err );
