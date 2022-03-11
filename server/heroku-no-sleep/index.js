@@ -17,7 +17,7 @@ const HEROKU_PING_EVENT = 'herokuping';
 */
 module.exports = function createPinger (server, minutes) {
 
-    function onePing () {
+    function emitHerokuPing () {
         debug( 'ping: event emiting ....' ); // first
         server.emit( HEROKU_PING_EVENT );
         debug( 'ping: event emitted !' );  // forth
@@ -46,7 +46,7 @@ module.exports = function createPinger (server, minutes) {
                 log.info( `No-Sleep-Heroku-App stopped.` );
             }
         }
-        herokuTimer = setTimeout( onePing, msInterval );
+        herokuTimer = setTimeout( emitHerokuPing, msInterval );
         debug( 'pinger: timer setted !' ); // third
     });
 
@@ -57,6 +57,6 @@ module.exports = function createPinger (server, minutes) {
         //debug( 'pinger: timer removed !!!', herokuTimer );
     });
 
-    onePing();
+    emitHerokuPing();
 };
 

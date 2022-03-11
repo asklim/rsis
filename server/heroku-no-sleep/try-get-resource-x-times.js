@@ -39,12 +39,26 @@ module.exports = async function tryConnectXtimes ({
                 t0 = Date.now();
                 const response = await resourceGetter();
                 ms += Date.now() - t0;
-                if( response ) {
+                if( response && !(response instanceof Error) ) {
                     return resolve ({
                         attempt: n,
                         ok: true,
                         ms,
                         response
+                    });
+                }
+
+                if( n < totalAttempts ) {
+                    setTimeout( attempt, msInterval, n + 1 );
+                }
+                else {
+                    const ttl = Date.now() - tStart;
+                    reject({
+                        attempt: n,
+                        reason: 'timeout',
+                        ms: ttl,
+                        message: `No response from ${apiUrl}, ${n} times (${ttl}ms).`
+                        , err: response
                     });
                 }
             }
@@ -55,22 +69,9 @@ module.exports = async function tryConnectXtimes ({
                     reason: 'catch',
                     ms,
                     message: err.message
+                    , err
                 });
             }
-
-            if( n < totalAttempts ) {
-                setTimeout( attempt, msInterval, n + 1 );
-            }
-            else {
-                const ttl = Date.now() - tStart;
-                reject({
-                    attempt: n,
-                    reason: 'timeout',
-                    ms: ttl,
-                    message: `No response from ${apiUrl}, ${n} times (${ttl}ms).`
-                });
-            }
-
         })( 1 );
     });
 };

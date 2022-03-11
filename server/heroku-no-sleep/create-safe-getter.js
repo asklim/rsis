@@ -33,8 +33,8 @@ module.exports = function createSafeGetter (
             return await getter( apiUrl );
         }
         catch (err) {
-            logger && logger.error( 'Error GET of Resource\n', err );
-            //return void 0 //undefined
+            logger && logger.error( 'Error GET of Resource\n' );
+            return err;
         }
     };
 };
