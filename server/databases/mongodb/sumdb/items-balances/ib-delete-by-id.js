@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( '_dbg_:items-balances:db' );
+//const debug = require( 'debug' )( '-dbg:items-balances:db' );
 
 const { format } = require( 'util' );
 const UUID = require( 'uuid' );
@@ -9,51 +9,46 @@ const {
 } = require( '../../../../helpers' );
 
 
-module.exports = function injector( IClass ) {
+/**
+ * Delete ItemsBalance document by uuid or ObjId
+ * @returns
+ * - statusCode 204 No Content & { message, uuid }
+ * - statusCode 404 Not Found & message
+ * - statusCode 500 Server Error & error object
+ **/
+module.exports = async function deleteById (documentId) {
 
-    /**
-     * Delete items-balance document by uuid or ObjId
-     * @returns
-     * - statusCode 204 No Content & { message, uuid }
-     * - statusCode 404 Not Found & message
-     * - statusCode 500 Server Error & error object
-     **/
+    try {
+        const filtering = UUID.validate( documentId ) ?
+            { uuid: documentId }
+            : { _id: documentId };
 
-    async function deleteById (documentId) {
+        const storage = this.getModel();
 
-        try {
-            const filtering = UUID.validate( documentId ) ?
-                { uuid: documentId }
-                : { _id: documentId };
+        const doc = await storage.findOne( filtering );
 
-            const ItemsBalances = IClass.getModel();
-
-            const doc = await ItemsBalances.findOne( filtering );
-
-            if( !doc ) {
-                let msg = `[storage] ItemsBalance not found`;
-                return makeResult(
-                    HTTP.NOT_FOUND,
-                    `${msg} w/filter: ` + format( '%o', filtering ),
-                    `${msg}.`
-                );
-            }
-
-            const { uuid } = await ItemsBalances.findOneAndDelete( filtering );
-
+        if( !doc ) {
+            let msg = `[storage] ItemsBalance not found`;
             return makeResult(
-                HTTP.NO_CONTENT,
-                `[storage] ItemsBalance deleted (${uuid}).`,
-                {
-                    message: `ItemsBalance deleted successful (${uuid}).`,
-                    uuid,
-                }
+                HTTP.NOT_FOUND,
+                `${msg} w/filter: ` + format( '%o', filtering ),
+                `${msg}.`
             );
         }
-        catch (err) {
-            return makeErrorResult( err );
-        }
+
+        const { uuid } = await storage.findOneAndDelete( filtering );
+
+        return makeResult(
+            HTTP.NO_CONTENT,
+            `[storage] ItemsBalance deleted (${uuid}).`,
+            {
+                message: `ItemsBalance deleted successful (${uuid}).`,
+                uuid,
+            }
+        );
     }
-    return deleteById;
+    catch (err) {
+        return makeErrorResult( err );
+    }
 };
 

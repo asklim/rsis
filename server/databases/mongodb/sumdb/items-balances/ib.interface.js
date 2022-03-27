@@ -1,50 +1,53 @@
 
 const UUID = require( 'uuid' );
 
-const injectedCreateOne = require( './ib-create-one.js' );
-const injectedReadOne = require( './ib-read-one.js' );
-const injectedUpdateOne = require( './ib-update-one' );
-const injectedDeleteById = require( './ib-delete-by-id' );
+const createOne = require( './ib-create-one.js' );
+const find = require( './ib-find' );
+const readOne = require( './ib-read-one.js' );
+const updateOne = require( './ib-update-one' );
+const deleteById = require( './ib-delete-by-id' );
 
 const IA_ItemsBalances = require('../../../../applogic/items-balances/storage.interface-abstract');
 
 const db = require( '../../..' ).getDB( 'sum' );
-let MongoModel = db.model( 'ItemsBalances' );
+let MongoModel = db?.model( 'ItemsBalances' );
 
-module.exports = class IItemsBalances extends IA_ItemsBalances {
+module.exports = class IItemsBalancesStorage extends IA_ItemsBalances {
 
-    static setModel (modelInterface=MongoModel) {
-        MongoModel = modelInterface;
+    constructor (modelInterface=MongoModel) {
+        super();
+        this.setModel( modelInterface );
+        this.createOne = createOne;
+        this.find = find;
+        this.deleteById = deleteById;
+        this.readOne = readOne;
+        this.updateOne = updateOne;
     }
-    static getModel () {
-        return MongoModel;
+
+    setModel (modelInterface) {
+        this._mongoModel = modelInterface;
+    }
+    getModel () {
+        return this._mongoModel;
     }
 
-    static createOne = injectedCreateOne( IItemsBalances );
+    async readById (reportId) {
 
-    static readOne = injectedReadOne( IItemsBalances );
-
-    static async readById (reportId) {
-
-        let filtering = UUID.validate( reportId )
-            ? { uuid: reportId }
+        let filtering = UUID.validate( reportId ) ?
+            { uuid: reportId }
             : { _id: reportId };
 
-        return await IItemsBalances.readOne( filtering );
+        return await this.readOne( filtering );
     }
 
-    static async readByQuery ({
+    async readByQuery ({
         agent,
         onDate,
         filial = 'filial1',
         creator = 'mainsm'
     }) {
         let filtering = { agent, onDate, filial, creator };
-        return await IItemsBalances.readOne( filtering );
+        return await this.readOne( filtering );
     }
-
-    static updateOne = injectedUpdateOne( IItemsBalances );
-
-    static deleteById = injectedDeleteById( IItemsBalances );
 
 };

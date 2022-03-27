@@ -6,10 +6,14 @@ const {
 } = require( '../../helpers' );
 const log = consoleLogger( '[daily-reports:logic]' );
 
-const IStorage = require( '../../databases/mongodb/sumdb/daily-reports/daily-reports.interface' );
+const MongoStorage = require( '../../databases/mongodb/sumdb/daily-reports/daily-reports.interface' );
+let IStorage = MongoStorage;
 
+exports = module.exports = class DailyReports {
 
-class DailyReports {
+    static setStorage = function (storageInterface=MongoStorage) {
+        IStorage = storageInterface;
+    };
 
     /**
      * Create a new daily report
@@ -134,6 +138,5 @@ class DailyReports {
 
         return await IStorage.deleteById( reportId );
     };
-}
+};
 
-exports = module.exports = DailyReports;

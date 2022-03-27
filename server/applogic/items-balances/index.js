@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'logic:itemsBalances' );
+//const debug = require( 'debug' )( '-dbg:itemsBalances:logic' );
 
 const {
     httpResponseCodes: HTTP,
@@ -9,22 +9,22 @@ const log = consoleLogger( '[items-balances:logic]' );
 
 const MongoStorage = require( '../../databases/mongodb/sumdb/items-balances/ib.interface' );
 //const AbstractStorage = require( './storage.interface-abstract' );
-let IStorage = MongoStorage;
+//let IStorage = new MongoStorage;
 
 exports = module.exports = class ItemsBalances {
 
-    static setStorage = function (storageInterface=MongoStorage) {
-        IStorage = storageInterface;
-    };
+    constructor (StorageInterface=MongoStorage) {
+        this._storage = new StorageInterface;
+    }
 
     /**
-     * Create a new items balance doc
-     * @returns
+     * Create a new ItemsBalance doc
      * @statusCode 201 Created & { message, uuid }
      * @statusCode 400 Bad Request & message
      * @statusCode 500 Server Error & error object
+     * @returns {ResultObject} ResultObject
      **/
-    static createOne = async function (body) {
+    async createOne (body) {
 
         const {
             agent, onDate, items
@@ -37,12 +37,13 @@ exports = module.exports = class ItemsBalances {
                 'Bad request, No .onDate, .agent, .items fields.'
             );
         }
-        return await IStorage.createOne( body );
-    };
+        return await this._storage.createOne( body );
+    }
 
 
     /**
-     * Update items-balance by Query (filial & onDate & agent & creator)
+     * Update ItemsBalance by Query
+     * - Query = (filial & onDate & agent & creator)
      * - Если и filial и onDate и creator и agent совпадает,
      * то обновляем запись, иначе создаем новую
      * @returns
@@ -51,7 +52,7 @@ exports = module.exports = class ItemsBalances {
      * - statusCode 400 Bad Request & response = message
      * - statusCode 500 Server Error & response = error object
      **/
-    static updateOrCreate = async function (body) {
+    async updateOrCreate (body) {
 
         const {
             filial, agent, creator, onDate,
@@ -65,23 +66,24 @@ exports = module.exports = class ItemsBalances {
             );
         }
 
-        const result = await ItemsBalances.
-        readByQuery({ filial, agent, creator, onDate });
+        const result = await this.readByQuery({
+            filial, agent, creator, onDate
+        });
 
         log.debug( '[updateOrCreate] statusCode is', result.statusCode );
 
         if( result.statusCode == HTTP.OK ) {
             // response - это документ
             const { response: document } = result;
-            return await IStorage.updateOne( document._id, body );
+            return await this._storage.updateOne( document._id, body );
         }
 
-        return await /*IStorage*/ ItemsBalances.createOne( body );
-    };
+        return await this.createOne( body );
+    }
 
 
     /**
-     * Read a items-balance by the objId or uuid
+     * Read a ItemsBalance by the objId or uuid
      * @returns
      * - statusCode 200 OK          & document
      * - statusCode 400 Bad Request & message
@@ -90,14 +92,44 @@ exports = module.exports = class ItemsBalances {
      * @usage var.1 |
      * GET /api/ *** /:documentId
      **/
-    static readById = async function (documentId) {
+    async readById (documentId) {
+        return await this._storage.readById( documentId );
+    }
 
-        return await IStorage.readById( documentId );
-    };
+    /**
+     *
+     * @param {*} param0
+     * @returns
+     */
+    async find ({
+        onDates, startDate, endDate,
+        agent,
+        filial,
+        creator
+    }) {
+        if( !onDates && !startDate
+            || ( startDate && !Date.parse( startDate ))
+            || ( endDate && !Date.parse( endDate )) ) {
+            return makeResult(
+                HTTP.BAD_REQUEST,
+                'ItemsBalances.find: Bad dates in req.query specified.',
+                'Bad dates in req.query specified.'
+            );
+        }
+        const filter = {};
+        onDates && (filter.onDates = onDates);
+        startDate && (filter.startDate = startDate);
+        endDate && (filter.endDate = endDate);
+        agent && (filter.agent = agent);
+        filial && (filter.filial = filial);
+        creator && (filter.creator = creator);
+
+        return await this._storage.find( filter );
+    }
 
 
     /**
-     * Read a items-balance by the id
+     * Read a ItemsBalance by the id
      * @fires 200 OK          & document
      * @fires 400 Bad Request & message
      * @fires 404 Not Found   & message
@@ -109,18 +141,9 @@ exports = module.exports = class ItemsBalances {
      * @usage queryString:
      * filial=filialId & onDate=isoDate & agent=agentId
      **/
-    static readByQuery = async function (query) {
+    async readByQuery (query) {
 
-        const { /*filial, agent,*/ onDate, } = query;
-
-        /*if( !filial && !onDate && !agent ) {
-            // Если какой-либо undefined - то ошибка
-            return ({
-                statusCode: HTTP.BAD_REQUEST,
-                logMessage: 'items-balances.readByQuery: No query specified.',
-                response: 'No query in request.'
-            });
-        }*/
+        const { onDate, } = query;
 
         if( onDate && !Date.parse( onDate )) {
             return makeResult(
@@ -129,22 +152,17 @@ exports = module.exports = class ItemsBalances {
                 'Bad query.date in request.'
             );
         }
-
-        return await IStorage.readByQuery( query );
-
-    };
+        return await this._storage.readByQuery( query );
+    }
 
 
     /**
-     * Delete items-balance by uuid or ObjId
+     * Delete ItemsBalance by uuid or ObjId
      * @statusCode 204 No Content & { uuid, message }
      * @statusCode 404 Not Found & message
      * @statusCode 500 Server Error & error object
      **/
-    static deleteById = async function (documentId) {
-
-        return await IStorage.deleteById( documentId );
-    };
-
+    async deleteById (documentId) {
+        return await this._storage.deleteById( documentId );
+    }
 };
-

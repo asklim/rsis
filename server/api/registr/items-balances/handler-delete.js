@@ -7,7 +7,7 @@ const {
 } = require( '../../../helpers/' );
 
 const log = consoleLogger( '[items-balances:api]' );
-const ItemsBalances = require( `../../../applogic/items-balances` );
+const ItemsBalances = require( `../../../applogic/items-balances/` );
 
 
 /**
@@ -35,7 +35,7 @@ module.exports = async function itemsBalancesHandler_DELETE (req, res) {
     }
 
     try {
-        const deleteResult = await ItemsBalances.deleteById( documentId );
+        const deleteResult = await (new ItemsBalances).deleteById( documentId );
 
         req.app.getStateHandler( res, log )( deleteResult );
     }

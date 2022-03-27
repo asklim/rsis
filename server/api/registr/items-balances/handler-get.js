@@ -33,10 +33,16 @@ module.exports = async function itemsBalancesHandler_GET (req, res) {
     ;
 
     try {
-        const readResult = ( documentId ) ?
-            await ItemsBalances.readById( documentId )
-            : await ItemsBalances.readByQuery( req.query );
-
+        let readResult;
+        if( documentId == 'list') {
+            log.debug( '[h-GET] try find documents, req.query:', req.query );
+            readResult = await (new ItemsBalances).find( req.query );
+        }
+        else {
+            readResult = ( documentId ) ?
+                await (new ItemsBalances).readById( documentId )
+                : await (new ItemsBalances).readByQuery( req.query );
+        }
         req.app.getStateHandler( res, log )( readResult );
     }
     catch (err) {

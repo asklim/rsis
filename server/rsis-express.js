@@ -59,7 +59,7 @@ app.getStateHandler = function getStateHandler(
             // debug( 'err.name:', err.name );
             // debug( 'err.message:', err.message );
             // debug( 'err.toString():', err.toString() );
-            const len = response?.stack.split('\n').length;
+            const len = response?.stack?.split('\n').length;
             logger.debug( `err.stack (${len}):`, response?.stack );
             return send500ServerError( res, response );
         }

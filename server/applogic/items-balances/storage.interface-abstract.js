@@ -14,25 +14,23 @@ module.exports = class IA_ItemBalances {
      * @param {String} body.onDate - ISO date
      * @param {Map<String,Object>} body.items
      */
-    static createOne = async function (body) {
+    async createOne (body) {
         throw new Error( ERR_MSG );
-    };
+    }
 
-    static readById = async function (documentId) {
+    async readById (documentId) {
         throw new Error( ERR_MSG );
-    };
+    }
 
-    static readByQuery = async function (query) {
+    async readByQuery (query) {
         throw new Error( ERR_MSG );
-    };
+    }
 
-    static updateOne = async function (documentId, body) {
+    async updateOne (documentId, body) {
         throw new Error( ERR_MSG );
-    };
+    }
 
-    static deleteById = async function (documentId) {
+    async deleteById (documentId) {
         throw new Error( ERR_MSG );
-    };
-
-
+    }
 };

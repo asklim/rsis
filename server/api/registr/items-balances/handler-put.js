@@ -5,9 +5,8 @@ const {
     send500ServerError,
 } = require( '../../../helpers' );
 
-const ItemsBalances = require( `../../../applogic/items-balances/` );
-
 const log = consoleLogger( '[items-balances:api]' );
+const ItemsBalances = require( `../../../applogic/items-balances/` );
 
 
 /**
@@ -21,18 +20,15 @@ const log = consoleLogger( '[items-balances:api]' );
  */
 module.exports = async function itemsBalancesHandler_PUT (req, res) {
 
-    let filial, onDate;
     const agent = req.body?.agent;
+    const filial = req.body?.filial;
+    const onDate = req.body?.onDate;
 
-    if( req.body ) {
-        filial = req.body.filial;
-        onDate = req.body.onDate;
-    }
     const { documentId } = req.params;
 
-    log.debug( '[h-PUT] ' + documentId ?
+    log.debug( '[h-PUT] ' + (documentId ?
         `try update, documentId is '${documentId}'`
-        : `try update for filial=${filial}, onDate=${onDate}, agent=${agent}`
+        : `try update for filial=${filial}, onDate=${onDate}, agent=${agent}`)
     );
 
     if( !req.body || !Object.keys( req.body ).length ) {
@@ -41,7 +37,7 @@ module.exports = async function itemsBalancesHandler_PUT (req, res) {
     }
 
     try {
-        const updateResult = await ItemsBalances.updateOrCreate( req.body );
+        const updateResult = await (new ItemsBalances).updateOrCreate( req.body );
 
         req.app.getStateHandler( res, log )( updateResult );
     }
@@ -49,6 +45,5 @@ module.exports = async function itemsBalancesHandler_PUT (req, res) {
         log.error( err );
         return send500ServerError( res, err );
     }
-
 };
 

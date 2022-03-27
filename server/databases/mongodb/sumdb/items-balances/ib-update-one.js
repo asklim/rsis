@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( '_dbg_:items-balances:db' );
+const debug = require( 'debug' )( '-dbg:items-balances:db' );
 const UUID = require( 'uuid' );
 
 const {
@@ -8,55 +8,53 @@ const {
 } = require( '../../../../helpers' );
 
 
-module.exports = function injector( IClass ) {
+/**
+ * Update a ItemsBalance document by uuid or ObjId
+ * @returns
+ * - statusCode 200 OK & response= { message, uuid }
+ * - statusCode 400 Bad Request & response= message
+ * - statusCode 500 Server Error & response= error object
+ */
+module.exports = async function updateOne (documentId, body) {
 
-    /**
-     * Update a items balance document by uuid or ObjId
-     * @returns
-     * - statusCode 200 OK & response= { message, uuid }
-     * - statusCode 400 Bad Request & response= message
-     * - statusCode 500 Server Error & response= error object
-     */
+    try {
+        /** TODO: body validation ???? */
+        const { items, caption, notes, host } = body;
 
-    async function updateOne (documentId, body) {
+        const $set = Object.assign({}, {
+            items,
+            caption, notes,
+            host,
+            //updatedAt: Date.now()
+            //Должно обновляться автоматически, т.к. schema.options.timestamps
+        });
+        const $inc = { __v: 1 };
 
-        try {
-            /** TODO: body validation ???? */
-            const { items, caption, notes, host } = body;
+        const filtering = UUID.validate( documentId ) ?
+            { uuid: documentId }
+            : { _id: documentId };
 
-            const $set = Object.assign({}, {
-                items,
-                caption, notes,
-                host,
-                //updatedAt: Date.now()
-                //Должно обновляться автоматически, т.к. schema.options.timestamps
-            });
-            const $inc = { __v: 1 };
+        debug( '[update-one] filtering:', filtering );
 
-            const filtering = UUID.validate( documentId ) ?
-                { uuid: documentId }
-                : { _id: documentId };
+        const storage = this.getModel();
 
-            debug( '[update-one] filtering:', filtering );
+        const { uuid } = await storage.findOneAndUpdate(
+            filtering,
+            { $set, $inc },
+            { new: true }
+        );
 
-            const ItemsBalances = IClass.getModel();
+        debug( '[update-one] doc updated, uuid:', uuid );
 
-            const { uuid } = await ItemsBalances.
-            findOneAndUpdate( filtering, { $set, $inc }, { new: true } );
-
-            debug( '[update-one] doc updated, uuid:', uuid );
-
-            return makeResult( HTTP.OK,
-                `[storage] ItemsBalance updated (${uuid}).`,
-                {
-                    message: `ItemsBalance updated successful (${uuid}).`,
-                    uuid,
-                }
-            );
-        }
-        catch (err) {
-            return makeErrorResult( err );
-        }
+        return makeResult( HTTP.OK,
+            `[storage] ItemsBalance updated (${uuid}).`,
+            {
+                message: `ItemsBalance updated successful (${uuid}).`,
+                uuid,
+            }
+        );
     }
-    return updateOne;
+    catch (err) {
+        return makeErrorResult( err );
+    }
 };

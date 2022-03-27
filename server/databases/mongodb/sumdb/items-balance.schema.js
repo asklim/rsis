@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( 'registr:items-balances' );
+const debug = require( 'debug' )( '-dbg:items-balances:schema' );
 
 const { Schema } = require( 'mongoose' );
 const UUID = require( 'uuid' );
@@ -131,11 +131,6 @@ itemsBalance.pre( 'save', async function () {
         this.uuid = UUID.v4();
         debug( `[schema] pre(save): ${this.uuid}` );
     }
-    //if( !this.updatedAt ) {
-    //    this.updatedAt = Date.now();
-    //}
-
 });
-
 
 module.exports = itemsBalance;

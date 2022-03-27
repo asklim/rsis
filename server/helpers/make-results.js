@@ -25,7 +25,6 @@ function makeErrorResult (error) {
     );
 }
 
-
 module.exports = {
     makeResult,
     makeErrorResult,

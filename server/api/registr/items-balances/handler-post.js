@@ -39,7 +39,7 @@ module.exports = async function itemBalancesHandler_POST (req, res) {
     }
 
     try {
-        const createResult = await ItemsBalances.createOne( req.body );
+        const createResult = await (new ItemsBalances).createOne( req.body );
         req.app.getStateHandler( res, log )( createResult );
     }
     catch (err) {

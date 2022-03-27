@@ -1,4 +1,4 @@
-const debug = require( 'debug' )( '_dbg_:items-balances:db' );
+const debug = require( 'debug' )( '-dbg:items-balances:db' );
 
 const {
     httpResponseCodes: HTTP,
@@ -7,50 +7,44 @@ const {
 } = require( '../../../../helpers' );
 
 
-module.exports = function injector( IClass ) {
+/**
+ * Create a new ItemsBalance document
+ * @returns
+ * - statusCode 201 Created & response= { message, uuid }
+ * - statusCode 400 Bad Request & response= message
+ * - statusCode 409 Conflict & response= message
+ * - statusCode 500 Server Error & response= error object
+ */
+module.exports = async function createOne (body) {
 
-    /**
-     * Create a new items-balance document
-     * @returns
-     * - statusCode 201 Created & response= { message, uuid }
-     * - statusCode 400 Bad Request & response= message
-     * - statusCode 409 Conflict & response= message
-     * - statusCode 500 Server Error & response= error object
-     */
+    const { filial, agent, creator, onDate } = body;
 
-    async function createOne (body) {
+    try {
+        const storage = this.getModel();
 
-        const { filial, agent, creator, onDate } = body;
+        const finded = await storage.findOne({ filial, agent, creator, onDate });
 
-        try {
-            const ItemsBalances = IClass.getModel();
+        if( finded ) {
+            let msg = `[storage] ItemsBalance date:${onDate} for agent:${agent} from filial:${filial} by creator:${creator} exist.`;
+            return makeResult( HTTP.CONFLICT, msg, msg );
+        }
 
-            const finded = await ItemsBalances.findOne({ filial, agent, creator, onDate });
+        const report = await storage.create( body );
 
-            if( finded ) {
-                let msg = `[storage] ItemsBalance date:${onDate} for agent:${agent} from filial:${filial} by creator:${creator} exist.`;
-                return makeResult( HTTP.CONFLICT, msg, msg );
+        const { uuid } = report;
+        //const uuid = '12345678-1234-1234-1234-123456789012';
+        debug( `[create-one]: ${uuid}` );
+
+        return makeResult(
+            HTTP.CREATED,
+            `[storage] ItemsBalance created (${uuid}).`,
+            {
+                message: `ItemsBalance created successful (${uuid}).`,
+                uuid,
             }
-
-            const report = await ItemsBalances.create( body );
-
-            const { uuid } = report;
-            //const uuid = '12345678-1234-1234-1234-123456789012';
-            debug( `[create-one]: ${uuid}` );
-
-            return makeResult(
-                HTTP.CREATED,
-                `[storage] ItemsBalance created (${uuid}).`,
-                {
-                    message: `ItemsBalance created successful (${uuid}).`,
-                    uuid,
-                }
-            );
-        }
-        catch (err) {
-            return makeErrorResult( err );
-        }
+        );
     }
-
-    return createOne;
+    catch (err) {
+        return makeErrorResult( err );
+    }
 };
