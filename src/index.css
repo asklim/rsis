@@ -19,8 +19,8 @@ html {
 */
 body {
     /*background: rgba(0, 102, 255, 0.38);*/
-    /*background-color: #1f2029;
-    height: 100%;
+    background-color: hsla( 45, 100%, 88%, 0.6);
+    /*height: 100%;
 	line-height: 1.7;
     margin: 0;
     min-width: 992px !important;

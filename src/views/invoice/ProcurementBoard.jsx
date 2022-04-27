@@ -69,7 +69,7 @@ import {
 });*/
 
 
-export default function ProcurementBoardPage() {
+const ProcurementBoardPage = () => {
 
     const FREQ_VALUES = ['last', 'avrg', 'max'];
     const FREQ_LAST = 0;
@@ -267,146 +267,145 @@ export default function ProcurementBoardPage() {
 
 
     return (<>
-        <GridContainer>
-            <GridItem xs={12} sm={10} md={8} lg={6}>
-                <Paper elevation={1}>
-                    <Grid container>
-                        <Grid item xs={4}><Card>
-                            <CardHeader
-                                title = "По продажам"
-                                subheader = "выбор по частоте"
-                            />
-                            <CardContent>
-                                <RadioGroup
-                                    aria-labelledby = "select-items-by-sales-freq"
-                                    name = "filter-by-sales-frequency"
-                                    value = {filterByFreq}
-                                    onChange = {handleFilterByFreqChange}
-                                >
-                                    <FormControlLabel
-                                        value = {FREQ_VALUES[ FREQ_LAST ]}
-                                        control = {<Radio
-                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                        />}
-                                        label = "Last"
-                                    />
-                                    <FormControlLabel
-                                        value = {FREQ_VALUES[ FREQ_AVRG ]}
-                                        control = {<Radio
-                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                        />}
-                                        label = "Средние"
-                                    />
-                                    <FormControlLabel
-                                        value = {FREQ_VALUES[ FREQ_MAX ]}
-                                        control = {<Radio
-                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                        />}
-                                        label = "Maximal"
-                                    />
-                                </RadioGroup>
-                            </CardContent>
-                        </Card></Grid>
-                        <Grid item xs={4}><Card>
-                            <CardHeader
-                                title = "Откуда"
-                                subheader = "выбор по источнику"
-                            />
-                            <CardContent>
-                                <FormGroup>
-                                    <FormControlLabel
-                                        label = "RU"
-                                        control = {<Checkbox
-                                            checked = {isFilterByFromChecked( FROM_RU )}
-                                            onChange = {handleFromFilterClick( "ru" )}
-                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                        />}
-                                    />
-                                    <FormControlLabel
-                                        label = "BY"
-                                        control = {<Checkbox
-                                            checked = {isFilterByFromChecked( FROM_BY )}
-                                            onChange = {handleFromFilterClick( "by" )}
-                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                        />}
-                                    />
-                                    <FormControlLabel
-                                        label = "EU"
-                                        control = {<Checkbox
-                                            checked = {isFilterByFromChecked( FROM_EU )}
-                                            tabIndex = {-1}
-                                            onChange = {handleFromFilterClick( "eu" )}
-                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                        />}
-                                    />
-                                </FormGroup>
-                            </CardContent>
-                        </Card></Grid>
-                        <Grid item xs={4}><Card>
-                            <CardHeader
-                                title = "Дней"
-                                subheader = "how many sales days"
-                            />
-                        </Card></Grid>
-                    </Grid>
-                </Paper>
-            </GridItem>
+        <GridContainer><GridItem xs={12} sm={10} md={8} lg={6}>
+            <Paper elevation={1}>
+                <Grid container>
+                    <Grid item xs={4}><Card>
+                        <CardHeader
+                            title = "По продажам"
+                            subheader = "выбор по частоте"
+                        />
+                        <CardContent>
+                            <RadioGroup
+                                aria-labelledby = "select-items-by-sales-freq"
+                                name = "filter-by-sales-frequency"
+                                value = {filterByFreq}
+                                onChange = {handleFilterByFreqChange}
+                            >
+                                <FormControlLabel
+                                    value = {FREQ_VALUES[ FREQ_LAST ]}
+                                    control = {<Radio
+                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                    />}
+                                    label = "Last"
+                                />
+                                <FormControlLabel
+                                    value = {FREQ_VALUES[ FREQ_AVRG ]}
+                                    control = {<Radio
+                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                    />}
+                                    label = "Средние"
+                                />
+                                <FormControlLabel
+                                    value = {FREQ_VALUES[ FREQ_MAX ]}
+                                    control = {<Radio
+                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                    />}
+                                    label = "Maximal"
+                                />
+                            </RadioGroup>
+                        </CardContent>
+                    </Card></Grid>
+                    <Grid item xs={4}><Card>
+                        <CardHeader
+                            title = "Откуда"
+                            subheader = "выбор по источнику"
+                        />
+                        <CardContent>
+                            <FormGroup>
+                                <FormControlLabel
+                                    label = "RU"
+                                    control = {<Checkbox
+                                        checked = {isFilterByFromChecked( FROM_RU )}
+                                        onChange = {handleFromFilterClick( "ru" )}
+                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                    />}
+                                />
+                                <FormControlLabel
+                                    label = "BY"
+                                    control = {<Checkbox
+                                        checked = {isFilterByFromChecked( FROM_BY )}
+                                        onChange = {handleFromFilterClick( "by" )}
+                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                    />}
+                                />
+                                <FormControlLabel
+                                    label = "EU"
+                                    control = {<Checkbox
+                                        checked = {isFilterByFromChecked( FROM_EU )}
+                                        tabIndex = {-1}
+                                        onChange = {handleFromFilterClick( "eu" )}
+                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                    />}
+                                />
+                            </FormGroup>
+                        </CardContent>
+                    </Card></Grid>
+                    <Grid item xs={4}><Card>
+                        <CardHeader
+                            title = "Дней"
+                            subheader = "how many sales days"
+                        />
+                    </Card></Grid>
+                </Grid>
+            </Paper>
+        </GridItem>
         </GridContainer>
 
-        <GridContainer>
-            <GridItem xs={12} sm={10} md={8} lg={6}>
-                <CustomTabs
-                    title = "Заказ на:"
-                    headerColor = "primary"
-                    tabs = {[
-                        {
-                            tabName: `${days.short} дней`,
-                            tabIcon: ShortPeriod,
-                            tabContent: (
-                                <Table
-                                    tableHeaderColor = "danger"
-                                    tableHead = {tableHeader('sp')}
-                                    tableData = {shortPeriod}
-                                />
-                            )
-                        },
-                        {
-                            tabName: `${days.middle} дня`,
-                            tabIcon: MiddlePeriod,
-                            tabContent: (
-                                <Table
-                                    tableHeaderColor = "warning"
-                                    tableHead = {tableHeader('mp')}
-                                    tableData = {middlePeriod}
-                                />
-                            )
-                        },
-                        {
-                            tabName: `${days.long} дней`,
-                            tabIcon: LongPeriod,
-                            tabContent: (
-                                <Table
-                                    tableHeaderColor = "primary"
-                                    tableHead = {tableHeader('lp')}
-                                    tableData = {longPeriod}
-                                />
-                            )
-                        },
-                        {
-                            tabName: `${days.xtraLong} дней`,
-                            tabIcon: XtraLongPeriod,
-                            tabContent: (
-                                <Table
-                                    tableHeaderColor = "info"
-                                    tableHead = {tableHeader('xlp')}
-                                    tableData = {xtraLongPeriod}
-                                />
-                            )
-                        }
-                    ]}
-                />
-            </GridItem>
-
+        <GridContainer><GridItem xs={12} sm={10} md={8} lg={6}>
+            <CustomTabs
+                title = "Заказ на:"
+                headerColor = "primary"
+                tabs = {[
+                    {
+                        tabName: `${days.short} дней`,
+                        tabIcon: ShortPeriod,
+                        tabContent: (
+                            <Table
+                                tableHeaderColor = "danger"
+                                tableHead = {tableHeader('sp')}
+                                tableData = {shortPeriod}
+                            />
+                        )
+                    },
+                    {
+                        tabName: `${days.middle} дня`,
+                        tabIcon: MiddlePeriod,
+                        tabContent: (
+                            <Table
+                                tableHeaderColor = "warning"
+                                tableHead = {tableHeader('mp')}
+                                tableData = {middlePeriod}
+                            />
+                        )
+                    },
+                    {
+                        tabName: `${days.long} дней`,
+                        tabIcon: LongPeriod,
+                        tabContent: (
+                            <Table
+                                tableHeaderColor = "primary"
+                                tableHead = {tableHeader('lp')}
+                                tableData = {longPeriod}
+                            />
+                        )
+                    },
+                    {
+                        tabName: `${days.xtraLong} дней`,
+                        tabIcon: XtraLongPeriod,
+                        tabContent: (
+                            <Table
+                                tableHeaderColor = "info"
+                                tableHead = {tableHeader('xlp')}
+                                tableData = {xtraLongPeriod}
+                            />
+                        )
+                    }
+                ]}
+            />
+        </GridItem>
         </GridContainer>
     </>);
-}
+};
+
+export default ProcurementBoardPage;

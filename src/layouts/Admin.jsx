@@ -115,7 +115,7 @@ export default function Admin ({ ...rest }) {
                 color = {color}
                 {...rest}
             />
-            <div className = {classes.mainPanel} ref = {mainPanel}>
+            <div className={classes.mainPanel} ref={mainPanel}>
                 <Navbar
                     routes = {routes}
                     handleDrawerToggle = {handleDrawerToggle}

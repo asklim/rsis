@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,31 +22,36 @@ import styles from "assets/jss/m-d-r/components/headerStyle.js";
 const useStyles = makeStyles( styles );
 
 
-export default function Header (props) {
-
+export default function Header ({
+    color,
+    routes,
+    rtlActive,
+    ...rest
+}) {
     const classes = useStyles();
+    const location = useLocation();
 
     function getRouteTitle() {
 
         let name;
-
-        props.routes.map( (route) => {
+        routes.map( (route) => {
             const fullroute = route.layout + '/' + route.path;
             if(
-                window.location.href.indexOf( fullroute ) !== -1
+                window.location.href.includes( fullroute )
             ){
-                name = props.rtlActive ? route.rtlName : route.name;
+                name = rtlActive ? route.rtlName : route.name;
             }
             return null;
         });
-        console.log( `getRouteTitle is ${name}` );
+        //console.log( `getRouteTitle is ${name}` );
         return name;
     }
 
-    const { color } = props;
     const appBarClasses = classNames({
         [" " + classes[color]]: color
     });
+
+    React.useEffect( () => {}, [ location ]);
 
     return (
         <AppBar className={classes.appBar + appBarClasses}>
@@ -61,13 +67,13 @@ export default function Header (props) {
                     </Button>
                 </div>
                 <Hidden smDown implementation="css">
-                    {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+                    {rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
                 </Hidden>
                 <Hidden mdUp implementation="css">
                     <IconButton
                         color = "inherit"
                         aria-label = "open drawer"
-                        onClick = {props.handleDrawerToggle}
+                        onClick = {rest.handleDrawerToggle}
                     >
                         <Menu />
                     </IconButton>

@@ -1,6 +1,7 @@
 
 import React from "react";
 //import PropTypes from "prop-types";
+import { NavLink } from "react-router-dom";
 
 // core components
 import { Grid } from "@mui/material";
@@ -63,6 +64,10 @@ export default function LoginSignupPage () {
                                             </div>
                                             <a href="#" className="btn">submit</a>
                                             <p>
+                                                <a href="/admin" className="link">link to Admin</a>
+                                                <NavLink to="/admin" >
+                                                    NavLink to Admin
+                                                </NavLink>
                                                 <a href="#0" className="link">Forgot your password?</a>
                                             </p>
                                         </div>

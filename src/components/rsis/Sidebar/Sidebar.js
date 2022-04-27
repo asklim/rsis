@@ -2,7 +2,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,92 +24,93 @@ const useStyles = makeStyles( styles );
 
 export default function Sidebar (props) {
 
+    const {
+        color, logo,
+        image, logoText,
+        routes,
+        rtlActive
+    } = props;
+
     const classes = useStyles();
+    const location = useLocation();
 
     // verifies if routeName is the one active (in browser input)
     function isActiveRoute (routeName) {
         return window.location.href.includes( routeName );
     }
 
-    const {
-        color, logo,
-        image, logoText,
-        routes
-    } = props;
 
-    const links = (
-        <List className = { classes.list }>
+    const links = <List className={classes.list}>
 
-            {routes.map( (route, key) => {
+        {routes.map( (route, key) => {
 
-                let activePro = " ";
-                let listItemClasses;
-                const fullroute = route.layout + '/' + route.path;
+            let activePro = " ";
+            let listItemClasses;
+            const fullroute = route.layout + '/' + route.path;
 
-                if( ["upgrade-to-pro", "uis-dash"].includes( route.path )) {
-                    activePro = classes.activePro + " ";
-                    listItemClasses = classNames({
-                        [ " "+classes[color] ]: true
-                    });
-                }
-                else {
-                    listItemClasses = classNames({
-                        [ " "+classes[color] ]: isActiveRoute( fullroute )
-                    });
-                }
-
-                const whiteFontClasses = classNames({
-                    [ " "+classes.whiteFont ]: isActiveRoute( fullroute )
+            if( ["upgrade-to-pro", "uis-dash"].includes( route.path )) {
+                activePro = classes.activePro + " ";
+                listItemClasses = classNames({
+                    [" "+classes[color]]: true
                 });
+            }
+            else {
+                listItemClasses = classNames({
+                    [" "+classes[color]]: isActiveRoute( fullroute )
+                });
+            }
 
-                return (
-                    <NavLink
-                        to = { fullroute }
-                        className = { activePro + classes.item }
-                        /*activeClassName = "active"*/
-                        key = { key }
-                    >
-                        <ListItem button className={ classes.itemLink + listItemClasses }>
-                            {typeof route.icon === "string" ? (
-                                <Icon
-                                    className = { classNames(
-                                        classes.itemIcon,
-                                        whiteFontClasses,
-                                        {
-                                            [ classes.itemIconRTL ]: props.rtlActive
-                                        }
-                                    )}
-                                >
-                                    { route.icon }
-                                </Icon>
-                            ) : (
-                                <route.icon
-                                    className={classNames(
-                                        classes.itemIcon,
-                                        whiteFontClasses,
-                                        {
-                                            [ classes.itemIconRTL ]: props.rtlActive
-                                        }
-                                    )}
-                                />
-                            )}
-                            <ListItemText
-                                primary = { props.rtlActive ? route.rtlName : route.name }
+            const whiteFontClasses = classNames({
+                [" "+classes.whiteFont]: isActiveRoute( fullroute )
+            });
+
+            return (
+                <NavLink
+                    to = { fullroute }
+                    className = { activePro + classes.item }
+                    /*activeClassName = "active"*/
+                    key = { key }
+                >
+                    <ListItem button className={ classes.itemLink + listItemClasses }>
+                        {typeof route.icon === "string" ? (
+                            <Icon
                                 className = { classNames(
-                                    classes.itemText,
+                                    classes.itemIcon,
                                     whiteFontClasses,
                                     {
-                                        [ classes.itemTextRTL ]: props.rtlActive
+                                        [classes.itemIconRTL]: rtlActive
                                     }
                                 )}
-                                disableTypography = { true }
+                            >
+                                { route.icon }
+                            </Icon>
+                        ) : (
+                            <route.icon
+                                className={classNames(
+                                    classes.itemIcon,
+                                    whiteFontClasses,
+                                    {
+                                        [classes.itemIconRTL]: rtlActive
+                                    }
+                                )}
                             />
-                        </ListItem>
-                    </NavLink>
-                );
-            })}
-        </List>
-    );
+                        )}
+                        <ListItemText
+                            primary = { rtlActive ? route.rtlName : route.name }
+                            className = { classNames(
+                                classes.itemText,
+                                whiteFontClasses,
+                                {
+                                    [classes.itemTextRTL]: rtlActive
+                                }
+                            )}
+                            disableTypography = { true }
+                        />
+                    </ListItem>
+                </NavLink>
+            );
+        })}
+    </List>;
 
     var brandLogo = (
         <div className={ classes.logo }>
@@ -117,7 +118,7 @@ export default function Sidebar (props) {
                 href = { window.location.origin }
                 className = { classNames( classes.logoLink,
                     {
-                        [ classes.logoLinkRTL ]: props.rtlActive
+                        [classes.logoLinkRTL]: rtlActive
                     }
                 )}
                 target = ""//"_blank"
@@ -130,17 +131,22 @@ export default function Sidebar (props) {
         </div>
     );
 
+    // Чтобы обновлялись нажатые кнопки.
+    React.useEffect( () => {
+        //console.log( location );
+    }, [ location ]);
+
     return (<>
         <Hidden mdUp implementation="css">
             <Drawer
                 variant = "temporary"
-                anchor = { props.rtlActive ? "left" : "right" }
+                anchor = { rtlActive ? "left" : "right" }
                 open = { props.open }
                 classes = {{
                     paper: classNames(
                         classes.drawerPaper,
                         {
-                            [ classes.drawerPaperRTL ]: props.rtlActive
+                            [classes.drawerPaperRTL]: rtlActive
                         }
                     )
                 }}
@@ -151,7 +157,7 @@ export default function Sidebar (props) {
             >
                 { brandLogo }
                 <div className = { classes.sidebarWrapper }>
-                    { props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks /> }
+                    { rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks /> }
                     { links }
                 </div>
                 { image !== undefined ? (
@@ -166,14 +172,14 @@ export default function Sidebar (props) {
 
         <Hidden smDown implementation="css">
             <Drawer
-                anchor = { props.rtlActive ? "right" : "left" }
+                anchor = { rtlActive ? "right" : "left" }
                 variant = "permanent"
                 open
                 classes = {{
                     paper: classNames(
                         classes.drawerPaper,
                         {
-                            [classes.drawerPaperRTL]: props.rtlActive
+                            [classes.drawerPaperRTL]: rtlActive
                         }
                     )
                 }}
