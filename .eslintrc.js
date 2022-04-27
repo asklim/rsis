@@ -7,7 +7,7 @@ module.exports = {
         node: true,
         jest: true,
         es2021: true,
-    },    
+    },
     parser: "@babel/eslint-parser",
     /* parser: "babel-eslint",
     parserOptions: {
@@ -17,14 +17,15 @@ module.exports = {
             jsx: true,
         },
     }, */
-    plugins: [ 
+    plugins: [
         "eslint-plugin-react",
         "eslint-plugin-react-hooks",
+        "@emotion"
     ],
     extends: [
-        "eslint:recommended", 
+        "eslint:recommended",
         "plugin:react/recommended"
-    ],    
+    ],
     settings: {
         react: {
             createClass: "createReactClass", // Regex for Component Factory use,
@@ -49,7 +50,7 @@ module.exports = {
         //strict: "warn",
         "no-console": "off",
         indent: [
-            "warn", 
+            "warn",
             4,
             {
                 SwitchCase: 1,
@@ -57,7 +58,7 @@ module.exports = {
             }
         ],
         "linebreak-style": [
-            "error", 
+            "error",
             "unix"
         ],
         quotes: ["off", "single"],
@@ -83,5 +84,10 @@ module.exports = {
         "react/jsx-uses-react": "warn",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
+        "@emotion/pkg-renaming": "error",
+        "@emotion/jsx-import": "error",
+        "@emotion/no-vanilla": "error",
+        "@emotion/import-from-emotion": "error",
+        "@emotion/styled-import": "error"
     },
 };

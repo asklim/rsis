@@ -1,3 +1,4 @@
+
 const webpack = require( 'webpack' );
 
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
@@ -22,6 +23,7 @@ const { WebpackManifestPlugin } = require( 'webpack-manifest-plugin' );
 module.exports = function (buildOptions) {
 
     const {
+        appVersion,
         isEnvDevelopment,
         isEnvProduction,
         env,
@@ -65,6 +67,7 @@ module.exports = function (buildOptions) {
                         ? 'rsis local'
                         : 'rsis dev-mode',
                     template: paths.appHtmlTemplate,
+                    appVersion,
                 },
                 isEnvProduction
                     ? {

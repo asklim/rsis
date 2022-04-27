@@ -2,7 +2,7 @@
 
 const log = require( './helpers/' ).consoleLogger( '[rsis:app]' );
 
-const createError = require( 'http-errors' );
+//const createError = require( 'http-errors' );
 const express = require( 'express' );
 const path = require( 'path' );
 const cors = require( 'cors' );
@@ -84,6 +84,7 @@ if( !isProduction && isHMR ) {
 }
 
 
+// eslint-disable-next-line no-unused-vars
 app.get( '*', (_req, res, next) => {
 
     const INDEX_HTML_PFN = path.resolve( __dirname, `../static/index.html` );
@@ -94,25 +95,33 @@ app.get( '*', (_req, res, next) => {
     res.sendFile( INDEX_HTML_PFN,
         (err) => {
             if( err ) {
-                console.log( `E: error sending '${INDEX_HTML_PFN}'`);
+                log.error( `sending error of '${INDEX_HTML_PFN}'`);
                 console.log( err );
-                next( err );
+                //TODO: Выяснить как работает Error Handling
+                // Нужно ли передавать 'err' дальше?
+                // Нужно ли генерировать ошибку 404?
+                //next( err );
             }
         }
     );
 });
 
-
-// catch 404 and forward to error handler
+/*
 app.use( (req, res, next) => {
+    // catch 404 and forward to error handler
     console.log( 'create Error 404.' );
     next( createError( 404 ), req, res );
 });
+*/
 
-// error handler
-// eslint-disable-next-line no-unused-vars
-app.use( (err, req, res, _next) => {
+/**
+ *  LAST ERROR HANDLER in ExpressApp
+ * */
+app.use((
+    // eslint-disable-next-line no-unused-vars
+    err, req, res, _next
     // must be 4 args
+) => {
     let runMode = req.app.get( 'env' );
     const isDev = runMode === 'development';
     console.log( `app-server error-handler: env = '${runMode}'` );

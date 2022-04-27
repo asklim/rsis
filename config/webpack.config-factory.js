@@ -1,3 +1,5 @@
+const rootDir = require( 'fs' ).realpathSync( process.cwd() );
+const appVersion = require( `${rootDir}/package.json` ).version;
 
 const path = require( 'path' );
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -57,6 +59,7 @@ module.exports = function( webpackEnv ) {
     const env = getClientEnvironment( publicUrl );
 
     const buildOptions = {
+        appVersion,
         isEnvDevelopment,
         isEnvProduction,
         isEnvProductionProfile,
@@ -78,11 +81,9 @@ module.exports = function( webpackEnv ) {
         stats: isEnvProduction
             ? 'normal'
             : 'detailed', //'verbose',
-        devtool: isEnvProduction
-            ? shouldUseSourceMap
-                ? 'source-map'
-                : false
-            : isEnvDevelopment && 'inline-source-map',
+        devtool: isEnvProduction ?
+            shouldUseSourceMap ? 'source-map' : false
+            : isEnvDevelopment && 'source-map', //'inline-source-map',
 
         // These are the "entry points" to our application.
         // This means they will be the "root" imports that are included in JS bundle.
@@ -127,7 +128,8 @@ module.exports = function( webpackEnv ) {
 
             // this defaults to 'window', but by setting it to 'this' then
             // module chunks which are built will work in web workers as well.
-            globalObject: 'this',
+            globalObject: 'globalThis',
+            // If 'this', then don`t work bundle chunking: this is undefined
         },
         optimization: {
             //isEnvProduction ?
