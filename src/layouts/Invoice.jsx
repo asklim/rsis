@@ -1,39 +1,35 @@
-/* eslint-disable react/prop-types*/
-import React from "react";
+
+import * as React from "react";
 //import PropTypes from "prop-types";
-import {
-    //Routes, Route,
-    Outlet,
-} from "react-router-dom";
+import { Outlet, } from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+// Google Material-UI/core components
+import { makeStyles } from "@mui/styles";
 
 // core components
-import Navbar from "components/m-d-r/Navbars/Navbar.js";
-import Footer from "components/m-d-r/Footer/Footer.js";
-import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
+import Navbar from "components/m-d-r/Navbars/Navbar.jsx";
+import Footer from "components/m-d-r/Footer/Footer.jsx";
+import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.jsx";
+import Sidebar from "components/rsis/Sidebar/Sidebar.jsx";
 
 import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png"; // must be an image
 
-import Sidebar from "components/rsis/Sidebar/Sidebar.js";
 //import Whoops404 from "components/misc/Whoops404.js";
 import routes from "./invoice-routes.js";
 
-
 let ps;
-
 const useStyles = makeStyles( styles );
 
-export default function InvoiceBoard({ ...rest })
-{
+
+export default function InvoiceBoard({ ...rest }) {
+
     // styles
     const classes = useStyles();
 
@@ -120,7 +116,9 @@ export default function InvoiceBoard({ ...rest })
                     </div>
                 </div>
 
-                <Footer />
+                <Footer
+                    appVersion ={window.document.rsis.appVersion}
+                />
                 <FixedPlugin
                     handleImageClick={handleImageClick}
                     handleColorClick={handleColorClick}

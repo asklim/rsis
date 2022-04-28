@@ -1,13 +1,14 @@
-import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import * as React from "react";
+// Google Material-UI/core components
+import { makeStyles } from "@mui/styles";
+
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.js";
-import GridContainer from "components/m-d-r/Grid/GridContainer.js";
-import Table from "components/m-d-r/Table/Table.js";
-import Card from "components/m-d-r/Card/Card.js";
-import CardHeader from "components/m-d-r/Card/CardHeader.js";
-import CardBody from "components/m-d-r/Card/CardBody.js";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import Table from "components/m-d-r/Table/Table.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
 
 const styles = {
     cardCategoryWhite: {
@@ -39,9 +40,11 @@ const styles = {
     }
 };
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles( styles );
+
 
 export default function TableList() {
+
     const classes = useStyles();
     return (
         <GridContainer>

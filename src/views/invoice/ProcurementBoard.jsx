@@ -1,5 +1,5 @@
 //const debug = require( 'debug' )( 'invoice:procurement' );
-import * as debugFactory from "debug";
+import * as debugFactory from 'debug';
 const debug = debugFactory( 'invoice:procurement');
 
 import React, {
@@ -9,8 +9,8 @@ import React, {
 } from "react";
 //import PropTypes from "prop-types";
 
-// @material-ui/core
-//import { makeStyles } from "@material-ui/core/styles";
+// Google Material-UI/core
+//import { makeStyles } from "@mui/styles";
 import {
     Card, CardContent, CardHeader,
     Checkbox,
@@ -25,7 +25,7 @@ import {
     //Icon,
 } from '@mui/material';
 
-// @material-ui/icons
+// Google Material-UI/icons
 import {
     Battery20 as ShortPeriod,
     Battery50 as MiddlePeriod,
@@ -38,27 +38,27 @@ import {
 } from "@mui/icons-material";
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.js";
-import GridContainer from "components/m-d-r/Grid/GridContainer.js";
-import Table from "components/m-d-r/Table/Table.js";
-import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.js";
-//import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.js";
-//import Tasks from "components/m-d-r/Tasks/Tasks.js";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import Table from "components/m-d-r/Table/Table.jsx";
+import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.jsx";
+//import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
+//import Tasks from "components/m-d-r/Tasks/Tasks.jsx";
 /*
-import Danger from "components/m-d-r/Typography/Danger.js";
-import Card from "components/m-d-r/Card/Card.js";
-import CardHeader from "components/m-d-r/Card/CardHeader.js";
-import CardIcon from "components/m-d-r/Card/CardIcon.js";
-import CardBody from "components/m-d-r/Card/CardBody.js";
-import CardFooter from "components/m-d-r/Card/CardFooter.js";
+import Danger from "components/m-d-r/Typography/Danger.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardIcon from "components/m-d-r/Card/CardIcon.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
+import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
 */
 
-import Loading from "components/misc/Loading";
-import DataLoadError from "components/misc/DataLoadError";
+import Loading from "components/misc/Loading.jsx";
+import DataLoadError from "components/misc/DataLoadError.jsx";
 
 import {
     procurementPeriods as days,
-} from "config/enum-values";
+} from "config/enum-values.js";
 
 //import dashboardStyle from "assets/jss/m-d-r/views/dashboardStyle.js";
 //import checkboxAndRadioStyle from "assets/jss/m-d-r/checkboxAndRadioStyle.js";

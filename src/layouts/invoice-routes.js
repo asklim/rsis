@@ -1,9 +1,9 @@
-// @material-ui/icons
+// Google Material-UI/icons
 import {
     AddBoxOutlined,
     ArrowBack,
     Fingerprint,
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 
 // core components/views for Invoice layout
 import DashboardPage from "../views/m-d-r/Dashboard.jsx";

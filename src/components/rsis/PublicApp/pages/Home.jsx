@@ -1,5 +1,5 @@
 
-import React from "react";
+import * as React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 // mui core components
@@ -16,7 +16,7 @@ import {
 
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/styles';
 
 const Item = styled( Paper )( ({ theme }) => ({
     ...theme.typography.body2,

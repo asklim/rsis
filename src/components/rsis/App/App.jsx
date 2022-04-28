@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 //import { createBrowserHistory } from "history";
 import {
@@ -6,7 +6,7 @@ import {
     Navigate,
     Routes,
     Route
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 

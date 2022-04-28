@@ -1,12 +1,12 @@
-import React from "react";
+import * as React from "react";
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.js";
-import GridContainer from "components/m-d-r/Grid/GridContainer.js";
-import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.js";
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
 
-// @material-ui/icons
-import AddAlert from "@material-ui/icons/AddAlert";
+// Google Material-UI/icons
+import AddAlert from "@mui/icons-material/AddAlert";
 
 const Loading = () => <GridContainer>
     <GridItem xs={12} sm={12} md={8} lg={4}>

@@ -8,16 +8,16 @@ import {
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+// Google Material-UI/core components
+import { makeStyles } from "@mui/styles";
 
 // core components
-import Navbar from "components/m-d-r/Navbars/Navbar.js";
-import Footer from "components/m-d-r/Footer/Footer.js";
-import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
+import Navbar from "components/m-d-r/Navbars/Navbar.jsx";
+import Footer from "components/m-d-r/Footer/Footer.jsx";
+import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.jsx";
 
 
-import Sidebar from "components/rsis/Sidebar/Sidebar.js";
+import Sidebar from "components/rsis/Sidebar/Sidebar.jsx";
 import styles from "assets/jss/m-d-r/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
@@ -135,7 +135,9 @@ export default function Admin ({ ...rest }) {
                         {/*switchRoutes*/}
                     </div>
                 )}
-                {getRoute() ? <Footer /> : null}
+                <Footer
+                    appVersion ={window.document.rsis.appVersion}
+                />
                 <FixedPlugin
                     handleImageClick = {handleImageClick}
                     handleColorClick = {handleColorClick}

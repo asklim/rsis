@@ -1,30 +1,31 @@
-/* eslint-disable react/prop-types */
-import React  from "react";
+import * as React from "react";
 
-// @material-ui/core components
-//import withStyles from "@material-ui/core/styles/withStyles";
-import { makeStyles } from "@material-ui/core/styles";
+// Google Material-UI/core components
+import { makeStyles } from "@mui/styles";
+
+import {
+    //Button,
+    Typography
+} from '@mui/material';
+
+//import { Fingerprint } from '@mui/icons-material';
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.js";
-import GridContainer from "components/m-d-r/Grid/GridContainer.js";
-import Table from "components/m-d-r/Table/Table.js";
-import Card from "components/m-d-r/Card/Card.js";
-import CardHeader from "components/m-d-r/Card/CardHeader.js";
-import CardBody from "components/m-d-r/Card/CardBody.js";
-//import Fingerprint from '@material-ui/icons/Fingerprint';
-//import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import GridItem from "components/m-d-r/Grid/GridItem.jsx";
+import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
+import Table from "components/m-d-r/Table/Table.jsx";
+import Card from "components/m-d-r/Card/Card.jsx";
+import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
+import CardBody from "components/m-d-r/Card/CardBody.jsx";
 
+import SimpleDialogDemoCC from "components/misc/SimpleDialog/SimpleDialogDemo.CC.jsx";
+import SimpleDialogDemoRFC from "components/misc/SimpleDialog/SimpleDialogDemo.jsx";
+import AlertDialog from "components/misc/AlertDialog/AlertDialog.jsx";
 
-import SimpleDialogDemoCC from "components/misc/SimpleDialog/SimpleDialogDemo.CC.js";
-import SimpleDialogDemoRFC from "components/misc/SimpleDialog/SimpleDialogDemo.js";
-import TodosInputList from "components/misc/TodosInputList";
-import AlertDialog from "components/misc/AlertDialog/AlertDialog";
-import { TelegramUserInfo } from "components/misc/Telegram";
+import { TelegramUserInfo } from "components/misc/Telegram/";
+import TodosInputList from "components/misc/TodosInputList/";
 
 import dashboard from "assets/jss/m-d-r/views/dashboardStyle.js";
-
 
 const styles = {
 
@@ -52,7 +53,7 @@ export default function DialogList() {
 
     const classes = useStyles();
 
-    return ( <GridContainer>
+    return (<GridContainer>
 
         <GridItem xs={12} sm={8} md={6}>
             <Card>
@@ -157,5 +158,5 @@ export default function DialogList() {
             </Card>
         </GridItem>
 
-    </GridContainer> );
+    </GridContainer>);
 }

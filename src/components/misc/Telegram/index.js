@@ -1,4 +1,4 @@
-import TelegramUserInfo from './TelegramUserInfo.js';
+import TelegramUserInfo from './TelegramUserInfo.jsx';
 
 export {
     TelegramUserInfo,

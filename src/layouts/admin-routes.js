@@ -1,15 +1,17 @@
-// @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
-import AddBox from "@material-ui/icons/AddBoxOutlined";
-import Person from "@material-ui/icons/Person";
-import LibraryBooks from "@material-ui/icons/LibraryBooks";
-//import BubbleChart from "@material-ui/icons/BubbleChart";
-//import LocationOn from "@material-ui/icons/LocationOn";
-import Notifications from "@material-ui/icons/Notifications";
-import Unarchive from "@material-ui/icons/Unarchive";
-import Language from "@material-ui/icons/Language";
-import Fingerprint from '@material-ui/icons/Fingerprint';
-import ExitToApp from '@material-ui/icons/ExitToApp';
+// Google Material-UI/icons
+import {
+    AddBox,
+    //BubbleChart,
+    Dashboard,
+    ExitToApp,
+    Fingerprint,
+    Language,
+    LibraryBooks,
+    //LocationOn,
+    Notifications,
+    Person,
+    Unarchive,
+} from '@mui/icons-material';
 
 // core components/views for Admin layout
 import DashboardPage from "../views/m-d-r/Dashboard.jsx";

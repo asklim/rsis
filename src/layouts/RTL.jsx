@@ -1,27 +1,25 @@
-import React from "react";
+import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+// Google Material-UI/core components
+import { makeStyles } from "@mui/styles";
 
 // core components
-import Navbar from "components/m-d-r/Navbars/Navbar.js";
-import Footer from "components/m-d-r/Footer/Footer.js";
-import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.js";
+import Navbar from "components/m-d-r/Navbars/Navbar.jsx";
+import Footer from "components/m-d-r/Footer/Footer.jsx";
+import FixedPlugin from "components/m-d-r/FixedPlugin/FixedPlugin.jsx";
+import Sidebar from "components/rsis/Sidebar/Sidebar.jsx";
 
-import routes from "./admin-routes.js";
-
-import Sidebar from "components/rsis/Sidebar/Sidebar.js";
 import styles from "assets/jss/m-d-r/layouts/rtlStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
 
-let ps;
+import routes from "./admin-routes.js";
 
 const switchRoutes = (
     <Routes>
@@ -29,9 +27,9 @@ const switchRoutes = (
             if (route.layout === "/rtl") {
                 return (
                     <Route
-                        path={/*prop.layout +*/ route.path}
-                        element /*component*/ ={<route.component />}
-                        key={key}
+                        path = {route.path}
+                        element = {<route.component />}
+                        key = {key}
                     />
                 );
             }
@@ -40,6 +38,7 @@ const switchRoutes = (
     </Routes>
 );
 
+let ps;
 const useStyles = makeStyles( styles );
 
 export default function RTL({ ...rest }) {
@@ -131,7 +130,10 @@ export default function RTL({ ...rest }) {
                 ) : (
                     <div className={classes.map}>{switchRoutes}</div>
                 )}
-                {getRoute() ? <Footer /> : null}
+
+                <Footer
+                    appVersion ={window.document.rsis.appVersion}
+                />
                 <FixedPlugin
                     handleImageClick={handleImageClick}
                     handleColorClick={handleColorClick}
