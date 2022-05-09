@@ -1,4 +1,4 @@
-import blue from '@mui/material/colors/blue';
+import { blue } from '@mui/material/colors';
 
 const simpleDialogStyle = {
     avatar: {

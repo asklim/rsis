@@ -9,13 +9,16 @@ import App from 'components/rsis/PublicApp/PublicApp';
 
 import 'index.css';
 
-//console.log( 'running ReactApp' );
+// import { Debug } from 'utils/debuggers.js';
+// const debug = Debug.extend( 'index' );
+import { debugFactory } from 'utils/debuggers.js';
+const debug = debugFactory( 'debug:index' );
 
 console.log( '[INFO] before rendering react-app.' );
 
 const theme = createTheme({});
 
-const appElement = window.document.getElementById( "react-app" );
+const appElement = window.document.getElementById( 'react-app' );
 window.document.rsis = { appVersion: appElement.innerText };
 console.log( `[INFO] rsis.appVersion = ${window.document.rsis.appVersion}` );
 
@@ -28,7 +31,7 @@ ReactDOM.render(
     appElement
 );
 
-localStorage.debug = 'invoice:*';
-console.log( '[DEBUG] theme', theme );
+console.log( 'localStorage.debug:', localStorage.debug );
+debug( 'theme', theme );
 //console.log( '[DEBUG] React', React );
 //console.log( '[DEBUG] React DOM', ReactDOM );

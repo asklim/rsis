@@ -1,6 +1,8 @@
-//const debug = require( 'debug' )( 'invoice:procurement' );
-import * as debugFactory from 'debug';
-const debug = debugFactory( 'invoice:procurement');
+// import { debug as Debug } from "../../utils/debuggers";
+// const debug = Debug.extend( 'procurement' );
+
+import { debugFactory } from 'utils/debuggers.js';
+const debug = debugFactory( 'invoice:procurement' );
 
 import React, {
     useState,
@@ -203,7 +205,8 @@ const ProcurementBoardPage = () => {
     const fetchLists = () => {
 
         const { origin } = window.location;
-        const route = `${origin}/api/sum/procurement/last`;
+        const route = `${origin}/api/dataset/procurement/last`;
+        //const route = `${origin}/api/sum/procurement/last`;
 
         //debug( 'fetchLists window.location.origin: ', origin );
         console.log( 'fetch Lists from:', route );

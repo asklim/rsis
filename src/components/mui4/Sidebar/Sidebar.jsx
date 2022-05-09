@@ -23,7 +23,7 @@ import styles from "./sidebarStyle.js";
 const useStyles = makeStyles( styles );
 
 
-export default function Sidebar ({
+function Sidebar ({
     color,
     logo,
     logoText,

@@ -60,7 +60,24 @@
     line-height: 1;
 }
 
+* {
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color */
+    /*-webkit-tap-highlight-color is a non-standard CSS property that sets the color
+    of the highlight that appears over a link while it's being tapped.
+    The highlighting indicates to the user that their tap is being successfully recognized,
+     and indicates which element they're tapping on.*/
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    /* -webkit-tap-highlight-color: transparent; */ /* for removing the highlight */
+
+    letter-spacing: normal !important;
+}
+
+*:focus {
+    outline: 0;
+}
+
 html * {
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -74,8 +91,8 @@ body {
     line-height: 1.5em;
 }
 
-blockquote footer:before,
-blockquote small:before {
+blockquote footer::before,
+blockquote small::before {
     content: "\2014 \00A0";
 }
 
@@ -137,7 +154,7 @@ h6 {
 }
 
 a {
-    color: #9c27b0;
+    color: red; /*#9c27b0;*/
     text-decoration: none;
 }
 
@@ -149,15 +166,6 @@ a:focus {
 
 legend {
     border-bottom: 0;
-}
-
-* {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-    /* -webkit-tap-highlight-color: transparent; */
-}
-
-*:focus {
-    outline: 0;
 }
 
 a:focus,
@@ -243,6 +251,3 @@ footer ul li a:hover {
     }
 }
 
-* {
-    letter-spacing: normal !important;
-}

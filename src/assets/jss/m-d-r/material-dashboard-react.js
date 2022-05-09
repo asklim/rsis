@@ -13,6 +13,8 @@
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
  */
+// Google Material-UI/core components
+import { alpha } from "@mui/material/styles";
 
 // ##############################
 // // // Function that converts from hex color to rgb color
@@ -96,13 +98,9 @@ const whiteColor = "#FFF";
 
 const boxShadow = {
     boxShadow:
-    "0 10px 30px -12px rgba(" +
-    hexToRgb(blackColor) +
-    ", 0.42), 0 4px 25px 0px rgba(" +
-    hexToRgb(blackColor) +
-    ", 0.12), 0 8px 10px -5px rgba(" +
-    hexToRgb(blackColor) +
-    ", 0.2)"
+    `0 10px 30px -12px ${alpha( blackColor, 0.42 )}` +
+    `, 0 4px 25px 0px ${alpha( blackColor, 0.12 )}` +
+    `, 0 8px 10px -5px ${alpha( blackColor, 0.2 )}`
 };
 
 const primaryBoxShadow = {
