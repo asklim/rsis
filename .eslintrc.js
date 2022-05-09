@@ -9,8 +9,7 @@ module.exports = {
         es2021: true,
     },
     parser: "@babel/eslint-parser",
-    /* parser: "babel-eslint",
-    parserOptions: {
+    /*parserOptions: {
         ecmaVersion: 2019,
         sourceType: "module",
         ecmaFeatures: {

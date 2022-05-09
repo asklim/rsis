@@ -1,5 +1,5 @@
 const debug = require( 'debug' )( 'helper:sendToWebApp' );
-const request = require( 'request' );
+const axios = require( 'axios' ).default;
 
 const {
     //icwd,
@@ -17,70 +17,74 @@ module.exports.sendToWebApp = function (apiRoute, reqBody) {
     const docMetaInfo = `- type: ${type} id: ${id} pid: ${pid}`;
     debug( docMetaInfo );
 
-    sendTo(
-        apiRoute,
-        "POST",
-        reqBody,
-        (postStatus) => {
+    sendTo( apiRoute, "POST", reqBody ).
+    then( (postRes) => {
 
-            log.debug( `- POST status = ${postStatus}` );
-            if( postStatus >= HTTP.INTERNAL_SERVICE_ERROR ) {
-                return log.error( 'Service Error, ' + docMetaInfo );
-            }
+        const postStatus = postRes.status;
 
-            if( postStatus == HTTP.CREATED ) {
-                return log.info( 'SUCCESS: document Created, ' + docMetaInfo );
-            }
-
-            if( postStatus == HTTP.CONFLICT ) {
-            // нельзя создать. Уже существует.
-                sendTo(
-                    apiRoute,
-                    "PUT",
-                    reqBody,
-                    (putStatus) => {
-
-                        log.debug( `- PUT status = ${putStatus}` );
-                        if( putStatus == HTTP.OK ) {
-                            log.info( 'SUCCESS: document Updated, ' + docMetaInfo );
-                        }
-                        else {
-                            log.error( 'document sending FAILURE, ' + docMetaInfo );
-                        }
-                    }
-                );
-            }
+        log.debug( `- POST status = ${postStatus}` );
+        if( postStatus >= HTTP.INTERNAL_SERVICE_ERROR ) {
+            return log.error( 'Service Error, ' + docMetaInfo );
         }
-    );
+
+        if( postStatus == HTTP.CREATED ) {
+            return log.info( 'SUCCESS: document Created, ' + docMetaInfo );
+        }
+
+        if( postStatus == HTTP.CONFLICT ) {
+            // нельзя создать. Уже существует.
+            sendTo( apiRoute, "PUT", reqBody ).
+            then( (putRes) => {
+                const putStatus = putRes.status;
+
+                log.debug( `- PUT status = ${putStatus}` );
+                if( putStatus == HTTP.OK ) {
+                    log.info( 'SUCCESS: document Updated, ' + docMetaInfo );
+                }
+                else {
+                    log.error( 'document sending FAILURE, ' + docMetaInfo );
+                }
+            }).
+            catch( (err) => {
+                log.error( 'document sending FAILURE,', docMetaInfo );
+                log.error( err );
+            });
+        }
+    }).
+    catch( (err) => {
+        log.error( 'document sending FAILURE,', docMetaInfo );
+        log.error( err );
+    });
 };
 
 
 
-function sendTo (apiRoute, verb, reqBody, callback) {
+function sendTo (apiRoute, verb, reqBody) {
 
     let webServerURL = process.env.API_SERVER;
+    //debug('sendTo\n', reqBody);
 
-    const reqOptions = {
-        url : `${webServerURL}${apiRoute}`,
-        method : `${verb}`,
-        headers : {
+
+    return axios({
+        url: `${webServerURL}${apiRoute}`,
+        method: `${verb}`,
+        headers: {
             "Content-Type" : "application/json",
             "charset" : "utf-8"
         },
-        json : reqBody,
-        qs : {},
-    };
-    //debug('sendTo\n', reqBody);
+        data: reqBody,
+    });
 
-    request(
+
+    /*
         reqOptions,
-        (err, res, /*body*/) => {
+        (err, res, /*body*//*) => {
 
             if( err ) {
                 return callback( HTTP.SERVICE_UNAVAILABLE );
             }
             return callback( res.statusCode );
         }
-    );
+    );*/
 }
 
