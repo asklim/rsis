@@ -10,7 +10,7 @@ import {
 
 const dropdownStyle = (theme) => ({
     buttonLink: {
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down("md")]: { //'md'
             display: "flex",
             marginLeft: "30px",
             width: "auto"
@@ -20,7 +20,7 @@ const dropdownStyle = (theme) => ({
         width: "20px",
         height: "20px",
         zIndex: "4",
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down("md")]: { //'md'
             display: "block",
             width: "30px",
             height: "30px",
@@ -36,22 +36,22 @@ const dropdownStyle = (theme) => ({
     popperClose: {
         pointerEvents: "none"
     },
-    popperResponsive: {
-        [theme.breakpoints.down("md")]: {
-            zIndex: "1640",
-            position: "static",
-            float: "none",
-            width: "auto",
-            marginTop: "0",
-            backgroundColor: "transparent",
-            border: "0",
-            WebkitBoxShadow: "none",
-            boxShadow: "none",
-            color: "black"
-        }
-    },
+    // popperResponsive: {
+    //     [theme.breakpoints.down("md")]: { //'md'
+    //         zIndex: "1640",
+    //         position: "static",
+    //         float: "none",
+    //         width: "auto",
+    //         marginTop: "0",
+    //         backgroundColor: "transparent",
+    //         border: "0",
+    //         WebkitBoxShadow: "none",
+    //         boxShadow: "none",
+    //         color: "black"
+    //     }
+    // },
     popperNav: {
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("md")]: { //'sm'
             position: "static !important",
             left: "unset !important",
             top: "unset !important",

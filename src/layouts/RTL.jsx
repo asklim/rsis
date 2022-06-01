@@ -9,11 +9,11 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 
 // core components
-import Footer from 'components/m-d-r/Footer/Footer.jsx';
-import FixedPlugin from 'components/m-d-r/FixedPlugin/FixedPlugin.jsx';
+import Footer from '../components/Footer/Footer.jsx';
+import FixedPlugin from '../components/FixedPlugin/FixedPlugin.jsx';
 
-import Navbar from 'components/Navbars/Navbar.jsx';
-import Sidebar from 'components/Sidebar/Sidebar.jsx';
+import Navbar from '../components/Navbars/Navbar.jsx';
+import Sidebar from '../components/Sidebar/Sidebar.jsx';
 
 import bgImage from 'assets/img/sidebar-2.jpg';
 import logo from 'assets/img/reactlogo.png';
@@ -21,14 +21,14 @@ import logo from 'assets/img/reactlogo.png';
 
 const PREFIX = 'RTLLayout';
 const classes = {
-    root: `${PREFIX}-root`,
+    root:      `${PREFIX}-root`,
     mainPanel: `${PREFIX}-mainPanel`,
-    content: `${PREFIX}-content`,
+    content:   `${PREFIX}-content`,
     container: `${PREFIX}-container`,
 };
 
 // eslint-disable-next-line no-unused-vars
-const Root = styled('div')( ({ theme }) => ({
+const Root = styled( 'div' )( ({ theme }) => ({
     [`&.${classes.root}`]: {
         // `&.${...` without spaces (root styles)
         direction: 'rtl',
@@ -38,7 +38,7 @@ const Root = styled('div')( ({ theme }) => ({
     },
 }));
 
-const MainPanel = styled('div')( ({ theme }) => ({
+const MainPanel = styled( 'div' )( ({ theme }) => ({
     [`&.${classes.mainPanel}`]: {
         // `&.${...` without spaces (root styles)
         float: 'left',
@@ -87,17 +87,16 @@ export default function RTL({ ...rest }) {
 
     // states and functions
     const [image, setImage] = React.useState( bgImage );
-    const [color, setColor] = React.useState( 'blue' );
-    const [fixedClasses, setFixedClasses] = React.useState( 'dropdown show' );
+    const [hue, setHue] = React.useState( 'blue' );
+    const [ menuShow, setMenuShow ] = React.useState( false );
     const [mobileOpen, setMobileOpen] = React.useState( false );
 
     const handleImageClick = (image) => setImage( image );
 
-    const handleColorClick = (color) => setColor( color );
+    const handleColorClick = (hue) => setHue( hue );
 
-    const handleFixedClick = () => setFixedClasses(
-        fixedClasses === 'dropdown' ? 'dropdown show' : 'dropdown'
-    );
+
+    const handleFixedClick = () => setMenuShow( !menuShow );
 
     const handleDrawerToggle = () => setMobileOpen( !mobileOpen );
 
@@ -126,7 +125,7 @@ export default function RTL({ ...rest }) {
                 window.removeEventListener( 'resize', resizeFunction );
             }
         );
-    }, [mainPanel]);
+    }, [ mainPanel ]);
 
     return (<Root className={classes.root}>
         <MainPanel
@@ -140,7 +139,7 @@ export default function RTL({ ...rest }) {
                 image={image}
                 handleDrawerToggle={handleDrawerToggle}
                 open={mobileOpen}
-                color={color}
+                hue={hue}
                 rtlActive
                 {...rest}
             />
@@ -167,12 +166,12 @@ export default function RTL({ ...rest }) {
                 appVersion ={window.document.rsis.appVersion}
             />
             <FixedPlugin
-                handleImageClick={handleImageClick}
-                handleColorClick={handleColorClick}
-                bgColor={color}
-                bgImage={image}
-                handleFixedClick={handleFixedClick}
-                fixedClasses={fixedClasses}
+                bgImage = {image}
+                handleColorClick = {handleColorClick}
+                handleFixedClick = {handleFixedClick}
+                handleImageClick = {handleImageClick}
+                hue = {hue}
+                menuShow = {menuShow}
                 rtlActive
             />
         </MainPanel>

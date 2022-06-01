@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { debug } from 'utils/debuggers.js';
 
 // Google Material-UI/core components
 import { alpha, styled } from '@mui/material/styles';
@@ -11,9 +12,10 @@ const classes = {
 };
 
 const Root = styled( ListItem, {
-    shouldForwardProp: (prop) => prop !== 'color' && prop !== 'colored',
-})(({ color, colored, theme }) => ({
-    [`&.${classes.root}`]: { // `&.${...` without spaces
+    shouldForwardProp: (prop) => prop !== 'hue' && prop !== 'colored',
+})(({ hue, colored, theme }) => ({
+    [`&.${classes.root}`]: {
+        // `&.${...` without spaces
         width: 'auto',
         transition: 'all 300ms linear',
         margin: '10px 15px 0',
@@ -23,40 +25,38 @@ const Root = styled( ListItem, {
         padding: '10px 15px',
         backgroundColor: 'transparent',
         ...theme.ctmdr.defaultFont,
-        ...(coloredClasses( color, colored, theme )),
+        ...(coloredClasses( hue, colored, theme )),
     },
 }));
 
 
 export default function ColoredListItem ({
-    color,
+    hue,
     colored,
     children,
     ...rest
 }) {
     return (<Root className={classes.root}
-        color = {color}
+        hue = {hue}
         colored = {colored}
         { ...rest }
     >
         { children }
     </Root>);
 }
-
 ColoredListItem.propTypes = {
-    color: PropTypes.string,
+    hue: PropTypes.oneOf([ 'purple', 'blue', 'green', 'orange', 'red' ]),
     colored: PropTypes.bool,
     children: PropTypes.node,
 };
 
 
-function coloredClasses (color, isColored, theme) {
+function coloredClasses (hue, isColored, theme) {
 
-    if( !color ) {
-        console.log( `'!color' condition: ${color}` );
+    if( !hue ) {
+        debug( `ColoredListItem.jsx: '!hue color' condition: ${hue}` );
         return ({});
     }
-    isColored ?? console.log( `Nullish 'colored': ${isColored}` );
 
     const shadow = (color) =>
         `0 12px 20px -10px ${alpha( color, 0.28)}` +
@@ -64,8 +64,8 @@ function coloredClasses (color, isColored, theme) {
         `,0 7px 8px -5px ${alpha( color , 0.2 )}`
     ;
 
-    const key = theme.ctmdr.colorsMatrix[color];
-    const ctmdrColors = theme.ctmdr.palette[ key ];
+    const color = theme.ctmdr.colorsMatrix[ hue ];
+    const ctmdrColors = theme.ctmdr.palette[ color ];
     //console.log( `key: ${key} colors: ${ctmdrColors}` );
 
     const classes = {
@@ -93,9 +93,7 @@ function coloredClasses (color, isColored, theme) {
             },
         },
     };
-    //console.log( 'Sidebar listItem', classes[color] );
+    //debug( 'Colored Sidebar listItem', classes[`colored`] );
 
-    return isColored ?
-        classes.colored
-        : classes.transparent;
+    return isColored ? classes.colored : classes.transparent;
 }

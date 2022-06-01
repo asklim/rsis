@@ -1,11 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-//import App from 'components/rsis/App/App';
-import App from 'components/rsis/PublicApp/PublicApp';
+import PublicApp from './PublicApp/PublicApp.jsx';
 
 import 'index.css';
 
@@ -14,18 +13,22 @@ import 'index.css';
 import { debugFactory } from 'utils/debuggers.js';
 const debug = debugFactory( 'debug:index' );
 
-console.log( '[INFO] before rendering react-app.' );
-
-const theme = createTheme({});
-
 const appElement = window.document.getElementById( 'react-app' );
 window.document.rsis = { appVersion: appElement.innerText };
 console.log( `[INFO] rsis.appVersion = ${window.document.rsis.appVersion}` );
+console.log( '[INFO] before rendering react-app.' );
+
+const theme = createTheme({
+    palette: {
+        background: {
+            body: 'hsla( 95, 100%, 88%, 0.6 )',
+        },
+    },});
 
 ReactDOM.render(
     <ThemeProvider theme={theme}>
         <BrowserRouter>
-            <App />
+            <PublicApp />
         </BrowserRouter>
     </ThemeProvider>,
     appElement

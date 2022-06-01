@@ -1,21 +1,38 @@
-import * as React from "react";
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import {
+    Grid,
+    SnackbarContent,
+} from '@mui/material';
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.jsx";
-import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
-import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
+// import SnackbarContent from 'components/m-d-r/Snackbar/SnackbarContent.jsx';
 
 // Google Material-UI/icons
-import AddAlert from "@mui/icons-material/AddAlert";
+import AddAlert from '@mui/icons-material/AddAlert';
 
-const Loading = () => <GridContainer>
-    <GridItem xs={12} sm={12} md={8} lg={4}>
+const Loading = ({
+    msg='Loading ... wait please ...'
+}) => <Grid container>
+    <Grid item xs={12} sm={10} md={8} lg={6}>
         <SnackbarContent
-            message = {'Loading ... wait please ...'}
-            color = "info"
-            icon = {AddAlert}
+            message = {<div>
+                <AddAlert />
+                <span>{`${msg}`}</span>
+            </div>}
+            sx = {{
+                color: 'common.white',
+                backgroundColor: 'info.main',
+                typography: 'h6',
+            }}
+            action={[]}
         />
-    </GridItem>
-</GridContainer>;
+    </Grid>
+</Grid>;
+Loading.propTypes = {
+    msg: PropTypes.string,
+};
 
 export default Loading;
+
+// color = 'info'

@@ -88,7 +88,7 @@ export default function BrandLogo ({
             >
                 { rtlMode && logoText }
                 <LogoImageWrapper>
-                    <LogoImage src ={ logo } alt = "logo" />
+                    <LogoImage src={ logo } alt="logo" />
                 </LogoImageWrapper>
                 { !rtlMode && logoText }
             </LogoLink>

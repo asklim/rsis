@@ -44,8 +44,12 @@ export default function CustomInput({
         [cls.marginTop]: labelText === undefined
     });
 
-    const handlerOnChange = (event) => console.log( event.target.value );
-    const handlerOn = (event) => console.log( `ended: ${event.target.value}` );
+
+    // const handlerOnCapture = (e) => e.code?.includes( 'Enter' ) &&
+    //     console.log( `entered: ${query}` );
+
+    // Capture перехватывает/прерывает событие onKeyUp
+    //onKeyUpCapture = {(e) => console.log( 'capture', e )}
 
     return (
         <FormControl
@@ -62,14 +66,12 @@ export default function CustomInput({
                 </InputLabel>
             )}
             <Input
-                classes={{
+                classes = {{
                     root: marginTop,
                     disabled: cls.disabled,
                     underline: underlineClasses
                 }}
-                onChange = {handlerOnChange}
-                onEnded = {handlerOn}
-                id={id}
+                id = {id}
                 {...inputProps}
             />
             {error ? (

@@ -2,18 +2,18 @@ import * as React from 'react';
 import { Outlet, } from 'react-router-dom';
 
 // Google Material-UI/core components
-import { /*alpha,*/ styled } from '@mui/material/styles';
+import { /*alpha,*/ styled } from '@mui/material/styles'; //v.5
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from 'perfect-scrollbar';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 
 // core components
-import Footer from 'components/m-d-r/Footer/Footer.jsx';
-import FixedPlugin from 'components/m-d-r/FixedPlugin/FixedPlugin.jsx';
+import Footer from '../components/Footer/Footer.jsx';
+import FixedPlugin from '../components/FixedPlugin/FixedPlugin.jsx';
 
-import Navbar from 'components/Navbars/Navbar.jsx';
-import Sidebar from 'components/Sidebar/Sidebar.jsx';
+import Navbar from '../components/Navbars/Navbar.jsx';
+import Sidebar from '../components/Sidebar/Sidebar.jsx';
 
 import bgImage from 'assets/img/sidebar-2.jpg';
 import logo from 'assets/img/reactlogo.png'; // must be an image
@@ -25,9 +25,9 @@ const MD_BREAKPOINT = 960-1; // theme.breakpoints.md
 
 const PREFIX = 'InvoiceLayout';
 const classes = {
-    root: `${PREFIX}-root`,
+    root:      `${PREFIX}-root`,
     mainPanel: `${PREFIX}-mainPanel`,
-    content: `${PREFIX}-content`,
+    content:   `${PREFIX}-content`,
     container: `${PREFIX}-container`,
 };
 
@@ -76,24 +76,21 @@ export default function InvoiceBoard({ ...rest }) {
 
     // states and functions
     const [image, setImage] = React.useState( bgImage );
-    const [color, setColor] = React.useState( 'blue' );
-    const [fixedClasses, setFixedClasses] = React.useState( 'dropdown show' );
+    const [hue, setHue] = React.useState( 'blue' );
+    const [ menuShow, setMenuShow ] = React.useState( false );
     const [mobileOpen, setMobileOpen] = React.useState( false );
     //hasImage: true
 
     const handleImageClick = (image) => setImage( image );
 
-    const handleColorClick = (color) => setColor( color );
+    const handleColorClick = (hue) => setHue( hue );
 
-    const handleFixedClick = () => setFixedClasses(
-        fixedClasses === 'dropdown' ? 'dropdown show' : 'dropdown'
-    );
+    const handleFixedClick = () => setMenuShow( !menuShow );
 
     const handleDrawerToggle = () =>  setMobileOpen( !mobileOpen );
 
-    const resizeFunction = () => {
+    const resizeFunction = () =>
         (window.innerWidth > MD_BREAKPOINT) && setMobileOpen( false );
-    };
 
     React.useEffect(() => {
         // initialize and destroy the PerfectScrollbar plugin
@@ -116,7 +113,7 @@ export default function InvoiceBoard({ ...rest }) {
                 window.removeEventListener( 'resize', resizeFunction );
             }
         );
-    }, [mainPanel]);
+    }, [ mainPanel ]);
 
 
     return (<Root className={classes.root}>
@@ -131,10 +128,11 @@ export default function InvoiceBoard({ ...rest }) {
                 image = {image}
                 handleDrawerToggle = {handleDrawerToggle}
                 open = {mobileOpen}
-                color = {color}
+                hue = {hue}
                 {...rest}
             />
             <Navbar
+                hue = {hue}
                 routes = {routes}
                 handleDrawerToggle = {handleDrawerToggle}
                 {...rest}
@@ -150,12 +148,12 @@ export default function InvoiceBoard({ ...rest }) {
                 appVersion ={window.document.rsis.appVersion}
             />
             <FixedPlugin
-                handleImageClick = {handleImageClick}
-                handleColorClick = {handleColorClick}
-                bgColor = {color}
                 bgImage = {image}
+                handleColorClick = {handleColorClick}
                 handleFixedClick = {handleFixedClick}
-                fixedClasses = {fixedClasses}
+                handleImageClick = {handleImageClick}
+                hue = {hue}
+                menuShow = {menuShow}
             />
         </MainPanel>
     </Root>);

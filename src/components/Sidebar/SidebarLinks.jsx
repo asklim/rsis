@@ -1,9 +1,9 @@
-import * as React from "react";
-import PropTypes from "prop-types";
+import * as React from 'react';
+import PropTypes from 'prop-types';
 import { NavLink, } from 'react-router-dom';
 
 // Google Material-UI/core components
-import { /*alpha,*/ styled } from "@mui/material/styles";
+import { /*alpha,*/ styled } from '@mui/material/styles';
 import {
     Box,
     Icon,
@@ -11,88 +11,92 @@ import {
     ListItemText
 } from '@mui/material';
 
-import ColoredListItem from "./ColoredListItem";
+import ColoredListItem from './ColoredListItem';
 
 
 const PREFIX = 'SidebarLinks';
 const classes = {
-    list: `${PREFIX}-list`,
-    item: `${PREFIX}-item`,
+    root:       `${PREFIX}-root`,
+    list:       `${PREFIX}-list`,
+    item:       `${PREFIX}-item`,
     bottomItem: `${PREFIX}-bottomItem`,
-    itemIcon: `${PREFIX}-itemIcon`,
-    itemText: `${PREFIX}-itemText`,
+    itemIcon:   `${PREFIX}-itemIcon`,
+    itemText:   `${PREFIX}-itemText`,
 };
 
 const Root = styled( Box, {
     shouldForwardProp: (prop) => prop !== 'rtlActive',
 })(({ rtlActive, theme }) => ({
+    [`&.${classes.root}`]: {
+        zIndex: '3',
+    },
     [`& .${classes.list}`]: {
-        marginTop: "20px",
-        paddingLeft: "0",
-        paddingTop: "0",
-        paddingBottom: "0",
-        marginBottom: "0",
-        listStyle: "none",
-        position: "unset"
+        marginTop: '20px',
+        paddingLeft: '0',
+        paddingTop: '0',
+        paddingBottom: '0',
+        marginBottom: '0',
+        listStyle: 'none',
+        position: 'unset'
     },
     [`& .${classes.item}`]: {
         //color: theme.palette.common.white,
-        position: "relative",
-        display: "block",
-        textDecoration: "none",
-        // "&:hover": { color: theme.palette.common.white },
-        // "&:focus": { color: theme.palette.common.white },
-        // "&:visited": { color: theme.palette.common.white },
+        position: 'relative',
+        display: 'block',
+        textDecoration: 'none',
+        // '&:hover': { color: theme.palette.common.white },
+        // '&:focus': { color: theme.palette.common.white },
+        // '&:visited': { color: theme.palette.common.white },
     },
     [`& .${classes.bottomItem}`]: {
         //color: theme.palette.common.white,
-        position: "relative",
-        display: "block",
-        textDecoration: "none",
-        "&:hover": { textTransform: "uppercase" },
-        "&:focus": { color: theme.palette.common.black },
-        "&:visited": { color: theme.palette.warning.dark },
-        [theme.breakpoints.up("md")]: {
-            position: "absolute",
-            width: "100%",
-            bottom: "13px"
+        position: 'relative',
+        display: 'block',
+        textDecoration: 'none',
+        '&:hover': { textTransform: 'uppercase' },
+        '&:focus': { color: theme.palette.common.black },
+        '&:visited': { color: theme.palette.warning.dark },
+        [theme.breakpoints.up('md')]: {
+            position: 'absolute',
+            width: '100%',
+            bottom: '13px'
         }
     },
     [`& .${classes.itemIcon}`]: {
-        width: "24px",
-        height: "30px",
-        fontSize: "24px",
-        lineHeight: "30px",
-        textAlign: "center",
-        verticalAlign: "middle",
+        width: '24px',
+        height: '30px',
+        fontSize: '24px',
+        lineHeight: '30px',
+        textAlign: 'center',
+        verticalAlign: 'middle',
         //color: 'inherit',
         //color: `${alpha( theme.palette.common.white, 0.8 )}`,
         ...(rtlActive ? {
-            float: "right",
-            marginRight: "3px",
-            marginLeft: "15px",
+            float: 'right',
+            marginRight: '3px',
+            marginLeft: '15px',
         } : {
-            float: "left",
-            marginRight: "15px",
-            marginLeft: "3px", // Добавил для симметрии, результат - ???
+            float: 'left',
+            marginRight: '15px',
+            marginLeft: '3px', // Добавил для симметрии, результат - ???
         }),
     },
     [`& .${classes.itemText}`]: {
         //...defaultFont,
-        margin: "0",
-        lineHeight: "30px",
-        fontSize: "14px",
+        margin: '0',
+        lineHeight: '30px',
+        fontSize: '14px',
         //color: 'inherit',
         //color: theme.palette.common.white,
         ...(rtlActive && {
-            textAlign: "right"
+            textAlign: 'right'
         }),
     },
 }));
 
 
 export default function SidebarLinks ({
-    color,
+    hue,
     routes,
     rtlActive
 }) {
@@ -101,7 +105,7 @@ export default function SidebarLinks ({
         return window.location.href.includes( routeName );
     }
 
-    return (<Root>
+    return (<Root className={classes.root}>
         <List className={classes.list}>
 
             {routes.map( (route, key) => {
@@ -137,7 +141,7 @@ export default function SidebarLinks ({
                     >
                         <ColoredListItem
                             button
-                            color = {color}
+                            hue = {hue}
                             colored = {colored}
                         >
                             <Badge
@@ -160,9 +164,7 @@ export default function SidebarLinks ({
 
 
 SidebarLinks.propTypes = {
-    color: PropTypes.oneOf([
-        'purple', 'blue', 'green', 'orange', 'red', 'transparent'
-    ]),
+    hue: PropTypes.oneOf([ 'purple', 'blue', 'green', 'orange', 'red' ]),
     routes: PropTypes.arrayOf( PropTypes.object ),
     rtlActive: PropTypes.bool,
 };
