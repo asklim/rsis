@@ -5,7 +5,7 @@ const createConn = require( './create-conn' );
 const {
     dbName,
     mongoURI
-} = require( '../rsis-config.js' );
+} = require( '../rsis.config.js' );
 
 const { rsiscfg: databaseName } = dbName;
 

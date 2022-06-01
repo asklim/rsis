@@ -13,7 +13,7 @@ const morgan = require( 'morgan' );
 const passport = require( 'passport' );
 //const LocalStrategy = require( 'passport-local' ).Strategy;
 
-const { API_SERVER_LOCAL } = require( `./rsis-config.js` );
+const { API_SERVER_LOCAL } = require( `./rsis.config.js` );
 
 const {
     NODE_ENV,
@@ -23,8 +23,6 @@ const {
 
 const isProduction = NODE_ENV === 'production';
 const isHMR = DEV_MODE === 'HotModuleReplacement';
-
-
 
 
 const app = require( './rsis-express' );
@@ -75,7 +73,7 @@ if( !isProduction && isHMR ) {
     const wdmOption = {
         publicPath: webpackConfig.output.publicPath,
     };
-    console.log( 'webpack-dev-middleware (wdm) config: ', wdmOption );
+    log.debug( 'webpack-dev-middleware (wdm) config: ', wdmOption );
     app.use( webpackDevMiddleware( compiler, wdmOption ));
     app.use( require( 'webpack-hot-middleware' )( compiler, {
         path: '/__webpack_hmr',
