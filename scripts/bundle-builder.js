@@ -113,7 +113,7 @@ checkBrowsers( paths.appPath, isInteractive ).
         console.log();
 
         const appPackage = require( paths.appPackageJson );
-        const publicUrl = paths.publicUrl;
+        const publicUrl = `"${paths.publicUrl}"`;
         const publicPath = webpackConfiguration.output.publicPath;
         const buildFolder = path.relative( process.cwd(), paths.appBuild );
         printHostingInstructions(

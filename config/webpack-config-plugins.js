@@ -20,21 +20,18 @@ const { WebpackManifestPlugin } = require( 'webpack-manifest-plugin' );
 
 
 
-module.exports = function (buildOptions) {
+module.exports = function webpackConfigPlugins ({
+    appVersion,
+    isEnvDevelopment,
+    isEnvProduction,
+    env,
+    paths,
+    publicPath,
+    publicUrl,
+    //shouldUseSourceMap,
+    shouldInlineRuntimeChunk,
 
-    const {
-        appVersion,
-        isEnvDevelopment,
-        isEnvProduction,
-        env,
-        paths,
-        publicPath,
-        publicUrl,
-        //shouldUseSourceMap,
-        shouldInlineRuntimeChunk,
-
-    } = buildOptions;
-
+}) {
     return [
         // The ProgressPlugin provides a way to customize how progress is
         // reported during a compilation.
@@ -49,7 +46,7 @@ module.exports = function (buildOptions) {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: paths.appSrc + '/public',
+                    from: paths.appSrc + '/assets/public',
                     to: 'assets/',
                     globOptions: {
                         ignore: [ '*.DS_Store' ],

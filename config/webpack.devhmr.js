@@ -1,4 +1,4 @@
-// Do this as the first thing so that any code reading it 
+// Do this as the first thing so that any code reading it
 // knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
@@ -10,11 +10,11 @@ const configFactory = require( './webpack.config-factory.js' );
 const webpackConfig = configFactory( 'development' );
 
 
-const hmrConfig = { 
+const hmrConfig = {
 
     ...webpackConfig,
     stats: {
-        preset: 'normal', //'minimal', 
+        preset: 'normal', //'minimal',
         colors: true,
     },
     devServer: {
@@ -24,20 +24,20 @@ const hmrConfig = {
     entry: [
         // MUST BE 2 entrypoints
         'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true',
-        'react-hot-loader/patch',
+        //'react-hot-loader/patch',
         paths.appIndexJs
     ],
     optimization: {},
     plugins: [
         ...webpackConfig.plugins,
         new webpack.HotModuleReplacementPlugin(),
-    ],    
+    ],
 };
 
-hmrConfig.resolve.alias = {
-    ...webpackConfig.resolve.alias,
-    'react-dom': '@hot-loader/react-dom',
-};
+// hmrConfig.resolve.alias = {
+//     ...webpackConfig.resolve.alias,
+//     //'react-dom': '@hot-loader/react-dom',
+// };
 
 //console.log( 'hmrConfig.resolve.alias:\n', hmrConfig.resolve.alias );
 

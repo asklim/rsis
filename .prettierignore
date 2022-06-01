@@ -1,3 +1,15 @@
+# I DON`T USE a PRETTIER
+**/*
+/*.*
+build/*
+config/*
+docs/*
+public/*
+scripts/*
+server/*
+src/*
+static/*
+
 # dotenv environment variables file
 .env
 prettier.config.js
@@ -21,15 +33,6 @@ babel.config.js
 
 # Static Bootstrap map files
 /static/bootstrap/css/*.css.map
-static/
-config
-docs
-public
-scripts
-server
-build
-src
-
 
 # Logs
 logs

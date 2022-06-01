@@ -2,7 +2,7 @@ const fs = require( 'fs' );
 const path = require( 'path' );
 
 const paths = require( './paths' );
-// Make sure that including paths.js after env.js 
+// Make sure that including paths.js after env.js
 // will read .env variables.
 delete require.cache[ require.resolve( './paths' )];
 
@@ -25,20 +25,19 @@ var dotenvFiles = [
     paths.dotenv,
 ].filter( Boolean );
 
-// Load environment variables from .env* files. 
+// Load environment variables from .env* files.
 // Suppress warnings using silent if this file is missing.
 // dotenv will never modify any environment variables
-// that have already been set.  
+// that have already been set.
 // Variable expansion is supported in .env files.
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
 
-dotenvFiles.forEach( dotenvFile => {
+dotenvFiles.forEach( (dotenvFile) => {
 
     if( fs.existsSync( dotenvFile )) {
-        
-        require( 'dotenv-expand' )(
-            require( 'dotenv' ).config({
+        require('dotenv-expand').expand(
+            require('dotenv').config({
                 path: dotenvFile,
             })
         );
@@ -68,7 +67,7 @@ process.env.NODE_PATH = ( process.env.NODE_PATH || '' )
 const REACT_APP = /^REACT_APP_/i;
 
 function getClientEnvironment (publicUrl) {
-        
+
     const raw = Object.keys( process.env )
         .filter( key => REACT_APP.test( key ))
         .reduce(

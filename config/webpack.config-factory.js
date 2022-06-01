@@ -72,15 +72,9 @@ module.exports = function( webpackEnv ) {
         env
     };
 
-    return {
-
-        mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
-
+    return ({
         // Stop compilation early in production
         bail: isEnvProduction,
-        stats: isEnvProduction
-            ? 'normal'
-            : 'detailed', //'verbose',
         devtool: isEnvProduction ?
             shouldUseSourceMap ? 'source-map' : false
             : isEnvDevelopment && 'source-map', //'inline-source-map',
@@ -91,7 +85,45 @@ module.exports = function( webpackEnv ) {
             // Finally, this is your app's code:
             paths.appIndexJs,
         ],
+        mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
         module: require( './webpack-config-module.js' )( buildOptions ),
+        // Some libraries import Node modules but don't use them in the browser.
+        // Tell Webpack to provide empty mocks for them so importing them works.
+        // Uncaught ReferenceError: global is not defined,
+        // if: node: false,
+        node : {}, // it`s Ok
+        // Turn off performance processing because we utilize
+        // our own hints via the FileSizeReporter
+        optimization: {
+            //isEnvProduction ?
+
+            // In development if minimizer is present,
+            // then: "Uncaught TypeError: this is undefined"
+            minimizer: [
+                // This is only used in production mode
+                '...',
+                new CssMinimizerPlugin(),
+            ],
+            // Automatically split vendor and commons
+            // https://twitter.com/wSokra/status/969633336732905474
+            // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+            splitChunks: {
+                chunks: 'all',
+                //minSize : 524288,
+                //maxSize : 1048576,
+                //name: false,
+            },
+
+            // Keep the runtime chunk separated to enable long term caching
+            // https://twitter.com/wSokra/status/969679223278505985
+            // https://github.com/facebook/create-react-app/issues/5358
+            // then: "Uncaught TypeError: this is undefined"
+            /*runtimeChunk: {
+                name: 'single', // alias for 'runtime'
+                // 'multiple' is alias for:
+                //name: entrypoint => `runtime-${entrypoint.name}`,
+            },*/
+        },
         output: {
             // The build folder.
             path: paths.appBuild,
@@ -131,37 +163,12 @@ module.exports = function( webpackEnv ) {
             globalObject: 'globalThis',
             // If 'this', then don`t work bundle chunking: this is undefined
         },
-        optimization: {
-            //isEnvProduction ?
-
-            // In development if minimizer is present,
-            // then: "Uncaught TypeError: this is undefined"
-            minimizer: [
-                // This is only used in production mode
-                '...',
-                new CssMinimizerPlugin(),
-            ],
-            // Automatically split vendor and commons
-            // https://twitter.com/wSokra/status/969633336732905474
-            // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-            splitChunks: {
-                chunks: 'all',
-                //minSize : 524288,
-                //maxSize : 1048576,
-                //name: false,
-            },
-
-            // Keep the runtime chunk separated to enable long term caching
-            // https://twitter.com/wSokra/status/969679223278505985
-            // https://github.com/facebook/create-react-app/issues/5358
-            // then: "Uncaught TypeError: this is undefined"
-            /*runtimeChunk: {
-                name: 'single', // alias for 'runtime'
-                // 'multiple' is alias for:
-                //name: entrypoint => `runtime-${entrypoint.name}`,
-            },*/
-        },
-        //: {},
+        performance: isEnvProduction ?
+            {
+                maxEntrypointSize: 512000,
+                maxAssetSize: 512000,
+            } : false,
+        plugins: require( './webpack-config-plugins.js' )( buildOptions ),
         resolve: {
             // This allows you to set a fallback for where Webpack should look for modules.
             // We placed these paths second because we want `node_modules` to "win"
@@ -236,20 +243,18 @@ module.exports = function( webpackEnv ) {
                 PnpWebpackPlugin.moduleLoader( module ),
             ],
         },
-        // Some libraries import Node modules but don't use them in the browser.
-        // Tell Webpack to provide empty mocks for them so importing them works.
-        // Uncaught ReferenceError: global is not defined,
-        // if: node: false,
-        node : {}, // it`s Ok
-        // Turn off performance processing because we utilize
-        // our own hints via the FileSizeReporter
-        performance: isEnvProduction
-            ? {
-                maxEntrypointSize: 512000,
-                maxAssetSize: 512000,
-            }
-            : false,
-        plugins: require( './webpack-config-plugins.js' )( buildOptions ),
-    };
+        stats: isEnvProduction ?
+            'normal'
+            : 'detailed', //'verbose',
+        watchOptions: {
+            aggregateTimeout: 600,
+            ignored: [
+                '**/node_modules',
+                '**/.git',
+                '**/server',
+                '**/docs',
+            ],
+        },
+    });
 
 };
