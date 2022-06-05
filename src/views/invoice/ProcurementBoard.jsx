@@ -74,16 +74,16 @@ import {
 const ProcurementBoardPage = () => {
 
     const FREQ_VALUES = ['last', 'avrg', 'max'];
-    const FREQ_LAST = 0;
-    const FREQ_AVRG = 1;
-    const FREQ_MAX = 2;
+    const freqLAST = 0;
+    const freqAVRG = 1;
+    const freqMAX = 2;
 
     const SUPPLY_FROM = ['ru', 'by', 'eu'];
-    const FROM_RU = 0;
-    const FROM_BY = 1;
-    const FROM_EU = 2;
+    const fromRU = 0;
+    const fromBY = 1;
+    const fromEU = 2;
 
-    const [filterByFreq, setFilterByFreq] = useState( FREQ_VALUES[ FREQ_LAST ]);
+    const [filterByFreq, setFilterByFreq] = useState( FREQ_VALUES[ freqLAST ]);
     const [filterByFrom, setFilterByFrom] = useState( SUPPLY_FROM );
 
     const [isLoaded, setIsLoaded] = useState( false );
@@ -113,6 +113,63 @@ const ProcurementBoardPage = () => {
     };
 
 
+    const isFromIntersected = (item, fromFilter) => {
+
+        const itemFroms = item.from.
+            split( ',' ).
+            map( x => x.trim().toLowerCase() );
+        //debug( 'isIntersected, itemFroms ', itemFroms );
+        const result = fromFilter.filter( x => itemFroms.includes( x ));
+        return result.length !== 0;
+    };
+
+    const serverDatasetFilter = (period, freq, fromFilter) => {
+        const freqId = FREQ_VALUES.indexOf( freq ); // 0|1|2
+        return (
+            (item) => item[ period ][ freqId ] > 0
+                && isFromIntersected( item, fromFilter )
+        );
+    };
+
+    const convertToViewList = (period, freq, from) => new Promise(
+        (resolve) => {
+            const filtering = serverDatasetFilter( period, freq, from );
+            const viewList = serverDataset.
+                filter( filtering ).
+                map( (item, key) => {
+                    return [
+                        ( key+1 ).toString(),
+                        item[ period ][freqLAST].toString(),
+                        item[ period ][freqAVRG].toString(),
+                        item[ period ][freqMAX].toString(),
+                        item.name
+                    ];
+                });
+            //debug( 'convertToView:', freqId, viewList.length );
+            resolve( viewList );
+        })
+    ;
+
+    const updateViewingLists = (freq=filterByFreq, from=filterByFrom) => {
+
+        debug( '!!! updateViewLists freq=', freq, 'from=', from );
+        Promise.all([
+            convertToViewList( 'sp', freq, from ),
+            convertToViewList( 'mp', freq, from ),
+            convertToViewList( 'lp', freq, from ),
+            convertToViewList('xlp', freq, from )
+        ]).
+        then( (lists) => {
+            setShortPeriod( lists[0] );
+            setMiddlePeriod( lists[1] );
+            setLongPeriod( lists[2] );
+            setXtraLongPeriod( lists[3] );
+            debug( 'updateViewingLists', lists.map( l => l.length ));
+        }).catch( (err) => {
+            console.log( 'Error convert to ViewList', err );
+        });
+    };
+
     const handleFilterByFreqChange = (event) => {
 
         const freq = event.target.value;
@@ -138,68 +195,6 @@ const ProcurementBoardPage = () => {
             updateViewingLists( undefined, newChecked );
             setFilterByFrom( newChecked );
         };
-
-
-    const isFromIntersected = (item, fromFilter) => {
-
-        const itemFroms = item.from.
-            split( ',' ).
-            map( x => x.trim().toLowerCase() );
-        //debug( 'isIntersected, itemFroms ', itemFroms );
-        const result = fromFilter.filter( x => itemFroms.includes( x ));
-        return result.length !== 0;
-    };
-
-
-    const serverDatasetFilter = (period, freq, fromFilter) => {
-        const freqId = FREQ_VALUES.indexOf( freq ); // 0|1|2
-        return (
-            (item) => item[ period ][ freqId ] > 0
-                && isFromIntersected( item, fromFilter )
-        );
-    };
-
-
-    const convertToViewList = (period, freq, from) => new Promise(
-        (resolve) => {
-            const filtering = serverDatasetFilter( period, freq, from );
-            const viewList = serverDataset.
-                filter( filtering ).
-                map( (item, key) => {
-                    return [
-                        ( key+1 ).toString(),
-                        item[ period ][FREQ_LAST].toString(),
-                        item[ period ][FREQ_AVRG].toString(),
-                        item[ period ][FREQ_MAX].toString(),
-                        item.name
-                    ];
-                });
-            //debug( 'convertToView:', freqId, viewList.length );
-            resolve( viewList );
-        })
-    ;
-
-
-    const updateViewingLists = (freq=filterByFreq, from=filterByFrom) => {
-
-        debug( '!!! updateViewLists freq=', freq, 'from=', from );
-        Promise.all([
-            convertToViewList( 'sp', freq, from ),
-            convertToViewList( 'mp', freq, from ),
-            convertToViewList( 'lp', freq, from ),
-            convertToViewList('xlp', freq, from )
-        ]).
-        then( (lists) => {
-            setShortPeriod( lists[0] );
-            setMiddlePeriod( lists[1] );
-            setLongPeriod( lists[2] );
-            setXtraLongPeriod( lists[3] );
-            debug( 'updateViewingLists', lists.map( l => l.length ));
-        }).catch( (err) => {
-            console.log( 'Error convert to ViewList', err );
-        });
-    };
-
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchLists = () => {
@@ -286,21 +281,21 @@ const ProcurementBoardPage = () => {
                                 onChange = {handleFilterByFreqChange}
                             >
                                 <FormControlLabel
-                                    value = {FREQ_VALUES[ FREQ_LAST ]}
+                                    value = {FREQ_VALUES[ freqLAST ]}
                                     control = {<Radio
                                         sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                     />}
                                     label = "Last"
                                 />
                                 <FormControlLabel
-                                    value = {FREQ_VALUES[ FREQ_AVRG ]}
+                                    value = {FREQ_VALUES[ freqAVRG ]}
                                     control = {<Radio
                                         sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                     />}
                                     label = "Средние"
                                 />
                                 <FormControlLabel
-                                    value = {FREQ_VALUES[ FREQ_MAX ]}
+                                    value = {FREQ_VALUES[ freqMAX ]}
                                     control = {<Radio
                                         sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                     />}
@@ -319,7 +314,7 @@ const ProcurementBoardPage = () => {
                                 <FormControlLabel
                                     label = "RU"
                                     control = {<Checkbox
-                                        checked = {isFilterByFromChecked( FROM_RU )}
+                                        checked = {isFilterByFromChecked( fromRU )}
                                         onChange = {handleFromFilterClick( "ru" )}
                                         sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                     />}
@@ -327,7 +322,7 @@ const ProcurementBoardPage = () => {
                                 <FormControlLabel
                                     label = "BY"
                                     control = {<Checkbox
-                                        checked = {isFilterByFromChecked( FROM_BY )}
+                                        checked = {isFilterByFromChecked( fromBY )}
                                         onChange = {handleFromFilterClick( "by" )}
                                         sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                     />}
@@ -335,7 +330,7 @@ const ProcurementBoardPage = () => {
                                 <FormControlLabel
                                     label = "EU"
                                     control = {<Checkbox
-                                        checked = {isFilterByFromChecked( FROM_EU )}
+                                        checked = {isFilterByFromChecked( fromEU )}
                                         tabIndex = {-1}
                                         onChange = {handleFromFilterClick( "eu" )}
                                         sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}

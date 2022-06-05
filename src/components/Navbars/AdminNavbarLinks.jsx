@@ -1,12 +1,12 @@
-import { debug } from 'utils/debuggers.js';
+// import { debug } from 'utils/debuggers.js';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { /*NavLink,*/ useNavigate, } from 'react-router-dom';
 
 // Google Material-UI/core components
 import { styled } from '@mui/material/styles'; //v.5
 import {
     Box,
-    Divider,
 } from '@mui/material';
 // Google Material-UI/icons
 import {
@@ -18,7 +18,10 @@ import {
 // core components
 import CustomInput from 'components/CustomInput/CustomInput.jsx';
 import Button from 'components/CustomButtons/Button.jsx';
+
 import LiquidPopupLinks from './LiquidPopupLinks';
+import ContentFetch from './ContentFetch';
+
 
 const PREFIX = 'NavBarLinks';
 const classes = {
@@ -151,22 +154,53 @@ export default function AdminNavbarLinks() {
             `textContent: ${textContent}, outerText: ${outerText}`
         );
     };
-    const handlerOnKeyUp = (event) => event.code == 'Enter' && actionStartSearch( event );
     const actionStartSearch = (event) => console.log(`entered: '${query}', event:`, event );
+    const handlerOnKeyUp = (event) => event.code == 'Enter' && actionStartSearch( event );
 
     const rootRef = React.createRef();
 
-    const notificationRef = React.useRef( [] );
-    React.useEffect( () => {
-        notificationRef.current = getNotificationsList();
-    }, [ rootRef ]);
+    // const notificationRef = React.useRef( [] );
+    // React.useEffect( () => {
+    //     notificationRef.current = getNotificationsList();
+    // }, [ rootRef ]);
 
-    const profilePopupRef = React.useRef( [] );
-    React.useEffect( () => {
-        profilePopupRef.current = getProfilePopupList();
-    }, [ rootRef ]);
+    // const profilePopupRef = React.useRef( [] );
+    // React.useEffect( () => {
+    //     profilePopupRef.current = getProfilePopupList();
+    // }, [ rootRef ]);
 
     const navigate = useNavigate();
+
+    const NotificationLinks = ( props ) => (
+        <LiquidPopupLinks
+            enablePopup = {isWideWindow()}
+            anchorEl = {openNotification}
+            icon = {Notifications}
+            title = 'Notification'
+            clickHandler = {handleClickNotification}
+            closeHandler = {handleCloseNotification}
+            content = {props.data}
+        />
+    );
+    NotificationLinks.propTypes = {
+        data: PropTypes.object,
+    };
+
+    const ProfileLinks = ({ data }) => (
+        <LiquidPopupLinks
+            enablePopup = {isWideWindow()}
+            anchorEl = {openProfile}
+            icon = {Person}
+            title = 'Profile'
+            clickHandler = {handleClickProfile}
+            closeHandler = {handleCloseProfile}
+            content = {data}
+            disableCounter
+        />
+    );
+    ProfileLinks.propTypes ={
+        data: PropTypes.object,
+    };
 
 
     return (<RootSxDiv className={classes.root}>
@@ -204,7 +238,17 @@ export default function AdminNavbarLinks() {
             </Box>
         </Button>
 
-        <LiquidPopupLinks
+        <ContentFetch
+            uri = 'notifications'
+            render = {NotificationLinks}
+        />
+
+        <ContentFetch
+            uri = 'profile'
+            render = {ProfileLinks}
+        />
+
+        {/* <LiquidPopupLinks
             enablePopup = {isWideWindow()}
             anchorEl = {openNotification}
             icon = {Notifications}
@@ -212,9 +256,9 @@ export default function AdminNavbarLinks() {
             clickHandler={handleClickNotification}
             closeHandler={handleCloseNotification}
             content = {notificationRef.current}
-        />
+        /> */}
 
-        <LiquidPopupLinks
+        {/* <LiquidPopupLinks
             enablePopup = {isWideWindow()}
             anchorEl = {openProfile}
             icon = {Person}
@@ -223,57 +267,7 @@ export default function AdminNavbarLinks() {
             closeHandler={handleCloseProfile}
             content = {profilePopupRef.current}
             disableCounter
-        />
+        /> */}
     </RootSxDiv>);
 }
 
-
-function getNotificationsList () {
-    return [
-        {
-            title: 'Mike John responded to your email',
-            action: (logger=debug) => logger('notification 1 action'),
-        },{
-            title: 'You have 5 new tasks',
-            action: (logger=debug) => logger('notification 2 action'),
-        },{
-            title: `You're now friend with Andrew`,
-            action: (logger=debug) => logger('notification 3 action'),
-        },{
-            title: 'Another Notification',
-            action: (logger=debug) => logger('notification 4 action'),
-        },{
-            title: 'Another One',
-            action: (logger=debug) => logger('notification 5 action'),
-        },{
-            title: 'Another Second',
-            action: (logger=debug) => logger('notification 6 action'),
-        },{
-            title: 'You have a new emails',
-            action: (logger=debug) => logger('notification 7 action'),
-        },
-    ];
-}
-
-
-function getProfilePopupList () {
-    return [
-        {
-            title: 'Profile',
-            action: (logger=debug) => logger('profilePopup 1 action'),
-        },{
-            title: 'Settings',
-            action: (logger=debug) => logger('profilePopup 2 action'),
-        },
-        <Divider light key={'d1'}/>,
-        {
-            title: 'Logout',
-            action: (logger=debug) => logger('profilePopup 3 action'),
-        },
-        <Divider key={'d2'} />,
-        {
-            title: 'Another One',
-            action: (logger=debug) => logger('profilePopup 4 action'),
-        },
-    ];
-}

@@ -46,43 +46,46 @@ module.exports = {
         ],
     },
     rules: {
-        //strict: "warn",
+        /*******       LOGIC      *******
+         * https://eslint.org/docs/rules/
+        */
+        "no-await-in-loop": "warn",
+        "no-template-curly-in-string": "warn",
+        "no-unused-vars": ["error", {
+            varsIgnorePattern: "should|expect",
+        }],
+        "no-use-before-define": ["warn", "nofunc"],
+        "require-atomic-updates": "warn",
+
+        /*******   SUGGESTIONS   *******/
         "no-console": "off",
-        indent: [
-            "warn",
-            4,
-            {
-                SwitchCase: 1,
-                MemberExpression: "off",
-            }
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
+        strict: ["warn", "safe"],
+
+        /*******    LAYOUT & FORMATTING    *******/
+        "array-bracket-spacing": ["off"],
+        "func-call-spacing": ["off"],
+        indent: ["warn", 4, {
+            SwitchCase: 1,
+            MemberExpression: "off",
+        }],
+        "jsx-quotes": ["off", "prefer-single"],
+        "linebreak-style": ["error", "unix" ],
+        "no-multiple-empty-lines": ["warn", {
+            max: 5,
+            maxBOF: 5,
+            maxEOF: 1,
+        }],
+        "object-curly-spacing": ["off"],
         quotes: ["off", "single"],
         semi: ["error", "always"],
-        "no-unused-vars": [
-            "error",
-            {
-                varsIgnorePattern: "should|expect",
-            },
-        ],
-        "func-call-spacing": ["off"],
-        "object-curly-spacing": ["off"],
-        "array-bracket-spacing": ["off"],
         "space-in-parens": ["off", "always"],
-        "no-multiple-empty-lines": [
-            "warn",
-            {
-                max: 5,
-                maxBOF: 5,
-                maxEOF: 1,
-            },
-        ],
+
+        /*******   REACT RULES   *******/
         "react/jsx-uses-react": "warn",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
+
+        /*******   @emotions/ RULES   *******/
         "@emotion/pkg-renaming": "error",
         "@emotion/jsx-import": "error",
         "@emotion/no-vanilla": "error",

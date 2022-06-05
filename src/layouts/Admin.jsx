@@ -40,9 +40,10 @@ const classes = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const Layout = styled('div')( ({ theme }) => ({
+const LayoutSxDiv = styled('div')( ({ theme }) => ({
     [`&.${classes.root}`]: {
         // `&.${...` without spaces (root styles)
+        display: 'flex',
         height: '100%',
         position: 'relative',
         top: '0',
@@ -55,13 +56,14 @@ const MainPanel = styled('div')( ({ theme }) => {
     return ({
         [`&.${classes.mainPanel}`]: {
         // `&.${...` without spaces (root styles)
+            flexShrink: 0,
             float: 'right',
             maxHeight: '100%',
             overflow: 'hidden',
-            WebkitOverflowScrolling: 'touch',
             position: 'relative',
             transition: theme.ctmdr.transition,
             width: '100%',
+            WebkitOverflowScrolling: 'touch',
             [theme.breakpoints.up('md')]: {
                 width: `calc(100% - ${drawerWidth}px)`
             },
@@ -74,10 +76,10 @@ const MainPanel = styled('div')( ({ theme }) => {
             overflow: 'hidden',
         },
         [`&${' '}.${classes.container}`]: {
-        //marginTop: '36px',
+            //marginTop: '36px',
             minHeight: 'calc(100vh - 123px)',
             padding: '30px 15px',
-        //position: 'relative',
+            //position: 'relative',
         },
         [`&${' '}.${classes.content}`]: {
             marginTop: '0px',
@@ -95,20 +97,21 @@ export default function Admin ({ ...rest }) {
 
     // states and functions
     const [ image, setImage ] = React.useState( bgImage );
-    const [ hue, setHue ] = React.useState( 'blue' );
-    const [ menuShow, toggleMenuShow ] = React.useReducer( (x) => !x, false );
+    const [ hue, setHue ] = React.useState('blue');
     const handleImageClick = (image) => setImage( image );
     const handleColorClick = (hue) => setHue( hue );
-    //const handleFixedClick = () => setMenuShow( !menuShow );
 
     const [ mobileOpen, setMobileOpen ] = React.useState( false );
     const handleDrawerToggle = () => setMobileOpen( !mobileOpen );
+
+    const [ menuShow, toggleMenuShow ] = React.useReducer( (x) => !x, false );
+    //const handleFixedClick = () => setMenuShow( !menuShow );
 
     React.useLayoutEffect( () => {
         /**
          *  initialize and destroy the PerfectScrollbar plugin
          */
-        const isWinPlatform = navigator?.userAgent?.includes( 'Win' );
+        const isWinPlatform = navigator?.userAgent?.includes('Win');
         const resizeFunction = () => {
             (window.innerWidth > MD_BREAKPOINT) && setMobileOpen( false );
             ps?.update();
@@ -124,13 +127,13 @@ export default function Admin ({ ...rest }) {
             debug(`ps`, ps );
             document.body.style.overflow = 'hidden';
         }
-        window.addEventListener( 'resize', resizeFunction );
+        window.addEventListener('resize', resizeFunction );
         // Specify how to clean up after this effect:
         return (
             function cleanup() {
                 ps?.destroy();
                 ps = null;
-                window.removeEventListener( 'resize', resizeFunction );
+                window.removeEventListener('resize', resizeFunction );
             }
         );
     }, [ mainPanel ]);
@@ -140,7 +143,7 @@ export default function Admin ({ ...rest }) {
     };
 
 
-    return (<Layout className={classes.root}
+    return (<LayoutSxDiv className={classes.root}
         ref = {mainPanel}
     >
         <Sidebar
@@ -186,6 +189,6 @@ export default function Admin ({ ...rest }) {
                 menuShow = {menuShow}
             />
         </MainPanel>
-    </Layout>);
+    </LayoutSxDiv>);
 }
 

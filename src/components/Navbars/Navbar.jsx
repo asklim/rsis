@@ -41,7 +41,7 @@ const Root = styled( AppBar, {
             border: '0',
             borderRadius: '3px',
             borderBottom: '0',
-            display: 'block',
+            display: 'flow-root',
             marginBottom: '0',
             minHeight: '50px',
             padding: '10px 0',

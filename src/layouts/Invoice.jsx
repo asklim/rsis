@@ -3,6 +3,9 @@ import { Outlet, } from 'react-router-dom';
 
 // Google Material-UI/core components
 import { /*alpha,*/ styled } from '@mui/material/styles'; //v.5
+import {
+    Box,
+} from '@mui/material';
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from 'perfect-scrollbar';
@@ -25,112 +28,119 @@ const MD_BREAKPOINT = 960-1; // theme.breakpoints.md
 
 const PREFIX = 'InvoiceLayout';
 const classes = {
-    root:      `${PREFIX}-root`,
-    mainPanel: `${PREFIX}-mainPanel`,
-    content:   `${PREFIX}-content`,
-    container: `${PREFIX}-container`,
+    root:        `${PREFIX}-root`,
+    mainPanel:   `${PREFIX}-mainPanel`,
+    scrollCntnr: `${PREFIX}-scrollCntnr`,
+    content:     `${PREFIX}-content`,
+    container:   `${PREFIX}-container`,
 };
 
 // eslint-disable-next-line no-unused-vars
-const Root = styled('div')( ({ theme }) => ({
+const LayoutSxDiv = styled('div')( ({ theme }) => ({
     [`&.${classes.root}`]: {
         // `&.${...` without spaces (root styles)
+        display: 'flex',
         height: '100vh',
         position: 'relative',
         top: '0',
     },
 }));
 
-const MainPanel = styled('div')( ({ theme }) => ({
-    // `&.${...` without spaces (root styles)
-    [`&.${classes.mainPanel}`]: {
-        float: 'right',
-        maxHeight: '100%',
-        overflow: 'auto',
-        overflowScrolling: 'touch',
-        position: 'relative',
-        transition: theme.ctmdr.transition,
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: `calc(100% - ${theme.ctmdr.drawerWidth}px)`
+const MainPanel = styled('div')( ({ theme }) => {
+    const { drawerWidth, transition } = theme.ctmdr;
+    const navbarHeight = 84;
+    return ({
+        [`&.${classes.mainPanel}`]: {
+            // `&.${...` without spaces (root styles)
+            flexShrink: 0,
+            float: 'right',
+            maxHeight: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            top: 0,
+            transition: transition,
+            width: '100%',
+            WebkitOverflowScrolling: 'touch',
+            [theme.breakpoints.up('md')]: {
+                width: `calc(100% - ${drawerWidth}px)`
+            },
         },
-    },
-    [`& .${classes.container}`]: {
-        marginTop: '70px',
-        padding: '30px 15px',
-        minHeight: 'calc(100vh - 123px)',
-    },
-    [`& .${classes.content}`]: {
-        marginTop: '0px',
-    },
-}));
+        [`&${' '}.${classes.scrollCntnr}`]: {
+            height: `calc(100vh - ${navbarHeight}px)`,
+            //marginTop: '0px',
+            width: '100%',
+            position: 'relative',
+            overflow: 'hidden',
+        },
+        [`&${' '}.${classes.container}`]: {
+            //marginTop: '70px',
+            minHeight: 'calc(100vh - 123px)',
+            padding: '30px 15px',
+        },
+        [`&${' '}.${classes.content}`]: {
+            marginTop: '0px',
+        },
+    });
+});
 
 let ps;
 
 
-export default function InvoiceBoard({ ...rest }) {
-
-
-    // ref to help us initialize PerfectScrollbar on windows devices
-    const mainPanel = React.createRef();
+export default function InvoiceBoard ({ ...rest }) {
 
     // states and functions
-    const [image, setImage] = React.useState( bgImage );
-    const [hue, setHue] = React.useState( 'blue' );
-    const [ menuShow, setMenuShow ] = React.useState( false );
-    const [mobileOpen, setMobileOpen] = React.useState( false );
-    //hasImage: true
+    const [ image, setImage ] = React.useState( bgImage );
+    const [ hue, setHue ] = React.useState('blue');
 
-    const handleImageClick = (image) => setImage( image );
-
-    const handleColorClick = (hue) => setHue( hue );
-
-    const handleFixedClick = () => setMenuShow( !menuShow );
-
+    const [ mobileOpen, setMobileOpen ] = React.useState( false );
     const handleDrawerToggle = () =>  setMobileOpen( !mobileOpen );
-
     const resizeFunction = () =>
         (window.innerWidth > MD_BREAKPOINT) && setMobileOpen( false );
 
+    const [ menuShow, toggleMenuShow ] = React.useReducer( (x) => !x, false );
+    // const handleFixedClick = () => setMenuShow( !menuShow );
+
+    // ref to help us initialize PerfectScrollbar on windows devices
+    const layoutRef = React.createRef();
+
     React.useEffect(() => {
         // initialize and destroy the PerfectScrollbar plugin
-        const isWinPlatform = navigator?.userAgent?.includes( 'Win' );
+        const isWinPlatform = navigator?.userAgent?.includes('Win');
 
         if( isWinPlatform ) {
-            ps = new PerfectScrollbar( mainPanel.current, {
+            let ctx = layoutRef.current.querySelector(`.${classes.scrollCntnr}`);
+            ps = new PerfectScrollbar( ctx, {
                 suppressScrollX: true,
-                suppressScrollY: false
+                //suppressScrollY: false
             });
             document.body.style.overflow = 'hidden';
         }
-        window.addEventListener( 'resize', resizeFunction );
+        window.addEventListener('resize', resizeFunction );
         // Specify how to clean up after this effect:
         return (
             function cleanup() {
                 if( isWinPlatform ) {
                     ps?.destroy();
+                    ps = null;
                 }
-                window.removeEventListener( 'resize', resizeFunction );
+                window.removeEventListener('resize', resizeFunction );
             }
         );
-    }, [ mainPanel ]);
+    }, [ layoutRef ]);
 
 
-    return (<Root className={classes.root}>
-        <MainPanel
-            className = {classes.mainPanel}
-            ref = {mainPanel}
-        >
-            <Sidebar
-                routes = {routes}
-                logoText = {'Invoice Board'}
-                logo = {logo}
-                image = {image}
-                handleDrawerToggle = {handleDrawerToggle}
-                open = {mobileOpen}
-                hue = {hue}
-                {...rest}
-            />
+    return (<LayoutSxDiv className={classes.root} ref={layoutRef}>
+        <Sidebar
+            routes = {routes}
+            logoText = {'Invoice Board'}
+            logo = {logo}
+            image = {image}
+            handleDrawerToggle = {handleDrawerToggle}
+            open = {mobileOpen}
+            hue = {hue}
+            {...rest}
+        />
+        <MainPanel className={classes.mainPanel}>
             <Navbar
                 hue = {hue}
                 routes = {routes}
@@ -138,24 +148,25 @@ export default function InvoiceBoard({ ...rest }) {
                 {...rest}
             />
 
-            <div className={classes.container}>
-                <div className={classes.content}>
-                    <Outlet />
-                </div>
-            </div>
+            <Box className={classes.scrollCntnr}>
 
-            <Footer
-                appVersion ={window.document.rsis.appVersion}
-            />
+                <div className={classes.container}>
+                    <div className={classes.content}>
+                        <Outlet />
+                    </div>
+                </div>
+                <Footer appVersion={window.document.rsis.appVersion} />
+            </Box>
+
             <FixedPlugin
                 bgImage = {image}
-                handleColorClick = {handleColorClick}
-                handleFixedClick = {handleFixedClick}
-                handleImageClick = {handleImageClick}
+                handleColorClick = {(hue) => setHue( hue )}
+                handleFixedClick = {toggleMenuShow}
+                handleImageClick = {(image) => setImage( image )}
                 hue = {hue}
                 menuShow = {menuShow}
             />
         </MainPanel>
-    </Root>);
+    </LayoutSxDiv>);
 }
 
