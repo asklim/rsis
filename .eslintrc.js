@@ -47,7 +47,7 @@ module.exports = {
     },
     rules: {
         /*******       LOGIC      *******
-         * https://eslint.org/docs/rules/
+         * https://eslint.org/docs/latest/rules/
         */
         "no-await-in-loop": "warn",
         "no-template-curly-in-string": "warn",

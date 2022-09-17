@@ -83,12 +83,15 @@ const resolveModule = (resolveFn, filePath) =>  {
     return resolveFn( `${filePath}.js` );
 };
 
+const distFolderName = 'static';
+
 // config after eject: we're in ./config/
 module.exports = {
 
+    distFolderName,
     dotenv :          resolveApp( '.env' ),
     appPath :         resolveApp( '.' ),
-    appBuild :        resolveApp( 'static' ), //('build'),
+    appBuild :        resolveApp( distFolderName ), //('build'),
     appPublic :       resolveApp( 'src/assets/public' ),
     appHtml :         resolveApp( 'src/index-template.html' ),
     appHtmlTemplate : resolveApp( 'src/index-template.html' ),
