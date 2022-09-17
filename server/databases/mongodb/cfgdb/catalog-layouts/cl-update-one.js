@@ -1,6 +1,6 @@
 
-const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
-const UUID = require( 'uuid' );
+const debug = require('debug')('--dbs:cfg:catalogLayouts');
+const UUID = require('uuid');
 const {
     icwd,
     httpResponseCodes: HTTP,
@@ -19,18 +19,15 @@ const CatalogLayouts = db.model( 'CatalogLayouts' );
  * - statusCode 400 Bad Request & response= message
  * - statusCode 500 Server Error & response= error object
  */
-
 module.exports = async function updateOne (catalogId, body) {
-
 
     const { xlGroups, items, host } = body;
 
-    const filtering = UUID.validate( catalogId )
-        ? { uuid: catalogId }
+    const filtering = UUID.validate( catalogId ) ?
+        { uuid: catalogId }
         : { _id: catalogId };
 
     try {
-
         const $set = Object.assign({},{
             xlGroups, items,
             host,

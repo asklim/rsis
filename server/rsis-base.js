@@ -1,8 +1,6 @@
-
-//const debug = require( 'debug' )('rsis:base');
+//const dbgTest = require( 'debug' )('rsis:base:test');
 
 const http = require( 'http' );
-const herokuPinger = require( './heroku-no-sleep' );
 const {
     createMongoDBConnections,
     databasesShutdown,
@@ -17,10 +15,6 @@ createMongoDBConnections();
 const {
     app: rsisExpressApp,
 } = require( './rsis-app.js' );
-
-rsisExpressApp.getMyDB = function () {
-    log.debug( 'Call from rsisExpressApp.getMyDB !!!!!!!!!!!!!!!' );
-};
 
 //debug( 'typeof getMyDB is', typeof rsisExpressApp.getMyDB );
 //debug( rsisExpressApp.get('env')); // == NODE_ENV
@@ -93,22 +87,17 @@ server.on( 'clientError', (_err, socket) => {
 server.on( 'close', () => {
 
     console.log( 'http-server closing ....' );
+    rsisExpressApp.emit('close');
     //ngrok.disconnect();
     //console.log( 'ngrok disconnected.' );
 });
-
-const EVERY_30_MINUTE = 30;
-/** Закрытие pinger будет после закрытия server  */
-herokuPinger( server, EVERY_30_MINUTE );
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 server.listen(
     port,
-    () => {
-        serverAppOutput( 'addr'/*'full'*/, server );
-    }
+    () => serverAppOutput('addr'/*'full'*/, server )
 );
 
 
@@ -125,37 +114,43 @@ const shutdownTheServer = () => {
 };
 
 
-process.once( 'SIGUSR2', async () => { // For nodemon restarts
-    await shutdownTheServer();
-    databasesShutdown(
-        'SIGUSR2, nodemon restart',
-        async () => {
-            setTimeout( process.kill, 500, process.pid, 'SIGUSR2' );
-        }
-    );
-});
+process.once(
+    'SIGUSR2', // For nodemon restarts
+    async () => {
+        await shutdownTheServer();
+        databasesShutdown(
+            'SIGUSR2, nodemon restart',
+            async () => {
+                setTimeout( process.kill, 500, process.pid, 'SIGUSR2');
+            }
+        );
+    }
+);
 
-const ZERO_EXIT_CODE = 0;
 
-// For app termination
-process.on( 'SIGINT', async () => {
-    console.log( '\b\b\x20\x20' );
-    console.log( 'Got SIGINT signal (^C)!\n' );
-    const p = shutdownTheServer();
-    //debug( 'shutdown returns', p ); // Promise { <pending> }
-    await p;
-    //debug( 'shutdown returns', p ); // Promise { undefined }
-    await databasesShutdown(
-        'SIGINT, app termination',
-        () => {
-            //const EXIT_DELAY = 0;
-            //setTimeout( process.exit, EXIT_DELAY, ZERO_EXIT_CODE );
-            process.exit( ZERO_EXIT_CODE );
-        }
-    );
-    /** Если без setTimeout, то это никогда не будет выполнено */
-    console.log( 'Exit from app.' );
-});
+const OK_EXIT_CODE = 0;
+
+process.on( // For app termination
+    'SIGINT',
+    async () => {
+        console.log('\b\b\x20\x20');
+        console.log('Got SIGINT signal (^C)!\n');
+        const p = shutdownTheServer();
+        //debug( 'shutdown returns', p ); // Promise { <pending> }
+        await p;
+        //debug( 'shutdown returns', p ); // Promise { undefined }
+        await databasesShutdown(
+            'SIGINT, app termination'
+            /*, () => {
+                //const EXIT_DELAY = 0;
+                //setTimeout( process.exit, EXIT_DELAY, ZERO_EXIT_CODE );
+            }*/
+        );
+        /** Если без setTimeout, то это никогда не будет выполнено */
+        console.log(`Process finished (pid:${process.pid}, exit code: 0).`);
+        process.exit( OK_EXIT_CODE );
+    }
+);
 
 // For Heroku app termination
 process.on( 'SIGTERM', async () => {
@@ -163,7 +158,7 @@ process.on( 'SIGTERM', async () => {
     await databasesShutdown(
         'SIGTERM, app termination',
         async () => {
-            setTimeout( process.exit, 500, ZERO_EXIT_CODE );
+            setTimeout( process.exit, 500, OK_EXIT_CODE );
         }
     );
 });

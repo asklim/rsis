@@ -1,19 +1,22 @@
-//const debug = require( 'debug' )('rsis:app');
+const debug = require( 'debug' )('rsis:app');
 
-const log = require( './helpers/' ).consoleLogger( '[rsis:app]' );
+const log = require('./helpers/').consoleLogger('[rsis:app]');
 
 //const createError = require( 'http-errors' );
-const express = require( 'express' );
-const path = require( 'path' );
-const cors = require( 'cors' );
+const express = require('express');
+const path = require('path');
+const cors = require('cors');
 //const favicon = require( 'serve-favicon' );
-const cookieParser = require( 'cookie-parser' );
-const morgan = require( 'morgan' );
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const paths = require('../config/paths');
 //const uuid = require( 'uuid' );
-const passport = require( 'passport' );
+const passport = require('passport');
 //const LocalStrategy = require( 'passport-local' ).Strategy;
 
-const { API_SERVER_LOCAL } = require( `./rsis.config.js` );
+const herokuPinger = require('./heroku-no-sleep/');
+
+const { API_SERVER_LOCAL } = require(`./rsis.config.js`);
 
 const {
     NODE_ENV,
@@ -25,17 +28,18 @@ const isProduction = NODE_ENV === 'production';
 const isHMR = DEV_MODE === 'HotModuleReplacement';
 
 
-const app = require( './rsis-express' );
+const app = require('./rsis-express');
+debug('getStartTime:', app.getStartTime() );
 
-const apiRouter = require( './api-router' );
+const apiRouter = require('./api-router');
 
 app.set( 'apiServer', NODE_ENV === 'production' ?
     API_WWW_SERVER  //'https://rsis-webapp.herokuapp.com'
     : API_SERVER_LOCAL
 );
 // view engine setup
-app.set( 'views', './views' );
-app.set( 'view engine', 'ejs' );
+app.set('views', './views');
+app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use( favicon( `${icwd}/public/favicon.ico` ));
@@ -47,20 +51,29 @@ const loggerTemplate = [
 ].join(' ');
 app.use( morgan( loggerTemplate )); // dev | common | combined |short
 
+/** json MUST BE BEFORE routers */
 app.use( express.json({ limit: "5mb" }));
+
+app.use( '/api', apiRouter );
+
+app.use((req, _res, next) => {
+    // const html = path.resolve( __dirname, `../${paths.distFolderName}/index.html` );
+    // debug(`request url: ${req.url}`);
+    // debug(`'index.html' is ${html}`);
+    next();
+});
+
 app.use( express.urlencoded({ extended: true, limit: "5mb" }));
 app.use( cookieParser() );
 
 app.use( passport.initialize() );
 //app.use( passport.session() );
 
-app.use( express.static( 'static' ));
+// log.debug(`build path: ${paths.appBuild}`); // full path
+app.use( express.static( paths.distFolderName /*'static'*/ ));
 
 app.use( cors() );
-app.options( '*', cors() );
-
-app.use( '/api', apiRouter );
-
+//app.options( '*', cors() );
 
 if( !isProduction && isHMR ) {
 
@@ -83,12 +96,13 @@ if( !isProduction && isHMR ) {
 
 
 // eslint-disable-next-line no-unused-vars
-app.get( '*', (_req, res, next) => {
+app.get( '*', (req, res, next) => {
 
     const INDEX_HTML_PFN = path.resolve( __dirname, `../static/index.html` );
 
-    log.info( `server __dirname is ${__dirname}` );
-    log.info( `sending 'index.html' from ${INDEX_HTML_PFN}` );
+    debug(`request url: ${req.url}`);
+    log.info(`server __dirname is ${__dirname}`);
+    log.info(`sending 'index.html' from ${INDEX_HTML_PFN}`);
 
     res.sendFile( INDEX_HTML_PFN,
         (err) => {
@@ -98,7 +112,10 @@ app.get( '*', (_req, res, next) => {
                 //TODO: Выяснить как работает Error Handling
                 // Нужно ли передавать 'err' дальше?
                 // Нужно ли генерировать ошибку 404?
-                //next( err );
+                next( err );
+            }
+            else {
+                next();
             }
         }
     );
@@ -120,14 +137,16 @@ app.use((
     err, req, res, _next
     // must be 4 args
 ) => {
+    log.debug(`request url: ${req.url}`);
+
     let runMode = req.app.get( 'env' );
     const isDev = runMode === 'development';
     console.log( `app-server error-handler: env = '${runMode}'` );
-    console.log( isDev
-        ? (req.body && Object.keys( req.body ).length > 0)
-            ? req.body
+    console.log( isDev ?
+        (req.body && Object.keys( req.body ).length > 0) ?
+            req.body
             : req
-        : ""
+        : ''
     );
 
     // set locals, only providing error in development
@@ -139,6 +158,11 @@ app.use((
     //res.render( 'error' );
 });
 
+debug('app locals', app.locals );
+
+const EVERY_30_MINUTE = 30;
+/** Закрытие pinger будет после закрытия server  */
+herokuPinger( app, EVERY_30_MINUTE );
 
 
 module.exports = {

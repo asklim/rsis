@@ -1,9 +1,9 @@
-const debug = require( 'debug' )( '-dbg:items-balances:schema' );
+const debug = require('debug')('-dbg:items-balances:schema');
 
-const { Schema } = require( 'mongoose' );
-const UUID = require( 'uuid' );
+const { Schema } = require('mongoose');
+const UUID = require('uuid');
 
-//const PATH_DEFINITION = require( '../schema.paths-definitions' );
+//const PATH_DEFINITION = require('../schema.paths-definitions');
 
 
 

@@ -1,8 +1,15 @@
-//const debug = require( 'debug' )( 'dbs:connect' );
-const { consoleLogger, } = require( '../helpers' );
+const debug = require('debug')('_temp:dbs:index');
+const { consoleLogger, } = require('../helpers');
 
-const log = consoleLogger( `[mongo-dbs]` );
+const log = consoleLogger(`[mongo-dbs]`);
 const dbs = {};
+
+const DB_CODENAME = {
+    'cfg'   : 'rsiscfg',
+    'config': 'rsiscfg',
+    'sum'   : 'rsissum',
+    'temp'  : 'rsistmp',
+};
 
 /**
  * @name getDB
@@ -12,40 +19,37 @@ const dbs = {};
  * @return {Mongoose.Connection} The connection to database
  *
 **/
-const getDB = (dbType) => {
+function getDB (dbType) {
 
     if( typeof dbType !== 'string' ) {
-        return log.warn( 'dbType must be a string.' );
+        log.warn( 'dbType must be a string.' );
+        return;
     }
 
-    let dbName;
+    let dbName = DB_CODENAME[ dbType.toLowerCase() ];
 
-    switch( dbType.toLowerCase() ) {
+    /*switch( dbType.toLowerCase() ) {
         case 'config': dbName = 'rsiscfg'; break;
         case   'temp': dbName = 'rsistmp'; break;
         case    'sum': dbName = 'rsissum'; break;
-    }
+    }*/
 
     if( !dbs[dbName] ) {
         createMongoDBConnections();
     }
-    //debug( 'getDB:', dbs[ dbName ], '\ntypeof .model: ',typeof dbs[ dbName ].model );
+    debug(`getDB: ${dbs[ dbName ]}\ntypeof .model: ${typeof dbs[ dbName ].model}`);
 
     return dbs[ dbName ];
     //Если getDB = async (), то ломается там где используется.
     //Надо переделывать под await, т.к. возвращается Promise???
-};
+}
 
 
-const createMongoDBConnections = () => {
-
-    if( !dbs.rsiscfg ) { dbs.rsiscfg = require( './dbrsiscfg' ); }
-    if( !dbs.rsissum ) { dbs.rsissum = require( './dbrsissum' ); }
-    if( !dbs.rsistmp ) { dbs.rsistmp = require( './dbrsistmp' ); }
-
-    //debug( 'rsiscfg', dbs.rsiscfg );
-};
-
+function createMongoDBConnections () {
+    if( !dbs.rsiscfg ) { dbs.rsiscfg = require('./dbrsiscfg'); }
+    if( !dbs.rsissum ) { dbs.rsissum = require('./dbrsissum'); }
+    if( !dbs.rsistmp ) { dbs.rsistmp = require('./dbrsistmp'); }
+}
 
 
 /**
@@ -55,37 +59,28 @@ const createMongoDBConnections = () => {
  *                          к базам данных
  *
 **/
-const databasesShutdown = async (msg, next) => {
-    /*
-    const allDbsClosingPromises = Object.keys( dbs )
-    .map(
-        (dbKey) => dbs[ dbKey ].closeConn()
-    );
-
-    Promise.all( allDbsClosingPromises
-        //[ dbTmp.closeConn(), dbSum.closeConn(), dbCfg.closeConn() ]
-    )
-    .then( (dbsNames) => {
-        console.log( 'dbs closed: ', dbsNames );
-        console.log( 'Mongoose disconnected through ' + msg );
-        next();
-    })
-    .catch( (error) => log.error( error ));
-    */
-
+async function databasesShutdown (
+    msg,
+    next
+) {
     try {
         const dbsTitles = [];
         for( let dbKey in dbs ) {
-            dbsTitles.push( await dbs[ dbKey ].closeConn() );
+            const db = dbs[ dbKey ];
+            // eslint-disable-next-line no-await-in-loop
+            const title = await db.closeConn();
+            dbsTitles.push( title );
         }
-        log.info( 'dbs closed: ', dbsTitles );
-        console.log( `Mongoose disconnected through ${msg}` );
-        next && await next();
+        log.info('dbs closed: ', dbsTitles );
+        console.log(`Mongoose disconnected through ${msg}`);
     }
     catch (error) {
-        log.error( 'databases shutdown error', error );
+        log.error('databases shutdown error', error );
     }
-};
+    finally {
+        next && await next();
+    }
+}
 
 
 module.exports = {

@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 require( 'dotenv' ).config();
+const axios = require( 'axios' ).default;
 
 const log = require( 'loglevel' );
-const isProduction = process.env.NODE_ENV === 'production';
+const { PORT, NODE_ENV } = process.env;
+
+const isProduction = NODE_ENV === 'production';
 log.setLevel( isProduction ? log.levels.DEBUG : log.levels.TRACE );
 
 const os = require( 'os' );
@@ -19,9 +22,16 @@ const initLog = consoleLogger( '[rsis:index]' );
 
 initLog.warn( 'Start of init section.' );
 
+// (async () => {
+// })();
+
 const version = require( `${icwd}/package.json` ).version;
 
 (async () => {
+    if( await isAppInProcess( PORT )) {
+        initLog.warn('App has already been launched.');
+        process.exit( 1 );
+    }
     await outputStartServerInfo( version );
     require( './rsis-base.js' );
     initLog.info( 'End of init section.' );
@@ -56,3 +66,17 @@ async function outputStartServerInfo (appVersion) {
     console.log( colors.gray( 'User Info :' ), userInfo.yellow, '\n' );
 }
 
+
+async function isAppInProcess( port ) {
+    try {
+        let path = `http://localhost:${port}/api/health/app`;
+        let response = await axios.get( path );
+        initLog.debug('isAppInProgress path:', path );
+        initLog.debug('isAppInProgress is true, data:', response.data );
+        return true;
+    }
+    catch {
+        //initLog.debug('isAppInProgress is false', err );
+        return false;
+    }
+}

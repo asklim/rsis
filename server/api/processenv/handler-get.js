@@ -27,48 +27,43 @@ module.exports = async function handler_GET (
     res
 ) {
     try {
-        log.debug( 'req.query:', req.query );
+        log.debug('req.query:', req.query );
         //console.log( 'console.log - api/processenv/handler-get [handler]' );
 
-        debug( 'typeof req.app is', typeof req.app );  // function
-        debug( 'typeof getMyDB is', typeof req.app?.getMyDB );  // function
+        debug('typeof req.app is', typeof req.app );  // function
+        debug('typeof getMyDB is', typeof req.app?.getMyDB );  // function
         req.app.getMyDB();
 
-        log.info(
-            'handler-get - req.params:', req.params,
-            'count:', req.params && Object.keys( req.params ).length
-        );
-        log.info( 'handler-get - req.query:', req.query );
+        const count = req.params && Object.keys( req.params ).length || 0;
 
-        const count = req.params
-            ? Object.keys( req.params ).length
-            : 0
-        ;
+        //log.info('handler-get - req.params:', req.params, 'count:', count );
+        log.info('handler-get - req.query:', req.query );
 
-        if( count !== 0) {
+
+        if( count != 0 ) {
             // не должно быть
-            return send400BadRequest( res, '.params not allowed' );
+            return send400BadRequest( res, '.params not allowed');
         }
 
         if( !req.query ) {
             // req.query должен быть
-            return send400BadRequest( res, '.query not present' );
+            return send400BadRequest( res, '.query not present');
         }
 
         const { name } = req.query;
 
         if( !name ) {
             // req.query.name должен быть
-            return send400BadRequest( res, '.name not present' );
+            return send400BadRequest( res, '.name not present');
         }
 
         const envVarValue = process.env[ name ];
 
-        log.info( `name: ${name} value:`, envVarValue );
+        log.info(`name: ${name} value: ${envVarValue}`);
 
         if( !envVarValue ) {
             // Нет такой переменной в окружении
-            return send404NotFound( res, 'invalid .name' );
+            return send404NotFound( res, 'invalid .name');
         }
 
         send200Ok( res, {
@@ -78,6 +73,6 @@ module.exports = async function handler_GET (
         });
     }
     catch (err) {
-        log.trace( 'catch, error:', err );
+        log.trace('catch, error:', err );
     }
 };

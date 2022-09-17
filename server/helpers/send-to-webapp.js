@@ -68,7 +68,7 @@ function sendTo (apiRoute, verb, reqBody) {
             "charset" : "utf-8"
         },
         data: reqBody,
-        validateStatus: (status) => status < HTTP.INTERNAL_SERVER_ERROR
+        validateStatus: (status) => (status < HTTP.INTERNAL_SERVER_ERROR),
     });
 }
 

@@ -29,14 +29,13 @@ require( './api/sum/financereport/router' )( router );
 require( './api/dataset/router.cjs' )( router );
 
 
-router.all(
-    '/*',
-    (_req, res) => {
-        log.warn( `${__filename} - api-router.js - unhandled route` );
-        res.status( 400 );
-        const tstamp = (new Date).toUTCString();
-        res.json( { message: `Bad request at api-router (${tstamp}).` });
-    }
-);
+// eslint-disable-next-line no-unused-vars
+router.use( (req, res, _next) => {
+    log.warn(`${__filename} - unhandled route: ${req.url}`);
+    //log.warn(_req);
+    res.status( 400 );
+    const tstamp = (new Date).toUTCString();
+    res.json( { message: `Bad request at api-router (${tstamp}).`});
+});
 
 module.exports = router;

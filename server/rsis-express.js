@@ -1,4 +1,4 @@
-// const debug = require( 'debug' )('rsis:express');
+const debug = require( 'debug' )('rsis:express');
 const express = require( 'express' );
 
 const {
@@ -15,6 +15,18 @@ const {
 const defaultLogger = consoleLogger( '[rsis:express]' );
 
 const app = express();
+
+app.logger = defaultLogger;
+app.getMyDB = function () {
+    this.logger.debug('Call from rsisExpressApp.getMyDB !!!!!!!!!!!!!!!');
+};
+
+
+app.startTimestamp = Date.now();
+app.getStartTime = function () { return this.startTimestamp;};
+debug('app(define).getStartTime:', app.getStartTime() );
+//debug('app(define).logger is', ({}).hasOwnProperty.call( app, 'logger'));
+
 
 app.getStateHandler = function getStateHandler(
     res,

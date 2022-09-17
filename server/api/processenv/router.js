@@ -21,6 +21,7 @@ module.exports = function ( router ) {
 
     const envPath = '/processenv';
 
+    //router.get( `${envPath}/:name`, handler_GET );
     router.get( envPath, handler_GET );
     router.all( envPath, callbackError405 );
 
