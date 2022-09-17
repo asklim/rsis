@@ -13,6 +13,7 @@ export default function Fetch ({
         <pre>{JSON.stringify(error, null, 2)}</pre>
     ),
     dataHook = useHookFetch,
+    ...rest
 }) {
     // debug('renderLoading', renderLoading.toString(), renderLoading );
     // // [object Object] "$$typeof": Symbol("react.element")
@@ -22,9 +23,9 @@ export default function Fetch ({
     // //  JSON.stringify(error, null, 2));
 
     const [ isLoaded, data, error ] = dataHook( uri );
-    if( error ) return renderError({ error });
-    if( !isLoaded ) return renderLoading;
-    if( data ) return renderSuccess({ data });
+    if( error ) { return renderError({ error }); }
+    if( !isLoaded ) { return renderLoading; }
+    if( data ) { return renderSuccess({ ...rest, data }); }
 }
 
 Fetch.propTypes = {

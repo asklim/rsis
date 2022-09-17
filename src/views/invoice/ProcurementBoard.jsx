@@ -1,18 +1,11 @@
-// import { debug as Debug } from "../../utils/debuggers";
-// const debug = Debug.extend( 'procurement' );
-
 import { debugFactory } from 'utils/debuggers.js';
 const debug = debugFactory( 'invoice:procurement' );
 
-import React, {
-    useState,
-    useEffect,
-    // useCallback,
-} from "react";
-//import PropTypes from "prop-types";
+import * as React from 'react';
+//import PropTypes from 'prop-types';
 
 // Google Material-UI/core
-//import { makeStyles } from "@mui/styles";
+import { /*alpha,*/ styled } from '@mui/material/styles';
 import {
     Card, CardContent, CardHeader,
     Checkbox,
@@ -37,38 +30,53 @@ import {
     //Check,
     //Store, Warning, DateRange, LocalOffer,
     //Update, ArrowUpward, AccessTime,  Accessibility
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 // core components
-import GridItem from "components/m-d-r/Grid/GridItem.jsx";
-import GridContainer from "components/m-d-r/Grid/GridContainer.jsx";
-import Table from "components/m-d-r/Table/Table.jsx";
-import CustomTabs from "components/m-d-r/CustomTabs/CustomTabs.jsx";
-//import SnackbarContent from "components/m-d-r/Snackbar/SnackbarContent.jsx";
-//import Tasks from "components/m-d-r/Tasks/Tasks.jsx";
+import GridItem from 'components/m-d-r/Grid/GridItem.jsx';
+import GridContainer from 'components/m-d-r/Grid/GridContainer.jsx';
+import Table from 'components/m-d-r/Table/Table.jsx';
+import CustomTabs from 'components/m-d-r/CustomTabs/CustomTabs.jsx';
+//import SnackbarContent from 'components/m-d-r/Snackbar/SnackbarContent.jsx';
+//import Tasks from 'components/m-d-r/Tasks/Tasks.jsx';
 /*
-import Danger from "components/m-d-r/Typography/Danger.jsx";
-import Card from "components/m-d-r/Card/Card.jsx";
-import CardHeader from "components/m-d-r/Card/CardHeader.jsx";
-import CardIcon from "components/m-d-r/Card/CardIcon.jsx";
-import CardBody from "components/m-d-r/Card/CardBody.jsx";
-import CardFooter from "components/m-d-r/Card/CardFooter.jsx";
+import Danger from 'components/m-d-r/Typography/Danger.jsx';
+import Card from 'components/m-d-r/Card/Card.jsx';
+import CardHeader from 'components/m-d-r/Card/CardHeader.jsx';
+import CardIcon from 'components/m-d-r/Card/CardIcon.jsx';
+import CardBody from 'components/m-d-r/Card/CardBody.jsx';
+import CardFooter from 'components/m-d-r/Card/CardFooter.jsx';
 */
 
-import Loading from "components/misc/Loading.jsx";
-import DataLoadError from "components/misc/DataLoadError.jsx";
+import Loading from 'components/misc/Loading.jsx';
+import DataLoadError from 'components/misc/DataLoadError.jsx';
 
-import {
-    procurementPeriods as days,
-} from "config/enum-values.js";
+import { procurementPeriods as days } from 'config/enum-values.js';
 
-//import dashboardStyle from "assets/jss/m-d-r/views/dashboardStyle.js";
-//import checkboxAndRadioStyle from "assets/jss/m-d-r/checkboxAndRadioStyle.js";
-
-//const useStyles = makeStyles( {} );
-/*    ...dashboardStyle,
-    ...checkboxAndRadioStyle,
-});*/
+const PREFIX = 'ProcurementBoard';
+const classes = {
+    root:     `${PREFIX}-root`,
+    settings: `${PREFIX}-settings`,
+};
+// eslint-disable-next-line no-unused-vars
+const RootSxDiv = styled('div')( ({ theme }) => {
+    const navbarHeight = 84;
+    return ({
+        [`&.${classes.root}`]: {
+            // `&.${...` without spaces (root styles)
+            //display: 'flex',
+            height: '100%',
+            position: 'relative',
+            top: '0',
+        },
+        [`&${' '}.${classes.settings}`]: {
+            width: '100%',
+            position: 'sticky',
+            top: `-${navbarHeight+266}px`,
+            zIndex: 2,
+        },
+    });
+});
 
 
 const ProcurementBoardPage = () => {
@@ -83,24 +91,24 @@ const ProcurementBoardPage = () => {
     const fromBY = 1;
     const fromEU = 2;
 
-    const [filterByFreq, setFilterByFreq] = useState( FREQ_VALUES[ freqLAST ]);
-    const [filterByFrom, setFilterByFrom] = useState( SUPPLY_FROM );
+    const [filterByFreq, setFilterByFreq] = React.useState( FREQ_VALUES[ freqLAST ]);
+    const [filterByFrom, setFilterByFrom] = React.useState( SUPPLY_FROM );
 
-    const [isLoaded, setIsLoaded] = useState( false );
-    const [isDataLoadingError, setIsDataLoadingError] = useState( false );
-    const [serverDataset, setServerDataset] = useState( [] );        // Array of Hash
+    const [isLoaded, setIsLoaded] = React.useState( false );
+    const [isDataLoadingError, setIsDataLoadingError] = React.useState( false );
+    const [serverDataset, setServerDataset] = React.useState( [] );        // Array of Hash
     //  /server/sample-datasets/procurements.js
-    // Viewing lists for Table
-    const [shortPeriod, setShortPeriod] = useState( [] );  // Array of Array
-    const [middlePeriod, setMiddlePeriod] = useState( [] );
-    const [longPeriod, setLongPeriod] = useState( [] );
-    const [xtraLongPeriod, setXtraLongPeriod] = useState( [] );
 
-    const [dataServerResponse, setDataServerResponse] = useState( {} );
+    // Viewing lists for Table
+    const [shortPeriod, setShortPeriod] = React.useState( [] );  // Array of Array
+    const [middlePeriod, setMiddlePeriod] = React.useState( [] );
+    const [longPeriod, setLongPeriod] = React.useState( [] );
+    const [xtraLongPeriod, setXtraLongPeriod] = React.useState( [] );
+
+    const [dataServerResponse, setDataServerResponse] = React.useState( {} );
 
 
     const tableHeader = (period) => {
-
         const lineCount = {
             sp: shortPeriod.length,
             mp: middlePeriod.length,
@@ -196,22 +204,20 @@ const ProcurementBoardPage = () => {
             setFilterByFrom( newChecked );
         };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fetchLists = () => {
 
         const { origin } = window.location;
         const route = `${origin}/api/dataset/procurement/last`;
-        //const route = `${origin}/api/sum/procurement/last`;
 
         //debug( 'fetchLists window.location.origin: ', origin );
-        console.log( 'fetch Lists from:', route );
+        debug( 'fetch Lists from:', route );
 
         let headers = {
-            mode: "cors",
-            credentials: "omit",
-            "Content-Type": "application/json",
-            "Cache-Control": 'no-cache, no-store',
-            charset: "utf-8"
+            mode: 'cors',
+            credentials: 'omit',
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store',
+            charset: 'utf-8'
         };
 
         fetch( route, { headers }).
@@ -239,22 +245,15 @@ const ProcurementBoardPage = () => {
     };
 
     //Эффект применяется после рендеринга и только 1 раз
-    // esl--int-disable-next-line react-hooks/exhaustive-deps
-    useEffect( fetchLists, [] );
-    //useEffect( () => fetchLists(), [] );
+    React.useEffect( fetchLists, [] );
 
-    useEffect(
-        () => {
-            updateViewingLists( filterByFreq, filterByFrom );
-        },
+    React.useEffect(() => {
+        updateViewingLists( filterByFreq, filterByFrom );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [serverDataset]
-    );
+    }, [ serverDataset ]);
 
     const isFilterByFromChecked = (index) =>
         filterByFrom.includes( SUPPLY_FROM[ index ]);
-
-    //const classes = useStyles();
 
     if( isDataLoadingError ) {
         return (
@@ -264,103 +263,105 @@ const ProcurementBoardPage = () => {
     if( !isLoaded ) { return <Loading/>; }
 
 
-    return (<>
-        <GridContainer><GridItem xs={12} sm={10} md={8} lg={6}>
-            <Paper elevation={1}>
-                <Grid container>
-                    <Grid item xs={4}><Card>
-                        <CardHeader
-                            title = "По продажам"
-                            subheader = "выбор по частоте"
-                        />
-                        <CardContent>
-                            <RadioGroup
-                                aria-labelledby = "select-items-by-sales-freq"
-                                name = "filter-by-sales-frequency"
-                                value = {filterByFreq}
-                                onChange = {handleFilterByFreqChange}
-                            >
-                                <FormControlLabel
-                                    value = {FREQ_VALUES[ freqLAST ]}
-                                    control = {<Radio
-                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                    />}
-                                    label = "Last"
-                                />
-                                <FormControlLabel
-                                    value = {FREQ_VALUES[ freqAVRG ]}
-                                    control = {<Radio
-                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                    />}
-                                    label = "Средние"
-                                />
-                                <FormControlLabel
-                                    value = {FREQ_VALUES[ freqMAX ]}
-                                    control = {<Radio
-                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                    />}
-                                    label = "Maximal"
-                                />
-                            </RadioGroup>
-                        </CardContent>
-                    </Card></Grid>
-                    <Grid item xs={4}><Card>
-                        <CardHeader
-                            title = "Откуда"
-                            subheader = "выбор по источнику"
-                        />
-                        <CardContent>
-                            <FormGroup>
-                                <FormControlLabel
-                                    label = "RU"
-                                    control = {<Checkbox
-                                        checked = {isFilterByFromChecked( fromRU )}
-                                        onChange = {handleFromFilterClick( "ru" )}
-                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                    />}
-                                />
-                                <FormControlLabel
-                                    label = "BY"
-                                    control = {<Checkbox
-                                        checked = {isFilterByFromChecked( fromBY )}
-                                        onChange = {handleFromFilterClick( "by" )}
-                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                    />}
-                                />
-                                <FormControlLabel
-                                    label = "EU"
-                                    control = {<Checkbox
-                                        checked = {isFilterByFromChecked( fromEU )}
-                                        tabIndex = {-1}
-                                        onChange = {handleFromFilterClick( "eu" )}
-                                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                                    />}
-                                />
-                            </FormGroup>
-                        </CardContent>
-                    </Card></Grid>
-                    <Grid item xs={4}><Card>
-                        <CardHeader
-                            title = "Дней"
-                            subheader = "how many sales days"
-                        />
-                    </Card></Grid>
-                </Grid>
-            </Paper>
-        </GridItem>
-        </GridContainer>
+    return (<RootSxDiv className={classes.root}>
+        <div className={classes.settings}>
+            <Grid container><Grid item xs={12} sm={10} md={8} lg={6}>
+                <Paper elevation={1}>
+                    <Grid container>
+                        <Grid item xs={4}><Card>
+                            <CardHeader
+                                title = 'По продажам'
+                                subheader = 'выбор по частоте'
+                            />
+                            <CardContent>
+                                <RadioGroup
+                                    aria-labelledby = 'select-items-by-sales-freq'
+                                    name = 'filter-by-sales-frequency'
+                                    value = {filterByFreq}
+                                    onChange = {handleFilterByFreqChange}
+                                >
+                                    <FormControlLabel
+                                        value = {FREQ_VALUES[ freqLAST ]}
+                                        control = {<Radio
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                        label = 'Last'
+                                    />
+                                    <FormControlLabel
+                                        value = {FREQ_VALUES[ freqAVRG ]}
+                                        control = {<Radio
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                        label = 'Средние'
+                                    />
+                                    <FormControlLabel
+                                        value = {FREQ_VALUES[ freqMAX ]}
+                                        control = {<Radio
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                        label = 'Maximal'
+                                    />
+                                </RadioGroup>
+                            </CardContent>
+                        </Card></Grid>
+                        <Grid item xs={4}><Card>
+                            <CardHeader
+                                title = 'Откуда'
+                                subheader = 'выбор по источнику'
+                            />
+                            <CardContent>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        label = 'RU'
+                                        control = {<Checkbox
+                                            checked = {isFilterByFromChecked( fromRU )}
+                                            onChange = {handleFromFilterClick( 'ru' )}
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                    />
+                                    <FormControlLabel
+                                        label = 'BY'
+                                        control = {<Checkbox
+                                            checked = {isFilterByFromChecked( fromBY )}
+                                            onChange = {handleFromFilterClick( 'by' )}
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                    />
+                                    <FormControlLabel
+                                        label = 'EU'
+                                        control = {<Checkbox
+                                            checked = {isFilterByFromChecked( fromEU )}
+                                            tabIndex = {-1}
+                                            onChange = {handleFromFilterClick( 'eu' )}
+                                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                                        />}
+                                    />
+                                </FormGroup>
+                            </CardContent>
+                        </Card></Grid>
+                        <Grid item xs={4}><Card>
+                            <CardHeader
+                                title = 'Дней'
+                                subheader = 'how many sales days'
+                            />
+                        </Card></Grid>
+                    </Grid>
+                </Paper>
+            </Grid>
+            </Grid>
+        </div>
 
         <GridContainer><GridItem xs={12} sm={10} md={8} lg={6}>
             <CustomTabs
-                title = "Заказ на:"
-                headerColor = "primary"
+                title = 'Заказ на:'
+                headerColor = 'primary'
                 tabs = {[
                     {
                         tabName: `${days.short} дней`,
                         tabIcon: ShortPeriod,
                         tabContent: (
                             <Table
-                                tableHeaderColor = "danger"
+                                tableHeaderColor = 'danger'
                                 tableHead = {tableHeader('sp')}
                                 tableData = {shortPeriod}
                             />
@@ -371,7 +372,7 @@ const ProcurementBoardPage = () => {
                         tabIcon: MiddlePeriod,
                         tabContent: (
                             <Table
-                                tableHeaderColor = "warning"
+                                tableHeaderColor = 'warning'
                                 tableHead = {tableHeader('mp')}
                                 tableData = {middlePeriod}
                             />
@@ -382,7 +383,7 @@ const ProcurementBoardPage = () => {
                         tabIcon: LongPeriod,
                         tabContent: (
                             <Table
-                                tableHeaderColor = "primary"
+                                tableHeaderColor = 'primary'
                                 tableHead = {tableHeader('lp')}
                                 tableData = {longPeriod}
                             />
@@ -393,7 +394,7 @@ const ProcurementBoardPage = () => {
                         tabIcon: XtraLongPeriod,
                         tabContent: (
                             <Table
-                                tableHeaderColor = "info"
+                                tableHeaderColor = 'info'
                                 tableHead = {tableHeader('xlp')}
                                 tableData = {xtraLongPeriod}
                             />
@@ -403,7 +404,7 @@ const ProcurementBoardPage = () => {
             />
         </GridItem>
         </GridContainer>
-    </>);
+    </RootSxDiv>);
 };
 
 export default ProcurementBoardPage;
