@@ -1,0 +1,17 @@
+export const distFolderName: "static";
+export const moduleFileExtensions: string[];
+export declare let dotenv: string;
+export declare let appPath: string;
+export declare let appBuild: string;
+export declare let appPublic: string;
+export declare let appHtml: string;
+export declare let appHtmlTemplate: string;
+export declare let appIndexJs: any;
+export declare let appNodeModules: string;
+export declare let appPackageJson: string;
+export declare let appSrc: string;
+export declare let appJsConfig: string;
+export declare let appTsConfig: string;
+export declare let yarnLockFile: string;
+export declare let publicUrl: any;
+export declare let servedPath: any;

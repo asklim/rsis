@@ -1,9 +1,8 @@
 /**
  * Format message for http routes handler middleware
- * @param {Integer} httpStatusCode
- * @param {String} logmsg
- * @param {String|Object} response
- * @returns {Object}
+ * @param {number} httpStatusCode
+ * @param {string} logmsg
+ * @param {string | object} response
  */
 function makeResult (
     httpStatusCode,

@@ -1,20 +1,18 @@
-//const dbgTest = require( 'debug' )('rsis:base:test');
+//const dbgTest = require('debug')('rsis:base:test');
 
-const http = require( 'http' );
+const http = require('http');
 const {
     createMongoDBConnections,
     databasesShutdown,
-} = require( './databases' );
+} = require('./databases');
 
 
-const log = require( './helpers' ).consoleLogger( '[rsis:base]' );
+const log = require('./helpers').consoleLogger('[rsis:base]');
 
 createMongoDBConnections();
 
 
-const {
-    app: rsisExpressApp,
-} = require( './rsis-app.js' );
+const { app: rsisExpressApp, } = require('./rsis-app.js');
 
 //debug( 'typeof getMyDB is', typeof rsisExpressApp.getMyDB );
 //debug( rsisExpressApp.get('env')); // == NODE_ENV
@@ -23,8 +21,8 @@ const {
 /*******************************************************
  * Get port from environment and store in Express.
  */
-const port = normalizePort( process.env.PORT || '3067' );
-rsisExpressApp.set( 'port', port );
+const port = normalizePort( process.env.PORT ?? '3067');
+rsisExpressApp.set('port', port );
 
 
 const server = http.createServer( rsisExpressApp );
@@ -47,17 +45,17 @@ const handlerOnError = (err) => {
     switch( err.code ) {
 
         case 'EACCES':
-            log.error( bind + ' requires elevated privileges' );
+            log.error(`${bind} requires elevated privileges.`);
             process.exit( 1 );
             break;
 
         case 'EADDRINUSE':
-            log.error( bind + ' is already in use' );
+            log.error(`${bind} is already in use.`);
             process.exit( 1 );
             break;
 
         default:
-            log.log( `E: www-server unhandled error !!!`, err );
+            log.log(`E: www-server unhandled error !!!`, err );
             //throw error;
     }
 };
@@ -71,22 +69,22 @@ const handlerOnListening = () => {
         ? 'pipe ' + addr
         : 'port ' + addr.port
     ;
-    log.debug( `Server listening on ${bind}.` );
+    log.debug(`Server listening on ${bind}.`);
 };
 
 
-server.on( 'error', handlerOnError );
+server.on('error', handlerOnError );
 
-server.on( 'listening', handlerOnListening );
+server.on('listening', handlerOnListening );
 
-server.on( 'clientError', (_err, socket) => {
+server.on('clientError', (_err, socket) => {
 
-    socket.end( 'HTTP/1.1 400 Bad Request\r\n\r\n' );
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
 });
 
-server.on( 'close', () => {
+server.on('close', () => {
 
-    console.log( 'http-server closing ....' );
+    console.log('http-server closing ...');
     rsisExpressApp.emit('close');
     //ngrok.disconnect();
     //console.log( 'ngrok disconnected.' );
@@ -129,22 +127,22 @@ process.once(
 
 
 const OK_EXIT_CODE = 0;
+const clearTwoChar = '\b\b\x20\x20';
 
 process.on( // For app termination
     'SIGINT',
     async () => {
-        console.log('\b\b\x20\x20');
-        console.log('Got SIGINT signal (^C)!\n');
+        console.log(`${clearTwoChar}\nGot SIGINT signal (^C)!\n`);
         const p = shutdownTheServer();
         //debug( 'shutdown returns', p ); // Promise { <pending> }
         await p;
         //debug( 'shutdown returns', p ); // Promise { undefined }
         await databasesShutdown(
             'SIGINT, app termination'
-            /*, () => {
+            , () => {
                 //const EXIT_DELAY = 0;
                 //setTimeout( process.exit, EXIT_DELAY, ZERO_EXIT_CODE );
-            }*/
+            }
         );
         /** Если без setTimeout, то это никогда не будет выполнено */
         console.log(`Process finished (pid:${process.pid}, exit code: 0).`);
@@ -158,7 +156,8 @@ process.on( 'SIGTERM', async () => {
     await databasesShutdown(
         'SIGTERM, app termination',
         async () => {
-            setTimeout( process.exit, 500, OK_EXIT_CODE );
+            const EXIT_DELAY = 500;
+            setTimeout( process.exit, EXIT_DELAY, OK_EXIT_CODE );
         }
     );
 });
@@ -180,12 +179,6 @@ function normalizePort(
 }
 
 
-/**
- *
- * @param {*} outputMode
- * @param {*} appVersion
- * @param {*} httpServer
- */
 function serverAppOutput(
     outputMode,
     httpServer
@@ -215,4 +208,3 @@ function serverAppOutput(
 
     (outputs[ outputMode.toLowerCase() ] || outputs[ 'default' ])();
 }
-

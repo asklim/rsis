@@ -1,16 +1,16 @@
-const debug = require( 'debug' )('rsis:app');
+const debug = require('debug')('rsis:app');
 
 const log = require('./helpers/').consoleLogger('[rsis:app]');
 
+//const uuid = require( 'uuid' );
 //const createError = require( 'http-errors' );
+//const favicon = require( 'serve-favicon' );
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-//const favicon = require( 'serve-favicon' );
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const paths = require('../config/paths');
-//const uuid = require( 'uuid' );
 const passport = require('passport');
 //const LocalStrategy = require( 'passport-local' ).Strategy;
 
@@ -169,4 +169,3 @@ module.exports = {
     app,
     //databasesShutdown,
 };
-

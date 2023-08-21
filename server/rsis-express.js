@@ -1,5 +1,6 @@
-const debug = require( 'debug' )('rsis:express');
-const express = require( 'express' );
+/** @typedef { import ("../@types/server/rsis-express").RsisExpress} RsisExpress */
+const debug = require('debug')('rsis:express');
+const express = require('express');
 
 const {
     consoleLogger,
@@ -10,15 +11,16 @@ const {
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( './helpers/' );
+} = require('./helpers/');
 
-const defaultLogger = consoleLogger( '[rsis:express]' );
+const defaultLogger = consoleLogger('[rsis:express]');
 
+/** @type {RsisExpress} */
 const app = express();
 
 app.logger = defaultLogger;
 app.getMyDB = function () {
-    this.logger.debug('Call from rsisExpressApp.getMyDB !!!!!!!!!!!!!!!');
+    return this.logger.debug('Call from rsisExpressApp.getMyDB !!!!!!!!!!!!!!!');
 };
 
 
