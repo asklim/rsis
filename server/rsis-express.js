@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** @typedef { import ("../@types/server/rsis-express").RsisExpress} RsisExpress */
 const debug = require('debug')('rsis:express');
 const express = require('express');
