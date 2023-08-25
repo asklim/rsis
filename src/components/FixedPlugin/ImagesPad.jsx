@@ -13,7 +13,7 @@ const classes = {
     container:  `${PREFIX}-container`,
 };
 
-const SxSection = styled( 'section' )( ({ theme }) => {
+const SxSection = styled('section')( ({ theme }) => {
     const { pxToRem } = theme.typography;
     return ({
         [`&.${classes.root}`]: {
@@ -45,7 +45,7 @@ const SxSection = styled( 'section' )( ({ theme }) => {
 });
 
 
-const Thumbnail = styled( 'span', {
+const Thumbnail = styled('span', {
     shouldForwardProp: (prop) => prop !== 'current',
 })( ({ current, theme }) => {
     const { pxToRem } = theme.typography;

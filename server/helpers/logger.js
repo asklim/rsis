@@ -1,4 +1,4 @@
-const log = require( 'loglevel' );
+const log = require('loglevel');
 const isHeroku = process.env.DYNO && (process.env.PWD === '/app');
 const isSystemdService = (process.stdout.isTTY == undefined);
 
@@ -34,16 +34,16 @@ module.exports = function createLogger (ticker = '') {
     }
 
 
-    const debug = (...args) => log.debug( debugPrefix( 'DEBUG' )+msgColor, ...args, end );
+    const debug = (...args) => log.debug( debugPrefix('DEBUG')+msgColor, ...args, end );
 
-    const info = (...args) => log.info( logPrefix( 'INF' ), ...args );
+    const info = (...args) => log.info( logPrefix('INF'), ...args );
 
-    const warn = (...args) => log.warn( logPrefix( 'WARN' ), ...args );
+    const warn = (...args) => log.warn( logPrefix('WARN'), ...args );
 
-    const error = (...args) => log.error( logPrefix( 'ERROR' ), ...args );
+    const error = (...args) => log.error( logPrefix('ERROR'), ...args );
 
     return ({
-        trace: (...args) => log.trace( debugPrefix( 'TRACE' ), ...args ),
+        trace: (...args) => log.trace( debugPrefix('TRACE'), ...args ),
         debug,
         info,
         warn,

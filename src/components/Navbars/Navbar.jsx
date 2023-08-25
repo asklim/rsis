@@ -1,5 +1,5 @@
 import { debugFactory } from 'utils/debuggers.js';
-const debug = debugFactory( '-----debug:navbar' );
+const debug = debugFactory('-----debug:navbar');
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -33,8 +33,8 @@ const Root = styled( AppBar, {
 })(({ hue, theme }) => {
     const color = theme.ctmdr.colorsMatrix[ hue ];
     const ctmdrColors = theme.ctmdr.palette?.[ color ];
-    //color && console.log( `color: ${color}` );
-    debug( 'ctmdrColors', ctmdrColors );
+    //color && console.log(`color: ${color}`);
+    debug('ctmdrColors', ctmdrColors );
     return ({
         [`&.${classes.root}`]: {
         // `&.${...` without spaces
@@ -98,12 +98,12 @@ export default function Navbar ({
             return window.location.href.includes( fullroute );
         })?.[0];
         const name = rtlActive ? route?.rtlName : route?.name;
-        //console.log( `getRouteTitle is ${name}` );
+        //console.log(`getRouteTitle is ${name}`);
         return name;
     }
 
     React.useEffect( () => {}, [ location, navbarRef ]);
-    debug( `argument-hue: ${hue}` );
+    debug(`argument-hue: ${hue}`);
 
     return (
         <Root className = {classes.root}

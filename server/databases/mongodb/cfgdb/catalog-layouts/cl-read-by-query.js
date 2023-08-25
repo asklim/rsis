@@ -1,8 +1,8 @@
 
-//const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
-//const log = consoleLogger( 'dbs-cfg:' );
+//const debug = require('debug')('dbs:cfg:catalogLayouts');
+//const log = consoleLogger('dbs-cfg:');
 
-const readOne = require( './cl-read-one' );
+const readOne = require('./cl-read-one');
 
 /**
  * Read a catalog-layout by parameters
@@ -31,7 +31,7 @@ module.exports = async function readByQuery ({ client, list, listType, date }) {
             since: { $lte: theDate }
         });
     }
-    else if( date == '' ) {
+    else if( date == '') {
         Object.assign( filtering, {
             prev: { $eq: null }
         });
@@ -45,4 +45,3 @@ module.exports = async function readByQuery ({ client, list, listType, date }) {
     return await readOne( filtering, listType );
 
 };
-

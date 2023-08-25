@@ -3,7 +3,7 @@
 
 # microsoft office temporary documents
 ~$*.*
-
+dist/
 ./@types/
 
 # Static Bootstrap map files

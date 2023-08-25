@@ -1,8 +1,8 @@
-const { Schema } = require( 'mongoose' );
+const { Schema } = require('mongoose');
 
 
 
-/** 
+/**
  * @name WeekNaturalRecord
  * @description
  * Запись с данными об товарной позиции <gid> в документе
@@ -10,63 +10,63 @@ const { Schema } = require( 'mongoose' );
  * @property {String} gid  - Global id of product item
  * @property {String} name - Название продукта (InnerName)
  * @property {String} gr   - Группа, используется для сортировки: 10 .. 99
- * @property {Number} qpu  - Quantity per Unit - Количество штук в коробке 
+ * @property {Number} qpu  - Quantity per Unit - Количество штук в коробке
  * @property {String} from - варианты канала/ов поставки товара: "BY,RU,EU" | "BY,RU" - строка со значениями, разделенными запятыми
  * @property {Number} frAct - Остаток товара на фирме (Актуальный)
  * @property {Number} fqL   - Частота продаж в день (Last - последняя неделя)
- * @property {Number} fqA	- Частота продаж в день (Average - за 6 недель) 
+ * @property {Number} fqA	- Частота продаж в день (Average - за 6 недель)
  * @property {Number} fqM	- Частота продаж в день (Maximal - за 6 недель)
- * @property {Number} valid	- Срок годности в месяцах 
+ * @property {Number} valid	- Срок годности в месяцах
  *
 **/
 
 const WeekNaturalRecord = new Schema({
 
     gid: {
-        type: String, 
-        required: true, 
+        type: String,
+        required: true,
         unique: true
     },
 
     name: {
-        type: String, 
-        required: true, 
+        type: String,
+        required: true,
     },
 
     gr: {
-        type: String, 
-        required: true, 
+        type: String,
+        required: true,
     },
 
     qpu: {
-        type: Number, 
+        type: Number,
         min: 1,
-        required: true, 
+        required: true,
     },
 
     from: {
-        type: String, 
-        //required: true, 
+        type: String,
+        //required: true,
     },
 
     frAct: {
-        type: Number, 
+        type: Number,
     },
 
     fqL: {
-        type: Number, 
+        type: Number,
     },
 
     fqA: {
-        type: Number, 
+        type: Number,
     },
 
     fqM: {
-        type: Number, 
+        type: Number,
     },
 
     valid: {
-        type: Number, 
+        type: Number,
     },
 });
 
@@ -77,22 +77,22 @@ const WeekNaturalRecord = new Schema({
  * @summary Week Summary Natural
  * @description Схема данных для расчета закупки
  * @property {Number} id   - number of week of 21 century
- * @property {String} type - тип отчета. ???? 
+ * @property {String} type - тип отчета. ????
  * @property {String} host      - имя компьютера, сделавшего изменение.
  * @property {Date}   updatedAt - дата изменений
  * @property {Object} body - данные в зависимости от типа агента
- * 
+ *
 **/
 const WeekNatural = new Schema({
 
     id: {
-        type: Number, 
-        required: true, 
+        type: Number,
+        required: true,
         unique: true
     },
 
     type: {
-        type: String, 
+        type: String,
         required: true,
         lowercase: true
     },
@@ -102,12 +102,12 @@ const WeekNatural = new Schema({
     },
 
     host: {
-        type: String, 
+        type: String,
         required: true
     },
 
     updatedAt: {
-        type: Date, 
+        type: Date,
         'default': Date.now
     }
 

@@ -1,7 +1,7 @@
 
-const log = require( '../helpers' ).consoleLogger( '[heroku:reconnect]' );
+const log = require('../helpers').consoleLogger('[heroku:reconnect]');
 
-const tryGetResource = require( './try-get-resource-x-times.js' );
+const tryGetResource = require('./try-get-resource-x-times.js');
 
 const TOTAL_ATTEMPTS = 5;
 const MILLISECONDS_BETWEEN_ATTEMPTS = 10*1000;
@@ -32,14 +32,14 @@ async function reconnect () {
     try {
         const res = await herokuGetter( apiHerokuHealthUrl );
 
-        log.info( `app health is Ok:`, {
+        log.info(`app health is Ok:`, {
             ...res?.response?.data, //axios format of response
             attempt: res?.attempt,
             ms: res?.ms,
         });
     }
     catch (error) {
-        log.error( 'catch - reconnect', error );
+        log.error('catch - reconnect', error );
     }
 }
 
@@ -54,4 +54,3 @@ module.exports = {
     reconnect,
     isNowInWorkTime,
 };
-

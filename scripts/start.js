@@ -57,7 +57,7 @@ if( process.env.HOST ) {
         `If this was unintentional, check that you haven't mistakenly set it in your shell.`
     );
     console.log(
-        `Learn more here: ${chalk.yellow( 'https://bit.ly/CRA-advanced-config' )}`
+        `Learn more here: ${chalk.yellow('https://bit.ly/CRA-advanced-config')}`
     );
     console.log();
 }
@@ -66,13 +66,13 @@ if( process.env.HOST ) {
 
 // We require that you explictly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require( 'react-dev-utils/browsersHelper' );
+const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 
-checkBrowsers( paths.appPath, isInteractive ) 
+checkBrowsers( paths.appPath, isInteractive )
 .then(() => {
     // We attempt to use the default port but if it is busy, we offer the user to
     // run on a different port.
-    // `choosePort()` Promise resolves to the next free port. 
+    // `choosePort()` Promise resolves to the next free port.
     return choosePort(HOST, DEFAULT_PORT);
 })
 .then( port => {
@@ -80,7 +80,7 @@ checkBrowsers( paths.appPath, isInteractive )
         // We have not found a port.
         return;
     }
-    const config = configFactory( 'development' );
+    const config = configFactory('development');
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require( paths.appPackageJson ).name;
     const urls = prepareUrls( protocol, HOST, port );
@@ -98,7 +98,7 @@ checkBrowsers( paths.appPath, isInteractive )
         urls,
         webpack,
     };
-    console.log( 'compiler`s options: ', compilerOptions );
+    console.log('compiler`s options: ', compilerOptions );
     const compiler = createCompiler( compilerOptions );
 
     // Load proxy config
@@ -115,13 +115,13 @@ checkBrowsers( paths.appPath, isInteractive )
 
     const devServer = new WebpackDevServer( compiler, serverConfig );
     // console.log( devServer );
-    // console.log( 'isInteractive = ', isInteractive ); //true
-       
+    // console.log('isInteractive = ', isInteractive ); //true
+
     //throw new Error('stop dev server');
 
     // Launch WebpackDevServer.
-    console.log( 'after create DevServer' );
-    
+    console.log('after create DevServer');
+
     devServer.listen( port, HOST, (err) => {
 
         if( err ) {
@@ -143,11 +143,11 @@ checkBrowsers( paths.appPath, isInteractive )
             console.log();
         }
 
-        console.log( chalk.cyan( 'Starting the development server...\n' ));
+        console.log( chalk.cyan('Starting the development server...\n'));
         //openBrowser(urls.localUrlForBrowser);
     });
 
-    console.log( 'before process handlers' );
+    console.log('before process handlers');
 
     [ 'SIGINT', 'SIGTERM' ].forEach( function(sig) {
         process.on( sig, function() {

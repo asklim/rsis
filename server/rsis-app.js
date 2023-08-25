@@ -2,9 +2,9 @@ const debug = require('debug')('rsis:app');
 
 const log = require('./helpers/').consoleLogger('[rsis:app]');
 
-//const uuid = require( 'uuid' );
-//const createError = require( 'http-errors' );
-//const favicon = require( 'serve-favicon' );
+//const uuid = require('uuid');
+//const createError = require('http-errors');
+//const favicon = require('serve-favicon');
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const paths = require('../config/paths');
 const passport = require('passport');
-//const LocalStrategy = require( 'passport-local' ).Strategy;
+//const LocalStrategy = require('passport-local').Strategy;
 
 const herokuPinger = require('./heroku-no-sleep/');
 
@@ -29,11 +29,12 @@ const isHMR = DEV_MODE === 'HotModuleReplacement';
 
 
 const app = require('./rsis-express');
+// @ts-ignore
 debug('getStartTime:', app.getStartTime() );
 
 const apiRouter = require('./api-router');
 
-app.set( 'apiServer', NODE_ENV === 'production' ?
+app.set('apiServer', NODE_ENV === 'production' ?
     API_WWW_SERVER  //'https://rsis-webapp.herokuapp.com'
     : API_SERVER_LOCAL
 );
@@ -42,7 +43,7 @@ app.set('views', './views');
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use( favicon( `${icwd}/public/favicon.ico` ));
+//app.use( favicon(`${icwd}/public/favicon.ico`));
 
 const loggerTemplate = [
     '[:date[web]]', ':status',
@@ -54,10 +55,10 @@ app.use( morgan( loggerTemplate )); // dev | common | combined |short
 /** json MUST BE BEFORE routers */
 app.use( express.json({ limit: "5mb" }));
 
-app.use( '/api', apiRouter );
+app.use('/api', apiRouter );
 
 app.use((req, _res, next) => {
-    // const html = path.resolve( __dirname, `../${paths.distFolderName}/index.html` );
+    // const html = path.resolve( __dirname, `../${paths.distFolderName}/index.html`);
     // debug(`request url: ${req.url}`);
     // debug(`'index.html' is ${html}`);
     next();
@@ -73,22 +74,23 @@ app.use( passport.initialize() );
 app.use( express.static( paths.distFolderName /*'static'*/ ));
 
 app.use( cors() );
-//app.options( '*', cors() );
+//app.options('*', cors() );
 
 if( !isProduction && isHMR ) {
 
-    const webpack = require( 'webpack' );
-    const webpackConfig = require( '../config/webpack.devhmr.js' );
-    const webpackDevMiddleware = require( 'webpack-dev-middleware' );
+    const webpack = require('webpack');
+    const webpackConfig = require('../config/webpack.devhmr.js');
+    const webpackDevMiddleware = require('webpack-dev-middleware');
 
+    // @ts-ignore
     const compiler = webpack( webpackConfig );
 
     const wdmOption = {
         publicPath: webpackConfig.output.publicPath,
     };
-    log.debug( 'webpack-dev-middleware (wdm) config: ', wdmOption );
+    log.debug('webpack-dev-middleware (wdm) config: ', wdmOption );
     app.use( webpackDevMiddleware( compiler, wdmOption ));
-    app.use( require( 'webpack-hot-middleware' )( compiler, {
+    app.use( require('webpack-hot-middleware')( compiler, {
         path: '/__webpack_hmr',
         heartbeat: 10 * 1000,
     }));
@@ -96,9 +98,9 @@ if( !isProduction && isHMR ) {
 
 
 // eslint-disable-next-line no-unused-vars
-app.get( '*', (req, res, next) => {
+app.get('*', (req, res, next) => {
 
-    const INDEX_HTML_PFN = path.resolve( __dirname, `../static/index.html` );
+    const INDEX_HTML_PFN = path.resolve( __dirname, `../static/index.html`);
 
     debug(`request url: ${req.url}`);
     log.info(`server __dirname is ${__dirname}`);
@@ -107,7 +109,7 @@ app.get( '*', (req, res, next) => {
     res.sendFile( INDEX_HTML_PFN,
         (err) => {
             if( err ) {
-                log.error( `sending error of '${INDEX_HTML_PFN}'`);
+                log.error(`sending error of '${INDEX_HTML_PFN}'`);
                 console.log( err );
                 //TODO: Выяснить как работает Error Handling
                 // Нужно ли передавать 'err' дальше?
@@ -124,7 +126,7 @@ app.get( '*', (req, res, next) => {
 /*
 app.use( (req, res, next) => {
     // catch 404 and forward to error handler
-    console.log( 'create Error 404.' );
+    console.log('create Error 404.');
     next( createError( 404 ), req, res );
 });
 */
@@ -139,9 +141,9 @@ app.use((
 ) => {
     log.debug(`request url: ${req.url}`);
 
-    let runMode = req.app.get( 'env' );
+    let runMode = req.app.get('env');
     const isDev = runMode === 'development';
-    console.log( `app-server error-handler: env = '${runMode}'` );
+    console.log(`app-server error-handler: env = '${runMode}'`);
     console.log( isDev ?
         (req.body && Object.keys( req.body ).length > 0) ?
             req.body
@@ -155,7 +157,7 @@ app.use((
 
     // render the error page
     res.status( err.status || 500 ).end();
-    //res.render( 'error' );
+    //res.render('error');
 });
 
 debug('app locals', app.locals );

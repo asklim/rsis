@@ -1,12 +1,12 @@
-//const debug = require( 'debug' )( 'reports:daily' );
+//const debug = require('debug')('reports:daily');
 
-const { format } = require( 'util' );
-const UUID = require( 'uuid' );
-const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
+const { format } = require('util');
+const UUID = require('uuid');
+const { StatusCodes: HTTP } = require('../../../../helpers');
 
-const db = require( '../../..' ).getDB( 'sum' );
+const db = require('../../..').getDB('sum');
 
-const ModelDailyReports = db.model( 'DailyReports' );
+const ModelDailyReports = db.model('DailyReports');
 
 
 /**
@@ -30,7 +30,7 @@ module.exports = async function deleteById (reportId) {
             let msg = `Daily Report not found.`;
             return ({
                 statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg} w/filter: ` + format( '%o', filtering ),
+                logMessage: `${msg} w/filter: ` + format('%o', filtering ),
                 response: msg
             });
         }
@@ -55,4 +55,3 @@ module.exports = async function deleteById (reportId) {
     }
 
 };
-

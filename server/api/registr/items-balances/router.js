@@ -4,10 +4,10 @@ const {
 } = require('../../../helpers');
 
 
-const handlerGET = require( './handler-get' );
-const handlerPOST = require( './handler-post' );
-const handlerPUT = require( './handler-put' );
-const handlerDELETE = require('./handler-delete' );
+const handlerGET = require('./handler-get');
+const handlerPOST = require('./handler-post');
+const handlerPUT = require('./handler-put');
+const handlerDELETE = require('./handler-delete');
 
 
 module.exports = async function ( router ) {
@@ -24,6 +24,5 @@ module.exports = async function ( router ) {
     router.put( route, handlerPUT);
     router.delete( route, handlerDELETE );
 
-    router.all( `${route}/*`, callbackError400 );
+    router.all(`${route}/*`, callbackError400 );
 };
-

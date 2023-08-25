@@ -1,20 +1,20 @@
-const debug = require( 'debug' )( 'api:config:agents' );
-const { 
-    icwd, 
+const debug = require('debug')('api:config:agents');
+const {
+    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( 'api-config:' );
+const log = consoleLogger('api-config:');
 
-const db = require( `${icwd}/server/databases` ).getDB( 'config' );
-const Agent = db.model( 'Agent' );
+const db = require(`${icwd}/server/databases`).getDB('config');
+const Agent = db.model('Agent');
 
 
-/** 
+/**
  * Return a (A)-list of all agents docs or
  * (B)-agent`s doc list { by type and/or group }
  * @usage
@@ -34,7 +34,7 @@ module.exports = function readAgentsList (req, res) {
 
     if( !req.query ) {
         console.log('No query object for agents-list specified.');
-        return send400BadRequest( res, 'No query object in request.' );
+        return send400BadRequest( res, 'No query object in request.');
     }
 
     let queryLength = Object.keys( req.query ).length; // 0, 1, 2 and more
@@ -43,10 +43,10 @@ module.exports = function readAgentsList (req, res) {
 
     if( queryLength ) { // !==0
 
-        let typeCondition = new RegExp( req.query.type, 'i' );
-        let groupCondition = new RegExp( req.query.group, 'i' );
+        let typeCondition = new RegExp( req.query.type, 'i');
+        let groupCondition = new RegExp( req.query.group, 'i');
 
-        if( req.query.type ) { 
+        if( req.query.type ) {
             filtering = { ...filtering, type: typeCondition };
         }
         if( req.query.group ) {
@@ -54,7 +54,7 @@ module.exports = function readAgentsList (req, res) {
         }
     }
 
-    debug( 'conditions: ', filtering );
+    debug('conditions: ', filtering );
 
     Agent.find(
         filtering,
@@ -65,12 +65,11 @@ module.exports = function readAgentsList (req, res) {
                 return send500ServerError( res, err );
             }
             if( !agents ) {
-                return send404NotFound( res, 'agents not found.' );
+                return send404NotFound( res, 'agents not found.');
             }
 
-            log.info( 'read-agents-list count:', Object.keys( agents ).length );
+            log.info('read-agents-list count:', Object.keys( agents ).length );
             return send200Ok( res, agents);
         }
     );
 };
-

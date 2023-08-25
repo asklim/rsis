@@ -1,14 +1,14 @@
-//const debug = require( 'debug' )( '-dbg:itemsBalances:logic' );
+//const debug = require('debug')('-dbg:itemsBalances:logic');
 
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     consoleLogger,
     makeResult,
-} = require( '../../helpers' );
-const log = consoleLogger( '[items-balances:logic]' );
+} = require('../../helpers');
+const log = consoleLogger('[items-balances:logic]');
 
-const MongoStorage = require( '../../databases/mongodb/sumdb/items-balances/ib.interface' );
-//const AbstractStorage = require( './storage.interface-abstract' );
+const MongoStorage = require('../../databases/mongodb/sumdb/items-balances/ib.interface');
+//const AbstractStorage = require('./storage.interface-abstract');
 //let IStorage = new MongoStorage;
 
 exports = module.exports = class ItemsBalances {
@@ -19,10 +19,9 @@ exports = module.exports = class ItemsBalances {
 
     /**
      * Create a new ItemsBalance doc
-     * @statusCode 201 Created & { message, uuid }
-     * @statusCode 400 Bad Request & message
-     * @statusCode 500 Server Error & error object
-     * @returns {ResultObject} ResultObject
+     * @fires 201 Created & { message, uuid }
+     * @fires 400 Bad Request & message
+     * @fires 500 Server Error & error object
      **/
     async createOne (body) {
 
@@ -67,10 +66,11 @@ exports = module.exports = class ItemsBalances {
         }
 
         const result = await this.readByQuery({
+            // @ts-ignore
             filial, agent, creator, onDate
         });
 
-        log.debug( '[updateOrCreate] statusCode is', result.statusCode );
+        log.debug('[updateOrCreate] statusCode is', result.statusCode );
 
         if( result.statusCode == HTTP.OK ) {
             // response - это документ
@@ -134,9 +134,10 @@ exports = module.exports = class ItemsBalances {
      * @fires 400 Bad Request & message
      * @fires 404 Not Found   & message
      * @fires 500 Server Error & error object
-     * @param {String} query.filial - Level1: filial1 or frm
-     * @param {String} query.agent - Level2: f1, wh1, wh0
-     * @param {String} query.onDate - isoDate as "YYYY-MM-DD"
+     * @param {object} query
+     * @param {string} query.filial - Level1: filial1 or frm
+     * @param {string} query.agent - Level2: f1, wh1, wh0
+     * @param {string} query.onDate - isoDate as "YYYY-MM-DD"
      * @usage GET /api/registr/items-balances/?queryString
      * @usage queryString:
      * filial=filialId & onDate=isoDate & agent=agentId

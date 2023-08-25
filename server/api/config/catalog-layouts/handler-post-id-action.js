@@ -1,17 +1,17 @@
-const debug = require( 'debug' )( 'api:catalogLayouts:post-id-action' );
+const debug = require('debug')('api:catalogLayouts:post-id-action');
 const {
     //icwd,
     //consoleLogger,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     //send201Created,
     //send400BadRequest,
     //send409Conflict,
     //send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-//const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
+//const CatalogLayouts = require(`../../../applogic/catalog-layouts`);
 
-//const log = consoleLogger( 'api-config:' );
+//const log = consoleLogger('api-config:');
 
 
 
@@ -28,12 +28,12 @@ const {
  */
 module.exports = async function (req, res) {
 
-    debug( 'req.params:', req.params );
+    debug('req.params:', req.params );
 
     const { catalogId, action } = req.params;
 
-    debug( 'catalogId:', catalogId );
-    debug( 'action:', action);
+    debug('catalogId:', catalogId );
+    debug('action:', action);
 
     res.status( HTTP.I_AM_A_TEAPOT ).json( { message: 'I`am a Tea Pot'} );
 

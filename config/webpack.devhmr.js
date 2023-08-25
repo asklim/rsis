@@ -3,11 +3,11 @@
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
 
-const paths = require( './paths' );
-const webpack = require( 'webpack' );
+const paths = require('./paths');
+const webpack = require('webpack');
 
-const configFactory = require( './webpack.config-factory.js' );
-const webpackConfig = configFactory( 'development' );
+const configFactory = require('./webpack.config-factory.js');
+const webpackConfig = configFactory('development');
 
 
 const hmrConfig = {
@@ -39,6 +39,6 @@ const hmrConfig = {
 //     //'react-dom': '@hot-loader/react-dom',
 // };
 
-//console.log( 'hmrConfig.resolve.alias:\n', hmrConfig.resolve.alias );
+//console.log('hmrConfig.resolve.alias:\n', hmrConfig.resolve.alias );
 
 module.exports = hmrConfig;

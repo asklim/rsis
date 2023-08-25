@@ -1,12 +1,12 @@
 
 ( async () => {
-    await require( 'dotenv' ).config();
+    await require('dotenv').config();
 })();
 
-const mongoose = require( 'mongoose' );
-const catalogLayoutSchema = require( '../catalog-layout.schema' );
+const mongoose = require('mongoose');
+const catalogLayoutSchema = require('../catalog-layout.schema');
 
-const mockNewDoc = require( './mock-new-doc.json');
+const mockNewDoc = require('./mock-new-doc.json');
 
 const MONGOOSE_OPTIONS =  {
     useNewUrlParser: true,
@@ -15,29 +15,29 @@ const MONGOOSE_OPTIONS =  {
     useFindAndModify: false,
 };
 
-//console.log( 'NODE_ENV:', process.env.NODE_ENV ); //NODE_ENV: test
+//console.log('NODE_ENV:', process.env.NODE_ENV ); //NODE_ENV: test
 
 let db;
 
 beforeAll( async () => {
     db = await mongoose.
         createConnection( process.env.MONGO_TESTDB_URI, MONGOOSE_OPTIONS );
-    db.model( 'CatalogLayouts', catalogLayoutSchema, 'catalog.layouts' ); 
+    db.model('CatalogLayouts', catalogLayoutSchema, 'catalog.layouts');
 });
 
 afterAll( async () => {
     await db.close();
 });
 
-const IStorage = require( '../catalog-layouts.interface' );
+const IStorage = require('../catalog-layouts.interface');
 
-describe( 'create catalog-layout', () => {
+describe('create catalog-layout', () => {
 
-    test( 'should create new catalog-layout doc', async () => {
+    test('should create new catalog-layout doc', async () => {
 
         let upd = await IStorage.createOne( mockNewDoc );
         expect( upd.statusCode ).toEqual( 201 );
-        let { uuid } = upd.response; 
+        let { uuid } = upd.response;
         expect( uuid ).not.toBeNull();
 
         let { client, list } = mockNewDoc;
@@ -48,4 +48,3 @@ describe( 'create catalog-layout', () => {
         expect( mockNewDoc ).toEqual( mockNewDoc );
     });
 });
-

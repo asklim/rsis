@@ -1,12 +1,12 @@
-const debug = require( 'debug' )( 'helper:sendToWebApp' );
-const axios = require( 'axios' ).default;
+const debug = require('debug')('helper:sendToWebApp');
+const axios = require('axios').default;
 
 const {
     consoleLogger,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
 } = require(`../helpers`);
 
-const log = consoleLogger( '[rsis:toWebApp]' );
+const log = consoleLogger('[rsis:toWebApp]');
 
 
 module.exports.sendToWebApp = function (apiRoute, reqBody) {
@@ -21,7 +21,7 @@ module.exports.sendToWebApp = function (apiRoute, reqBody) {
 
         const postStatus = postRes.status;
 
-        log.debug( `- POST status = ${postStatus}` );
+        log.debug(`- POST status = ${postStatus}`);
 
         if( postStatus == HTTP.CREATED ) {
             return log.info(`SUCCESS: document created (${docMetaInfo})`);
@@ -33,22 +33,22 @@ module.exports.sendToWebApp = function (apiRoute, reqBody) {
             then( (putRes) => {
                 const putStatus = putRes.status;
 
-                log.debug( `- PUT status = ${putStatus}` );
+                log.debug(`- PUT status = ${putStatus}`);
                 if( putStatus == HTTP.OK ) {
                     log.info(`SUCCESS: document updated (${docMetaInfo})`);
                 }
                 else {
-                    log.error( 'document sending FAILURE:', docMetaInfo );
+                    log.error('document sending FAILURE:', docMetaInfo );
                 }
             }).
             catch( (err) => {
-                log.error( 'document <PUT> FAILURE:', docMetaInfo );
+                log.error('document <PUT> FAILURE:', docMetaInfo );
                 log.error( err );
             });
         }
     }).
     catch( (err) => {
-        log.error( 'document <POST> FAILURE:', docMetaInfo );
+        log.error('document <POST> FAILURE:', docMetaInfo );
         log.error( err );
     });
 };
@@ -71,4 +71,3 @@ function sendTo (apiRoute, verb, reqBody) {
         validateStatus: (status) => (status < HTTP.INTERNAL_SERVER_ERROR),
     });
 }
-

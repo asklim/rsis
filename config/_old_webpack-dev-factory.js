@@ -2,18 +2,18 @@
 //const TerserPlugin = require('terser-webpack-plugin');
 //const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
-const fs = require( 'fs' );
-const path = require( 'path' );
-const webpack = require( 'webpack' );
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
 
-const resolve = require( 'resolve' );
+const resolve = require('resolve');
 
-const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
-const CaseSensitivePathsPlugin = require( 'case-sensitive-paths-webpack-plugin' );
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { WebpackManifestPlugin } = require( 'webpack-manifest-plugin' );
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const paths = require('./paths');
@@ -29,11 +29,11 @@ const WatchMissingNodeModulesPlugin =
       require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ForkTsCheckerWebpackPlugin =
       require('react-dev-utils/ForkTsCheckerWebpackPlugin');
-const typescriptFormatter = require( 'react-dev-utils/typescriptFormatter' );
+const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
-const postcssNormalize = require( 'postcss-normalize' );
+const postcssNormalize = require('postcss-normalize');
 
-//const eslint = require( 'eslint' );
+//const eslint = require('eslint');
 //const appPackageJson = require( paths.appPackageJson );
 
 
@@ -104,28 +104,28 @@ module.exports = function(webpackEnv)
     const getStyleLoaders = ( cssOptions, preProcessor ) => {
 
         const loaders = [
-            isEnvDevelopment && require.resolve( 'style-loader' ),
+            isEnvDevelopment && require.resolve('style-loader'),
             isEnvProduction && {
                 loader: MiniCssExtractPlugin.loader,
                 options: shouldUseRelativeAssetPaths ? { publicPath: '../../' } : {},
             },
             {
-                loader: require.resolve( 'css-loader' ),
+                loader: require.resolve('css-loader'),
                 options: cssOptions,
             },
             {
                 // Options for PostCSS as we reference these options twice
                 // Adds vendor prefixing based on your specified browser support in
                 // package.json
-                loader: require.resolve( 'postcss-loader' ),
+                loader: require.resolve('postcss-loader'),
                 options: {
                     // Necessary for external CSS imports to work
                     // https://github.com/facebook/create-react-app/issues/2677
                     //ident: 'postcss',
                     postcssOptions: {
                         plugins: () => [
-                            require( 'postcss-flexbugs-fixes' ),
-                            require( 'postcss-preset-env' )({
+                            require('postcss-flexbugs-fixes'),
+                            require('postcss-preset-env')({
                                 autoprefixer: {
                                     flexbox: 'no-2009',
                                 },
@@ -145,7 +145,7 @@ module.exports = function(webpackEnv)
         if( preProcessor ) {
             loaders.push(
                 {
-                    loader: require.resolve( 'resolve-url-loader' ),
+                    loader: require.resolve('resolve-url-loader'),
                     options: {
                         sourceMap: isEnvProduction && shouldUseSourceMap,
                     },
@@ -238,7 +238,7 @@ module.exports = function(webpackEnv)
                 ? info =>
                     path
                     .relative( paths.appSrc, info.absoluteResourcePath )
-                    .replace( /\\/g, '/' )
+                    .replace( /\\/g, '/')
                 : isEnvDevelopment &&
                 (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
 
@@ -291,8 +291,8 @@ module.exports = function(webpackEnv)
             // `web` extension prefixes have been added for better support
             // for React Native Web.
             extensions: paths.moduleFileExtensions
-                .map( ext => `.${ext}` )
-                .filter( ext => useTypeScript || !ext.includes( 'ts' ))
+                .map( ext => `.${ext}`)
+                .filter( ext => useTypeScript || !ext.includes('ts'))
             ,
             alias: {
                 'react-dom': '@hot-loader/react-dom',
@@ -360,12 +360,12 @@ module.exports = function(webpackEnv)
                     {
                     options: {
                         cache: true,
-                        formatter: require.resolve( 'react-dev-utils/eslintFormatter' ),
-                        eslintPath: require.resolve( 'eslint' ),
+                        formatter: require.resolve('react-dev-utils/eslintFormatter'),
+                        eslintPath: require.resolve('eslint'),
                         resolvePluginsRelativeTo: __dirname,
 
                     },
-                    loader: require.resolve( 'eslint-loader' ),
+                    loader: require.resolve('eslint-loader'),
                     },
                 ],
                 include: paths.appSrc,
@@ -398,7 +398,7 @@ module.exports = function(webpackEnv)
                         {
                             test: /\.(js|mjs|jsx|ts|tsx)$/,
                             include: paths.appSrc,
-                            loader: require.resolve( 'babel-loader' ),
+                            loader: require.resolve('babel-loader'),
                             options: {
                                 presets: [ '@babel/preset-env', '@babel/preset-react' ],
                                 // webpack5 FIX:
@@ -408,7 +408,7 @@ module.exports = function(webpackEnv)
                         plugins: [
                             'react-hot-loader/babel',
                         [
-                            require.resolve( 'babel-plugin-named-asset-import' ),
+                            require.resolve('babel-plugin-named-asset-import'),
                             {
                             loaderMap: {
                                 svg: {
@@ -433,7 +433,7 @@ module.exports = function(webpackEnv)
                         {
                             test: /\.(js|mjs)$/,
                             exclude: /@babel(?:\/|\\{1,2})runtime/,
-                            loader: require.resolve( 'babel-loader' ),
+                            loader: require.resolve('babel-loader'),
                             options: {
                                 babelrc: false,
                                 configFile: false,
@@ -648,7 +648,7 @@ module.exports = function(webpackEnv)
                         return manifest;
                     }, seed);
                     const entrypointFiles = entrypoints.main.filter(
-                        fileName => !fileName.endsWith( '.map' )
+                        fileName => !fileName.endsWith('.map')
                     );
 
                     return {
@@ -668,19 +668,19 @@ module.exports = function(webpackEnv)
             navigateFallback: publicUrl + '/index.html',
             navigateFallbackDenylist: [
                 // Exclude URLs starting with /_, as they're likely an API call
-                new RegExp( '^/_' ),
+                new RegExp('^/_'),
                 // Exclude any URLs whose last part seems to be a file extension
                 // as they're likely a resource and not a SPA route.
                 // URLs containing a "?" character won't be blacklisted as they're likely
                 // a route with query params (e.g. auth callbacks).
-                new RegExp( '/[^/?]+\\.[^/]+$' ),
+                new RegExp('/[^/?]+\\.[^/]+$'),
             ],
         }),
 
             // TypeScript type checking
             useTypeScript &&
         new ForkTsCheckerWebpackPlugin({
-            typescript: resolve.sync( 'typescript', {
+            typescript: resolve.sync('typescript', {
                 basedir: paths.appNodeModules,
             }),
             async: isEnvDevelopment,

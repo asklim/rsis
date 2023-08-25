@@ -1,9 +1,9 @@
 
-const passport = require( 'passport' );
-const LocalStrategy = require( 'passport-local' ).Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-const db = require( './databases' ).getDB( 'config' );
-const User = db.model( 'User' );
+const db = require('./databases').getDB('config');
+const User = db.model('User');
 
 passport.use( new LocalStrategy(
     {
@@ -22,17 +22,16 @@ passport.use( new LocalStrategy(
                     return done( null, false,
                         { message: 'Incorrect username.' }
                     );
-                } 
+                }
 
                 if( !user.isValidPassword( password )) {
                     return done( null, false,
                         { message: 'Incorrect password.' }
                     );
                 }
-                
+
                 return done( null, user );
             }
         );
     }
 ));
-

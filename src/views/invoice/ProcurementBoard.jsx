@@ -1,5 +1,5 @@
 import { debugFactory } from 'utils/debuggers.js';
-const debug = debugFactory( 'invoice:procurement' );
+const debug = debugFactory('invoice:procurement');
 
 import * as React from 'react';
 //import PropTypes from 'prop-types';
@@ -124,9 +124,9 @@ const ProcurementBoardPage = () => {
     const isFromIntersected = (item, fromFilter) => {
 
         const itemFroms = item.from.
-            split( ',' ).
+            split(',').
             map( x => x.trim().toLowerCase() );
-        //debug( 'isIntersected, itemFroms ', itemFroms );
+        //debug('isIntersected, itemFroms ', itemFroms );
         const result = fromFilter.filter( x => itemFroms.includes( x ));
         return result.length !== 0;
     };
@@ -153,18 +153,18 @@ const ProcurementBoardPage = () => {
                         item.name
                     ];
                 });
-            //debug( 'convertToView:', freqId, viewList.length );
+            //debug('convertToView:', freqId, viewList.length );
             resolve( viewList );
         })
     ;
 
     const updateViewingLists = (freq=filterByFreq, from=filterByFrom) => {
 
-        debug( '!!! updateViewLists freq=', freq, 'from=', from );
+        debug('!!! updateViewLists freq=', freq, 'from=', from );
         Promise.all([
-            convertToViewList( 'sp', freq, from ),
-            convertToViewList( 'mp', freq, from ),
-            convertToViewList( 'lp', freq, from ),
+            convertToViewList('sp', freq, from ),
+            convertToViewList('mp', freq, from ),
+            convertToViewList('lp', freq, from ),
             convertToViewList('xlp', freq, from )
         ]).
         then( (lists) => {
@@ -172,9 +172,9 @@ const ProcurementBoardPage = () => {
             setMiddlePeriod( lists[1] );
             setLongPeriod( lists[2] );
             setXtraLongPeriod( lists[3] );
-            debug( 'updateViewingLists', lists.map( l => l.length ));
+            debug('updateViewingLists', lists.map( l => l.length ));
         }).catch( (err) => {
-            console.log( 'Error convert to ViewList', err );
+            console.log('Error convert to ViewList', err );
         });
     };
 
@@ -183,7 +183,7 @@ const ProcurementBoardPage = () => {
         const freq = event.target.value;
         updateViewingLists( freq, undefined );
         setFilterByFreq( freq );
-        debug( 'handle_FREQ_filterChange:', freq );
+        debug('handle_FREQ_filterChange:', freq );
     };
 
 
@@ -191,7 +191,7 @@ const ProcurementBoardPage = () => {
 
         (event) => {
             const currentIndex = filterByFrom.indexOf( from );
-            debug( 'event.target', event.target.checked, currentIndex, from );
+            debug('event.target', event.target.checked, currentIndex, from );
             const newChecked = [ ...filterByFrom ];
 
             if( currentIndex === -1 ) {
@@ -199,7 +199,7 @@ const ProcurementBoardPage = () => {
             } else {
                 newChecked.splice( currentIndex, 1 );
             }
-            debug( 'handle_FROM_filterClick:', newChecked );
+            debug('handle_FROM_filterClick:', newChecked );
             updateViewingLists( undefined, newChecked );
             setFilterByFrom( newChecked );
         };
@@ -209,8 +209,8 @@ const ProcurementBoardPage = () => {
         const { origin } = window.location;
         const route = `${origin}/api/dataset/procurement/last`;
 
-        //debug( 'fetchLists window.location.origin: ', origin );
-        debug( 'fetch Lists from:', route );
+        //debug('fetchLists window.location.origin: ', origin );
+        debug('fetch Lists from:', route );
 
         let headers = {
             mode: 'cors',
@@ -225,13 +225,13 @@ const ProcurementBoardPage = () => {
             if( !response.ok ) {
                 setDataServerResponse( response );
                 setIsDataLoadingError( true );
-                console.log( 'fetch is not ok', response );
-                throw new Error( 'Ответ сети был не ok.' );
+                console.log('fetch is not ok', response );
+                throw new Error('Ответ сети был не ok.');
             }
             return response.json();
         }).  // '[{}, ..., {}]'
         then( (hashs) => {
-            console.log( 'fetch Lists has length:', hashs.length );
+            console.log('fetch Lists has length:', hashs.length );
             //is Ok: 444
             setServerDataset( hashs );
             setIsLoaded( true );
@@ -240,7 +240,7 @@ const ProcurementBoardPage = () => {
         catch( (err) => {
             setIsLoaded( false );
             setIsDataLoadingError( true );
-            console.log( 'ProcurementBoard.fetchLists catch', err );
+            console.log('ProcurementBoard.fetchLists catch', err );
         });
     };
 
@@ -315,7 +315,7 @@ const ProcurementBoardPage = () => {
                                         label = 'RU'
                                         control = {<Checkbox
                                             checked = {isFilterByFromChecked( fromRU )}
-                                            onChange = {handleFromFilterClick( 'ru' )}
+                                            onChange = {handleFromFilterClick('ru')}
                                             sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                         />}
                                     />
@@ -323,7 +323,7 @@ const ProcurementBoardPage = () => {
                                         label = 'BY'
                                         control = {<Checkbox
                                             checked = {isFilterByFromChecked( fromBY )}
-                                            onChange = {handleFromFilterClick( 'by' )}
+                                            onChange = {handleFromFilterClick('by')}
                                             sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                         />}
                                     />
@@ -332,7 +332,7 @@ const ProcurementBoardPage = () => {
                                         control = {<Checkbox
                                             checked = {isFilterByFromChecked( fromEU )}
                                             tabIndex = {-1}
-                                            onChange = {handleFromFilterClick( 'eu' )}
+                                            onChange = {handleFromFilterClick('eu')}
                                             sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                                         />}
                                     />

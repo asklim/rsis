@@ -1,17 +1,17 @@
-//const debug = require( 'debug' )( 'api:catalogLayouts' );
+//const debug = require('debug')('api:catalogLayouts');
 
 const {
     consoleLogger,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     send204NoContent,
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
+const CatalogLayouts = require(`../../../applogic/catalog-layouts`);
 
-const log = consoleLogger( '[catalogLayouts:api]' );
+const log = consoleLogger('[catalogLayouts:api]');
 
 
 /**
@@ -55,7 +55,7 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
 
         [HTTP.NO_CONTENT]: (result) => {
             log.info( result.logMessage );
-            //debug( '[h-DELETE]:', result.response );
+            //debug('[h-DELETE]:', result.response );
             //TODO: Client не получает тело json-ответа
             return send204NoContent( res, result.response );
         },
@@ -87,11 +87,10 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
             return STATE_HANDLERS[ statusCode ]( deleteResult );
         }
 
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
         return send500ServerError( res, err );
     }
 };
-

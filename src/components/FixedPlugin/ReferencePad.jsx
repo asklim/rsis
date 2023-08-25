@@ -16,7 +16,7 @@ const classes = {
     button:    `${PREFIX}-button`,
 };
 
-const SxSection = styled( 'section' )( ({ theme }) => {
+const SxSection = styled('section')( ({ theme }) => {
     const { pxToRem } = theme.typography;
     return ({
         [`&.${classes.root}`]: {

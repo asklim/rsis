@@ -1,10 +1,10 @@
-const debug = require( 'debug' )( 'reports:daily' );
+const debug = require('debug')('reports:daily');
 
-const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
+const { StatusCodes: HTTP } = require('../../../../helpers');
 
-const db = require( `../../..` ).getDB( 'sum' );
+const db = require(`../../..`).getDB('sum');
 
-const ModelDailyReports = db.model( 'DailyReports' );
+const ModelDailyReports = db.model('DailyReports');
 
 
 /**
@@ -38,7 +38,7 @@ module.exports = async function createOne (body) {
 
         const { uuid } = report;
         //const uuid = '12345678-1234-1234-1234-123456789012';
-        debug( `create-one: ${uuid}` );
+        debug(`create-one: ${uuid}`);
 
         return ({
             statusCode: HTTP.CREATED,
@@ -58,4 +58,3 @@ module.exports = async function createOne (body) {
     }
 
 };
-

@@ -1,5 +1,5 @@
-//const debug = require( 'debug' )( 'api:sum:procurement' );
-const request = require( 'request' );
+//const debug = require('debug')('api:sum:procurement');
+const request = require('request');
 
 const {
     icwd,
@@ -8,29 +8,26 @@ const {
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( '[api:procurement]' );
+const log = consoleLogger('[api:procurement]');
 
 
-const { procurementPeriods: period } = require( `${icwd}/src/config/enum-values` );
+const { procurementPeriods: period } = require(`${icwd}/src/config/enum-values`);
 
-const { needUnitsForPeriod } = require( 'asklim/rsis' )();
+const { rsisFactory } = require('asklim');
+const { needUnitsForPeriod } = rsisFactory();
 
 // debug( "typeof needUnitsForPeriod", typeof needUnitsForPeriod );
 // debug( "needUnitsForPeriod", needUnitsForPeriod );
 
 
 /**
- * Read a procurement dataset by the week id
- * @type router middleware
- * @param {*} req
- * @param {*} res
+ * Read a procurement dataset by the week id (router middleware)
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * GET /api/sum/procurements/:weekId
  * @example
@@ -38,8 +35,10 @@ const { needUnitsForPeriod } = require( 'asklim/rsis' )();
  * GET /api/sum/procurement/1011
  * GET /api/sum/procurement/last
  **/
-module.exports = function readOne (req, res) {
-
+module.exports = async function readOne (
+    req,
+    res
+) {
     log.debug(
         'readOne - req.params:', req.params, 'req.query:', req.query
     );
@@ -47,12 +46,13 @@ module.exports = function readOne (req, res) {
     const { weekId } = req.params;
 
     if( !weekId ) {
-        log.warn( 'readOne: No or bad <weekId> specified.' );
-        return send400BadRequest( res, 'No or bad <:weekId> in request.' );
+        log.warn('readOne: No or bad <weekId> specified.');
+        send400BadRequest( res, 'No or bad <:weekId> in request.');
+        return;
     }
 
-    const apiServer = req.app.get( 'apiServer' );
-    log.debug( `readOne: before fetch Dataset from ${apiServer} ...` );
+    const apiServer = req.app.get('apiServer');
+    log.debug(`readOne: before fetch Dataset from ${apiServer} ...`);
 
     makeProcurementDataset(
         apiServer,
@@ -61,18 +61,21 @@ module.exports = function readOne (req, res) {
 
             if( err ) {
                 log.error( err );
-                return send500ServerError( res, err );
+                send500ServerError( res, err );
+                return;
             }
 
             if( !data ) {
                 let msg = `procurement data for week ${weekId} not found.`;
                 log.warn( msg );
-                return send404NotFound( res, msg );
+                send404NotFound( res, msg );
+                return;
             }
 
             const count = data.length;
-            log.info( `SUCCESS: readOne (week: ${weekId}) sent ${count} items.` );
-            return send200Ok( res, data );
+            log.info(`SUCCESS: readOne (week: ${weekId}) sent ${count} items.`);
+            send200Ok( res, data );
+            return;
         }
     );
 };
@@ -90,7 +93,7 @@ function makeProcurementDataset (hostname, weekId, callback) {
 
     if( !hostname ) {
         // Тестовый датасет если hostname=''
-        const TEST_DATASET = require( `${icwd}/server/sample-datasets/procurement` );
+        const TEST_DATASET = require(`${icwd}/server/sample-datasets/procurement`);
         return callback( null, TEST_DATASET );
     }
 
@@ -124,7 +127,7 @@ function makeProcurementDataset (hostname, weekId, callback) {
         requestOptions,
         (err, _res, resBody) => { // '{id, type, ..., body:[{}, ..., {}]}'
 
-            //debug( 'makeProcurementDataset: week-natural data got.' ));
+            //debug('makeProcurementDataset: week-natural data got.'));
             if( err ) {
                 return callback( err, null );
             }
@@ -139,7 +142,7 @@ function makeProcurementDataset (hostname, weekId, callback) {
                 return callback( null, null );
             }
             const count = weekNaturalItems?.length;
-            log.debug( `makeDataset, got ${count} items in week-natural data.` );
+            log.debug(`makeDataset, got ${count} items in week-natural data.`);
 
             //Преобразование в Procurement DataSet
             const result = weekNaturalItems.
@@ -149,7 +152,7 @@ function makeProcurementDataset (hostname, weekId, callback) {
             // на xtraLong период
             // т.e. хотя-бы один элемент больше 0, => их сумма >0, а не [0,0,0]
 
-            log.debug( 'makeDataset, converted to procurement dataset.' );
+            log.debug('makeDataset, converted to procurement dataset.');
             callback( null, result );
         }
     );

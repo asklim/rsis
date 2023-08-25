@@ -1,16 +1,16 @@
-const debug = require( 'debug' )( 'reports:daily:' );
+const debug = require('debug')('reports:daily:');
 const {
     consoleLogger,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     send201Created,
     send400BadRequest,
     send409Conflict,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const DailyReports = require( `../../../applogic/daily-reports` );
+const DailyReports = require(`../../../applogic/daily-reports`);
 
-const log = consoleLogger( 'api-reports:daily:' );
+const log = consoleLogger('api-reports:daily:');
 
 
 /**
@@ -19,7 +19,6 @@ const log = consoleLogger( 'api-reports:daily:' );
  * @fires 400 Bad Request & message
  * @fires 409 Conflict & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * POST /api/reports/daily
  */
@@ -32,7 +31,7 @@ module.exports = async function dailyReportsHandler_POST (req, res) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    debug( `[h-POST] try create: filial=${filial}, onDate=${onDate}` );
+    debug(`[h-POST] try create: filial=${filial}, onDate=${onDate}`);
 
 
     if( !req.body
@@ -43,7 +42,8 @@ module.exports = async function dailyReportsHandler_POST (req, res) {
             response: 'Bad request, req.body is empty.'
         };
         log.warn( result.logMessage );
-        return send400BadRequest( res, result.response );
+        send400BadRequest( res, result.response );
+        return;
     }
 
     const STATE_HANDLERS = {
@@ -79,7 +79,7 @@ module.exports = async function dailyReportsHandler_POST (req, res) {
             return STATE_HANDLERS[ statusCode ]( createResult );
         }
 
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
@@ -87,4 +87,3 @@ module.exports = async function dailyReportsHandler_POST (req, res) {
     }
 
 };
-

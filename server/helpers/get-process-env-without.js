@@ -1,5 +1,5 @@
 
-const { securetizeToken, } = require( './securetize.js' );
+const { securetizeToken, } = require('./securetize.js');
 
 /**
  * Выводит переменные окружения process.env.*,

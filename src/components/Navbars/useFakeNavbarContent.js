@@ -1,5 +1,5 @@
 import { debugFactory } from 'utils/debuggers.js';
-const debug = debugFactory( 'debug:useFakeNavbarContent' );
+const debug = debugFactory('debug:useFakeNavbarContent');
 
 import * as React from 'react';
 // import PropTypes from 'prop-types';
@@ -15,12 +15,12 @@ export default function useFakeNavbarContent( uri ) {
         try {
             let list;
             list = await fakeFetch( uri, 0 );
-            //debug( 'list', list );
+            //debug('list', list );
             setData( list );
             setIsLoaded( true );
         }
         catch (err) {
-            debug( 'error', err );
+            debug('error', err );
             setError( err );
         }
     }
@@ -43,7 +43,7 @@ async function fakeFetch (uri, delay=0) {
         setTimeout( () => {
             response[ uri ] ?
                 resolve( response[ uri ]() )
-                : reject( 'Fake-Server error' );
+                : reject('Fake-Server error');
         }, delay * 1000 );
     } );
 }
@@ -97,4 +97,3 @@ function getProfilePopupList () {
         },
     ];
 }
-

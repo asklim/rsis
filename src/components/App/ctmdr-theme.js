@@ -21,7 +21,7 @@ const ctmdrTheme = {
             `, 0 4px 25px 0px ${alpha( blackColor, 0.12 )}` +
             `, 0 8px 10px -5px ${alpha( blackColor, 0.2 )}`,
         primary:
-            `0 4px 20px 0 ${alpha( '#000', .14)}, ` +
+            `0 4px 20px 0 ${alpha('#000', .14)}, ` +
             `0 7px 10px -5px ${alpha(primaryColor[0], .4)}`,
     },
     palette: {

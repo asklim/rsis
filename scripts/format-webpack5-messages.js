@@ -22,7 +22,7 @@ function isLikelyASyntaxError( message ) {
  */
 function formatMessage( messageWebpack5 ) {
 
-    if( typeof messageWebpack5 == 'string' ) {
+    if( typeof messageWebpack5 == 'string') {
         return messageWebpack5;
     }
 

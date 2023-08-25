@@ -27,7 +27,7 @@ const images = [
     image3,
     image4
 ];
-//debug( 'images', images ); // Array of  String: `/images/0a127c5829ff5a63fc0a.jpg`
+//debug('images', images ); // Array of  String: `/images/0a127c5829ff5a63fc0a.jpg`
 const hues = [ 'purple', 'blue', 'green', 'orange', 'red' ];
 
 // const referenceList = [
@@ -57,7 +57,7 @@ const classes = {
     space:    `${PREFIX}-space`,
 };
 
-const SxDiv = styled( 'div', {
+const SxDiv = styled('div', {
     shouldForwardProp: (prop) => prop !== 'menuShow' && prop !== 'rtlActive',
 })(({ menuShow, rtlActive, theme }) => {
     const { pxToRem } = theme.typography;

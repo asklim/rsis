@@ -3,14 +3,14 @@ const debug = require('debug')('--dbs:cfg:catalogLayouts');
 const UUID = require('uuid');
 const {
     icwd,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     //consoleLogger,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
-const db = require( `${icwd}/server/databases` ).getDB( 'config' );
-const CatalogLayouts = db.model( 'CatalogLayouts' );
+const db = require(`${icwd}/server/databases`).getDB('config');
+const CatalogLayouts = db.model('CatalogLayouts');
 
-//const log = consoleLogger( 'db-cfg:catalog-layouts update:' );
+//const log = consoleLogger('db-cfg:catalog-layouts update:');
 
 /**
  * Update a catalog-layout by uuid or ObjId
@@ -35,12 +35,12 @@ module.exports = async function updateOne (catalogId, body) {
         });
         const $inc = { __v: 1 };
 
-        debug( 'filtering:', filtering );
+        debug('filtering:', filtering );
 
         const { uuid } = await CatalogLayouts.
             findOneAndUpdate( filtering, { $set, $inc }, { new: true } );
 
-        debug( 'updated-doc`s uuid:', uuid );
+        debug('updated-doc`s uuid:', uuid );
 
         return ({
             statusCode: HTTP.OK,

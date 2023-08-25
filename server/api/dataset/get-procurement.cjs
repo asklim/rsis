@@ -1,5 +1,6 @@
-//const debug = require( 'debug' )( 'procurement' );
-const axios = require( 'axios' ).default;
+
+//const debug = require('debug')('procurement');
+const axios = require('axios').default;
 
 const {
     icwd,
@@ -8,14 +9,15 @@ const {
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../helpers' );
+} = require('../../helpers');
 
-const log = consoleLogger( '[procurement:api]' );
+const log = consoleLogger('[procurement:api]');
 
 
-const { procurementPeriods: period } = require( `${icwd}/src/config/enum-values` );
+const { procurementPeriods: period } = require(`${icwd}/src/config/enum-values`);
 
-const { needUnitsForPeriod } = require( 'asklim/rsis' )();
+const { rsisFactory } = require('asklim');
+const { needUnitsForPeriod } = rsisFactory();
 
 // debug( "typeof needUnitsForPeriod", typeof needUnitsForPeriod );
 // debug( "needUnitsForPeriod", needUnitsForPeriod );
@@ -23,32 +25,31 @@ const { needUnitsForPeriod } = require( 'asklim/rsis' )();
 
 /**
  * Read a procurement dataset by the week id
- * @param {*} req
- * @param {*} res
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage GET /api/sum/procurements/:weekId
  * @example :weekId is ddd | dddd | last
  * GET /api/sum/procurement/960
  * GET /api/sum/procurement/1011
  * GET /api/sum/procurement/last
  **/
-module.exports = async function handler_GET (req, res) {
-
-    log.debug( 'hGET - req.params:', req.params, 'req.query:', req.query );
+module.exports = async function hGET_dataset_procurement (
+    req,
+    res
+) {
+    log.debug('hGET - req.params:', req.params, 'req.query:', req.query );
 
     const { weekId } = req.params;
 
     if( !weekId ) {
-        log.warn( 'handler GET: No or bad <weekId> specified.' );
-        return send400BadRequest( res, 'No or bad <:weekId> in request.' );
+        log.warn('handler GET: No or bad <weekId> specified.');
+        return send400BadRequest( res, 'No or bad <:weekId> in request.');
     }
 
-    const apiServer = req.app.get( 'apiServer' );
-    log.debug( `handler GET: before fetch Dataset from ${apiServer} ...` );
+    const apiServer = req.app.get('apiServer');
+    log.debug(`handler GET: before fetch Dataset from ${apiServer} ...`);
 
     try {
         const dataset = await makeProcurementDataset( apiServer, weekId );
@@ -59,7 +60,7 @@ module.exports = async function handler_GET (req, res) {
         }
 
         const count = dataset.length;
-        log.info( `GET: (week: ${weekId}) sent ${count} items.` );
+        log.info(`GET: (week: ${weekId}) sent ${count} items.`);
         return send200Ok( res, dataset );
     }
     catch (err) {
@@ -75,7 +76,6 @@ module.exports = async function handler_GET (req, res) {
  * Make dataset for Procurement View of Invoice Board
  * @param {*} hostname - getting data from { web | local | test }
  * @param {*} weekId - which week number (XXI century format)
- * @param {*} callback - data handler: (err, data) {}
  * @returns - Promise with err or data
  */
 function makeProcurementDataset (
@@ -86,7 +86,7 @@ function makeProcurementDataset (
 
         if( !hostname ) {
             // Тестовый датасет если hostname=''
-            const TEST_DATASET = require( `${icwd}/server/sample-datasets/procurement` );
+            const TEST_DATASET = require(`${icwd}/server/sample-datasets/procurement`);
             return resolve( TEST_DATASET );
         }
 
@@ -114,19 +114,19 @@ function makeProcurementDataset (
             }
         };
 
-        axios.get( `${hostname}/api/sum/weeknatural/${weekId}`, options ).
+        axios.get(`${hostname}/api/sum/weeknatural/${weekId}`, options ).
         then( (axires) => {
-            //debug( 'makeProcurementDataset: week-natural data got.' ));
+            //debug('makeProcurementDataset: week-natural data got.'));
             if( axires.status != 200 ) {
                 return reject( axires.statusText );
             }
             const weekNaturalItems = axires?.data?.body;
 
             if( !Array.isArray( weekNaturalItems )) {
-                return reject( `data must be Array, got ${typeof weekNaturalItems}.` );
+                return reject(`data must be Array, got ${typeof weekNaturalItems}.`);
             }
             const count = weekNaturalItems?.length;
-            log.debug( `makeDataset, got ${count} items in week-natural data.` );
+            log.debug(`makeDataset, got ${count} items in week-natural data.`);
 
             //Преобразование в Procurement DataSet
             const result = weekNaturalItems.
@@ -136,7 +136,7 @@ function makeProcurementDataset (
             // на xtraLong период
             // т.e. хотя-бы один элемент больше 0, => их сумма >0, а не [0,0,0]
 
-            log.debug( 'makeDataset, converted to procurement dataset.' );
+            log.debug('makeDataset, converted to procurement dataset.');
             return resolve( result );
         }).
         catch( (err) => {

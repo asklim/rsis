@@ -1,7 +1,7 @@
 
-const getCSSModuleLocalIdent = require( 'react-dev-utils/getCSSModuleLocalIdent' );
-const postcssNormalize = require( 'postcss-normalize' );
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const postcssNormalize = require('postcss-normalize');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
 // style files regexes
@@ -22,25 +22,25 @@ const getStyleLoaders = ( cssOptions, buildOptions, preProcessor ) => {
     } = buildOptions;
 
     const loaders = [
-        isEnvDevelopment && require.resolve( 'style-loader' ),
+        isEnvDevelopment && require.resolve('style-loader'),
         isEnvProduction && {
             loader: MiniCssExtractPlugin.loader,
             //options: shouldUseRelativeAssetPaths ? { publicPath: '../../' } : {},
         },{
-            loader: require.resolve( 'css-loader' ),
+            loader: require.resolve('css-loader'),
             options: cssOptions,
         },{
             // Options for PostCSS as we reference these options twice
             // Adds vendor prefixing based on your specified browser support in
             // package.json
-            loader: require.resolve( 'postcss-loader' ),
+            loader: require.resolve('postcss-loader'),
             options: {
                 // Necessary for external CSS imports to work
                 // https://github.com/facebook/create-react-app/issues/2677
                 postcssOptions: {
                     plugins: [
-                        require( 'postcss-flexbugs-fixes' ),
-                        require( 'postcss-preset-env' )({
+                        require('postcss-flexbugs-fixes'),
+                        require('postcss-preset-env')({
                             autoprefixer: {
                                 flexbox: 'no-2009',
                             },
@@ -59,7 +59,7 @@ const getStyleLoaders = ( cssOptions, buildOptions, preProcessor ) => {
     if( preProcessor ) {
         loaders.push(
             {
-                loader: require.resolve( 'resolve-url-loader' ),
+                loader: require.resolve('resolve-url-loader'),
                 options: {
                     sourceMap: isEnvProduction && shouldUseSourceMap,
                 },
@@ -131,7 +131,7 @@ module.exports = function (buildOptions) {
                         test: /\.(js|mjs|jsx|ts|tsx)$/,
                         include: paths.appSrc,
                         exclude: /node_modules/,
-                        loader: require.resolve( 'babel-loader' ),
+                        loader: require.resolve('babel-loader'),
                         options: {
                             presets: [
                                 '@babel/preset-env',
@@ -154,7 +154,7 @@ module.exports = function (buildOptions) {
                     {
                         test: /\.(js|mjs)$/,
                         exclude: /@babel(?:\/|\\{1,2})runtime/,
-                        loader: require.resolve( 'babel-loader' ),
+                        loader: require.resolve('babel-loader'),
                         options: {
                             babelrc: false,
                             configFile: false,
@@ -246,7 +246,7 @@ module.exports = function (buildOptions) {
                     // This loader doesn't use a "test" so it will catch all modules
                     // that fall through the other loaders.
                     {
-                        loader: require.resolve( 'file-loader' ),
+                        loader: require.resolve('file-loader'),
                         // Exclude `js` files to keep "css" loader working as
                         // it injects its runtime that would otherwise be
                         // processed through "file" loader.

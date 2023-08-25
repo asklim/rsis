@@ -1,25 +1,49 @@
 
-const { httpResponseCodes } = require( `asklim` );
-// const helpers = require( 'asklim' );
-//const serverConfig = require( '../server-config' );
+// const {
+//     StatusCode: httpResponseCodes,
+//     ExpressResponses,
 
-const httpResponses = require( './http-responses.js' );
-const consoleLogger = require( './logger.js' );
-const getProcessEnvWithout = require( './get-process-env-without.js' );
-const makeResults = require( './make-results.js' );
+// @ts-ignore
+const asklim = require('asklim');
+const { http, Logger } = asklim;
 
-//console.log( 'helpers\n', helpers ); // {}
+//const serverConfig = require('../server-config');
 
-const icwd = require( 'fs' ).realpathSync( process.cwd() );
+// const httpResponses = require('./http-responses.js');
+const consoleLogger = require('./logger.js');
+const getProcessEnvWithout = require('./get-process-env-without.js');
+const makeResults = require('./make-results.js');
+
+//console.log('helpers\n', helpers ); // {}
+
+const icwd = require('fs').realpathSync( process.cwd() );
+
+function shrinkServerRes( serverRes ) {
+    const {
+        outputSize,
+        _header,
+        _startTime,
+        statusCode,
+        statusMessage,
+    } = serverRes;
+    return ({
+        outputSize,
+        _header,
+        _startTime,
+        statusCode,
+        statusMessage,
+    });
+}
 
 module.exports = {
-    httpResponseCodes,
-    ... httpResponses,
+    Logger,
+    ... http,
     //... helpers,
-    //NO [Circular] ... require( './herokuapp' ), // ONLY direct from file
-    //NO [Circular] ... require( './send-to-webapp' ), // ONLY direct from file
+    //NO [Circular] ... require('./herokuapp'), // ONLY direct from file
+    //NO [Circular] ... require('./send-to-webapp'), // ONLY direct from file
     icwd,
     getProcessEnvWithout,
     consoleLogger, // переопределяет из 'asklim'
     ... makeResults,
+    shrinkServerRes,
 };

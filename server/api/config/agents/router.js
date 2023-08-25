@@ -1,19 +1,19 @@
 
-const { 
+const {
     callbackError405,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const  
-    createOne = require( './create-one' ),
-    readOne = require( './read-one' ),
-    updateOne = require( './update-one' ),
-    deleteOne = require( './delete-one' ),
-    readTypesGroupsIdsList = require( './read-types-groups-ids-list' ),
+const
+    createOne = require('./create-one'),
+    readOne = require('./read-one'),
+    updateOne = require('./update-one'),
+    deleteOne = require('./delete-one'),
+    readTypesGroupsIdsList = require('./read-types-groups-ids-list'),
     readAgentsList = require('./read-agents-list')
 ;
 
-/**  
- * api for 1 agent: /api/config/agents/<agentId>. 
+/**
+ * api for 1 agent: /api/config/agents/<agentId>.
  */
 
 module.exports = function (router) {
@@ -21,7 +21,7 @@ module.exports = function (router) {
     const agents = '/config/agents';
     const agentId = agents+'/:agentId';
     const agentsList = agents + '/list';
-  
+
     /* api for agents lists, must be before? one-agent routes */
     router.get( agentsList, readAgentsList );
 
@@ -43,4 +43,3 @@ module.exports = function (router) {
     router.post( agentId, callbackError405 );
     router.put( agentId, callbackError405 );
 };
-

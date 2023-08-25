@@ -21,8 +21,8 @@ const DB_CODENAME = {
 **/
 function getDB (dbType) {
 
-    if( typeof dbType !== 'string' ) {
-        log.warn( 'dbType must be a string.' );
+    if( typeof dbType !== 'string') {
+        log.warn('dbType must be a string.');
         return;
     }
 

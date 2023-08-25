@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'reports:week-natural' );
+//const debug = require('debug')('reports:week-natural');
 const {
     icwd,
     consoleLogger,
@@ -6,35 +6,32 @@ const {
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( '[week-natural:api:h-GET]' );
+const log = consoleLogger('[week-natural:api:h-GET]');
 
-const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
-const WeekNatural = db.model( 'WeekNatural' );
+const db = require(`${icwd}/server/databases`).getDB('sum');
+const WeekNatural = db.model('WeekNatural');
 
 
 /**
- * @name readOne
- * @description
  * Read a week summary Natural info
  * by the XXI century weekId or 'last'
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * GET /api/sum/weeknatural/:weekId
  * @example
  * GET /api/sum/weeknatural/960
  * GET /api/sum/weeknatural/1011
  * GET /api/sum/weeknatural/last
- *
 **/
-const readOne = (req, res) => {
-
-
+const readOne = async (
+    req,
+    res
+) => {
     console.log(
         `I: try readOne sum-week-natural document`,
         `\nI: finding weekNatural's params:`, req.params,
@@ -44,14 +41,14 @@ const readOne = (req, res) => {
     const { weekId } = req.params;
 
     if( !req.params || !weekId ) {
-
-        log.warn( 'weekNatural.readOne: No weekId specified.' );
-        return send400BadRequest( res, 'No weekId in request.' );
+        log.warn('weekNatural.readOne: No weekId specified.');
+        send400BadRequest( res, 'No weekId in request.');
+        return;
     }
 
     let finding, sorting, weekNumber;
 
-    if( weekId.toLowerCase() === 'last' ) {
+    if( weekId.toLowerCase() === 'last') {
 
         finding = {};
         sorting = { id: -1 };
@@ -61,8 +58,9 @@ const readOne = (req, res) => {
         weekNumber = Number.parseInt( weekId, 10 );
         if( !weekNumber ) {
 
-            log.warn( 'weekNatural.readOne: wrong weekId specified.' );
-            return send400BadRequest( res, 'Wrong weekId in request.' );
+            log.warn('weekNatural.readOne: wrong weekId specified.');
+            send400BadRequest( res, 'Wrong weekId in request.');
+            return;
         }
 
         finding =  { id: weekNumber };
@@ -70,29 +68,32 @@ const readOne = (req, res) => {
     }
 
 
-    WeekNatural
-        .find( finding )
-        .sort( sorting )
-        .limit(1)
-        .exec( (err, docs) => {
+    WeekNatural.
+        find( finding ).
+        sort( sorting ).
+        limit(1).
+        exec( (err, docs) => {
 
             if( err ) {
                 log.error( err );
-                return send500ServerError( res, err );
+                send500ServerError( res, err );
+                return;
             }
 
             if( !docs || docs.length < 1 ) {
 
                 let msg = `Summary data for week ${weekId}/${weekNumber} not found.`;
-                log.warn( `weekNatural ${msg}` );
+                log.warn(`weekNatural ${msg}`);
 
-                return send404NotFound( res, `WeekNatural ${msg}` );
+                send404NotFound( res, `WeekNatural ${msg}`);
+                return;
             }
 
-            log.info( `SUCCESS: weekNatural ${docs[0].id} readOne is Ok.`);
-            return send200Ok( res, docs[0] );
-        });
-
+            log.info(`SUCCESS: weekNatural ${docs[0].id} readOne is Ok.`);
+            send200Ok( res, docs[0] );
+            return;
+        })
+    ;
 };
 
 module.exports = readOne;

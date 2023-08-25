@@ -1,10 +1,10 @@
 
 const {
     callbackError405,
-} = require( '../../helpers/' );
+} = require('../../helpers/');
 
-const handler_GET = require( './handler-get.js' );
-//const options = require( './options' );
+const handler_GET = require('./handler-get.js');
+//const options = require('./options');
 
 // Это ответ на запрос OPTIONS
 // Access-Control-Allow-Methods - ответ Express
@@ -21,7 +21,7 @@ module.exports = function ( router ) {
 
     const envPath = '/processenv';
 
-    //router.get( `${envPath}/:name`, handler_GET );
+    //router.get(`${envPath}/:name`, handler_GET );
     router.get( envPath, handler_GET );
     router.all( envPath, callbackError405 );
 
@@ -31,4 +31,3 @@ module.exports = function ( router ) {
     //router.delete( envPath, callbackError405 );
 
 };
-

@@ -9,14 +9,14 @@ import PublicApp from './PublicApp/PublicApp.jsx';
 import 'index.css';
 
 // import { Debug } from 'utils/debuggers.js';
-// const debug = Debug.extend( 'index' );
+// const debug = Debug.extend('index');
 import { debugFactory } from 'utils/debuggers.js';
-const debug = debugFactory( 'debug:index' );
+const debug = debugFactory('debug:index');
 
-const appElement = window.document.getElementById( 'react-app' );
+const appElement = window.document.getElementById('react-app');
 window.document.rsis = { appVersion: appElement.innerText };
-console.log( `[INFO] rsis.appVersion = ${window.document.rsis.appVersion}` );
-console.log( '[INFO] before rendering react-app.' );
+console.log(`[INFO] rsis.appVersion = ${window.document.rsis.appVersion}`);
+console.log('[INFO] before rendering react-app.');
 
 const theme = createTheme({
     palette: {
@@ -34,7 +34,7 @@ ReactDOM.render(
     appElement
 );
 
-console.log( 'localStorage.debug:', localStorage.debug );
-debug( 'theme', theme );
-//console.log( '[DEBUG] React', React );
-//console.log( '[DEBUG] React DOM', ReactDOM );
+console.log('localStorage.debug:', localStorage.debug );
+debug('theme', theme );
+//console.log('[DEBUG] React', React );
+//console.log('[DEBUG] React DOM', ReactDOM );

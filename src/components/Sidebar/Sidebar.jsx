@@ -33,7 +33,7 @@ const classes = {
 };
 
 
-const Root = styled( 'div' )( ({ theme }) => ({
+const Root = styled('div')( ({ theme }) => ({
     [`&.${classes.root}`]: {
         // `&.${...` without spaces (root styles)
         height: '100%',
@@ -42,7 +42,7 @@ const Root = styled( 'div' )( ({ theme }) => ({
     },
 }));
 
-const NavLinkWrapper = styled( 'div' )( ({ theme }) => ({
+const NavLinkWrapper = styled('div')( ({ theme }) => ({
     [`&.${classes.navLinksWrapper}`]: {
         // `&.${...` without spaces (root styles)
         height: 'calc(100vh - 75px)',

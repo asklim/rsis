@@ -1,7 +1,7 @@
-//const debug = require( 'debug' )( 'reports:daily' );
-const UUID = require( 'uuid' );
+//const debug = require('debug')('reports:daily');
+const UUID = require('uuid');
 
-const readOne = require( './dr-read-one' );
+const readOne = require('./dr-read-one');
 
 /**
  * Read a daily-report by the id

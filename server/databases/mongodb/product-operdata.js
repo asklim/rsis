@@ -1,6 +1,6 @@
-const { Schema } = require( 'mongoose' );
+const { Schema } = require('mongoose');
 
-const PATH_DEFINITION = require( './schema.paths-definitions' );
+const PATH_DEFINITION = require('./schema.paths-definitions');
 
 
 const productOperDataItem = new Schema({

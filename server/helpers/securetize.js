@@ -10,7 +10,7 @@ function securetizeToken (token, ahead=12, behind=3) {
                 + token.substring( lenToken-behind )
             );
         }
-        this.securetizeToken( token, ahead-1, behind-1 );
+        /*this.*/ return securetizeToken( token, ahead-1, behind-1 );
 
     }
     catch (e) {
@@ -21,7 +21,7 @@ function securetizeToken (token, ahead=12, behind=3) {
 
 function securefy (obj) {
 
-    if( !Object.prototype.hasOwnProperty.call( obj, 'token' )) {
+    if( !Object.prototype.hasOwnProperty.call( obj, 'token')) {
         return obj;
     }
     const clone = Object.assign( {}, obj );

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Outlet, } from 'react-router-dom';
 
 import { debugFactory } from 'utils/debuggers.js';
-const debug = debugFactory( 'debug:admin' );
+const debug = debugFactory('debug:admin');
 
 // Google Material-UI/core components
 import { /*alpha,*/ styled } from '@mui/material/styles';
@@ -191,4 +191,3 @@ export default function Admin ({ ...rest }) {
         </MainPanel>
     </LayoutSxDiv>);
 }
-

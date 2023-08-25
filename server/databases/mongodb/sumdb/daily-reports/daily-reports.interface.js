@@ -6,13 +6,13 @@ const IA_DailyReports = require("../../../../applogic/daily-reports/storage.inte
 
 module.exports = class IDailyReports extends IA_DailyReports {
 
-    static createOne = require( './dr-create-one' );
+    static createOne = require('./dr-create-one');
 
-    static readById = require( './dr-read-by-id' );
-    static readByQuery = require( './dr-read-by-query' );
+    static readById = require('./dr-read-by-id');
+    static readByQuery = require('./dr-read-by-query');
 
-    static updateOne = require( './dr-update-one' );
+    static updateOne = require('./dr-update-one');
 
-    static deleteById = require( './dr-delete-by-id' );
+    static deleteById = require('./dr-delete-by-id');
 
 };

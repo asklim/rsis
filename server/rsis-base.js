@@ -14,7 +14,7 @@ createMongoDBConnections();
 
 const { app: rsisExpressApp, } = require('./rsis-app.js');
 
-//debug( 'typeof getMyDB is', typeof rsisExpressApp.getMyDB );
+//debug('typeof getMyDB is', typeof rsisExpressApp.getMyDB );
 //debug( rsisExpressApp.get('env')); // == NODE_ENV
 
 
@@ -33,7 +33,7 @@ const server = http.createServer( rsisExpressApp );
  */
 const handlerOnError = (err) => {
 
-    if( err.syscall !== 'listen' ) {
+    if( err.syscall !== 'listen') {
         throw err;
     }
 
@@ -55,7 +55,7 @@ const handlerOnError = (err) => {
             break;
 
         default:
-            log.log(`E: www-server unhandled error !!!`, err );
+            log.log(`[ERR!] www-server unhandled error !!!`, err );
             //throw error;
     }
 };
@@ -64,8 +64,9 @@ const handlerOnError = (err) => {
  * Event listener for HTTP server "listening" event.
  */
 const handlerOnListening = () => {
-    let addr = server.address();
-    let bind = typeof addr === 'string'
+    const _a = server.address();
+    const addr = _a ?? typeof( _a );
+    const bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port
     ;
@@ -87,7 +88,7 @@ server.on('close', () => {
     console.log('http-server closing ...');
     rsisExpressApp.emit('close');
     //ngrok.disconnect();
-    //console.log( 'ngrok disconnected.' );
+    //console.log('ngrok disconnected.');
 });
 
 /**
@@ -102,15 +103,16 @@ server.listen(
 // *************************************************************
 // CAPTURE APP TERMINATION / RESTART EVENTS
 
-const shutdownTheServer = () => {
-    return new Promise( (resolve) => {
-        server.close( () => {
-            console.log( 'http-server closed now.' );
-            resolve();
-        });
+async function shutdownTheServer () {
+    return server.
+    close( (err) => {
+        if( err ) {
+            console.log('Error of closing server.\n', err );
+            return;
+        }
+        console.log('http-server closed now.');
     });
-};
-
+}
 
 process.once(
     'SIGUSR2', // For nodemon restarts
@@ -134,9 +136,9 @@ process.on( // For app termination
     async () => {
         console.log(`${clearTwoChar}\nGot SIGINT signal (^C)!\n`);
         const p = shutdownTheServer();
-        //debug( 'shutdown returns', p ); // Promise { <pending> }
+        //debug('shutdown returns', p ); // Promise { <pending> }
         await p;
-        //debug( 'shutdown returns', p ); // Promise { undefined }
+        //debug('shutdown returns', p ); // Promise { undefined }
         await databasesShutdown(
             'SIGINT, app termination'
             , () => {
@@ -151,7 +153,7 @@ process.on( // For app termination
 );
 
 // For Heroku app termination
-process.on( 'SIGTERM', async () => {
+process.on('SIGTERM', async () => {
     await shutdownTheServer();
     await databasesShutdown(
         'SIGTERM, app termination',
@@ -195,7 +197,7 @@ function serverAppOutput(
         : 'port ' + port;
 
     const outputs = {
-        full: () => console.log( 'Express server = ',  httpServer, '\n' ),
+        full: () => console.log('Express server = ',  httpServer, '\n'),
         addr: () => {
             console.log(
                 'Express server = "' + address.cyan
@@ -203,7 +205,7 @@ function serverAppOutput(
                 + '" listening on ' + bind.cyan, '\n'
             );
         },
-        default: () => console.log( '\n' )
+        default: () => console.log('\n')
     };
 
     (outputs[ outputMode.toLowerCase() ] || outputs[ 'default' ])();

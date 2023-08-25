@@ -45,11 +45,11 @@ export default function CustomInput({
     });
 
 
-    // const handlerOnCapture = (e) => e.code?.includes( 'Enter' ) &&
-    //     console.log( `entered: ${query}` );
+    // const handlerOnCapture = (e) => e.code?.includes('Enter') &&
+    //     console.log(`entered: ${query}`);
 
     // Capture перехватывает/прерывает событие onKeyUp
-    //onKeyUpCapture = {(e) => console.log( 'capture', e )}
+    //onKeyUpCapture = {(e) => console.log('capture', e )}
 
     return (
         <FormControl

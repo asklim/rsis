@@ -1,7 +1,7 @@
 const {
     presets,
     plugins
-} = require('./src/babel.config.js');
+} = require('./src/babel.config.cjs');
 
 module.exports = function (api) {
     api.cache.forever();

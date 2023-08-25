@@ -16,7 +16,7 @@ const classes = {
     button:     `${PREFIX}-button`,
 };
 
-const SxSection = styled( 'section', {
+const SxSection = styled('section', {
     shouldForwardProp: (prop) => prop !== 'hue',
 // eslint-disable-next-line no-unused-vars
 })(({ hue, theme }) => ({
@@ -59,7 +59,7 @@ const SxSection = styled( 'section', {
 }));
 
 
-const HueBadge = styled( 'span', {
+const HueBadge = styled('span', {
     shouldForwardProp: (prop) => prop !== 'hue' && prop !== 'current',
 // eslint-disable-next-line no-unused-vars
 })( ({ hue, current, theme }) => {
@@ -124,4 +124,3 @@ HueColorPad.propTypes = {
     handleColorClick: PropTypes.func,
     hue: PropTypes.oneOf( hueColors ),
 };
-

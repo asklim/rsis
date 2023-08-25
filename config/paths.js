@@ -1,7 +1,7 @@
 
-const path = require( 'path' );
-const fs = require( 'fs' );
-//const url = require( 'url' );
+const path = require('path');
+const fs = require('fs');
+//const url = require('url');
 
 
 
@@ -47,11 +47,11 @@ const getPublicUrl = (appPackageJson) => envPublicUrl || require( appPackageJson
 function getServedPath (appPackageJson) {
 
     const publicUrl = getPublicUrl( appPackageJson );
-    const servedUrl = envPublicUrl
-        || ( publicUrl && publicUrl.startsWith( 'http' )
-            ? (new URL( publicUrl )).pathname
-            : '/' );
-
+    const servedUrl = envPublicUrl || (
+        publicUrl && publicUrl.startsWith('http') ?
+            (new URL( publicUrl )).pathname
+            : '/'
+    );
     return ensureSlash( servedUrl, true );
 }
 
@@ -73,40 +73,40 @@ const moduleFileExtensions = [
 const resolveModule = (resolveFn, filePath) =>  {
 
     const extension = moduleFileExtensions.find( extension =>
-        fs.existsSync(resolveFn(`${filePath}.${extension}` ))
+        fs.existsSync(resolveFn(`${filePath}.${extension}`))
     );
 
     if( extension ) {
-        return resolveFn( `${filePath}.${extension}` );
+        return resolveFn(`${filePath}.${extension}`);
     }
 
-    return resolveFn( `${filePath}.js` );
+    return resolveFn(`${filePath}.js`);
 };
 
-const distFolderName = 'static';
+const distFolderName = 'dist';
 
 // config after eject: we're in ./config/
 module.exports = {
 
     distFolderName,
-    dotenv :          resolveApp( '.env' ),
-    appPath :         resolveApp( '.' ),
+    dotenv :          resolveApp('.env'),
+    appPath :         resolveApp('.'),
     appBuild :        resolveApp( distFolderName ), //('build'),
-    appPublic :       resolveApp( 'src/assets/public' ),
-    appHtml :         resolveApp( 'src/index-template.html' ),
-    appHtmlTemplate : resolveApp( 'src/index-template.html' ),
-    appIndexJs :      resolveModule( resolveApp, 'src/index' ), // without extension !!!
-    appNodeModules :  resolveApp( 'node_modules' ),
-    appPackageJson :  resolveApp( 'package.json' ),
-    appSrc :          resolveApp( 'src' ),
-    appJsConfig:      resolveApp( 'jsconfig.json' ),
-    appTsConfig :     resolveApp( 'tsconfig.json' ),
-    yarnLockFile :    resolveApp( 'yarn.lock' ),
+    appPublic :       resolveApp('src/assets/public'),
+    appHtml :         resolveApp('src/index-template.html'),
+    appHtmlTemplate : resolveApp('src/index-template.html'),
+    appIndexJs :      resolveModule( resolveApp, 'src/index'), // without extension !!!
+    appNodeModules :  resolveApp('node_modules'),
+    appPackageJson :  resolveApp('package.json'),
+    appSrc :          resolveApp('src'),
+    appJsConfig:      resolveApp('jsconfig.json'),
+    appTsConfig :     resolveApp('tsconfig.json'),
+    yarnLockFile :    resolveApp('yarn.lock'),
     //ejsRoot :         resolveApp('server/views/index.ejs'),
-    //proxySetup :      resolveApp( 'src/setupProxy.js' ),
-    //testsSetup :      resolveModule( resolveApp, 'src/setupTests' ),
-    publicUrl :       getPublicUrl( resolveApp( 'package.json' )),
-    servedPath :      getServedPath( resolveApp( 'package.json' )),
+    //proxySetup :      resolveApp('src/setupProxy.js'),
+    //testsSetup :      resolveModule( resolveApp, 'src/setupTests'),
+    publicUrl :       getPublicUrl( resolveApp('package.json')),
+    servedPath :      getServedPath( resolveApp('package.json')),
 };
 
 module.exports.moduleFileExtensions = moduleFileExtensions;

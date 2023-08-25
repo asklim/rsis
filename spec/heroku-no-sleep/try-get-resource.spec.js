@@ -1,8 +1,8 @@
-const createError = require( 'http-errors' );
+const createError = require('http-errors');
 
-const createSafeGetter = require('../create-safe-getter');
+const createSafeGetter = require('../../server/heroku-no-sleep/create-safe-getter');
 
-const tryGetResource = require( '../try-get-resource-x-times.js' );
+const tryGetResource = require('../../server/heroku-no-sleep/try-get-resource-x-times.js');
 
 
 const FAKE_URL = 'http://fakeUrl';
@@ -55,7 +55,7 @@ const tryGetOkResponse1 = {
 };
 
 
-test( '01/try get resource, but error',
+test('01/try get resource, but error',
     async () => {
         try {
             const result = await tryGetResource( optionsWhenError );
@@ -67,15 +67,15 @@ test( '01/try get resource, but error',
             expect( err ).not.toBeUndefined();
             expect( err instanceof Object ).toBeTruthy(  );
             expect( Object.keys( err ).length ).toEqual( 4 );
-            expect( typeof err.message === 'string' ).toBeTruthy();
-            expect( typeof err.reason === 'string' ).toBeTruthy();
-            expect( typeof err.attempt === 'number' ).toBeTruthy();
-            expect( typeof err.ms === 'number' ).toBeTruthy();
+            expect( typeof err.message === 'string').toBeTruthy();
+            expect( typeof err.reason === 'string').toBeTruthy();
+            expect( typeof err.attempt === 'number').toBeTruthy();
+            expect( typeof err.ms === 'number').toBeTruthy();
         }
     }
 );
 
-test( '02/get good axios response in first time',
+test('02/get good axios response in first time',
     async () => {
         const result = await tryGetResource( optionsWhenPass );
         delete result.ms;
@@ -85,7 +85,7 @@ test( '02/get good axios response in first time',
 
 jest.setTimeout(30_000);
 
-test( '03/try get resource, without getter (real Axios to FAKE_URL) == InternalServerError',
+test('03/try get resource, without getter (real Axios to FAKE_URL) == InternalServerError',
     //[LOGGER]: Error: http://fakeUrl : InternalServerError: Internal Server Error (27149ms)
     async () => {
         try {
@@ -101,12 +101,11 @@ test( '03/try get resource, without getter (real Axios to FAKE_URL) == InternalS
             expect( err ).toBeDefined();
             expect( err instanceof Object ).toBeTruthy();
             expect( err instanceof Error ).toBeFalsy();
-            expect( typeof err.message === 'string' ).toBeTruthy();
-            expect( typeof err.reason === 'string' ).toBeTruthy();
-            expect( typeof err.attempt === 'number' ).toBeTruthy();
-            expect( typeof err.ms === 'number' ).toBeTruthy();
+            expect( typeof err.message === 'string').toBeTruthy();
+            expect( typeof err.reason === 'string').toBeTruthy();
+            expect( typeof err.attempt === 'number').toBeTruthy();
+            expect( typeof err.ms === 'number').toBeTruthy();
             expect( Object.keys( err ).length ).toEqual( 4 );
         }
     }
 );
-

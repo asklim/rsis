@@ -33,7 +33,7 @@ const classes = {
     icons:         `${PREFIX}-icons`,
 };
 
-const RootSxDiv = styled( 'div', {
+const RootSxDiv = styled('div', {
     shouldForwardProp: (prop) => prop !== 'color',
 })(({ color, theme }) => {
     // eslint-disable-next-line no-unused-vars
@@ -71,7 +71,7 @@ const RootSxDiv = styled( 'div', {
         },
         [`&${' '}.${classes.buttonLink}`]: {
             zIndex: '14',
-            [theme.breakpoints.down( 'md' )]: { //'sm'
+            [theme.breakpoints.down('md')]: { //'sm'
                 display: 'flex',
                 margin: '10px 15px 0',
                 width: '-webkit-fill-available',
@@ -134,7 +134,7 @@ export default function AdminNavbarLinks() {
 
     const handleCloseNotification = (event) => {
         setOpenNotification( null );
-        console.log( `textContent: ${event.target.textContent}, event:`, event );
+        console.log(`textContent: ${event.target.textContent}, event:`, event );
     };
 
     const handleClickProfile = (event) =>
@@ -150,7 +150,7 @@ export default function AdminNavbarLinks() {
     const handlerOnChange = (event) => {
         const { value, textContent, outerText } = event.target;
         setQuery( value );
-        console.log( `input char: ${value?.at(-1) ?? 'undefined'}`,
+        console.log(`input char: ${value?.at(-1) ?? 'undefined'}`,
             `textContent: ${textContent}, outerText: ${outerText}`
         );
     };
@@ -270,4 +270,3 @@ export default function AdminNavbarLinks() {
         /> */}
     </RootSxDiv>);
 }
-

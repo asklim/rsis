@@ -43,7 +43,7 @@ export default function Header ({
             }
             return null;
         });
-        //console.log( `getRouteTitle is ${name}` );
+        //console.log(`getRouteTitle is ${name}`);
         return name;
     }
 

@@ -1,14 +1,14 @@
-//const debug = require( 'debug' )( 'api:health:' );
+//const debug = require('debug')('api:health:');
 const {
     send200Ok,
     send400BadRequest,
     send500ServerError,
     consoleLogger,
-} = require( '../../helpers' );
-const log = consoleLogger( '[api:health]' );
+} = require('../../helpers');
+const log = consoleLogger('[api:health]');
 
-const cfgdb = require( '../../databases' ).getDB( 'config' );
-const sumdb = require( `../../databases` ).getDB( 'sum' );
+const cfgdb = require('../../databases').getDB('config');
+const sumdb = require(`../../databases`).getDB('sum');
 
 
 /**
@@ -16,91 +16,100 @@ const sumdb = require( `../../databases` ).getDB( 'sum' );
  * приложения и базы данных
  * @usage GET /api/health/app
  * @usage or GET /api/health
- * @returns 200 {message : 'app'} - is Ok or nothing if app doesn't work
+ * @fires 200 {message : 'app'} - is Ok or nothing if app doesn't work
  *
  * @usage GET /api/health/databases
- * @returns 200 {ok: true, dbname: docsCount}
- * @returns 500 {ok: false, dbname: docsCountResult}
+ * @fires 200 {ok: true, dbname: docsCount}
+ * @fires 500 {ok: false, dbname: docsCountResult}
  *
  * @usage GET /api/health/mongocfg
  * @usage GET /api/health/mongosum
- * @returns 200 {message : 'nn'} - count of docs.
- * @returns 500 {message : '-1'} - no Mongo
+ * @fires 200 {message : 'nn'} - count of docs.
+ * @fires 500 {message : '-1'} - no Mongo
  **/
-
-module.exports = async function (req, res) {
-
-
+module.exports = async function hGET_health (
+    req,
+    res
+) {
     //params.pingId : {'app' | 'databases' | 'mongocfg' | 'mongosum'}
     let count = Object.keys( req.params ).length;
-    log.debug( `params.count=${count},`, req.params );
+    log.debug(`params.count=${count},`, req.params );
 
     if( !count ) {
         // При отсутствии параметра: проверка приложения (app)
-        return send200Ok( res, 'app--' );
+        send200Ok( res, 'app--');
+        return;
     }
 
     let { pingId } = req.params;
     if( !pingId ) {
         // req.params.* должен быть
-        return send400BadRequest( res, 'req.params.pingId not present.' );
+        send400BadRequest( res, 'req.params.pingId not present.');
+        return;
     }
 
     pingId = pingId.toLowerCase();
 
-    if( pingId === 'app' ) {
-        return send200Ok( res, 'app++' );
+    if( pingId === 'app') {
+        send200Ok( res, 'app++');
+        return;
     }
 
 
-    if( pingId === 'mongocfg' ) {
+    if( pingId === 'mongocfg') {
         try {
             const count = await totalDocumentsInDB( cfgdb );
-            return send200Ok( res, count.toString() );
+            send200Ok( res, count.toString() );
+            return;
         }
         catch {
-            return send500ServerError( res, '-1' );
+            send500ServerError( res, '-1');
+            return;
         }
     }
 
 
-    if( pingId === 'mongosum' ) {
+    if( pingId === 'mongosum') {
         try {
             const count = await totalDocumentsInDB( sumdb );
-            return send200Ok( res, count.toString() );
+            send200Ok( res, count.toString() );
+            return;
         }
         catch {
-            return send500ServerError( res, '-1' );
+            send500ServerError( res, '-1');
+            return;
         }
     }
 
 
-    if( pingId === 'databases' ) {
+    if( pingId === 'databases') {
 
         let cfgCount;
         let sumCount;
         try {
             cfgCount = await totalDocumentsInDB( cfgdb );
             sumCount = await totalDocumentsInDB( sumdb );
-            return send200Ok( res,
+            send200Ok( res,
                 {
                     ok: true,
                     mongocfg: cfgCount,
                     mongosum: sumCount
                 }
             );
+            return;
         }
         catch {
-            return send500ServerError( res,
+            send500ServerError( res,
                 {
                     ok: false,
                     mongocfg: cfgCount,
                     mongosum: sumCount
                 }
             );
+            return;
         }
     }
-    send400BadRequest( res, `parameter '${pingId}' is invalid.` );
+    send400BadRequest( res, `parameter '${pingId}' is invalid.`);
 };
 
 
@@ -116,6 +125,7 @@ async function totalDocumentsInDB (mongodb) {
     for( let name of mongodb.modelNames() ) {
 
         let theModel = mongodb.model( name );
+        // eslint-disable-next-line no-await-in-loop
         let count = await theModel.estimatedDocumentCount();
         total += count;
     }

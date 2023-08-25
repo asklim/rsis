@@ -1,10 +1,10 @@
-const debug = require( 'debug' )( 'reports:daily' );
-const UUID = require( 'uuid' );
+const debug = require('debug')('reports:daily');
+const UUID = require('uuid');
 
-const { httpResponseCodes: HTTP } = require( '../../../../helpers' );
+const { StatusCodes: HTTP } = require('../../../../helpers');
 
-const db = require( `../../..` ).getDB( 'sum' );
-const DailyReports = db.model( 'DailyReports' );
+const db = require(`../../..`).getDB('sum');
+const DailyReports = db.model('DailyReports');
 
 /**
  * Update a daily-report by uuid or ObjId
@@ -33,12 +33,12 @@ module.exports = async function updateOne (reportId, body) {
             ? { uuid: reportId }
             : { _id: reportId };
 
-        debug( 'filtering:', filtering );
+        debug('filtering:', filtering );
 
         const { uuid } = await DailyReports.
             findOneAndUpdate( filtering, { $set, $inc }, { new: true } );
 
-        debug( 'updated-doc`s uuid:', uuid );
+        debug('updated-doc`s uuid:', uuid );
 
         return ({
             statusCode: HTTP.OK,

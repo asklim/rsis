@@ -1,6 +1,6 @@
 
-const handlerGET = require( './handler-get' );
-const { callbackError405 } = require( '../../helpers' );
+const handlerGET = require('./handler-get');
+const { callbackError405 } = require('../../helpers');
 // Метод запроса не разрешен к использованию для данного URL
 
 

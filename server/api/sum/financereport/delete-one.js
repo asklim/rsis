@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'reports:finance' );
+//const debug = require('debug')('reports:finance');
 const {
     icwd,
     consoleLogger,
@@ -6,25 +6,23 @@ const {
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( 'api-SUM:reports:finance:' );
+const log = consoleLogger('api-SUM:reports:finance:');
 
-const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
-const FinanceReport = db.model( 'FinanceReport' );
+const db = require(`${icwd}/server/databases`).getDB('sum');
+const FinanceReport = db.model('FinanceReport');
 
-//const workdate = require( `${icwd}/imports/utils/workdate` );
+//const workdate = require(`${icwd}/imports/utils/workdate`);
 
 
 
 /**
  * Delete Finance Report summary
- * @name deleteOne
  * @fires 204 No Content  & deleted document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & null
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @example
  * DELETE /api/sum/financereport/:periodId
  * @example
@@ -45,7 +43,8 @@ module.exports = async function deleteOne (req, res) {
     const { periodId } = req.params;
 
     if( !periodId ) {
-        return send400BadRequest( res, 'Bad request, periodId is required.' );
+        send400BadRequest( res, 'Bad request, periodId is required.');
+        return;
     }
 
     const finding  = {
@@ -61,29 +60,32 @@ module.exports = async function deleteOne (req, res) {
 
     if( !finding.pid ) {
 
-        log.warn( '[financeReport.deleteOne] wrong <:periodId> specified.' );
-        return send400BadRequest( res, 'Wrong <:periodId> in request.' );
+        log.warn('[financeReport.deleteOne] wrong <:periodId> specified.');
+        send400BadRequest( res, 'Wrong <:periodId> in request.');
+        return;
     }
 
-    FinanceReport
-    .findOneAndDelete(
+    FinanceReport.
+    findOneAndDelete(
         finding,
         (err, doc) => {
 
             if( err ) {
                 log.error( err );
-                return send500ServerError( res, err );
+                send500ServerError( res, err );
+                return;
             }
 
             if( !doc ) {
-                return send404NotFound( res, doc );
+                send404NotFound( res, doc );
+                return;
             }
 
 
             let { period, pid } = doc;
-            log.info( `finance report by ${period}/${pid} period deleted.` );
-            return send204NoContent( res, doc );
+            log.info(`finance report by ${period}/${pid} period deleted.`);
+            send204NoContent( res, doc );
+            return;
         }
     );
 };
-

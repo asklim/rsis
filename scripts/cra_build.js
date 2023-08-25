@@ -6,27 +6,27 @@ process.env.NODE_ENV = 'production';
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
-process.on( 'unhandledRejection', err => {
+process.on('unhandledRejection', err => {
     throw err;
 });
 
 // Ensure environment variables are read.
-require( '../config/env' );
+require('../config/env');
 
 
-const path = require( 'path' );
-const fs = require( 'fs-extra' );
-const webpack = require( 'webpack' );
-//const bfj = require( 'bfj' );
-const configFactory = require( '../config/webpack-prod-factory.js' );
-const paths = require( '../config/paths' );
+const path = require('path');
+const fs = require('fs-extra');
+const webpack = require('webpack');
+//const bfj = require('bfj');
+const configFactory = require('../config/webpack-prod-factory.js');
+const paths = require('../config/paths');
 
-const chalk = require( 'react-dev-utils/chalk' );
-const checkRequiredFiles = require( 'react-dev-utils/checkRequiredFiles' );
-const formatWebpackMessages = require( 'react-dev-utils/formatWebpackMessages' );
-const printHostingInstructions = require( 'react-dev-utils/printHostingInstructions' );
-const FileSizeReporter = require( 'react-dev-utils/FileSizeReporter' );
-const printBuildError = require( 'react-dev-utils/printBuildError' );
+const chalk = require('react-dev-utils/chalk');
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
+const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
+const printBuildError = require('react-dev-utils/printBuildError');
 
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
@@ -48,11 +48,11 @@ if( !checkRequiredFiles([ paths.appHtml, paths.appIndexJs ]) ) {
 //const writeStatsJson = argv.indexOf('--stats') !== -1;
 
 // Generate configuration
-const config = configFactory( 'production' );
+const config = configFactory('production');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require( 'react-dev-utils/browsersHelper' );
+const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 
 checkBrowsers( paths.appPath, isInteractive )
     .then(() => {
@@ -62,8 +62,8 @@ checkBrowsers( paths.appPath, isInteractive )
     })
     .then(
         // Remove all content but keep the directory so that
-        // if you're in it, you don't end up in Trash  
-        (previousFileSizes) => 
+        // if you're in it, you don't end up in Trash
+        (previousFileSizes) =>
         {
             fs.emptyDirSync(paths.appBuild);
             // Merge with the public folder
@@ -72,7 +72,7 @@ checkBrowsers( paths.appPath, isInteractive )
             return build(previousFileSizes);
         })
     .then(
-        ({ stats, previousFileSizes, warnings }) => 
+        ({ stats, previousFileSizes, warnings }) =>
         {
             if (warnings.length) {
                 console.log(chalk.yellow('Compiled with warnings.\n'));
@@ -140,7 +140,7 @@ checkBrowsers( paths.appPath, isInteractive )
 
 // Create the production build and print the deployment instructions.
 //
-function build(previousFileSizes) 
+function build(previousFileSizes)
 {
     // We used to support resolving modules according to `NODE_PATH`.
     // This now has been deprecated in favor of jsconfig/tsconfig.json
@@ -158,12 +158,12 @@ function build(previousFileSizes)
 
     const compiler = webpack(config);
 
-    return new Promise( (resolve, reject) => 
+    return new Promise( (resolve, reject) =>
     {
-        compiler.run( (err, stats) => 
+        compiler.run( (err, stats) =>
         {
             let messages;
-            
+
             if( err ) {
                 if( !err.message ) {
                     return reject( err );
@@ -172,13 +172,13 @@ function build(previousFileSizes)
                     errors: [err.message],
                     warnings: [],
                 });
-            } 
+            }
             else {
                 let statistics = stats.toJson(
                     'errors-warnings'
                     // old version: { all: false, warnings: true, errors: true }
                 );
-                console.log( 'Stats.toJson:\n', statistics );
+                console.log('Stats.toJson:\n', statistics );
                 messages = formatWebpackMessages( statistics );
             }
 
@@ -188,7 +188,7 @@ function build(previousFileSizes)
                 if( messages.errors.length > 1 ) {
                     messages.errors.length = 1;
                 }
-                return reject( new Error( messages.errors.join( '\n\n' )));
+                return reject( new Error( messages.errors.join('\n\n')));
             }
             /*if (
                 process.env.CI &&
@@ -223,11 +223,11 @@ function build(previousFileSizes)
     });
 }
 
-function copyPublicFolder() 
+function copyPublicFolder()
 {
-    fs.copySync( 
-        paths.appPublic, 
-        paths.appBuild, 
+    fs.copySync(
+        paths.appPublic,
+        paths.appBuild,
         {
             dereference: true,
             filter: file => file !== paths.appHtml,

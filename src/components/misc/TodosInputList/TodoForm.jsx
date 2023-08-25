@@ -38,16 +38,16 @@ const TodoForm = ({
     /*, classes */
 }) => {
 
-    //console.log( 'TodoForm classes', classes );
+    //console.log('TodoForm classes', classes );
     const fetchEmails = () => { return defaultEmails; };
     const emails = fetchEmails();
 
-    const [ value, setValue ] = useState( '' );
+    const [ value, setValue ] = useState('');
     const [ selectedValue, setSelectedValue ] = useState( emails[0] );
     const [ open, setOpen ] = useState( false );
 
 
-    const resetValue = () => setValue( '' );
+    const resetValue = () => setValue('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -65,7 +65,7 @@ const TodoForm = ({
 
     //const classes = useStyles();
     const style = { ...styles().todosPopUp };
-    //console.log( 'TodoForm style', style );
+    //console.log('TodoForm style', style );
     const AccountChooserPopUp = withStyles(style)( SimpleDialog );
 
     return (

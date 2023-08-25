@@ -1,21 +1,21 @@
-const passport = require( 'passport' );
+const passport = require('passport');
 
-const { 
-    //icwd, 
+const {
+    //icwd,
     //consoleLogger,
     //sendJSONresponse,
     send200Ok,
     send400BadRequest,
     send401UnAuthorized,
     send500ServerError,
-} = require( '../../helpers' );
+} = require('../../helpers');
 
 
 module.exports = function (req, res) {
 
-    const { 
+    const {
         email,
-        password 
+        password
     } = req.body;
 
     if( !email || !password ) {
@@ -26,7 +26,7 @@ module.exports = function (req, res) {
         'local',
         (err, user, info) => {
             if(err) {
-                return send500ServerError( res, err ); 
+                return send500ServerError( res, err );
             }
 
             if( user ) {
@@ -40,4 +40,3 @@ module.exports = function (req, res) {
         }
     )( req, res );
 };
-

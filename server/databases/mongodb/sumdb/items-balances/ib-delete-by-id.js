@@ -1,12 +1,12 @@
-//const debug = require( 'debug' )( '-dbg:items-balances:db' );
+//const debug = require('debug')('-dbg:items-balances:db');
 
-const { format } = require( 'util' );
-const UUID = require( 'uuid' );
+const { format } = require('util');
+const UUID = require('uuid');
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     makeResult,
     makeErrorResult,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
 
 /**
@@ -31,7 +31,7 @@ module.exports = async function deleteById (documentId) {
             let msg = `[storage] ItemsBalance not found`;
             return makeResult(
                 HTTP.NOT_FOUND,
-                `${msg} w/filter: ` + format( '%o', filtering ),
+                `${msg} w/filter: ` + format('%o', filtering ),
                 `${msg}.`
             );
         }
@@ -51,4 +51,3 @@ module.exports = async function deleteById (documentId) {
         return makeErrorResult( err );
     }
 };
-

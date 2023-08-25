@@ -18,7 +18,7 @@ const classes = {
     vendor:    `${PREFIX}-vendor`,
 };
 
-const Root = styled( 'footer' )( ({ theme }) => ({
+const Root = styled('footer')( ({ theme }) => ({
     [`&.${classes.root}`]: {
         // `&.${...` without spaces (root styles)
         bottom: '0',
@@ -97,7 +97,7 @@ FooterLink.propTypes = {
 };
 
 
-const CopyrightRoot = styled( 'p' )( ({ theme }) => ({
+const CopyrightRoot = styled('p')( ({ theme }) => ({
     [`&.${classes.copyright}`]: {
         fontSize: '14px',
         float: 'right !important',

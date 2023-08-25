@@ -1,16 +1,17 @@
 
-//const debug = require( 'debug' )( 'heroku:' );
-const log = require( '../helpers' ).consoleLogger( '[heroku:try-get]' );
+//const debug = require('debug')('heroku:');
+const log = require('../helpers').consoleLogger('[heroku:try-get]');
 
-const createSafeGetter = require( './create-safe-getter.js' );
+const createSafeGetter = require('./create-safe-getter.js');
 
 /**
  * @description Пробует получить ответ с помощью getter attempts раз через msInterval;
  * apiUrl для ответа и консоли.
- * @param {Number} options.attempts - число попыток
- * @param {Number} options.interval - число миллисекунд между попытками
- * @param {Function} options.getter - Выполняет http-запрос к api ресурса
- * @param {String} options.apiUrl - Описание куда выполняется запрос для logging
+ * @param {object} options
+ * @param {number} options.attempts - число попыток
+ * @param {number} options.interval - число миллисекунд между попытками
+ * @param {function=} options.getter - Выполняет http-запрос к api ресурса
+ * @param {string} options.apiUrl - Описание куда выполняется запрос для logging
  * ---
  * @returns {Promise} - [object Error] OR [object Response Body]
 **/
@@ -31,11 +32,11 @@ module.exports = async function tryConnectXtimes ({
         (async function attempt (n) {
 
             if( n != 1 ) {
-                log.debug( `Connection attempt #${n} to ${apiUrl}` );
+                log.debug(`Connection attempt #${n} to ${apiUrl}`);
             }
-            let t0;
+            let t0 = 0;
             try {
-                //console.log( 'resourceGetter', resourceGetter );
+                //console.log('resourceGetter', resourceGetter );
                 t0 = Date.now();
                 const response = await resourceGetter();
                 ms += Date.now() - t0;
@@ -68,11 +69,10 @@ module.exports = async function tryConnectXtimes ({
                     attempt: n,
                     reason: 'catch',
                     ms,
-                    message: err.message
+                    message: err?.message
                     , err
                 });
             }
         })( 1 );
     });
 };
-

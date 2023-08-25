@@ -1,10 +1,10 @@
-const fs = require( 'fs' );
-const path = require( 'path' );
+const fs = require('fs');
+const path = require('path');
 
-const paths = require( './paths' );
+const paths = require('./paths');
 // Make sure that including paths.js after env.js
 // will read .env variables.
-delete require.cache[ require.resolve( './paths' )];
+delete require.cache[ require.resolve('./paths')];
 
 const { NODE_ENV } = process.env;
 
@@ -56,7 +56,7 @@ dotenvFiles.forEach( (dotenvFile) => {
 
 const appDirectory = fs.realpathSync( process.cwd() );
 
-process.env.NODE_PATH = ( process.env.NODE_PATH || '' )
+process.env.NODE_PATH = ( process.env.NODE_PATH || '')
     .split( path.delimiter )
     .filter( folder => folder && !path.isAbsolute( folder ))
     .map( folder => path.resolve( appDirectory, folder ))

@@ -1,6 +1,6 @@
-//const debug = require( 'debug' )( 'reports:daily' );
+//const debug = require('debug')('reports:daily');
 
-const readOne = require( './dr-read-one' );
+const readOne = require('./dr-read-one');
 
 /**
  * Read a daily-report by meta-parameters
@@ -18,4 +18,3 @@ module.exports = async function readByQuery ({ onDate, filial='filial1', creator
     return await readOne( filtering );
 
 };
-

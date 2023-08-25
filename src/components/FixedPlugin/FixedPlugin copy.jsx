@@ -37,10 +37,10 @@ export default function FixedPlugin({
 
     const handleClick = () => rest?.handleFixedClick();
 
-    const pluginClasses = classnames( 'fixed-plugin', {
+    const pluginClasses = classnames('fixed-plugin', {
         'rtl-fixed-plugin': rtlActive
     });
-    //debug( 'pluginClasses', pluginClasses ); //fixed-plugin rtl-fixed-plugin
+    //debug('pluginClasses', pluginClasses ); //fixed-plugin rtl-fixed-plugin
 
     return (<div className={pluginClasses} >
         <div id='fixedPluginClasses' className={fixedClasses}>
@@ -134,4 +134,3 @@ FixedPlugin.propTypes = {
     hue: PropTypes.oneOf( hues ),
     rtlActive: PropTypes.bool,
 };
-

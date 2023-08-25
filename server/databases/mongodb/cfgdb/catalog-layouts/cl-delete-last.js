@@ -1,16 +1,16 @@
-const { format } = require( 'util' );
+const { format } = require('util');
 
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     consoleLogger,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
-const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts deleteLast:' );
-const log = consoleLogger( 'db-cfg:catalogLayouts delete:' );
+const debug = require('debug')('dbs:cfg:catalogLayouts deleteLast:');
+const log = consoleLogger('db-cfg:catalogLayouts delete:');
 
-const db = require( '../../..' ).getDB( 'config' );
+const db = require('../../..').getDB('config');
 
-const ModelCatalogLayouts = db.model( 'CatalogLayouts' );
+const ModelCatalogLayouts = db.model('CatalogLayouts');
 
 
 
@@ -31,14 +31,14 @@ module.exports = async function deleteLast ({ client, list }) {
     try {
         const lastDoc = await ModelCatalogLayouts.findOneAndDelete( filtering );
 
-        debug( 'lastDoc uuid', lastDoc?.uuid );
+        debug('lastDoc uuid', lastDoc?.uuid );
 
         if( !lastDoc ) {
             let msg = `Catalog-layout not found.`;
             return ({
                 statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg} w/filter: ` + format( '%o', filtering ),
-                response: msg 
+                logMessage: `${msg} w/filter: ` + format('%o', filtering ),
+                response: msg
             });
         }
 
@@ -51,7 +51,7 @@ module.exports = async function deleteLast ({ client, list }) {
         }
 
         const { uuid, prev } = lastDoc;
-        log.info( `new link: ${prev} -> null` );
+        log.info(`new link: ${prev} -> null`);
 
         return ({
             statusCode: HTTP.NO_CONTENT,
@@ -70,4 +70,3 @@ module.exports = async function deleteLast ({ client, list }) {
         });
     }
 };
-

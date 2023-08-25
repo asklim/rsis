@@ -1,11 +1,11 @@
-const debug = require( 'debug' )( '-dbg:items-balances:db' );
-const UUID = require( 'uuid' );
+const debug = require('debug')('-dbg:items-balances:db');
+const UUID = require('uuid');
 
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     makeResult,
     makeErrorResult,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
 
 /**
@@ -34,7 +34,7 @@ module.exports = async function updateOne (documentId, body) {
             { uuid: documentId }
             : { _id: documentId };
 
-        debug( '[update-one] filtering:', filtering );
+        debug('[update-one] filtering:', filtering );
 
         const storage = this.getModel();
 
@@ -44,7 +44,7 @@ module.exports = async function updateOne (documentId, body) {
             { new: true }
         );
 
-        debug( '[update-one] doc updated, uuid:', uuid );
+        debug('[update-one] doc updated, uuid:', uuid );
 
         return makeResult( HTTP.OK,
             `[storage] ItemsBalance updated (${uuid}).`,

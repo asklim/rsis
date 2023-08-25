@@ -1,22 +1,22 @@
 
-const { 
-    icwd, 
+const {
+    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( 'api-config:' );
+const log = consoleLogger('api-config:');
 
-const db = require( `${icwd}/server/databases` ).getDB( 'config' );
-const Agent = db.model( 'Agent' );
+const db = require(`${icwd}/server/databases`).getDB('config');
+const Agent = db.model('Agent');
 
 
 
-/** 
- * Update agent card 
+/**
+ * Update agent card
  * @name updateOne
  * @fires 200 OK          & updated document
  * @fires 400 Bad Request & message
@@ -30,16 +30,16 @@ const Agent = db.model( 'Agent' );
 module.exports = function updateOne (req, res) {
 
 
-    if( !req.body 
+    if( !req.body
         || Object.keys( req.body ).length == 0 ) {
-        return send400BadRequest( res, 'Bad request, body is empty' );
+        return send400BadRequest( res, 'Bad request, body is empty');
     }
     //console.log(req.body);
 
     const { id } = req.body;
 
     if( !id ) {
-        return send400BadRequest( res, 'Bad request, <.id> field is required.' );
+        return send400BadRequest( res, 'Bad request, <.id> field is required.');
     }
 
     Agent.findOne(
@@ -52,8 +52,8 @@ module.exports = function updateOne (req, res) {
             }
 
             if( !findedAgent ) {
-                return send404NotFound( res, `agent ${id} not found.` );
-            } 
+                return send404NotFound( res, `agent ${id} not found.`);
+            }
 
 
             Object.assign( findedAgent, req.body );
@@ -66,7 +66,7 @@ module.exports = function updateOne (req, res) {
                     return send500ServerError( res, err );
                 }
 
-                log.info( `SUCCESS: agent ${savedAgent.id} updated.` );
+                log.info(`SUCCESS: agent ${savedAgent.id} updated.`);
                 return send200Ok( res, savedAgent );
 
             });

@@ -1,21 +1,21 @@
-console.time( 'build time is' );
+console.time('build time is');
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
-process.on( 'unhandledRejection', err => {
+process.on('unhandledRejection', err => {
     throw err;
 });
 
-const paths = require( '../config/paths' );
-const checkRequiredFiles = require( 'react-dev-utils/checkRequiredFiles' );
+const paths = require('../config/paths');
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 // Warn and crash if required files are missing
 if( !checkRequiredFiles([ paths.appHtml, paths.appIndexJs ]) ) {
     process.exit(1);
 }
 
-const path = require( 'path' );
-//const bfj = require( 'bfj' );
+const path = require('path');
+//const bfj = require('bfj');
 
 /** Process CLI arguments
  *  script: "node scripts/bundle-builder.js --development-config --stats"
@@ -26,10 +26,10 @@ const path = require( 'path' );
  *    '--stats'
  *  ]
 **/
-console.log( 'argv: ', process.argv );
+console.log('argv: ', process.argv );
 const argv = process.argv.slice(2);
 //const writeStatsJson = argv.indexOf('--stats') !== -1;
-const isEnvDevelopment = argv.includes( '--development-config' );
+const isEnvDevelopment = argv.includes('--development-config');
 const ENV_MODE = isEnvDevelopment ? 'development' : 'production';
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -38,26 +38,26 @@ const ENV_MODE = isEnvDevelopment ? 'development' : 'production';
 
 // Generate configuration
 const webpackConfiguration = isEnvDevelopment
-    ? require( '../config/webpack.dev' )
-    : require( '../config/webpack.prod' )
+    ? require('../config/webpack.dev')
+    : require('../config/webpack.prod')
 ;
-console.log( 'entry: ', webpackConfiguration.entry );
-//console.log( 'devServer: ', webpackConfiguration.devServer );
+console.log('entry: ', webpackConfiguration.entry );
+//console.log('devServer: ', webpackConfiguration.devServer );
 
 // Ensure environment variables are read.
-// require( '../config/env' );
+// require('../config/env');
 
-const compiler = require( 'webpack' )( webpackConfiguration );
+const compiler = require('webpack')( webpackConfiguration );
 
-const chalk = require( 'react-dev-utils/chalk' );
-const printHostingInstructions = require( 'react-dev-utils/printHostingInstructions' );
-const printBuildError = require( 'react-dev-utils/printBuildError' );
-const FileSizeReporter = require( 'react-dev-utils/FileSizeReporter' );
+const chalk = require('react-dev-utils/chalk');
+const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
+const printBuildError = require('react-dev-utils/printBuildError');
+const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 
-const formatWebpackMessages = require( './format-webpack5-messages' );
+const formatWebpackMessages = require('./format-webpack5-messages');
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
@@ -65,11 +65,11 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 const isInteractive = process.stdout.isTTY;
 
-console.log( 'before checkBrowsers, isInteractive', isInteractive );
+console.log('before checkBrowsers, isInteractive', isInteractive );
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require( 'react-dev-utils/browsersHelper' );
+const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 
 checkBrowsers( paths.appPath, isInteractive ).
     then(() => {
@@ -85,24 +85,24 @@ checkBrowsers( paths.appPath, isInteractive ).
         if(
             warnings.length
         ){
-            console.log( chalk.yellow( 'Compiled with warnings.\n' ));
-            console.log( warnings.join( '\n\n' ));
+            console.log( chalk.yellow('Compiled with warnings.\n'));
+            console.log( warnings.join('\n\n'));
             console.log(
                 '\nSearch for the ' +
-                chalk.underline( chalk.yellow( 'keywords' )) +
+                chalk.underline( chalk.yellow('keywords')) +
                 ' to learn more about each warning.'
             );
             console.log(
                 'To ignore, add ' +
-                chalk.cyan( '// eslint-disable-next-line' ) +
+                chalk.cyan('// eslint-disable-next-line') +
                 ' to the line before.\n'
             );
         }
         else {
-            console.log( chalk.green( 'Compiled successfully.\n' ));
+            console.log( chalk.green('Compiled successfully.\n'));
         }
 
-        console.log( 'File sizes after gzip:\n' );
+        console.log('File sizes after gzip:\n');
         printFileSizesAfterBuild(
             stats,
             previousFileSizes,
@@ -134,13 +134,13 @@ checkBrowsers( paths.appPath, isInteractive ).
             process.exit(1);
         }
         else {
-            console.log( chalk.red( 'Failed to compile.\n' ));
+            console.log( chalk.red('Failed to compile.\n'));
             printBuildError( err );
             process.exit(1);
         }
     }).
     then( () => {
-        console.timeEnd( 'build time is' );
+        console.timeEnd('build time is');
     }).
     catch( (err) => {
         if( err && err.message ) {
@@ -157,7 +157,7 @@ checkBrowsers( paths.appPath, isInteractive ).
 //
 function build (previousFileSizes) {
 
-    console.log( `Creating an ${ENV_MODE} build...` );
+    console.log(`Creating an ${ENV_MODE} build...`);
     return new Promise( (resolve, reject) => {
 
         compiler.run( (err, stats) => {
@@ -174,9 +174,9 @@ function build (previousFileSizes) {
                 });
             }
             else {
-                let statistics = stats.toJson( 'errors-warnings' );
+                let statistics = stats.toJson('errors-warnings');
 
-                console.log( 'Stats.toJson:\n', statistics );
+                console.log('Stats.toJson:\n', statistics );
                 //Replaced on helper.formatWebpack5Messages
                 messages = formatWebpackMessages( statistics );
             }
@@ -185,7 +185,7 @@ function build (previousFileSizes) {
                 // Only keep the first error. Others are often indicative
                 // of the same problem, but confuse the reader with noise.
                 messages.errors.length = 1;
-                return reject( new Error( messages.errors.join( '\n\n' )));
+                return reject( new Error( messages.errors.join('\n\n')));
             }
 
             const resolveArgs = {

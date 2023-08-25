@@ -1,24 +1,24 @@
 
-const db = require( '../../databases' ).getDB( 'config' );
-const User = db.model( 'User' );
+const db = require('../../databases').getDB('config');
+const User = db.model('User');
 
 const {
     send200Ok,
     send400BadRequest,
     send500ServerError,
-} = require( '../../helpers' );
+} = require('../../helpers');
 
 
 module.exports = function (req, res) {
 
-    const { 
+    const {
         name,
         email,
-        password, 
+        password,
     } = req.body;
 
     if( !name || !email || !password ) {
-        return send400BadRequest( res, 'All fields required.' );
+        return send400BadRequest( res, 'All fields required.');
     }
 
     const user = new User();
@@ -28,13 +28,13 @@ module.exports = function (req, res) {
     user.setPassword( password );
 
     user.save(
-        (err) => {      
+        (err) => {
             if( err ) {
-                return send500ServerError(res, err);   
-            } 
+                return send500ServerError(res, err);
+            }
             else {
                 let token = user.generateJwt();
-                return send200Ok(res, { token, });  
+                return send200Ok(res, { token, });
             }
         }
     );

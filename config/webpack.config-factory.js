@@ -1,14 +1,14 @@
-const rootDir = require( 'fs' ).realpathSync( process.cwd() );
-const appVersion = require( `${rootDir}/package.json` ).version;
+const rootDir = require('fs').realpathSync( process.cwd() );
+const appVersion = require(`${rootDir}/package.json`).version;
 
-const path = require( 'path' );
+const path = require('path');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const PnpWebpackPlugin = require( 'pnp-webpack-plugin' );
-const ModuleScopePlugin = require( 'react-dev-utils/ModuleScopePlugin' );
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
+const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
-const getClientEnvironment = require( './env' );
-const paths = require( './paths' );
-const modules = require( './modules' );
+const getClientEnvironment = require('./env');
+const paths = require('./paths');
+const modules = require('./modules');
 
 
 // Source maps are resource heavy
@@ -35,7 +35,7 @@ module.exports = function( webpackEnv ) {
     // Variable used for enabling profiling in Production
     // passed into alias object. Uses a flag if passed into the build command
     const isEnvProductionProfile =
-        isEnvProduction && process.argv.includes( '--profile' );
+        isEnvProduction && process.argv.includes('--profile');
 
     // Webpack uses `publicPath` to determine where the app is being served from.
     // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -86,7 +86,7 @@ module.exports = function( webpackEnv ) {
             paths.appIndexJs,
         ],
         mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
-        module: require( './webpack-config-module.js' )( buildOptions ),
+        module: require('./webpack-config-module.js')( buildOptions ),
         // Some libraries import Node modules but don't use them in the browser.
         // Tell Webpack to provide empty mocks for them so importing them works.
         // Uncaught ReferenceError: global is not defined,
@@ -168,7 +168,7 @@ module.exports = function( webpackEnv ) {
                 maxEntrypointSize: 512000,
                 maxAssetSize: 512000,
             } : false,
-        plugins: require( './webpack-config-plugins.js' )( buildOptions ),
+        plugins: require('./webpack-config-plugins.js')( buildOptions ),
         resolve: {
             // This allows you to set a fallback for where Webpack should look for modules.
             // We placed these paths second because we want `node_modules` to "win"
@@ -191,7 +191,7 @@ module.exports = function( webpackEnv ) {
             // `web` extension prefixes have been added for better support
             // for React Native Web.
             extensions: paths.moduleFileExtensions
-                .map( ext => `.${ext}` )
+                .map( ext => `.${ext}`)
                 .filter( ext => !ext.includes('ts') ),
             alias: {
                 // Support React Native Web
@@ -225,12 +225,12 @@ module.exports = function( webpackEnv ) {
             ],
             fallback: {
                 "buffer": false, // require.resolve("buffer"),
-                "stream": require.resolve( 'stream-browserify' ),
+                "stream": require.resolve('stream-browserify'),
                 "crypto": false, // require.resolve("crypto-browserify"),
-                "https": require.resolve( 'https-browserify' ),
+                "https": require.resolve('https-browserify'),
                 "path": false, // require.resolve("path-browserify"),
-                "http": require.resolve( 'stream-http' ),
-                "url": require.resolve( 'url' ),
+                "http": require.resolve('stream-http'),
+                "url": require.resolve('url'),
                 "fs" : false,
                 "util": require.resolve("util/"),
             }

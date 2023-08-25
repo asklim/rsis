@@ -1,21 +1,21 @@
-const debug = require( 'debug' )( '-api:processenv:' );
+const debug = require('debug')('-api:processenv:');
 const {
     //icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
     send404NotFound,
-} = require( '../../helpers/' );
+} = require('../../helpers/');
 
-const log = consoleLogger( '[api:processenv]' );
+const log = consoleLogger('[api:processenv]');
 
-// debug( 'log is', typeof log, log );
+// debug('log is', typeof log, log );
 // api:processenv:handler-get log is object {
 //    info: [Function: info],
 //    warn: [Function: warn],
 //    error: [Function: error]
 // } +0ms
-//console.log( 'console.log - api/processenv/handler-get [initialize]' );
+//console.log('console.log - api/processenv/handler-get [initialize]');
 
 /**
  * Read a env variable from process.env by name
@@ -28,7 +28,7 @@ module.exports = async function handler_GET (
 ) {
     try {
         log.debug('req.query:', req.query );
-        //console.log( 'console.log - api/processenv/handler-get [handler]' );
+        //console.log('console.log - api/processenv/handler-get [handler]');
 
         debug('typeof req.app is', typeof req.app );  // function
         debug('typeof getMyDB is', typeof req.app?.getMyDB );  // function

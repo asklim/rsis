@@ -34,10 +34,10 @@ const TelegramUserInfo = () => {
 
 
     const tgBot = useRef( null );
-    const [ chatId, setChatId ] = useState( '' );
+    const [ chatId, setChatId ] = useState('');
     const [ chatDetails, setChatDetails ] = useState( {chat: 'init'} );
     const [ accountInfo, setAccountInfo ] = useState( {bot: 'init'} );
-    const [ token, setToken ] = useState( '' );
+    const [ token, setToken ] = useState('');
 
     const classes = useStyles();
 
@@ -63,11 +63,11 @@ const TelegramUserInfo = () => {
             .catch( (error) => setAccountInfo( error ));
         }
 
-        console.log( 'useEffect token' );
+        console.log('useEffect token');
         let theTGBotToken = _getToken();
 
         if( theTGBotToken ) {
-            //console.log( `botAccount Token: '${theTGBotToken}'` );
+            //console.log(`botAccount Token: '${theTGBotToken}'`);
             tgBot.current = new Telegraf( theTGBotToken );
 
             setToken( theTGBotToken );

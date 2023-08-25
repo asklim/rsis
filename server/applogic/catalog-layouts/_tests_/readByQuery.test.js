@@ -1,22 +1,22 @@
-const { 
+const {
     createMongoDBConnections,
     databasesShutdown,
-} = require( '../../../databases' );
+} = require('../../../databases');
 
-const CatalogLayouts = require( '..' );
+const CatalogLayouts = require('..');
 
 beforeAll( async () => {
     await createMongoDBConnections();
 });
 
 afterAll( async () => {
-    await databasesShutdown( 'jest end', () => {});
+    await databasesShutdown('jest end', () => {});
 });
 
 
-describe( 'read catalog-layout', () => {
+describe('read catalog-layout', () => {
 
-    test( 'read LAST doc from catalog.layouts collection', async function () {
+    test('read LAST doc from catalog.layouts collection', async function () {
         const last = await CatalogLayouts.
             readByQuery({
                 client: 'excel',

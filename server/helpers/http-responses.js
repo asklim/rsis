@@ -1,5 +1,5 @@
 
-const { httpResponseCodes: HTTP } = require( `asklim` );
+const { StatusCodes: HTTP } = require('../../server/helpers');
 
 /**
  * Send content as 'object' ONLY.
@@ -9,7 +9,7 @@ const { httpResponseCodes: HTTP } = require( `asklim` );
  */
 function sendJSONresponse (res, status, content = 'response is undefined') {
 
-    let response = ( typeof content === 'object' ) ?
+    let response = ( typeof content === 'object') ?
         content
         : { 'message': content };
     res.status( status ).json( response );
@@ -52,13 +52,14 @@ function send409Conflict (res, ctx = 'CONFLICT') {
 function send500ServerError (res, ctx = 'INTERNAL_SERVER_ERROR') {
     sendJSONresponse( res,
         HTTP.INTERNAL_SERVER_ERROR,
+        // @ts-ignore
         ctx instanceof Error ? ctx.toString() : ctx
     );
 }
 
 
-const callbackError400 = (req, res) => send400BadRequest( res, 'callbackE400' );
-const callbackError405 = (req, res) => send405MethodNotAllowed( res, 'callbackE405' );
+const callbackError400 = (req, res) => send400BadRequest( res, 'callbackE400');
+const callbackError405 = (req, res) => send405MethodNotAllowed( res, 'callbackE405');
 
 
 module.exports = {

@@ -1,19 +1,19 @@
-const { format } = require( 'util' );
-const UUID = require( 'uuid' );
+const { format } = require('util');
+const UUID = require('uuid');
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     consoleLogger,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
-//const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
-const log = consoleLogger( 'db-cfg:catalog-layouts delete:' );
+//const debug = require('debug')('dbs:cfg:catalogLayouts');
+const log = consoleLogger('db-cfg:catalog-layouts delete:');
 
-const db = require( '../../..' ).getDB( 'config' );
+const db = require('../../..').getDB('config');
 
-const ModelCatalogLayouts = db.model( 'CatalogLayouts' );
+const ModelCatalogLayouts = db.model('CatalogLayouts');
 
 
-/** 
+/**
  * Delete catalog-layout by uuid or ObjId
  * @returns
  * - statusCode 204 No Content & { message, uuid }
@@ -24,7 +24,7 @@ const ModelCatalogLayouts = db.model( 'CatalogLayouts' );
 module.exports = async function deleteById (catalogId) {
 
 
-    const filtering = UUID.validate( catalogId ) 
+    const filtering = UUID.validate( catalogId )
         ? { uuid: catalogId }
         : { _id: catalogId };
 
@@ -37,17 +37,17 @@ module.exports = async function deleteById (catalogId) {
             let msg = `Catalog-layout not found.`;
             return ({
                 statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg} w/filter: ` + format( '%o', filtering ),
-                response: msg 
+                logMessage: `${msg} w/filter: ` + format('%o', filtering ),
+                response: msg
             });
         }
 
         /*
             При удалении документа doc, nextDoc считается неизменным, действующим
             с определенного момента (nextDoc.since), удаленный промежуток времени
-            занимает prevDoc (увеличивается до nextDoc), как будто документа doc 
+            занимает prevDoc (увеличивается до nextDoc), как будто документа doc
             не существовало.
-            Варианты: 
+            Варианты:
                 1. Есть и prevDoc и nextDoc (общий случай) - обновить 2 документа
                 2. doc - первый документ (нет prevDoc) - обновить только nextDoc
                 3. doc - последний документ (нет nextDoc) - обновить только prevDoc
@@ -67,7 +67,7 @@ module.exports = async function deleteById (catalogId) {
                 $set: { next: nextId, until: doc.until /* must be EQ nextDoc.since */ }
             };
             await ModelCatalogLayouts.findByIdAndUpdate( prevId, updatePrev );
-            log.info( `new link: ${prevId} -> ${nextId}` );
+            log.info(`new link: ${prevId} -> ${nextId}`);
 
         }
         else if( nextId ) {
@@ -77,7 +77,7 @@ module.exports = async function deleteById (catalogId) {
                 $set: { prev: null, since: null }
             };
             await ModelCatalogLayouts.findByIdAndUpdate( nextId, update );
-            log.info( `new link: null -> ${nextId}` );
+            log.info(`new link: null -> ${nextId}`);
 
         }
         else if( prevId ) {
@@ -87,7 +87,7 @@ module.exports = async function deleteById (catalogId) {
                 $set: { next: null, until: null }
             };
             await ModelCatalogLayouts.findByIdAndUpdate( prevId, update );
-            log.info( `new link: ${prevId} -> null` );
+            log.info(`new link: ${prevId} -> null`);
         }
 
         const { uuid } = await ModelCatalogLayouts.findOneAndDelete( filtering );
@@ -110,4 +110,3 @@ module.exports = async function deleteById (catalogId) {
     }
 
 };
-

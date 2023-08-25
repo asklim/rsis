@@ -54,7 +54,7 @@ ColoredListItem.propTypes = {
 function coloredClasses (hue, isColored, theme) {
 
     if( !hue ) {
-        debug( `ColoredListItem.jsx: '!hue color' condition: ${hue}` );
+        debug(`ColoredListItem.jsx: '!hue color' condition: ${hue}`);
         return ({});
     }
 
@@ -66,7 +66,7 @@ function coloredClasses (hue, isColored, theme) {
 
     const color = theme.ctmdr.colorsMatrix[ hue ];
     const ctmdrColors = theme.ctmdr.palette[ color ];
-    //console.log( `key: ${key} colors: ${ctmdrColors}` );
+    //console.log(`key: ${key} colors: ${ctmdrColors}`);
 
     const classes = {
         colored: {
@@ -93,7 +93,7 @@ function coloredClasses (hue, isColored, theme) {
             },
         },
     };
-    //debug( 'Colored Sidebar listItem', classes[`colored`] );
+    //debug('Colored Sidebar listItem', classes[`colored`] );
 
     return isColored ? classes.colored : classes.transparent;
 }

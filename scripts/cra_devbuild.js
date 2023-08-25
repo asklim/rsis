@@ -6,21 +6,21 @@ process.env.NODE_ENV = 'development';
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
-process.on( 'unhandledRejection', err => {
+process.on('unhandledRejection', err => {
     throw err;
 });
 
-console.log( 'argv: ', process.argv );
+console.log('argv: ', process.argv );
 
 // Ensure environment variables are read.
-require( '../config/env' );
+require('../config/env');
 
 const fs = require('fs-extra');
 const webpack = require('webpack');
 
 const paths = require('../config/paths');
 
-const configFactory = require( process.argv.includes( '--production-config' )
+const configFactory = require( process.argv.includes('--production-config')
     ? '../config/webpack-prod-factory'
     : '../config/webpack-dev-factory'
 );
@@ -70,26 +70,26 @@ if( process.env.HOST ) {
     console.log();
 }
 
-console.log( 'before checkBrowsers, isInteractive', isInteractive );
+console.log('before checkBrowsers, isInteractive', isInteractive );
 
 // We require that you explictly set browsers and do not fall back to
 // browserslist defaults.
-const { checkBrowsers } = require( 'react-dev-utils/browsersHelper' );
+const { checkBrowsers } = require('react-dev-utils/browsersHelper');
 
 checkBrowsers( paths.appPath, isInteractive )
     // First, read the current file sizes in build directory.
-    // This lets us display how much they changed later.  
+    // This lets us display how much they changed later.
     .then( () => {
         return measureFileSizesBeforeBuild( paths.appBuild );
-    })        
+    })
     .then( (previousFileSizes) => {
         // Remove all content but keep the directory so that
-        // if you're in it, you don't end up in Trash  
+        // if you're in it, you don't end up in Trash
         fs.emptyDirSync( paths.appBuild );
-        
+
         // Merge with the public folder
         copyPublicFolder();
-        
+
         // Start the webpack build
         return devBuild( previousFileSizes );
     })
@@ -98,23 +98,23 @@ checkBrowsers( paths.appPath, isInteractive )
 
             if( warnings.length ) {
 
-                console.log( chalk.yellow( 'Compiled with warnings.\n' ));
-                console.log( warnings.join( '\n\n' ));
+                console.log( chalk.yellow('Compiled with warnings.\n'));
+                console.log( warnings.join('\n\n'));
                 console.log(
                     '\nSearch for the ' +
-                        chalk.underline( chalk.yellow( 'keywords' )) +
+                        chalk.underline( chalk.yellow('keywords')) +
                         ' to learn more about each warning.'
                 );
-                console.log( 'To ignore, add ' +
-                    chalk.cyan( '// eslint-disable-next-line' ) +
+                console.log('To ignore, add ' +
+                    chalk.cyan('// eslint-disable-next-line') +
                     ' to the line before.\n'
                 );
-            } 
+            }
             else {
-                console.log( chalk.green( 'Compiled successfully.\n' ));
+                console.log( chalk.green('Compiled successfully.\n'));
             }
 
-            console.log( 'File sizes after gzip:\n' );
+            console.log('File sizes after gzip:\n');
             printFileSizesAfterBuild(
                 stats,
                 previousFileSizes,
@@ -126,7 +126,7 @@ checkBrowsers( paths.appPath, isInteractive )
 
         },
         err => {
-            console.log( chalk.red( 'Failed to compile.\n' ));
+            console.log( chalk.red('Failed to compile.\n'));
             printBuildError( err );
             process.exit(1);
         })
@@ -141,12 +141,12 @@ checkBrowsers( paths.appPath, isInteractive )
 
 function devBuild( previousFileSizes ) {
 
-    console.log( 'Creating a development build...' );
+    console.log('Creating a development build...');
     //console.log(paths);
 
-    const config = configFactory( 'development' );
-    console.log( 'entry: ', config.entry );
-    console.log( 'devServer: ', config.devServer );
+    const config = configFactory('development');
+    console.log('entry: ', config.entry );
+    console.log('devServer: ', config.devServer );
 
     const compiler = webpack( config );
 
@@ -163,12 +163,12 @@ function devBuild( previousFileSizes ) {
                     errors: [err.message],
                     warnings: [],
                 });
-            } 
+            }
             else {
-                let statistics = stats.toJson( "errors-warnings" 
+                let statistics = stats.toJson( "errors-warnings"
                     //old version { all: true, warnings: true, errors: true }
                 );
-                console.log( 'Stats.toJson:\n', statistics );
+                console.log('Stats.toJson:\n', statistics );
                 messages = formatWebpackMessages( statistics );
             }
 
@@ -178,15 +178,15 @@ function devBuild( previousFileSizes ) {
                 if (messages.errors.length > 1) {
                     messages.errors.length = 1;
                 }
-                return reject( new Error( messages.errors.join( '\n\n' )));
-            }    
+                return reject( new Error( messages.errors.join('\n\n')));
+            }
 
             const resolveArgs = {
                 stats,
                 previousFileSizes,
                 warnings: messages.warnings,
             };
-            return resolve( resolveArgs );  
+            return resolve( resolveArgs );
         });
     });
 }
@@ -199,4 +199,3 @@ function copyPublicFolder() {
         filter: file => file !== paths.appHtml,
     });
 }
-

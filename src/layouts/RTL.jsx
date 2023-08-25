@@ -28,7 +28,7 @@ const classes = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const Root = styled( 'div' )( ({ theme }) => ({
+const Root = styled('div')( ({ theme }) => ({
     [`&.${classes.root}`]: {
         // `&.${...` without spaces (root styles)
         direction: 'rtl',
@@ -38,7 +38,7 @@ const Root = styled( 'div' )( ({ theme }) => ({
     },
 }));
 
-const MainPanel = styled( 'div' )( ({ theme }) => ({
+const MainPanel = styled('div')( ({ theme }) => ({
     [`&.${classes.mainPanel}`]: {
         // `&.${...` without spaces (root styles)
         float: 'left',
@@ -87,7 +87,7 @@ export default function RTL({ ...rest }) {
 
     // states and functions
     const [image, setImage] = React.useState( bgImage );
-    const [hue, setHue] = React.useState( 'blue' );
+    const [hue, setHue] = React.useState('blue');
     const [ menuShow, setMenuShow ] = React.useState( false );
     const [mobileOpen, setMobileOpen] = React.useState( false );
 
@@ -117,12 +117,12 @@ export default function RTL({ ...rest }) {
             });
             document.body.style.overflow = 'hidden';
         }
-        window.addEventListener( 'resize', resizeFunction );
+        window.addEventListener('resize', resizeFunction );
         // Specify how to clean up after this effect:
         return (
             function cleanup() {
                 isWinPlatform && ps?.destroy();
-                window.removeEventListener( 'resize', resizeFunction );
+                window.removeEventListener('resize', resizeFunction );
             }
         );
     }, [ mainPanel ]);

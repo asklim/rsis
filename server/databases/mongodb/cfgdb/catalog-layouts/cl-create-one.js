@@ -1,13 +1,13 @@
 
-const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
+const debug = require('debug')('dbs:cfg:catalogLayouts');
 const {
-    httpResponseCodes: HTTP,
-} = require( '../../../../helpers' );
+    StatusCodes: HTTP,
+} = require('../../../../helpers');
 
 let db;
-db = require( `../../..` ).getDB( 'config' );
+db = require(`../../..`).getDB('config');
 
-const ModelCatalogLayouts = db.model( 'CatalogLayouts' );
+const ModelCatalogLayouts = db.model('CatalogLayouts');
 
 
 /**
@@ -34,13 +34,16 @@ module.exports = async function createOne (body) {
         //    .session( session )
         ;
         const isoDatetime = (new Date).toISOString();
-        body.since = since || isoDatetime;
+        // eslint-disable-next-line require-atomic-updates
+        body.since = since ?? isoDatetime;
 
         if( lastdoc ) {
             lastdoc.until = isoDatetime;
+            // eslint-disable-next-line require-atomic-updates
             body.prev = lastdoc._id;
         }
         else {
+            // eslint-disable-next-line require-atomic-updates
             body.prev = null;
         }
 
@@ -50,13 +53,13 @@ module.exports = async function createOne (body) {
         if( lastdoc ) {
             lastdoc.next = catalog._id;
             let saved = await lastdoc.save();
-            debug( `create-one: saved last doc objId: ${saved._id}` );
+            debug(`create-one: saved last doc objId: ${saved._id}`);
         }
         //});
 
         const { uuid } = catalog;
         //const uuid = '12345678-1234-1234-1234-123456789012';
-        //debug( `create-one: test-uuid ${uuid}` );
+        //debug(`create-one: test-uuid ${uuid}`);
 
         //session.endSession();
         return ({
@@ -81,4 +84,3 @@ module.exports = async function createOne (body) {
     }
 
 };
-

@@ -1,18 +1,18 @@
-const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
+const debug = require('debug')('dbs:cfg:catalogLayouts');
 
-const { format } = require( 'util' );
+const { format } = require('util');
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     //consoleLogger,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
-//const log = consoleLogger( 'dbs-cfg:' );
+//const log = consoleLogger('dbs-cfg:');
 
-const db = require( '../../..' ).getDB( 'config' );
+const db = require('../../..').getDB('config');
 
-const CatalogLayoutsModel = db.model( 'CatalogLayouts' );
+const CatalogLayoutsModel = db.model('CatalogLayouts');
 
-const CatalogLayout = require( '../../../../applogic/catalog-layout' );
+const CatalogLayout = require('../../../../applogic/catalog-layout');
 
 
 /**
@@ -36,8 +36,8 @@ module.exports = async function readOne (filtering, listType) {
             ? { xlGroups: 0, items: 0 }
             : {};
 
-        //debug( 'filtering:', filtering );
-        debug( 'projection:', projection );
+        //debug('filtering:', filtering );
+        debug('projection:', projection );
 
         const docs = await CatalogLayoutsModel.find( filtering, projection );
 
@@ -45,11 +45,11 @@ module.exports = async function readOne (filtering, listType) {
             let msg = `Catalog-layout not found.`;
             return ({
                 statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg}\nwith filtering: ` + format( '%o', filtering ),
+                logMessage: `${msg}\nwith filtering: ` + format('%o', filtering ),
                 response: msg
             });
         }
-        //debug( 'docs isArray:', Array.isArray(docs), /* true */
+        //debug('docs isArray:', Array.isArray(docs), /* true */
         //    'length=', docs.length  /* 1 */ );
         const doc = docs[0]; // структура MongoDB: Query? { $__, _doc, $init, isNew ...}
 
@@ -68,4 +68,3 @@ module.exports = async function readOne (filtering, listType) {
         });
     }
 };
-

@@ -1,12 +1,12 @@
-//const debug = require( 'debug' )( '-dbg:items-balances:api' );
+//const debug = require('debug')('-dbg:items-balances:api');
 const {
     consoleLogger,
     send400BadRequest,
     send500ServerError,
-} = require( '../../../helpers/' );
+} = require('../../../helpers/');
 
-const log = consoleLogger( '[items-balances:api]' );
-const ItemsBalances = require( `../../../applogic/items-balances/` );
+const log = consoleLogger('[items-balances:api]');
+const ItemsBalances = require(`../../../applogic/items-balances/`);
 
 
 /**
@@ -28,14 +28,14 @@ module.exports = async function itemBalancesHandler_POST (req, res) {
         filial = req.body.filial;
         onDate = req.body.onDate;
     }
-    log.debug( '[h-POST] ' +
+    log.debug('[h-POST] ' +
         `try create: filial=${filial}, onDate=${onDate}, agent=${agent}`
     );
 
 
     if( !req.body || !Object.keys( req.body ).length ) {
-        log.warn( '[h-POST] req.body is empty.' );
-        return send400BadRequest( res, 'Bad request, req.body is empty.' );
+        log.warn('[h-POST] req.body is empty.');
+        return send400BadRequest( res, 'Bad request, req.body is empty.');
     }
 
     try {
@@ -48,4 +48,3 @@ module.exports = async function itemBalancesHandler_POST (req, res) {
     }
 
 };
-

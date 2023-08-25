@@ -1,15 +1,15 @@
 
-const { 
+const {
     callbackError400,
     //callbackError405,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const 
-    handlerGET = require( './handler-get' ),
-    handlerPOST = require( './handler-post' ),
-    handlerPUT = require( './handler-put' ),
-    handlerDELETE = require( './handler-delete' ),
-    handlerPOST_WITH_ACTION = require( './handler-post-id-action' )
+const
+    handlerGET = require('./handler-get'),
+    handlerPOST = require('./handler-post'),
+    handlerPUT = require('./handler-put'),
+    handlerDELETE = require('./handler-delete'),
+    handlerPOST_WITH_ACTION = require('./handler-post-id-action')
 ;
 
 
@@ -30,6 +30,6 @@ module.exports = function ( router ) {
     router.delete( catalogs, handlerDELETE );
 
 
-    router.all( `${catalog}/*`, callbackError400 );
-    router.all( `${catalogs}/*`, callbackError400 );
+    router.all(`${catalog}/*`, callbackError400 );
+    router.all(`${catalogs}/*`, callbackError400 );
 };

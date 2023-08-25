@@ -1,6 +1,6 @@
-const { Schema, } = require( 'mongoose' );
+const { Schema, } = require('mongoose');
 
-const PATH_DEFINITION = require( '../schema.paths-definitions' );
+const PATH_DEFINITION = require('../schema.paths-definitions');
 
 
 
@@ -29,7 +29,7 @@ const productCatalogItem = new Schema({
     },
     qpul: {
         // quantity per unit local (складской)
-        // Для оперативного измененния количества 
+        // Для оперативного измененния количества
         // в коробке, не затрагивая Nomenklature
         // Если !qpu - то используем основной qpu
         type: Schema.Types.Number,
@@ -99,40 +99,40 @@ const productsCatalog = new Schema({
 
     client: {
         // Для какого клиента каталог
-        type: Schema.Types.String, 
-        required: true, 
+        type: Schema.Types.String,
+        required: true,
         enum: [ 'excel', 'web' ],
         default: 'web',
     },
     list: {
-        // вид (вариант) списка 
+        // вид (вариант) списка
         // тип торговой точки: 'cofeeTea',
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
         enum: [ 'coffeeTea' ],
         default: 'coffeeTea',
     },
     type: {
         // Вариант каталога
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
-        enum: [ 
-            'lid2gid', 
-            'main', 
-            'short', 
-            'photo', 
+        enum: [
+            'lid2gid',
+            'main',
+            'short',
+            'photo',
             'extra',
             'operdata'
         ]
     },
     caption: {
         // Заголовок/Название каталога
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: false,
     },
     notes: {
         // Описание каталога
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: false,
     },
     since: {
@@ -159,12 +159,12 @@ const productsCatalog = new Schema({
     },
     host: {
         // Откуда сохранен каталог
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
     },
     updatedAt: {
         // Когда сохранен
-        type: Schema.Types.Date, 
+        type: Schema.Types.Date,
         default: Date.now,
     }
 });

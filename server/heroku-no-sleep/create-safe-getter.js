@@ -1,7 +1,7 @@
-//const debug = require( 'debug' )('heroku:');
-const log = require( '../helpers' ).consoleLogger( '[heroku:safe-getter]' );
+//const debug = require('debug')('heroku:');
+const log = require('../helpers').consoleLogger('[heroku:safe-getter]');
 
-const axios = require( 'axios' ).default;
+const axios = require('axios').default;
 
 const axiosGetter = (apiUrl) => axios.get( apiUrl,
     {
@@ -29,13 +29,12 @@ module.exports = function createSafeGetter (
 ) {
     return async function () {
         try {
-            //debug( 'apiUrl:', typeof apiUrl, apiUrl );
+            //debug('apiUrl:', typeof apiUrl, apiUrl );
             return await getter( apiUrl );
         }
         catch (err) {
-            logger && logger.error( 'Error GET of Resource\n' );
+            logger && logger.error('Error GET of Resource\n');
             return err;
         }
     };
 };
-

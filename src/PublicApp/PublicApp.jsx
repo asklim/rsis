@@ -6,12 +6,12 @@ import Stack from '@mui/material/Stack';
 
 import Loading from 'components/misc/Loading.jsx';
 
-const Home = React.lazy(() => import( './pages/Home.jsx' ));
+const Home = React.lazy(() => import('./pages/Home.jsx'));
 const LoginSignupPage = React.lazy(
-    () => import( 'views/LoginSignup/LoginSignup.jsx' )
+    () => import('views/LoginSignup/LoginSignup.jsx')
 );
 
-const App = React.lazy(() => import( '../components/App/App.jsx' ));
+const App = React.lazy(() => import('../components/App/App.jsx'));
 
 const WaitedApp = () =>
     <Suspense fallback={<Variants />}>

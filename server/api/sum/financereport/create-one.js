@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'reports:finance:' );
+//const debug = require('debug')('reports:finance:');
 const {
     icwd,
     consoleLogger,
@@ -6,44 +6,44 @@ const {
     send400BadRequest,
     send409Conflict,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( 'api-SUM:reports:finance:' );
+const log = consoleLogger('api-SUM:reports:finance:');
 
-const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
-const FinanceReport = db.model( 'FinanceReport' );
+const db = require(`${icwd}/server/databases`).getDB('sum');
+const FinanceReport = db.model('FinanceReport');
 
-//const workdate = require( `${icwd}/imports/utils/workdate` );
+//const workdate = require(`${icwd}/imports/utils/workdate`);
 
 
 /**
  * Create a new Finance Report
- * @name createOne
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
  * @fires 409 Conflict    & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @example
  * POST /api/sum/financereport
 **/
 
-module.exports = function createOne (req, res) {
+module.exports = async function createOne (req, res) {
 
 
-    log.info( `try create, sum-finance-report body.pid: ${req.body.pid}` );
+    log.info(`try create, sum-finance-report body.pid: ${req.body.pid}`);
 
     if( !req.body
         || Object.keys( req.body ).length == 0 ) {
-        return send400BadRequest( res, 'Bad request, body is required' );
+        send400BadRequest( res, 'Bad request, body is required');
+        return;
     }
 
     const { pid, period } = req.body;
 
     if( !pid || !period ) {
-        return send400BadRequest( res,
+        send400BadRequest( res,
             'Bad request, body.pid and body.period is required'
         );
+        return;
     }
 
     const finding = {
@@ -51,41 +51,42 @@ module.exports = function createOne (req, res) {
         pid,
     };
 
-    FinanceReport
-    .find( finding )
-    .limit( 1 )
-    .exec( (err, docs) => {
+    FinanceReport.
+    find( finding ).
+    limit( 1 ).
+    exec( (err, docs) => {
 
         if( err ) {
             log.error( err );
-            return send500ServerError( res, err );
+            send500ServerError( res, err );
+            return;
         }
 
-        if( docs && docs.length !== 0 ) {
-
-            return send409Conflict( res,
+        if( docs?.length !== 0 ) {
+            send409Conflict( res,
                 `Finance report data for period ${pid}/${period} already exists.`
             );
+            return;
         }
 
-        FinanceReport
-        .create(
+        FinanceReport.
+        create(
             req.body,
             (err, doc) => {
 
                 if( err ) {
-                    log.error( 'finance-report create err: ', err );
-                    return send500ServerError( res, err );
+                    log.error('finance-report create err: ', err );
+                    send500ServerError( res, err );
+                    return;
                 }
 
                 let { period, pid } = doc;
-                log.info( `SUCCESS: financeReport ${period} ${pid} created.`);
-                return send201Created( res,
+                log.info(`SUCCESS: financeReport ${period} ${pid} created.`);
+                send201Created( res,
                     `Finance report for ${period} ${pid} created successfull.`
                 );
-
+                return;
             }
         );
     });
 };
-

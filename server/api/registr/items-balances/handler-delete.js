@@ -1,13 +1,13 @@
-// const debug = require( 'debug' )( '-dbg:items-balances:api' );
+// const debug = require('debug')('-dbg:items-balances:api');
 
 const {
     consoleLogger,
     send400BadRequest,
     send500ServerError,
-} = require( '../../../helpers/' );
+} = require('../../../helpers/');
 
-const log = consoleLogger( '[items-balances:api]' );
-const ItemsBalances = require( `../../../applogic/items-balances/` );
+const log = consoleLogger('[items-balances:api]');
+const ItemsBalances = require(`../../../applogic/items-balances/`);
 
 
 /**
@@ -25,13 +25,13 @@ module.exports = async function itemsBalancesHandler_DELETE (req, res) {
 
     const { documentId } = req.params;
     documentId ?
-        log.debug( '[h-DELETE] try delete document, req.params:', req.params )
-        : log.debug( '[h-DELETE] try delete document, req.query:', req.query )
+        log.debug('[h-DELETE] try delete document, req.params:', req.params )
+        : log.debug('[h-DELETE] try delete document, req.query:', req.query )
     ;
 
     if( !documentId ) {
-        log.warn( '[h-DELETE] No <documentId>.' );
-        return send400BadRequest( res, 'Bad request, No <documentId>.' );
+        log.warn('[h-DELETE] No <documentId>.');
+        return send400BadRequest( res, 'Bad request, No <documentId>.');
     }
 
     try {
@@ -44,4 +44,3 @@ module.exports = async function itemsBalancesHandler_DELETE (req, res) {
         return send500ServerError( res, err );
     }
 };
-

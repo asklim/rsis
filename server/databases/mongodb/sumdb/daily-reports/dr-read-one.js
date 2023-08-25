@@ -1,16 +1,16 @@
-const debug = require( 'debug' )( 'reports:daily' );
+const debug = require('debug')('reports:daily');
 
-const { format } = require( 'util' );
+const { format } = require('util');
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     //consoleLogger,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
-//const log = consoleLogger( 'dbs-sum:' );
+//const log = consoleLogger('dbs-sum:');
 
-const db = require( '../../..' ).getDB( 'sum' );
+const db = require('../../..').getDB('sum');
 
-const DailyReportsModel = db.model( 'DailyReports' );
+const DailyReportsModel = db.model('DailyReports');
 
 
 /**
@@ -27,7 +27,7 @@ module.exports = async function readOne (filtering) {
 
     try {
 
-        debug( 'filtering:', filtering );
+        debug('filtering:', filtering );
 
         const docs = await DailyReportsModel.find( filtering );
         // .find возвращает Array, даже если 0 или 1 документ
@@ -36,7 +36,7 @@ module.exports = async function readOne (filtering) {
             let msg = `Daily-report not found.`;
             return ({
                 statusCode: HTTP.NOT_FOUND,
-                logMessage: `${msg}\nwith filtering: ` + format( '%o', filtering ),
+                logMessage: `${msg}\nwith filtering: ` + format('%o', filtering ),
                 response: msg
             });
         }
@@ -59,4 +59,3 @@ module.exports = async function readOne (filtering) {
         });
     }
 };
-

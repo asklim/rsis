@@ -1,14 +1,14 @@
-// const debug = require( 'debug' )( 'dbg:items-balances:db' );
+// const debug = require('debug')('dbg:items-balances:db');
 
-const { format } = require( 'util' );
+const { format } = require('util');
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     consoleLogger,
     makeResult,
     makeErrorResult,
-} = require( '../../../../helpers/' );
+} = require('../../../../helpers/');
 
-const log = consoleLogger( '[items-balances:dbs]' );
+const log = consoleLogger('[items-balances:dbs]');
 
 /**
  * Read a ItemsBalance document by parameters
@@ -25,8 +25,8 @@ const log = consoleLogger( '[items-balances:dbs]' );
 module.exports = async function readOne (filtering) {
 
     try {
-        log.debug( '[read-one] filtering:', filtering );
-        // throw new Error( `Test ERROR in ib-readone-injector.`);
+        log.debug('[read-one] filtering:', filtering );
+        // throw new Error(`Test ERROR in ib-readone-injector.`);
         const storage = this.getModel();
 
         const docs = await storage.find( filtering ).exec();
@@ -37,7 +37,7 @@ module.exports = async function readOne (filtering) {
             let msg = `[storage] ItemsBalance not found.`;
             return makeResult(
                 HTTP.NOT_FOUND,
-                `${msg}\nw/filtering: ` + format( '%o', filtering ),
+                `${msg}\nw/filtering: ` + format('%o', filtering ),
                 msg
             );
         }
@@ -49,10 +49,10 @@ module.exports = async function readOne (filtering) {
         );
     }
     catch (err) {
-        // debug( 'err.name:', err.name );
-        // debug( 'err.message:', err.message );
-        // debug( 'err.toString():', err.toString() );
-        // log.debug( `err.stack (${err.stack.split('\n').length}):`, err.stack );
+        // debug('err.name:', err.name );
+        // debug('err.message:', err.message );
+        // debug('err.toString():', err.toString() );
+        // log.debug(`err.stack (${err.stack.split('\n').length}):`, err.stack );
         return makeErrorResult( err );
     }
 };

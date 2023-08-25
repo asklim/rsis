@@ -1,16 +1,16 @@
-//const debug = require( 'debug' )( 'api:catalogLayouts' );
+//const debug = require('debug')('api:catalogLayouts');
 
 const {
     consoleLogger,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     send200Ok,
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( '[catalogLayouts:api]' );
-const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
+const log = consoleLogger('[catalogLayouts:api]');
+const CatalogLayouts = require(`../../../applogic/catalog-layouts`);
 
 
 /**
@@ -77,11 +77,10 @@ module.exports = async function catalogLayoutHandler_GET (req, res) {
             return STATE_HANDLERS[ statusCode ]( readResult );
         }
 
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
         return send500ServerError( res, err );
     }
 };
-

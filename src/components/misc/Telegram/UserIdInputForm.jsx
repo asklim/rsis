@@ -39,11 +39,11 @@ const UserIdInputForm = ({
     const fetchAccountIds = () => { return defaultUserIds; };
     const accountIds = fetchAccountIds();
 
-    const [ value, setValue ] = useState( '' );
+    const [ value, setValue ] = useState('');
     const [ open, setOpen ] = useState( false );
 
 
-    //const resetValue = () => setValue( '' );
+    //const resetValue = () => setValue('');
 
     const handleClickOpen = () => {
         setOpen( true );
@@ -60,7 +60,7 @@ const UserIdInputForm = ({
 
     //const classes = useStyles();
     const style = { ...styles().todosPopUp };
-    //console.log( 'TodoForm style', style );
+    //console.log('TodoForm style', style );
     const AccountChooserPopUp = withStyles(style)( SimpleDialog );
 
     return (

@@ -1,4 +1,4 @@
-//const debug = require( 'debug' )( 'reports:finance' );
+//const debug = require('debug')('reports:finance');
 const {
     icwd,
     consoleLogger,
@@ -6,25 +6,23 @@ const {
     send400BadRequest,
     send404NotFound,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( 'api-SUM:reports:finance' );
+const log = consoleLogger('api-SUM:reports:finance');
 
-const db = require( `${icwd}/server/databases` ).getDB( 'sum' );
-const FinanceReport = db.model( 'FinanceReport' );
+const db = require(`${icwd}/server/databases`).getDB('sum');
+const FinanceReport = db.model('FinanceReport');
 
-//const workdate = require( `${icwd}/imports/utils/workdate` );
+//const workdate = require(`${icwd}/imports/utils/workdate`);
 
 
 /**
  * Read a financials summary report
  * by the XXI century week or calendar quarter or ???'last'
- * @name readOne
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @example for weeks
  * GET /api/sum/financereport/:periodId
  * GET /api/sum/financereport/960       - week #960
@@ -40,10 +38,10 @@ const FinanceReport = db.model( 'FinanceReport' );
  * ??? GET /api/sum/financereport/lastweek
  * ??? GET /api/sum/financereport/lastquarter
 **/
-
-module.exports = function readOne (req, res) {
-
-
+module.exports = async function readOne (
+    req,
+    res
+) {
     console.log(
         `I: try readOne sum-finance-report document`,
         '\nI: finding financeReport\'s params:', req.params,
@@ -54,9 +52,9 @@ module.exports = function readOne (req, res) {
     const { periodId } = req.params;
 
     if( !periodId ) {
-
-        log.warn( 'financeReport.readOne: No periodId specified.' );
-        return send400BadRequest( res, 'No periodId in request.' );
+        log.warn('financeReport.readOne: No periodId specified.');
+        send400BadRequest( res, 'No periodId in request.');
+        return;
     }
 
     let finding,
@@ -67,7 +65,7 @@ module.exports = function readOne (req, res) {
 
     if( periodIdLow.startWith('last') ) {
 
-        let period = periodIdLow.split( 'last' )[0];
+        let period = periodIdLow.split('last')[0];
         finding = { period };
         sorting = { id: -1 };
     }
@@ -76,23 +74,25 @@ module.exports = function readOne (req, res) {
         periodNumber = Number.parseInt( periodId, 10 );
         if( !periodNumber ) {
 
-            log.warn( 'financeReport.readOne: wrong periodId specified.' );
-            return send400BadRequest( res, 'Wrong periodId in request.' );
+            log.warn('financeReport.readOne: wrong periodId specified.');
+            send400BadRequest( res, 'Wrong periodId in request.');
+            return;
         }
         finding =  { pid: periodNumber };
         sorting =  {};
     }
 
 
-    FinanceReport
-    .find( finding )
-    .sort( sorting )
-    .limit(1)
-    .exec( (err, docs) => {
+    FinanceReport.
+    find( finding ).
+    sort( sorting ).
+    limit(1).
+    exec( (err, docs) => {
 
         if( err ) {
             log.error( err );
-            return send500ServerError( res, err );
+            send500ServerError( res, err );
+            return;
         }
 
         if( !docs || docs.length < 1 ) {
@@ -100,11 +100,13 @@ module.exports = function readOne (req, res) {
             let msg = `Summary data for week ${periodId}/${periodNumber} not found.`;
             log.warn(`financeReport ${msg}`);
 
-            return send404NotFound( res, `FinanceReport ${msg}` );
+            send404NotFound( res, `FinanceReport ${msg}`);
+            return;
         }
 
-        log.info( `SUCCESS: financeReport ${docs[0].id} readOne is Ok.`);
-        return send200Ok( res, docs[0] );
+        log.info(`SUCCESS: financeReport ${docs[0].id} readOne is Ok.`);
+        send200Ok( res, docs[0] );
+        return;
     });
 
 };

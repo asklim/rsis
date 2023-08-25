@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { debugFactory } from 'utils/debuggers.js';
-const debug = debugFactory( 'debug:app' );
+const debug = debugFactory('debug:app');
 
 import {
     Navigate,
@@ -97,7 +97,7 @@ const theme = createTheme({
     palette: {
         background: {
             body: 'hsla( 45, 100%, 88%, 0.6 )',
-            body2: alpha( 'hsl( 45, 100%, 88% )', 1 ),
+            body2: alpha('hsl( 45, 100%, 88% )', 1 ),
         },
     },
     ctmdr: ctmdrTheme,
@@ -109,6 +109,6 @@ const AppWithTheme = () =>
     </ThemeProvider>
 ;
 
-debug( 'rsis theme', theme );
+debug('rsis theme', theme );
 
 export default AppWithTheme;

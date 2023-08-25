@@ -1,4 +1,4 @@
-var mongoose = require( 'mongoose' );
+var mongoose = require('mongoose');
 
 module.exports = new mongoose.Schema({
     _id: {
@@ -71,4 +71,3 @@ module.exports = new mongoose.Schema({
         type: Date, 'default': Date.now
     }
 });
-

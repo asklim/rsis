@@ -1,16 +1,16 @@
 
-const UUID = require( 'uuid' );
+const UUID = require('uuid');
 
-const createOne = require( './ib-create-one.js' );
-const find = require( './ib-find' );
-const readOne = require( './ib-read-one.js' );
-const updateOne = require( './ib-update-one' );
-const deleteById = require( './ib-delete-by-id' );
+const createOne = require('./ib-create-one.js');
+const find = require('./ib-find');
+const readOne = require('./ib-read-one.js');
+const updateOne = require('./ib-update-one');
+const deleteById = require('./ib-delete-by-id');
 
 const IA_ItemsBalances = require('../../../../applogic/items-balances/storage.interface-abstract');
 
-const db = require( '../../..' ).getDB( 'sum' );
-let MongoModel = db?.model( 'ItemsBalances' );
+const db = require('../../..').getDB('sum');
+let MongoModel = db?.model('ItemsBalances');
 
 module.exports = class IItemsBalancesStorage extends IA_ItemsBalances {
 

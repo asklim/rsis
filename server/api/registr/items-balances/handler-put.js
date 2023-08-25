@@ -1,12 +1,12 @@
-//const debug = require( 'debug' )( '-dbg:items-balances:api' );
+//const debug = require('debug')('-dbg:items-balances:api');
 const {
     consoleLogger,
     send400BadRequest,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( '[items-balances:api]' );
-const ItemsBalances = require( `../../../applogic/items-balances/` );
+const log = consoleLogger('[items-balances:api]');
+const ItemsBalances = require(`../../../applogic/items-balances/`);
 
 
 /**
@@ -26,14 +26,14 @@ module.exports = async function itemsBalancesHandler_PUT (req, res) {
 
     const { documentId } = req.params;
 
-    log.debug( '[h-PUT] ' + (documentId ?
+    log.debug('[h-PUT] ' + (documentId ?
         `try update, documentId is '${documentId}'`
         : `try update for filial=${filial}, onDate=${onDate}, agent=${agent}`)
     );
 
     if( !req.body || !Object.keys( req.body ).length ) {
-        log.warn( '[h-PUT] req.body is empty.' );
-        return send400BadRequest( res, 'Bad request, req.body is empty.' );
+        log.warn('[h-PUT] req.body is empty.');
+        return send400BadRequest( res, 'Bad request, req.body is empty.');
     }
 
     try {
@@ -46,4 +46,3 @@ module.exports = async function itemsBalancesHandler_PUT (req, res) {
         return send500ServerError( res, err );
     }
 };
-

@@ -1,13 +1,13 @@
 const {
     callbackError400,
     //callbackError405,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
 const
-    handlerGET = require( './handler-get' ),
-    handlerPOST = require( './handler-post' ),
-    handlerPUT = require( './handler-put' ),
-    handlerDELETE = require( './handler-delete' )
+    handlerGET = require('./handler-get'),
+    handlerPOST = require('./handler-post'),
+    handlerPUT = require('./handler-put'),
+    handlerDELETE = require('./handler-delete')
 ;
 
 
@@ -25,5 +25,5 @@ module.exports = function ( router ) {
     router.put( reports, handlerPUT);
     router.delete( reports, handlerDELETE );
 
-    router.all( `${reports}/*`, callbackError400 );
+    router.all(`${reports}/*`, callbackError400 );
 };

@@ -1,22 +1,22 @@
 
-const webpack = require( 'webpack' );
+const webpack = require('webpack');
 
-const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
-const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const WorkboxWebpackPlugin = require( 'workbox-webpack-plugin' );
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
-const InlineChunkHtmlPlugin = require( 'react-dev-utils/InlineChunkHtmlPlugin' );
+const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 
-const CaseSensitivePathsPlugin = require( 'case-sensitive-paths-webpack-plugin' );
-const InterpolateHtmlPlugin = require( 'react-dev-utils/InterpolateHtmlPlugin' );
-const ModuleNotFoundPlugin = require( 'react-dev-utils/ModuleNotFoundPlugin' );
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 //const WatchMissingNodeModulesPlugin =
-//      require( 'react-dev-utils/WatchMissingNodeModulesPlugin');
-const { WebpackManifestPlugin } = require( 'webpack-manifest-plugin' );
+//      require('react-dev-utils/WatchMissingNodeModulesPlugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 
 
@@ -111,7 +111,7 @@ module.exports = function webpackConfigPlugins ({
         // during a production build.
         // Example of use:
         //     new webpack.DefinePlugin({
-        //         "process.env.NODE_ENV": JSON.stringify( 'development' )
+        //         "process.env.NODE_ENV": JSON.stringify('development')
         //     }),
         // Otherwise React will be compiled in the very slow development mode.
         new webpack.DefinePlugin( env.stringified ),
@@ -155,7 +155,7 @@ module.exports = function webpackConfigPlugins ({
                 }, seed);
 
                 const entrypointFiles = entrypoints.main.filter(
-                    fileName => !fileName.endsWith( '.map' )
+                    fileName => !fileName.endsWith('.map')
                 );
 
                 return {
@@ -175,12 +175,12 @@ module.exports = function webpackConfigPlugins ({
             navigateFallback: publicUrl + '/index.html',
             navigateFallbackDenylist: [
                 // Exclude URLs starting with /_, as they're likely an API call
-                new RegExp( '^/_' ),
+                new RegExp('^/_'),
                 // Exclude any URLs whose last part seems to be a file extension
                 // as they're likely a resource and not a SPA route.
                 // URLs containing a "?" character won't be blacklisted as they're likely
                 // a route with query params (e.g. auth callbacks).
-                new RegExp( '/[^/?]+\\.[^/]+$' ),
+                new RegExp('/[^/?]+\\.[^/]+$'),
             ],
         }),
     ].filter( Boolean );

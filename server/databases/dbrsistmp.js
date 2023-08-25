@@ -1,18 +1,18 @@
-const logdebug = require( 'debug' )( 'dbs:connect' );
-const debug = (...args) => logdebug( '\b:[tmp]', ...args );
+const logdebug = require('debug')('dbs:connect');
+const debug = (...args) => logdebug('\b:[tmp]', ...args );
 
-const { format } = require( 'util' );
-const createConn = require( './create-conn' );
+const { format } = require('util');
+const createConn = require('./create-conn');
 const {
     dbName,
     mongoURI
-} = require( '../rsis.config.js' );
+} = require('../rsis.config.js');
 
 const { rsistmp: databaseName } = dbName;
 
 const title = `${databaseName}-db`;
 
-const uriWithDbName = ( process.env.NODE_ENV === 'production' )
+const uriWithDbName = ( process.env.NODE_ENV === 'production')
     ? format( mongoURI.CLOUDDB_TEMPLATE,
         process.env.ATLAS_CREDENTIALS,
         databaseName
@@ -24,7 +24,7 @@ const uriWithDbName = ( process.env.NODE_ENV === 'production' )
 
 const db = createConn( uriWithDbName, title );
 
-debug( 'dbtmp, create connection.', /*db*/ );
+debug('dbtmp, create connection.', /*db*/ );
 
 // BRING IN YOUR SCHEMAS & MODELS
 

@@ -1,9 +1,9 @@
-const db = require( '../../../databases' ).getDB( 'config' );
+const db = require('../../../databases').getDB('config');
 
-const ProductsCatalog = db.model( 'ProductsCatalog' );
+const ProductsCatalog = db.model('ProductsCatalog');
 
 const sendJSONresponse = function (res, status, content) {
-    //console.log(`catalogs for excel:`, content);  
+    //console.log(`catalogs for excel:`, content);
     res.status(status);
     res.json(content);
 };
@@ -12,7 +12,7 @@ let testArr = [[2019011001, 2056], [2019011002, 2046]];
 
 
 /**
- * 
+ *
  */
 
 module.exports.catalogReadOne = function (req, res) {
@@ -34,9 +34,9 @@ module.exports.catalogReadOne = function (req, res) {
                 return;
             }
             console.log(`List's length = ${list.items.length} [0]: ${list.items[0]}`);
-            sendJSONresponse(res, 200, list.items);    
+            sendJSONresponse(res, 200, list.items);
         });
-    } 
+    }
     else {
         sendJSONresponse(res, 200, testArr );
     }
@@ -44,7 +44,7 @@ module.exports.catalogReadOne = function (req, res) {
 
 
 /**
- * 
+ *
  */
 
 module.exports.catalogCreateOne = function (req, res) {
@@ -59,7 +59,7 @@ module.exports.catalogCreateOne = function (req, res) {
         .create( query, function(err, list) {
             if (err) {
                 sendJSONresponse(res, 400, err);
-            } else {        
+            } else {
                 sendJSONresponse(res, 201, list);
             }
         });
@@ -68,7 +68,7 @@ module.exports.catalogCreateOne = function (req, res) {
 
 
 /**
- * 
+ *
  */
 
 module.exports.catalogUpdateOne = function (req, res) {
@@ -95,7 +95,7 @@ module.exports.catalogUpdateOne = function (req, res) {
             sendJSONresponse(res, 404, err);
             return;
         }
-        
+
         list.items = req.body;
         list.save(function(err, lst) {
             if (err) {
@@ -108,7 +108,7 @@ module.exports.catalogUpdateOne = function (req, res) {
 };
 
 /**
- * 
+ *
  */
 
 module.exports.catalogDeleteOne = function (req, res) {

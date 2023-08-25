@@ -1,10 +1,10 @@
-const debug = require( 'debug' )( '-dbg:items-balances:db' );
+const debug = require('debug')('-dbg:items-balances:db');
 
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     makeResult,
     makeErrorResult,
-} = require( '../../../../helpers' );
+} = require('../../../../helpers');
 
 
 /**
@@ -33,7 +33,7 @@ module.exports = async function createOne (body) {
 
         const { uuid } = report;
         //const uuid = '12345678-1234-1234-1234-123456789012';
-        debug( `[create-one]: ${uuid}` );
+        debug(`[create-one]: ${uuid}`);
 
         return makeResult(
             HTTP.CREATED,

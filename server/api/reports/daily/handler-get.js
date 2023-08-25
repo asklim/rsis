@@ -1,17 +1,17 @@
-const debug = require( 'debug' )( 'reports:daily:' );
+const debug = require('debug')('reports:daily:');
 
 const {
     consoleLogger,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     send200Ok,
     send400BadRequest,
     send404NotFound,
     send409Conflict,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const log = consoleLogger( 'api-reports:daily:' );
-const DailyReports = require( `../../../applogic/daily-reports` );
+const log = consoleLogger('api-reports:daily:');
+const DailyReports = require(`../../../applogic/daily-reports`);
 
 
 /**
@@ -82,11 +82,10 @@ module.exports = async function dailyReportsHandler_GET (req, res) {
             return STATE_HANDLERS[ statusCode ]( readResult );
         }
 
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
         return send500ServerError( res, err );
     }
 };
-

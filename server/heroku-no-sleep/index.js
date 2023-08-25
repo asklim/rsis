@@ -31,7 +31,7 @@ module.exports = function createPinger (
 
     server.on( HEROKU_PING_EVENT, herokuPingEvent_handler );
 
-    server.on( 'close', () => {
+    server.on('close', () => {
         clearTimeout( herokuTimer );
         log.debug('Reconnection Service stopped.');
     });
@@ -67,4 +67,3 @@ module.exports = function createPinger (
         debug(`App running from ${(new Date( started )).toISOString()}`);
     }
 };
-

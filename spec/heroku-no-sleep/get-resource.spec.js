@@ -1,7 +1,7 @@
 
 const createSafeGetter = require('../create-safe-getter');
 
-const createError = require( 'http-errors' );
+const createError = require('http-errors');
 
 const FAKE_URL = 'http://fakeUrl';
 const axiosResponse = (apiUrl) => ({
@@ -33,14 +33,13 @@ const fakeAxiosGetter = (apiUrl) => {
 };
 
 
-test( '01/get resource error', async () => {
+test('01/get resource error', async () => {
     const getter = createSafeGetter( FAKE_URL, fakeErrorGetter );
     expect( await getter() ).toBeUndefined();
 });
 
-it( '02/get good axios response', async () => {
+it('02/get good axios response', async () => {
     const result = axiosResponse( FAKE_URL );
     const getter = createSafeGetter( FAKE_URL, fakeAxiosGetter );
     expect( await getter() ).toEqual( result );
 });
-

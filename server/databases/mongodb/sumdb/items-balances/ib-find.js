@@ -1,14 +1,14 @@
-const debug = require( 'debug' )( '-dbg:items-balances:db' );
+const debug = require('debug')('-dbg:items-balances:db');
 
-const { format } = require( 'util' );
+const { format } = require('util');
 const {
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     consoleLogger,
     makeResult,
     makeErrorResult,
-} = require( '../../../../helpers/' );
+} = require('../../../../helpers/');
 
-const log = consoleLogger( '[items-balances:dbs]' );
+const log = consoleLogger('[items-balances:dbs]');
 
 /**
  * Find a ItemsBalance documents by parameters
@@ -34,7 +34,7 @@ module.exports = async function find (filtering) {
     };
 
     try {
-        log.debug( '[find] filtering:', filtering );
+        log.debug('[find] filtering:', filtering );
 
         const filter = makeFilter( filtering );
 
@@ -47,7 +47,7 @@ module.exports = async function find (filtering) {
             let msg = `[storage] ItemsBalance not found.`;
             return makeResult(
                 HTTP.NOT_FOUND,
-                `${msg}\nw/filtering: ` + format( '%o', filtering ),
+                `${msg}\nw/filtering: ` + format('%o', filtering ),
                 msg
             );
         }
@@ -63,10 +63,10 @@ module.exports = async function find (filtering) {
 
     }
     catch (err) {
-        // debug( 'err.name:', err.name );
-        // debug( 'err.message:', err.message );
-        // debug( 'err.toString():', err.toString() );
-        // log.debug( `err.stack (${err.stack.split('\n').length}):`, err.stack );
+        // debug('err.name:', err.name );
+        // debug('err.message:', err.message );
+        // debug('err.toString():', err.toString() );
+        // log.debug(`err.stack (${err.stack.split('\n').length}):`, err.stack );
         return makeErrorResult( err );
     }
 };
@@ -79,7 +79,7 @@ function makeFilter({
     creator
 }) {
     const filter = {};
-    const dates = onDates?.split( '/' );
+    const dates = onDates?.split('/');
     if( dates ) {
         const startDate = shortISODate( dates[0] );
         const endDate = dates[1] ?? (shortISODate( dates[1]) || startDate );
@@ -91,7 +91,7 @@ function makeFilter({
     filial && (filter.filial = filial);
     creator && (filter.creator = creator);
 
-    debug( '[find] filter:', filter );
+    debug('[find] filter:', filter );
     return filter;
 }
 

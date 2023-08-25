@@ -1,9 +1,9 @@
-const debug = require( 'debug' )( 'api:reports:dailyReport' );
+const debug = require('debug')('api:reports:dailyReport');
 
-const { Schema } = require( 'mongoose' );
-const UUID = require( 'uuid' );
+const { Schema } = require('mongoose');
+const UUID = require('uuid');
 
-const PATH_DEFINITION = require( '../schema.paths-definitions' );
+const PATH_DEFINITION = require('../schema.paths-definitions');
 
 
 
@@ -197,11 +197,11 @@ const dailyReport = new Schema({
 });
 
 
-dailyReport.pre( 'save', async function (/*next*/) {
+dailyReport.pre('save', async function (/*next*/) {
     // Pre middleware function
     if( !this.uuid ) {
         this.uuid = UUID.v4();
-        debug( `pre(save): ${this.uuid}` );
+        debug(`pre(save): ${this.uuid}`);
     }
     if( !this.updatedAt ) {
         this.updatedAt = Date.now();

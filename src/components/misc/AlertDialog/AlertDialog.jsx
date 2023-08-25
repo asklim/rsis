@@ -15,7 +15,7 @@ import {
 const AlertDialog = () => {
 
     const [ open, setOpen ] = useState( false );
-    const [ selectedValue, setSelectedValue ] = useState( '' );
+    const [ selectedValue, setSelectedValue ] = useState('');
 
     const handleClickOpen = () => setOpen( true );
 
@@ -23,12 +23,12 @@ const AlertDialog = () => {
 
     const handleCloseYes = () => {
         setOpen( false );
-        setSelectedValue( 'Yes' );
+        setSelectedValue('Yes');
     };
 
     const handleCloseNo = ()=> {
         setOpen( false );
-        setSelectedValue( 'No' );
+        setSelectedValue('No');
     };
 
     return (<>

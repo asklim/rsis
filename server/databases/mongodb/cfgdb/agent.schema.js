@@ -1,4 +1,4 @@
-const { Schema } = require( 'mongoose' );
+const { Schema } = require('mongoose');
 
 /**
  * @name Agent
@@ -7,19 +7,19 @@ const agentSchema = new Schema({
 
     id: {
         /* id агента в контексте type*/
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
     },
     type: {
         /*  тип агента. Возможные варианты:
-         *   staffer     - сотрудники 
+         *   staffer     - сотрудники
          *   saleplace   - места реализации
          *   supplier    - поставщики
          *   wholesale   - оптовые покупатели
          *   warehouse   - склады
          *   legalentity - юр.лицо (ИП)
          *   buyer       - покупатели (со склада) */
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
         lowercase: true,
     },
@@ -41,12 +41,12 @@ const agentSchema = new Schema({
     },
     host: {
         // - имя компьютера, сделавшего изменение.
-        type: Schema.Types.String, 
+        type: Schema.Types.String,
         required: true,
     },
     updatedAt: {
         // - дата изменений
-        type: Schema.Types.Date, 
+        type: Schema.Types.Date,
         default: Date.now,
     }
 });

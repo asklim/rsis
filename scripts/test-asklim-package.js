@@ -1,11 +1,9 @@
 /*
-const asklim = require( 'asklim/rsis' )();
-
-console.log( "typeof", typeof asklim );
 console.log( asklim );
 */
-
-const { needUnitsForPeriod } = require( 'asklim/rsis' )();
+const { rsisFactory } = require('asklim');
+console.log('typeof', typeof rsisFactory, rsisFactory );
+const { needUnitsForPeriod } = rsisFactory();
 
 const item = {
     gid: "2012030106",

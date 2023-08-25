@@ -1,26 +1,24 @@
 
-
 /**
  * Проверяет listType в запросе req
- * @param {String} req.query.listType
- * @returns valid listType in lowercase
- * @returns undefined - if listType is not valid
+ * * return valid listType in lowercase
+ * * undefined - if listType is not valid
+ * @param {String} listType from req.query
  */
-
-module.exports = function validatedListType( listType = 'main' ) {
+module.exports = function validatedListType( listType = 'main') {
 
     /* for http requests in api/:
         &type='main' // default
         or, 'meta'
-        &type='lid2gid' or, 
-        &type='short' or, 
-        &type='photo' or, 
+        &type='lid2gid' or,
+        &type='short' or,
+        &type='photo' or,
         &type='extra'
     */
-    const validListTypeValues = [ 
-        'meta', 'main', 
-        'lid2gid', 'short', 
-        'photo', 'extra' 
+    const validListTypeValues = [
+        'meta', 'main',
+        'lid2gid', 'short',
+        'photo', 'extra'
     ];
     listType = listType.toLowerCase();
 
@@ -29,4 +27,3 @@ module.exports = function validatedListType( listType = 'main' ) {
     }
     return listType;
 };
-

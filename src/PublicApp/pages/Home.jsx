@@ -25,7 +25,7 @@ const classes = {
     root: `${PREFIX}-root`,
 };
 
-const Root = styled( 'div' )( ({ theme }) => ({
+const Root = styled('div')( ({ theme }) => ({
     [`&.${classes.root}`]: {
         // `&.${...` without spaces (root styles)
         height: '100%',

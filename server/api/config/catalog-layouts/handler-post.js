@@ -1,18 +1,18 @@
 
-//const debug = require( 'debug' )( 'api:catalogLayouts' );
+//const debug = require('debug')('api:catalogLayouts');
 const {
     //icwd,
     consoleLogger,
-    httpResponseCodes: HTTP,
+    StatusCodes: HTTP,
     send201Created,
     send400BadRequest,
     //send409Conflict,
     send500ServerError,
-} = require( '../../../helpers' );
+} = require('../../../helpers');
 
-const CatalogLayouts = require( `../../../applogic/catalog-layouts` );
+const CatalogLayouts = require(`../../../applogic/catalog-layouts`);
 
-const log = consoleLogger( '[catalogLayouts:api]' );
+const log = consoleLogger('[catalogLayouts:api]');
 
 
 /**
@@ -34,7 +34,7 @@ module.exports = async function catalogLayoutsHandler_POST (req, res) {
         client = req.body.client;
         list = req.body.list;
     }
-    log.info( `try create, config/catalog-layouts: client=${client}, list=${list}` );
+    log.info(`try create, config/catalog-layouts: client=${client}, list=${list}`);
 
 
     if( !req.body
@@ -75,7 +75,7 @@ module.exports = async function catalogLayoutsHandler_POST (req, res) {
             return STATE_HANDLERS[ statusCode ]( createResult );
         }
 
-        throw new Error( `Handler of ${statusCode} not implemented.`);
+        throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
@@ -83,4 +83,3 @@ module.exports = async function catalogLayoutsHandler_POST (req, res) {
     }
 
 };
-

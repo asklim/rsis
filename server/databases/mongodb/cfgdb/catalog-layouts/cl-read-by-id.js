@@ -1,9 +1,9 @@
 
-//const debug = require( 'debug' )( 'dbs:cfg:catalogLayouts' );
-//const log = consoleLogger( 'dbs-cfg:' );
+//const debug = require('debug')('dbs:cfg:catalogLayouts');
+//const log = consoleLogger('dbs-cfg:');
 
-const UUID = require( 'uuid' );
-const readOne = require( './cl-read-one' );
+const UUID = require('uuid');
+const readOne = require('./cl-read-one');
 
 /**
  * Read a catalog-layout by the id

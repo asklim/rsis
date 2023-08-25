@@ -27,7 +27,7 @@ const classes = {
     counter:    `${PREFIX}-counter`,
 };
 
-const RootSxDiv = styled( 'div', {
+const RootSxDiv = styled('div', {
     shouldForwardProp: (prop) => prop !== 'color',
 })(({ color, theme }) => {
     // eslint-disable-next-line no-unused-vars
@@ -117,7 +117,7 @@ const RootSxDiv = styled( 'div', {
 const PopupMenuSxPopper = styled( Popper
     //, { shouldForwardProp: (prop) => prop !== 'open', }
 )(({ open, theme }) => {
-    // debug( `PopupMenu open is ${open}` );
+    // debug(`PopupMenu open is ${open}`);
     const { /*common,*/ error } = theme.palette;
     return ({
         //zIndex: 1401,
