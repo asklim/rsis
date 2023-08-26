@@ -15,7 +15,6 @@ const ItemsBalances = require(`../../../applogic/items-balances/`);
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage GET /api/registr/items-balances/:documentId
  * @usage GET /api/registr/items-balances?queryString
  * @usage GET /api/registr/items-balances/?queryString
@@ -23,8 +22,10 @@ const ItemsBalances = require(`../../../applogic/items-balances/`);
  * filial=filialId & creator=rsisjs
  * onDate=isoDate as YYYY-MM-DD & agent=agentId
  **/
-module.exports = async function itemsBalancesHandler_GET (req, res) {
-
+module.exports = async function hapi_registr_itemsBalances_GET (
+    req,
+    res
+) {
     const { documentId } = req.params;
 
     documentId ?
@@ -47,6 +48,7 @@ module.exports = async function itemsBalancesHandler_GET (req, res) {
     }
     catch (err) {
         log.error( err );
+        // @ts-ignore
         return send500ServerError( res, err );
     }
 };

@@ -15,27 +15,25 @@ const ItemsBalances = require(`../../../applogic/items-balances/`);
  * @fires 400 Bad Request & message
  * @fires 409 Conflict & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * POST /api/registr/items-balances
  */
-module.exports = async function itemBalancesHandler_POST (req, res) {
-
-    let filial, onDate;
-    const agent = req.body?.agent;
-
-    if( req.body ) {
-        filial = req.body.filial;
-        onDate = req.body.onDate;
-    }
+module.exports = async function hapi_registr_itemsBalances_POST (
+    req,
+    res
+) {
+    const agent = req?.body?.agent;
+    const filial = req?.body?.filial;
+    const onDate = req?.body?.onDate;
     log.debug('[h-POST] ' +
         `try create: filial=${filial}, onDate=${onDate}, agent=${agent}`
     );
 
-
-    if( !req.body || !Object.keys( req.body ).length ) {
+    if( !req.body
+        || !Object.keys( req.body ).length ) {
         log.warn('[h-POST] req.body is empty.');
-        return send400BadRequest( res, 'Bad request, req.body is empty.');
+        send400BadRequest( res, 'Bad request, req.body is empty.');
+        return;
     }
 
     try {
@@ -44,6 +42,7 @@ module.exports = async function itemBalancesHandler_POST (req, res) {
     }
     catch (err) {
         log.error( err );
+        // @ts-ignore
         return send500ServerError( res, err );
     }
 

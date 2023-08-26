@@ -21,8 +21,10 @@ const ItemsBalances = require(`../../../applogic/items-balances/`);
  * DELETE /api/registr/items-balances/60950e87258015071e86c8f7
  * DELETE /api/registr/items-balances/f2ab5c11-a252-4f65-b278-adb3afe12bcd
  **/
-module.exports = async function itemsBalancesHandler_DELETE (req, res) {
-
+module.exports = async function hapi_registr_itemsBalances_DELETE (
+    req,
+    res
+) {
     const { documentId } = req.params;
     documentId ?
         log.debug('[h-DELETE] try delete document, req.params:', req.params )
@@ -31,7 +33,8 @@ module.exports = async function itemsBalancesHandler_DELETE (req, res) {
 
     if( !documentId ) {
         log.warn('[h-DELETE] No <documentId>.');
-        return send400BadRequest( res, 'Bad request, No <documentId>.');
+        send400BadRequest( res, 'Bad request, No <documentId>.');
+        return;
     }
 
     try {
@@ -41,6 +44,7 @@ module.exports = async function itemsBalancesHandler_DELETE (req, res) {
     }
     catch (err) {
         log.error( err );
+        // @ts-ignore
         return send500ServerError( res, err );
     }
 };
