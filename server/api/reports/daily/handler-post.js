@@ -23,14 +23,12 @@ const log = consoleLogger('api-reports:daily:');
  * POST /api/reports/daily
  */
 
-module.exports = async function dailyReportsHandler_POST (req, res) {
-
-    let filial, onDate;
-
-    if( req.body ) {
-        filial = req.body.filial;
-        onDate = req.body.onDate;
-    }
+module.exports = async function hapi_reports_daily_POST (
+    req,
+    res
+) {
+    const filial = req?.body?.filial;
+    const onDate = req?.body?.onDate;
     debug(`[h-POST] try create: filial=${filial}, onDate=${onDate}`);
 
 
@@ -75,15 +73,15 @@ module.exports = async function dailyReportsHandler_POST (req, res) {
         const { statusCode } = createResult;
 
         if( statusCode in STATE_HANDLERS ) {
-
-            return STATE_HANDLERS[ statusCode ]( createResult );
+            STATE_HANDLERS[ statusCode ]( createResult );
         }
 
         throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
-        return send500ServerError( res, err );
+        // @ts-ignore
+        send500ServerError( res, err );
     }
 
 };

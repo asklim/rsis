@@ -20,7 +20,6 @@ const DailyReports = require(`../../../applogic/daily-reports`);
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage var.1 |
  * GET /api/reports/daily/:reportId
  * @usage var.2 |
@@ -31,10 +30,10 @@ const DailyReports = require(`../../../applogic/daily-reports`);
  * filial=filialId &
  * onDate=isoDate
  **/
-
-module.exports = async function dailyReportsHandler_GET (req, res) {
-
-
+module.exports = async function hapi_reports_daily_GET (
+    req,
+    res
+) {
     debug(
         '[h-GET] try read document',
         '\nI: finding daily-report`s params:', req.params,
@@ -79,13 +78,14 @@ module.exports = async function dailyReportsHandler_GET (req, res) {
         const { statusCode } = readResult;
 
         if( statusCode in STATE_HANDLERS ) {
-            return STATE_HANDLERS[ statusCode ]( readResult );
+            STATE_HANDLERS[ statusCode ]( readResult );
         }
 
         throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
+        // @ts-ignore
         return send500ServerError( res, err );
     }
 };

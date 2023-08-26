@@ -21,21 +21,16 @@ const log = consoleLogger('api-reports:daily:');
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * PUT /api/reports/daily
  */
-
-module.exports = async function dailyReportsHandler_PUT (req, res) {
-
-
+module.exports = async function hapi_reports_daily_PUT (
+    req,
+    res
+) {
     debug(`[h-PUT] start, reportId is "${req.params.reportId}"`);
-    let filial, onDate;
-
-    if( req.body ) {
-        filial = req.body.filial;
-        onDate = req.body.onDate;
-    }
+    const filial = req?.body?.filial;
+    const onDate = req?.body?.onDate;
     log.info(`try update daily-reports: filial=${filial}, onDate=${onDate}`);
 
 
@@ -47,7 +42,8 @@ module.exports = async function dailyReportsHandler_PUT (req, res) {
             response: 'Bad request, req.body is empty.'
         };
         log.warn( result.logMessage );
-        return send400BadRequest( res, result.response );
+        send400BadRequest( res, result.response );
+        return;
     }
 
 
@@ -82,14 +78,15 @@ module.exports = async function dailyReportsHandler_PUT (req, res) {
         const { statusCode } = updateResult;
 
         if( statusCode in STATE_HANDLERS ) {
-            return STATE_HANDLERS[ statusCode ]( updateResult );
+            STATE_HANDLERS[ statusCode ]( updateResult );
         }
 
         throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
-        return send500ServerError( res, err );
+        // @ts-ignore
+        send500ServerError( res, err );
     }
 
 };

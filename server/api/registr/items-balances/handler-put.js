@@ -47,6 +47,6 @@ module.exports = async function hapi_itemsBalances_PUT (
     catch (err) {
         log.error( err );
         // @ts-ignore
-        return send500ServerError( res, err );
+        send500ServerError( res, err );
     }
 };

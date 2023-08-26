@@ -27,9 +27,10 @@ const log = consoleLogger('api-reports:daily:');
  * DELETE /api/reports/daily/f2ab5c11-a252-4f65-b278-adb3afe12bcd
  **/
 
-module.exports = async function dailyReportsHandler_DELETE (req, res) {
-
-
+module.exports = async function hapi_reports_daily_DELETE (
+    req,
+    res
+) {
     debug(
         '[h-DELETE] try delete document',
         '\nI: daily-report`s delete params:', req.params,
@@ -39,13 +40,14 @@ module.exports = async function dailyReportsHandler_DELETE (req, res) {
     const { reportId } = req.params;
 
     if( !reportId ) {
-        let result = {
+        const result = {
             statusCode: HTTP.BAD_REQUEST,
             logMessage: 'daily-reports.DELETE: No <reportId>.',
             response: 'Bad request, No <reportId>.'
         };
         log.warn( result.logMessage );
-        return send400BadRequest( res, result.response );
+        send400BadRequest( res, result.response );
+        return;
     }
 
 
@@ -81,13 +83,14 @@ module.exports = async function dailyReportsHandler_DELETE (req, res) {
         const { statusCode } = deleteResult;
 
         if( statusCode in STATE_HANDLERS ) {
-            return STATE_HANDLERS[ statusCode ]( deleteResult );
+            STATE_HANDLERS[ statusCode ]( deleteResult );
         }
 
         throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );
-        return send500ServerError( res, err );
+        // @ts-ignore
+        send500ServerError( res, err );
     }
 };
