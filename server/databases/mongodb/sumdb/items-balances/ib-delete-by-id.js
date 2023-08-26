@@ -23,6 +23,7 @@ module.exports = async function deleteById (documentId) {
             { uuid: documentId }
             : { _id: documentId };
 
+        // @ts-ignore
         const storage = this.getModel();
 
         const doc = await storage.findOne( filtering );

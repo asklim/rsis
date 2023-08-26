@@ -1,6 +1,5 @@
 //const debug = require('debug')('reports:week-natural');
 const {
-    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
@@ -10,7 +9,9 @@ const {
 
 const log = consoleLogger('[week-natural:api:h-GET]');
 
-const db = require(`${icwd}/server/databases`).getDB('sum');
+// const db = require(`${icwd}/server/databases`).getDB('sum');
+const databases = require('../../../databases/index');
+const db = databases.getDB('sum');
 const WeekNatural = db.model('WeekNatural');
 
 

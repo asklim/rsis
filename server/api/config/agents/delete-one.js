@@ -1,5 +1,4 @@
 const {
-    icwd,
     consoleLogger,
     send204NoContent,
     send400BadRequest,
@@ -9,7 +8,9 @@ const {
 
 const log = consoleLogger('api-config:');
 
-const db = require(`${icwd}/server/databases`).getDB('config');
+// const db = require(`${icwd}/server/databases`).getDB('config');
+const databases = require('../../../databases/index');
+const db = databases.getDB('config');
 const Agent = db.model('Agent');
 
 

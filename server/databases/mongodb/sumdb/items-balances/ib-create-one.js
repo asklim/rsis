@@ -20,6 +20,8 @@ module.exports = async function createOne (body) {
     const { filial, agent, creator, onDate } = body;
 
     try {
+        //TODO: make HOF 'makeCreateOne( ctx )' and 'this' as ctx ??
+        // @ts-ignore
         const storage = this.getModel();
 
         const finded = await storage.findOne({ filial, agent, creator, onDate });

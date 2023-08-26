@@ -2,12 +2,12 @@
 const debug = require('debug')('--dbs:cfg:catalogLayouts');
 const UUID = require('uuid');
 const {
-    icwd,
     StatusCodes: HTTP,
-    //consoleLogger,
 } = require('../../../../helpers');
 
-const db = require(`${icwd}/server/databases`).getDB('config');
+// const db = require(`${icwd}/server/databases`).getDB('config');
+const databases = require('../../../index');
+const db = databases.getDB('config');
 const CatalogLayouts = db.model('CatalogLayouts');
 
 //const log = consoleLogger('db-cfg:catalog-layouts update:');

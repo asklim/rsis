@@ -124,13 +124,14 @@ const itemsBalance = new Schema({
 });
 
 
-itemsBalance.pre('save', async function () {
-
+// @ts-ignore
+itemsBalance.pre('save', async function (next) {
     // Pre middleware function
     if( !this.uuid ) {
         this.uuid = UUID.v4();
         debug(`[schema] pre(save): ${this.uuid}`);
     }
+    next();
 });
 
 module.exports = itemsBalance;

@@ -36,6 +36,7 @@ module.exports = async function updateOne (documentId, body) {
 
         debug('[update-one] filtering:', filtering );
 
+        // @ts-ignore
         const storage = this.getModel();
 
         const { uuid } = await storage.findOneAndUpdate(

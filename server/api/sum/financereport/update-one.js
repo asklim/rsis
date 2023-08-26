@@ -1,6 +1,5 @@
 //const debug = require('debug')('reports:finance:');
 const {
-    icwd,
     consoleLogger,
     send200Ok,
     send400BadRequest,
@@ -10,7 +9,9 @@ const {
 
 const log = consoleLogger('api-SUM:reports:finance:');
 
-const db = require(`${icwd}/server/databases`).getDB('sum');
+// const db = require(`${icwd}/server/databases`).getDB('sum');
+const databases = require('../../../databases/index');
+const db = databases.getDB('sum');
 const FinanceReport = db.model('FinanceReport');
 
 //const workdate = require(`${icwd}/imports/utils/workdate`);

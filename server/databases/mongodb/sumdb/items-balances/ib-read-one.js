@@ -13,20 +13,17 @@ const log = consoleLogger('[items-balances:dbs]');
 /**
  * Read a ItemsBalance document by parameters
  * @param {Object} filtering - передается в Mongoose для отбора элементов
- * @returns {Object} ResultMessage
- * @returns {Number} ResultMessage.statusCode
- * @returns {String} ResultMessage.logMessage
- * @returns {*} ResultMessage.response
- * @statusCode 200 OK & response= { ...doc }
- * @statusCode 400 Bad Request & response= message
- * @statusCode 404 Not Found   & response= message
- * @statusCode 500 Server Error & response= error object
+ * @fires 200 OK & response= { ...doc }
+ * @fires 400 Bad Request & response= message
+ * @fires 404 Not Found   & response= message
+ * @fires 500 Server Error & response= error object
  **/
 module.exports = async function readOne (filtering) {
 
     try {
         log.debug('[read-one] filtering:', filtering );
         // throw new Error(`Test ERROR in ib-readone-injector.`);
+        // @ts-ignore
         const storage = this.getModel();
 
         const docs = await storage.find( filtering ).exec();

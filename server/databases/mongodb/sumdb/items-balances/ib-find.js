@@ -12,15 +12,11 @@ const log = consoleLogger('[items-balances:dbs]');
 
 /**
  * Find a ItemsBalance documents by parameters
- * @param {Object} filtering - передается в Mongoose для отбора элементов
- * @returns {Object} ResultMessage
- * @returns {Number} ResultMessage.statusCode
- * @returns {String} ResultMessage.logMessage
- * @returns {*} ResultMessage.response
- * @statusCode 200 OK & response= { ...doc }
- * @statusCode 400 Bad Request & response= message
- * @statusCode 404 Not Found   & response= message
- * @statusCode 500 Server Error & response= error object
+ * @param {object} filtering - передается в Mongoose для отбора элементов
+ * @fires 200 OK & response= { ...doc }
+ * @fires 400 Bad Request & response= message
+ * @fires 404 Not Found   & response= message
+ * @fires 500 Server Error & response= error object
  **/
 module.exports = async function find (filtering) {
 
@@ -38,6 +34,7 @@ module.exports = async function find (filtering) {
 
         const filter = makeFilter( filtering );
 
+        // @ts-ignore
         const storage = this.getModel();
 
         const docs = await storage.find( filter, projection ).exec();
