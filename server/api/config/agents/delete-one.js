@@ -15,43 +15,44 @@ const Agent = db.model('Agent');
 
 /******
  * Delete agent card from Agent collection
- * @name deleteOne
  * @fires 204 No Content  & deleted document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & null
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * DELETE /api/config/agents/:agentId
  */
-
-module.exports = function deleteOne (req, res) {
-
+module.exports = async function deleteOne (
+    req,
+    res
+) {
     //console.log('dOne: Finding agent`s params: ', req.params);
     //console.log('dOne: Finding agent`s query: ', req.query);
 
     const { agentId } = req.params;
 
     if( !agentId ) {
-        return send400BadRequest( res, 'Bad request, <:agentId> is required.');
+        send400BadRequest( res, 'Bad request, <:agentId> is required.');
+        return;
     }
 
-    Agent
-    .findOneAndDelete(
+    Agent.
+    findOneAndDelete(
         { id: agentId },
         (err, agentCard ) => {
 
             if (err) {
                 log.error( err );
-                return send500ServerError( res, err );
+                send500ServerError( res, err );
+                return;
             }
-
             if( !agentCard ) {
-                return send404NotFound( res, agentCard );
+                send404NotFound( res, agentCard );
+                return;
             }
 
             log.info(`Agent ${agentId} card deleted.`);
-            return send204NoContent( res, agentCard );
+            send204NoContent( res, agentCard );
         });
 
 };

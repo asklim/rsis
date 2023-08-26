@@ -16,19 +16,17 @@ const formatAgent = require('./format-agents-to-console');
 
 /**
  * Read a agent info by the id
- * @name readOne
  * @fires 200 OK          & document
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * GET /api/config/agents/:agentId
  **/
-
-module.exports = function readOne (req, res) {
-
-
+module.exports = async function readOne (
+    req,
+    res
+) {
     console.log(
         'I: try readOne config-agents document',
         '\n I: finding agent`s params:', req.params,
@@ -39,7 +37,8 @@ module.exports = function readOne (req, res) {
 
     if( !agentId ) {
         log.warn('agents.readOne: No agentId specified');
-        return send400BadRequest( res, 'No agent.Id in request');
+        send400BadRequest( res, 'No agent.Id in request');
+        return;
     }
 
     Agent
@@ -49,18 +48,19 @@ module.exports = function readOne (req, res) {
 
             if( err ) {
                 log.error( err );
-                return send500ServerError( res, err );
+                send500ServerError( res, err );
+                return;
             }
-
             if( !agent ) {
                 let msg = `Agent ${agentId} not found.`;
                 log.warn( msg );
-                return send404NotFound( res, msg );
+                send404NotFound( res, msg );
+                return;
             }
 
             log.info(`SUCCESS: Agent ${agentId} readOne is Ok.`);
             console.log( formatAgent( agent ));
-            return send200Ok( res, agent );
+            send200Ok( res, agent );
         });
 
 };

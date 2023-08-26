@@ -154,7 +154,7 @@ module.exports = function webpackConfigPlugins ({
                     return manifest;
                 }, seed);
 
-                const entrypointFiles = entrypoints.main.filter(
+                const entrypointFiles = entrypoints?.main?.filter(
                     fileName => !fileName.endsWith('.map')
                 );
 

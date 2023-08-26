@@ -18,20 +18,17 @@ const formatAgent = require('./format-agents-to-console');
 
 /**
  * Return
- * (A)-type`s list or
- * (B)-group`s list { by type } or
- * (C)-id`s list { by type and/or group }
- * @usage
- * GET /api/config/agents?types
- * @usage
- * GET /api/config/agents?groups[&type=t]
- * @usage
- * GET /api/config/agents?ids&type=t[&group=g]
+ * - (A)-type`s list or
+ * - (B)-group`s list { by type } or
+ * - (C)-id`s list { by type and/or group }
+ * @usage GET /api/config/agents?types
+ * @usage GET /api/config/agents?groups[&type=t]
+ * @usage GET /api/config/agents?ids&type=t[&group=g]
  */
-
-module.exports = function readMetaValuesList (req, res) {
-
-
+module.exports = async function readMetaValuesList (
+    req,
+    res
+) {
     console.log(
         'I: try read-meta-values config-agents document',
         '\nI: finding meta-values`s params:', req.params,
@@ -40,13 +37,15 @@ module.exports = function readMetaValuesList (req, res) {
 
     if( !req.query ) {
         console.log('No query object for meta-values specified.');
-        return send400BadRequest( res, 'No query object in request.');
+        send400BadRequest( res, 'No query object in request.');
+        return;
     }
 
     const queryLength = Object.keys( req.query ).length;
 
     if( !queryLength ) {
-        return send400BadRequest( res, 'No valid query params in request');
+        send400BadRequest( res, 'No valid query params in request');
+        return;
     }
 
     const PROJECTIONS = {
@@ -55,14 +54,14 @@ module.exports = function readMetaValuesList (req, res) {
         'ids':    { _id: 0, id: 1 }
     };
 
-    let selector;
     // Определяет какой тип списка возвращается
     // Соответствует полям в PROJECTIONS
-    selector = Object.keys( req.query )[0];
+    let selector = Object.keys( req.query )[0] ?? '';
     selector = selector && selector.toLowerCase();
 
     if( !( selector in PROJECTIONS )) {
-        return send400BadRequest( res, 'No valid params in request');
+        send400BadRequest( res, 'No valid params in request');
+        return;
     }
 
     let filtering = {}; // all values for meta-selector
@@ -93,22 +92,21 @@ module.exports = function readMetaValuesList (req, res) {
 
             if( err ) {
                 log.error( err );
-                return send500ServerError( res, err );
+                send500ServerError( res, err );
+                return;
             }
             if( !agents ) {
-                return send404NotFound( res, 'agents not found.');
+                send404NotFound( res, 'agents not found.');
+                return;
             }
 
             //debug('readAll:', Object.keys(agents));
             //debug('agents Before:', agents[0] );
 
-            // единственное число от meta-selector:
-            // ids->id, types->type, groups->group
-            const fieldName = selector.substring( 0, selector.length-1 );
-            const docs = uniqueValue( agents, fieldName );
+            const docs = uniqueValue( agents, fieldName( selector ));
 
             console.log( formatAgent( docs ));
-            return send200Ok( res, docs);
+            send200Ok( res, docs);
         }
     );
 };
@@ -127,4 +125,13 @@ function uniqueValue (arr, propName) {
     });
 
     return result;
+}
+
+/**
+ * единственное число от meta-selector:
+ * ids->id, types->type, groups->group
+ * @param {string} selector
+*/
+function fieldName (selector) {
+    return selector.substring( 0, selector.length-1 );
 }
