@@ -64,13 +64,15 @@ module.exports = async function tryConnectXtimes ({
                 }
             }
             catch (err) {
+                // @ts-ignore
+                const { message } = err;
                 ms += Date.now() - t0;
                 reject({
                     attempt: n,
                     reason: 'catch',
                     ms,
-                    message: err?.message
-                    , err
+                    message,
+                    err
                 });
             }
         })( 1 );

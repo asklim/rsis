@@ -1,3 +1,4 @@
+// @ts-ignore
 const debug = require('debug')('reports:daily:');
 const {
     //icwd,
@@ -49,21 +50,25 @@ module.exports = async function hapi_reports_daily_PUT (
 
     const STATE_HANDLERS = {
 
+        // @ts-ignore
         [HTTP.OK]: (result) => {
             log.info( result.logMessage );
             return send200Ok( res, result.response );
         },
 
+        // @ts-ignore
         [HTTP.CREATED]: (result) => {
             log.info( result.logMessage );
             return send201Created( res, result.response );
         },
 
+        // @ts-ignore
         [HTTP.BAD_REQUEST]: (result) => {
             log.warn( result.logMessage );
             return send400BadRequest( res, result.response );
         },
 
+        // @ts-ignore
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
             log.error( result.logMessage );
             debug('[h-PUT] result.response', result.response ); //

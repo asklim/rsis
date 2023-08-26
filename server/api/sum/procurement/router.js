@@ -1,6 +1,6 @@
 
-const handler_GET = require('../../dataset/get-procurement.cjs');
-//const handler_GET = require('./read-one');
+// const handler_GET = require('../../dataset/get-procurement.cjs');
+const handler_GET = require('./handler-get');
 
 /**
  * api for 1 week procurement: /api/sum/procurements/<weekId>.
@@ -12,4 +12,3 @@ module.exports = function (router) {
 
     router.get( routeWithWeekId, handler_GET );
 };
-

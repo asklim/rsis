@@ -12,12 +12,10 @@ const DB_CODENAME = {
 };
 
 /**
- * @name getDB
+ * return The connection to database
  * @memberof /api/models
  * @summary Возвращает указанную базу данных
  * @param {String} dbType The database type
- * @return {Mongoose.Connection} The connection to database
- *
 **/
 function getDB (dbType) {
 

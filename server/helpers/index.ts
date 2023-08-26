@@ -3,11 +3,11 @@ import * as asklim from 'asklim';
 const { http, Logger } = asklim;
 
 const {
-    StatusCodes,
     send200Ok,
     send201Created,
     send204NoContent,
     send400BadRequest,
+    send401UnAuthorized,
     send404NotFound,
     send409Conflict,
     send500ServerError,
@@ -21,6 +21,7 @@ import { makeResult,
     makeErrorResult } from './make-results.js';
 
 import { shrinkServerRes } from './debug-utils.js';
+import StatusCodes from './status-codes-enum.js';
 
 const icwd = require('fs').realpathSync( process.cwd() );
 
@@ -34,6 +35,7 @@ export {
     send201Created,
     send204NoContent,
     send400BadRequest,
+    send401UnAuthorized,
     send404NotFound,
     send409Conflict,
     send500ServerError,

@@ -60,7 +60,13 @@ class CatalogLayouts {
 
         log.debug(`updateLastOrCreate, client=${client}, list=${list}`);
 
-        const { response: last } = await CatalogLayouts.readByQuery({ client, list });
+        const layout = {
+            client,
+            list,
+            listType: undefined,
+            date: undefined
+        };
+        const { response: last } = await CatalogLayouts.readByQuery( layout );
 
         log.debug('last uuid:', last.uuid );
         //debug( last );
@@ -149,7 +155,12 @@ class CatalogLayouts {
     static readFirst = async function readFirst ({ client, list }) {
 
         const DATE_BEFORE_ALL = '';
-        return await IStorage.readByQuery({ client, list, date: DATE_BEFORE_ALL });
+        return await IStorage.readByQuery({
+            client,
+            list,
+            listType: undefined,
+            date: DATE_BEFORE_ALL
+        });
     };
 
 
