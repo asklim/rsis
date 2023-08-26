@@ -22,7 +22,6 @@ const DailyReportsModel = db.model('DailyReports');
  * - statusCode 404 Not Found   & response= message
  * - statusCode 500 Server Error & response= error object
  **/
-
 module.exports = async function readOne (filtering) {
 
     try {
@@ -54,6 +53,7 @@ module.exports = async function readOne (filtering) {
     catch (err) {
         return ({
             statusCode: HTTP.INTERNAL_SERVER_ERROR,
+            // @ts-ignore
             logMessage: err.message,
             response: err
         });

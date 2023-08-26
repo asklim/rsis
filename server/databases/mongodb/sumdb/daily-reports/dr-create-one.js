@@ -15,7 +15,6 @@ const ModelDailyReports = db.model('DailyReports');
  * - statusCode 409 Conflict & response= message
  * - statusCode 500 Server Error & response= error object
  */
-
 module.exports = async function createOne (body) {
 
 
@@ -52,6 +51,7 @@ module.exports = async function createOne (body) {
     catch (err) {
         return ({
             statusCode: HTTP.INTERNAL_SERVER_ERROR,
+            // @ts-ignore
             logMessage: err.message,
             response: err
         });

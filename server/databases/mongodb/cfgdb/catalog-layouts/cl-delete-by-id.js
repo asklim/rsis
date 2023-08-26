@@ -104,6 +104,7 @@ module.exports = async function deleteById (catalogId) {
     catch (err) {
         return ({
             statusCode: HTTP.INTERNAL_SERVER_ERROR,
+            // @ts-ignore
             logMessage: err.message,
             response: err
         });

@@ -54,6 +54,7 @@ module.exports = async function updateOne (catalogId, body) {
     catch (err) {
         return ({
             statusCode: HTTP.INTERNAL_SERVER_ERROR,
+            // @ts-ignore
             logMessage: err.message,
             response: err
         });

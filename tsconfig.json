@@ -2,7 +2,8 @@
     "include": [
         "./server/**/*",
         "./config/**/*",
-        "spec/__test__"
+        "spec/__test__/*",
+        "**/__test__/*"
         //"./@types",
         // "./src/**/*"
     ],

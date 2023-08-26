@@ -156,13 +156,14 @@ const catalogLayout = new Schema({
     }
 });
 
-catalogLayout.pre('save', async function (/*next*/) {
+// @ts-ignore
+catalogLayout.pre('save', async function (next) {
     // Pre middleware function
     if( !this.uuid ) {
         this.uuid = UUID.v4();
         debug(`pre(save): ${this.uuid}`);
     }
-    //return next();
+    next();
 });
 
 

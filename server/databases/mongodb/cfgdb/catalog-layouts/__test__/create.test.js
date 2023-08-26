@@ -6,6 +6,7 @@
 const mongoose = require('mongoose');
 const catalogLayoutSchema = require('../catalog-layout.schema');
 
+// @ts-ignore
 const mockNewDoc = require('./mock-new-doc.json');
 
 const MONGOOSE_OPTIONS =  {
@@ -21,6 +22,7 @@ let db;
 
 beforeAll( async () => {
     db = await mongoose.
+        // @ts-ignore
         createConnection( process.env.MONGO_TESTDB_URI, MONGOOSE_OPTIONS );
     db.model('CatalogLayouts', catalogLayoutSchema, 'catalog.layouts');
 });
@@ -37,6 +39,7 @@ describe('create catalog-layout', () => {
 
         let upd = await IStorage.createOne( mockNewDoc );
         expect( upd.statusCode ).toEqual( 201 );
+        // @ts-ignore
         let { uuid } = upd.response;
         expect( uuid ).not.toBeNull();
 

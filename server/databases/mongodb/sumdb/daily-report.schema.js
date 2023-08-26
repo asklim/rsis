@@ -197,16 +197,17 @@ const dailyReport = new Schema({
 });
 
 
-dailyReport.pre('save', async function (/*next*/) {
+// @ts-ignore
+dailyReport.pre('save', async function (next) {
     // Pre middleware function
     if( !this.uuid ) {
         this.uuid = UUID.v4();
         debug(`pre(save): ${this.uuid}`);
     }
     if( !this.updatedAt ) {
-        this.updatedAt = Date.now();
+        this.updatedAt = new Date( Date.now());
     }
-    //return next();
+    next();
 });
 
 

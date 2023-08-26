@@ -212,6 +212,7 @@ const FinanceReport = new Schema({
            See http://bit.ly/mongoose-schematypes for a list of valid schema types.
         */
         ref: function() {
+            // @ts-ignore
             switch( FinanceReport.period ) {
 
                 case 'quarter':

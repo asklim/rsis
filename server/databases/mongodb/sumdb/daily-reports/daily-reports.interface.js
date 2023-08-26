@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 
-const ERR_MSG = "daily-report storage class: method not implemented.";
+// const ERR_MSG = "daily-report storage class: method not implemented.";
 
 const IA_DailyReports = require("../../../../applogic/daily-reports/storage.interface-abstract");
 
+// @ts-ignore
 module.exports = class IDailyReports extends IA_DailyReports {
 
     static createOne = require('./dr-create-one');

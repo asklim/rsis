@@ -52,6 +52,7 @@ module.exports = async function updateOne (reportId, body) {
     catch (err) {
         return ({
             statusCode: HTTP.INTERNAL_SERVER_ERROR,
+            // @ts-ignore
             logMessage: err.message,
             response: err
         });
