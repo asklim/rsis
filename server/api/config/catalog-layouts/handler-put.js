@@ -22,31 +22,29 @@ const log = consoleLogger('[catalogLayouts:api]');
  * @fires 201 Created     & message
  * @fires 400 Bad Request & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * PUT /api/config/catalog-layouts
- */
+*/
+module.exports = async function hapi_config_catalogLayouts_PUT (
+    req,
+    res
+) {
+    const client = req?.body?.client;
+    const list = req?.body?.list;
 
-module.exports = async function catalogLayoutsHandler_PUT (req, res) {
-
-    let client, list;
-
-    if( req.body ) {
-        client = req.body.client;
-        list = req.body.list;
-    }
     log.info(`try update last config/catalog-layouts: client=${client}, list=${list}`);
 
 
-    if( !req.body
+    if( !req?.body
         || !Object.keys( req.body ).length ) {
-        let result = {
+        const result = {
             statusCode: HTTP.BAD_REQUEST,
             logMessage: 'calalog-layouts.handler-put: req.body is empty.',
             response: 'Bad request, req.body is empty.'
         };
         log.warn( result.logMessage );
-        return send400BadRequest( res, result.response );
+        send400BadRequest( res, result.response );
+        return;
     }
 
 
@@ -85,7 +83,8 @@ module.exports = async function catalogLayoutsHandler_PUT (req, res) {
     }
     catch (err) {
         log.error( err );
-        return send500ServerError( res, err );
+        // @ts-ignore
+        send500ServerError( res, err );
     }
 
 };

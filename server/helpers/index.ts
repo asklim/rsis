@@ -1,9 +1,4 @@
 
-// const {
-//     StatusCode: httpResponseCodes,
-//     ExpressResponses,
-
-// @ts-ignore
 import * as asklim from 'asklim';
 const { http, Logger } = asklim;
 
@@ -16,10 +11,10 @@ const {
     send404NotFound,
     send409Conflict,
     send500ServerError,
+    callbackError400,
+    callbackError405,
 } = http;
-//const serverConfig = require('../server-config');
 
-// const httpResponses = require('./http-responses.js');
 import consoleLogger from './logger.js';
 import getProcessEnvWithout from './get-process-env-without.js';
 import { makeResult,
@@ -42,6 +37,8 @@ export {
     send404NotFound,
     send409Conflict,
     send500ServerError,
+    callbackError400,
+    callbackError405,
     icwd,
     getProcessEnvWithout,
     consoleLogger, // переопределяет из 'asklim'

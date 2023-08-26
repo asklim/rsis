@@ -114,7 +114,6 @@ module.exports = async function hGET_health (
 
 
 
-
 /**
  * @param mongodb - Mongoose.Connection to db
  * @returns count documents in db for all collections
@@ -130,24 +129,4 @@ async function totalDocumentsInDB (mongodb) {
         total += count;
     }
     return total;
-
-    /*
-        reduce не обрабатывает Promise !!!
-        Возвращает: "[object Promise]116", вместо "133" для
-        dbinfo: 192.168.0.240:27017/rsiscfg: [
-            [ 'Agent', 17 ],
-            [ 'User', 0 ],
-            [ 'ProductsCatalogs', 0 ],
-            [ 'CatalogLayouts', 116 ]
-        ]
-    */
-    /*
-    return mongodb.modelNames().reduce(
-        async (accum, name) => {
-            let theModel = mongodb.model( name );
-            let count = await theModel.estimatedDocumentCount();
-            return accum + count;
-        },
-        0
-    );*/
 }

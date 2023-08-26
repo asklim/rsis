@@ -39,29 +39,34 @@ app.getStateHandler = function getStateHandler(
 
         [HTTP.OK]: (result) => {
             logger.info( result.logMessage );
-            return send200Ok( res, result.response );
+            send200Ok( res, result.response );
+            return;
         },
 
         [HTTP.CREATED]: (result) => {
             logger.info( result.logMessage );
-            return send201Created( res, result.response );
+            send201Created( res, result.response );
+            return;
         },
 
         [HTTP.NO_CONTENT]: (result) => {
             logger.info( result.logMessage );
             //debug('[h-DELETE]:', result.response );
             //TODO: Client не получает тело json-ответа
-            return send204NoContent( res, result.response );
+            send204NoContent( res, result.response );
+            return;
         },
 
         [HTTP.BAD_REQUEST]: (result) => {
             logger.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
+            send400BadRequest( res, result.response );
+            return;
         },
 
         [HTTP.NOT_FOUND]: (result) => {
             logger.warn( result.logMessage );
-            return send404NotFound( res, result.response );
+            send404NotFound( res, result.response );
+            return;
         },
 
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
@@ -76,7 +81,8 @@ app.getStateHandler = function getStateHandler(
             // debug('err.toString():', err.toString() );
             const len = response?.stack?.split('\n').length;
             logger.debug(`err.stack (${len}):`, response?.stack );
-            return send500ServerError( res, response );
+            send500ServerError( res, response );
+            return;
         }
     };
 

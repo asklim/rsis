@@ -19,7 +19,6 @@ const CatalogLayouts = require(`../../../applogic/catalog-layouts`);
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage var.1 |
  * GET /api/config/catalog-layouts/:catalogId
  * @usage var.2 |
@@ -33,9 +32,10 @@ const CatalogLayouts = require(`../../../applogic/catalog-layouts`);
  * type=typeId &
  * date=isoDate
  **/
-module.exports = async function catalogLayoutHandler_GET (req, res) {
-
-
+module.exports = async function catalogLayoutHandler_GET (
+    req,
+    res
+) {
     log.info(
         'try read config/catalog-layout document',
         '\nreq.params:', req.params, 'req.query:', req.query
@@ -45,22 +45,26 @@ module.exports = async function catalogLayoutHandler_GET (req, res) {
 
         [HTTP.OK]: (result) => {
             log.info( result.logMessage );
-            return send200Ok( res, result.response );
+            send200Ok( res, result.response );
+            return;
         },
 
         [HTTP.BAD_REQUEST]: (result) => {
             log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
+            send400BadRequest( res, result.response );
+            return;
         },
 
         [HTTP.NOT_FOUND]: (result) => {
             log.warn( result.logMessage );
-            return send404NotFound( res, result.response );
+            send404NotFound( res, result.response );
+            return;
         },
 
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
             log.error( result.logMessage );
-            return send500ServerError( res, result.response );
+            send500ServerError( res, result.response );
+            return;
         }
     };
 
@@ -81,6 +85,7 @@ module.exports = async function catalogLayoutHandler_GET (req, res) {
     }
     catch (err) {
         log.error( err );
-        return send500ServerError( res, err );
+        // @ts-ignore
+        send500ServerError( res, err );
     }
 };

@@ -20,14 +20,15 @@ const {
  * @fires 200 Ok     & message
  * @fires 400 Bad Request & message
  * @fires 500 Server Error & error object
- * @returns {} undefined
  * @usage
  * POST /api/config/catalog-layouts/:catalogId/:action
  * @usage
  * POST /api/config/catalog-layouts/< uuid >/sendEmail
  */
-module.exports = async function (req, res) {
-
+module.exports = async function (
+    req,
+    res
+) {
     debug('req.params:', req.params );
 
     const { catalogId, action } = req.params;

@@ -28,10 +28,10 @@ const log = consoleLogger('[catalogLayouts:api]');
  * DELETE /api/config/catalog-layouts/f2ab5c11-a252-4f65-b278-adb3afe12bcd
  * DELETE /api/config/catalog-layouts/last?client=excel&list=coffeeTea
  **/
-
-module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
-
-
+module.exports = async function catalogLayoutsHandler_DELETE (
+    req,
+    res
+) {
     console.log(
         'I: try delete config/catalog-layout document',
         '\nI: catalog-layout`s delete params:', req.params,
@@ -41,13 +41,14 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
     const { catalogId } = req.params;
 
     if( !catalogId ) {
-        let result = {
+        const result = {
             statusCode: HTTP.BAD_REQUEST,
             logMessage: 'calalog-layouts.delete: No <catalogId>.',
             response: 'Bad request, No <catalogId>.'
         };
         log.warn( result.logMessage );
-        return send400BadRequest( res, result.response );
+        send400BadRequest( res, result.response );
+        return;
     }
 
 
@@ -57,22 +58,26 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
             log.info( result.logMessage );
             //debug('[h-DELETE]:', result.response );
             //TODO: Client не получает тело json-ответа
-            return send204NoContent( res, result.response );
+            send204NoContent( res, result.response );
+            return;
         },
 
         [HTTP.BAD_REQUEST]: (result) => {
             log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
+            send400BadRequest( res, result.response );
+            return;
         },
 
         [HTTP.NOT_FOUND]: (result) => {
             log.warn( result.logMessage );
-            return send404NotFound( res, result.response );
+            send404NotFound( res, result.response );
+            return;
         },
 
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
             log.error( result.logMessage );
-            return send500ServerError( res, result.response );
+            send500ServerError( res, result.response );
+            return;
         }
     };
 
@@ -91,6 +96,8 @@ module.exports = async function catalogLayoutsHandler_DELETE (req, res) {
     }
     catch (err) {
         log.error( err );
-        return send500ServerError( res, err );
+        // @ts-ignore
+        send500ServerError( res, err );
+        return;
     }
 };
