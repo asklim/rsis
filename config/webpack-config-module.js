@@ -1,6 +1,6 @@
 
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
-const postcssNormalize = require('postcss-normalize');
+// const postcssNormalize = require('postcss-normalize');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
@@ -49,7 +49,7 @@ const getStyleLoaders = ( cssOptions, buildOptions, preProcessor ) => {
                         // Adds PostCSS Normalize as the reset css with default options,
                         // so that it honors browserslist config in package.json
                         // which in turn let's users customize the target behavior as per their needs.
-                        postcssNormalize(),
+                        // postcssNormalize(),
                     ]
                 },
             },

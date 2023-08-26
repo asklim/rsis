@@ -109,7 +109,7 @@ function getModules() {
         );
     }
 
-    let config;
+    let config = {};
 
     // If there's a tsconfig.json we assume it's a
     // TypeScript project and set up the config
@@ -121,13 +121,13 @@ function getModules() {
         config = ts.readConfigFile(paths.appTsConfig, ts.sys.readFile).config;
         // Otherwise we'll check if there is jsconfig.json
         // for non TS projects.
-    } 
+    }
     else if (hasJsConfig) {
         config = require(paths.appJsConfig);
     }
 
-    config = config || {};
-    const options = config.compilerOptions || {};
+    // config = config ?? {};
+    const options = config?.compilerOptions ?? {};
 
     const additionalModulePaths = getAdditionalModulePaths(options);
 
