@@ -3,9 +3,9 @@ const debug = require('debug')('reports:daily:');
 const {
     consoleLogger,
     StatusCodes: HTTP,
-    send204NoContent,
+    // send204NoContent,
+    // send404NotFound,
     send400BadRequest,
-    send404NotFound,
     send500ServerError,
 } = require('../../../helpers');
 
@@ -51,42 +51,42 @@ module.exports = async function hapi_reports_daily_DELETE (
     }
 
 
-    const STATE_HANDLERS = {
+    // const STATE_HANDLERS = {
 
-        [HTTP.NO_CONTENT]: (result) => {
-            log.info( result.logMessage );
-            debug('[h-DELETE] result.response', result.response );
+    //     [HTTP.NO_CONTENT]: (result) => {
+    //         log.info( result.logMessage );
+    //         debug('[h-DELETE] result.response', result.response );
 
-            //TODO: Client не получает тело json-ответа
-            return send204NoContent( res, result.response );
-        },
+    //         //TODO: Client не получает тело json-ответа
+    //         return send204NoContent( res, result.response );
+    //     },
 
-        [HTTP.BAD_REQUEST]: (result) => {
-            log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
-        },
+    //     [HTTP.BAD_REQUEST]: (result) => {
+    //         log.warn( result.logMessage );
+    //         return send400BadRequest( res, result.response );
+    //     },
 
-        [HTTP.NOT_FOUND]: (result) => {
-            log.warn( result.logMessage );
-            return send404NotFound( res, result.response );
-        },
+    //     [HTTP.NOT_FOUND]: (result) => {
+    //         log.warn( result.logMessage );
+    //         return send404NotFound( res, result.response );
+    //     },
 
-        [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
-            log.error( result.logMessage );
-            return send500ServerError( res, result.response );
-        }
-    };
+    //     [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
+    //         log.error( result.logMessage );
+    //         return send500ServerError( res, result.response );
+    //     }
+    // };
 
     try {
         const deleteResult = await DailyReports.deleteById( reportId );
+        const handle = req.app.getStateHandler( res, log );
+        handle( deleteResult );
 
-        const { statusCode } = deleteResult;
-
-        if( statusCode in STATE_HANDLERS ) {
-            STATE_HANDLERS[ statusCode ]( deleteResult );
-        }
-
-        throw new Error(`Handler of ${statusCode} not implemented.`);
+        // const { statusCode } = deleteResult;
+        // if( statusCode in STATE_HANDLERS ) {
+        //     STATE_HANDLERS[ statusCode ]( deleteResult );
+        // }
+        // throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );

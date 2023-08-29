@@ -2,10 +2,10 @@
 const debug = require('debug')('reports:daily:');
 const {
     //icwd,
-    consoleLogger,
+    Logger,
     StatusCodes: HTTP,
-    send200Ok,
-    send201Created,
+    // send200Ok,
+    // send201Created,
     send400BadRequest,
     //send409Conflict,
     send500ServerError,
@@ -13,7 +13,7 @@ const {
 
 const DailyReports = require(`../../../applogic/daily-reports`);
 
-const log = consoleLogger('api-reports:daily:');
+const log = new Logger('api-reports:daily:');
 
 
 /**
@@ -35,9 +35,9 @@ module.exports = async function hapi_reports_daily_PUT (
     log.info(`try update daily-reports: filial=${filial}, onDate=${onDate}`);
 
 
-    if( !req.body
-        || !Object.keys( req.body ).length ) {
-        let result = {
+    if( !req.body ||
+        !Object.keys( req.body ).length ) {
+        const result = {
             statusCode: HTTP.BAD_REQUEST,
             logMessage: 'daily-report.PUT: req.body is empty.',
             response: 'Bad request, req.body is empty.'
@@ -48,45 +48,48 @@ module.exports = async function hapi_reports_daily_PUT (
     }
 
 
-    const STATE_HANDLERS = {
+    // const STATE_HANDLERS = {
 
-        // @ts-ignore
-        [HTTP.OK]: (result) => {
-            log.info( result.logMessage );
-            return send200Ok( res, result.response );
-        },
+    //     // @ts-ignore
+    //     [HTTP.OK]: (result) => {
+    //         log.info( result.logMessage );
+    //         return send200Ok( res, result.response );
+    //     },
 
-        // @ts-ignore
-        [HTTP.CREATED]: (result) => {
-            log.info( result.logMessage );
-            return send201Created( res, result.response );
-        },
+    //     // @ts-ignore
+    //     [HTTP.CREATED]: (result) => {
+    //         log.info( result.logMessage );
+    //         return send201Created( res, result.response );
+    //     },
 
-        // @ts-ignore
-        [HTTP.BAD_REQUEST]: (result) => {
-            log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
-        },
+    //     // @ts-ignore
+    //     [HTTP.BAD_REQUEST]: (result) => {
+    //         log.warn( result.logMessage );
+    //         return send400BadRequest( res, result.response );
+    //     },
 
-        // @ts-ignore
-        [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
-            log.error( result.logMessage );
-            debug('[h-PUT] result.response', result.response ); //
+    //     // @ts-ignore
+    //     [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
+    //         log.error( result.logMessage );
+    //         debug('[h-PUT] result.response', result.response ); //
 
-            return send500ServerError( res, result.logMessage /*.response*/ );
-            // Когда .logMessage - На клиенте более информативное сообщение
-        }
-    };
+    //         return send500ServerError( res, result.logMessage /*.response*/ );
+    //         // Когда .logMessage - На клиенте более информативное сообщение
+    //     }
+    // };
 
     try {
         const updateResult = await DailyReports.updateOrCreate( req.body );
-        const { statusCode } = updateResult;
 
-        if( statusCode in STATE_HANDLERS ) {
-            STATE_HANDLERS[ statusCode ]( updateResult );
-        }
+        // const { statusCode } = updateResult;
+        // if( statusCode in STATE_HANDLERS ) {
+        //     STATE_HANDLERS[ statusCode ]( updateResult );
+        // }
 
-        throw new Error(`Handler of ${statusCode} not implemented.`);
+        const handle = req.app.getStateHandler( res, log );
+        handle( updateResult );
+
+        // throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );

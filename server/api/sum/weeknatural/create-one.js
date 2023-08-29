@@ -51,14 +51,15 @@ const createOne = async (req, res)  => {
 
             if( err ) {
                 log.error( err );
-                resolve( send500ServerError( res, err ));
+                send500ServerError( res, err );
+                resolve( HTTP.SERVICE_UNAVAILABLE );
                 return;
             }
 
             if( docs?.length ) {
-                resolve( send409Conflict( res,
+                send409Conflict( res,
                     `Summary data for week ${id} already exists.`
-                ));
+                );
                 resolve( HTTP.CONFLICT );
                 return;
             }
@@ -68,7 +69,8 @@ const createOne = async (req, res)  => {
 
                 if( err ) {
                     log.error('weekNatural.create err: ', err );
-                    resolve( send500ServerError( res, err ));
+                    send500ServerError( res, err );
+                    resolve( HTTP.SERVICE_UNAVAILABLE );
                     return;
                 }
 

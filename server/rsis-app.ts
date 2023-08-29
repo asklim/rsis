@@ -1,43 +1,54 @@
-const debug = require('debug')('rsis:app');
+import {
+    default as createError,
+    HttpError
+} from 'http-errors';
+import path from 'node:path';
 
-const log = require('./helpers/').consoleLogger('[rsis:app]');
+import express, {
+    Request,
+    Response
+}  from 'express';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import morgan from 'morgan';
 
+import passport from 'passport';
 //const uuid = require('uuid');
 //const createError = require('http-errors');
 //const favicon = require('serve-favicon');
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
-const paths = require('../config/paths');
-const passport = require('passport');
 //const LocalStrategy = require('passport-local').Strategy;
 
-const herokuPinger = require('./heroku-no-sleep/');
+import paths from '../config/paths';
+import {
+    debugFactory,
+    env,
+    // icwd,
+    Logger,
+} from './helpers/';
 
-const { API_SERVER_LOCAL } = require(`./rsis.config.js`);
+import herokuPinger from './heroku-no-sleep/';
+import { API_SERVER_LOCAL } from './rsis.config';
+
+import { default as app } from './rsis-express';
+
+import apiRouter from './api-router';
+
+const d = debugFactory('rsis:app');
+const log = new Logger('[rsis:app]');
 
 const {
-    NODE_ENV,
+    // NODE_ENV,
+    isProduction,
     DEV_MODE,
-    API_SERVER: API_WWW_SERVER
-} = process.env;
+    API_SERVER: API_WWW_SERVER  //'https://rsis-webapp.herokuapp.com'
+} = env;
 
-const isProduction = NODE_ENV === 'production';
 const isHMR = DEV_MODE === 'HotModuleReplacement';
 
+d('getStartTime:', app.getStartTime() );
 
-const app = require('./rsis-express');
-// @ts-ignore
-debug('getStartTime:', app.getStartTime() );
 
-const apiRouter = require('./api-router');
-
-app.set('apiServer', NODE_ENV === 'production' ?
-    API_WWW_SERVER  //'https://rsis-webapp.herokuapp.com'
-    : API_SERVER_LOCAL
-);
+app.set('apiServer', isProduction ? API_WWW_SERVER : API_SERVER_LOCAL );
 // view engine setup
 app.set('views', './views');
 app.set('view engine', 'ejs');
@@ -57,12 +68,12 @@ app.use( express.json({ limit: "5mb" }));
 
 app.use('/api', apiRouter );
 
-app.use((req, _res, next) => {
-    // const html = path.resolve( __dirname, `../${paths.distFolderName}/index.html`);
-    // debug(`request url: ${req.url}`);
-    // debug(`'index.html' is ${html}`);
-    next();
-});
+// app.use((req, _res, next) => {
+//     const html = path.resolve( icwd, `${paths.distFolderName}/index.html`);
+//     d(`request url: ${req.url}`);
+//     d(`'index.html' is ${html}`);
+//     next();
+// });
 
 app.use( express.urlencoded({ extended: true, limit: "5mb" }));
 app.use( cookieParser() );
@@ -71,38 +82,42 @@ app.use( passport.initialize() );
 //app.use( passport.session() );
 
 // log.debug(`build path: ${paths.appBuild}`); // full path
-app.use( express.static( paths.distFolderName /*'static'*/ ));
+app.use( express.static( paths.distFolderName /*'dist'*/ ));
 
 app.use( cors() );
 //app.options('*', cors() );
 
+
 if( !isProduction && isHMR ) {
+    // (async () => {
+    //     const useDevHotMW = (await import('../config/use-devhmr-middleware.mjs')).default;
+    //     useDevHotMW( app, log );
+    // })();
+    //     const webpack = (await import('webpack')).default;
+    //     const devHMRConfig = (await import('../config/webpack.devhmr')).default;
+    //     const webpackDevMW = (await import('webpack-dev-middleware')).default;
+    //     const webpackHotMW = (await import('webpack-hot-middleware')).default;
+    //     const compiler = webpack( devHMRConfig );
 
-    const webpack = require('webpack');
-    const webpackConfig = require('../config/webpack.devhmr.js');
-    const webpackDevMiddleware = require('webpack-dev-middleware');
-
-    // @ts-ignore
-    const compiler = webpack( webpackConfig );
-
-    const wdmOption = {
-        publicPath: webpackConfig.output.publicPath,
-    };
-    log.debug('webpack-dev-middleware (wdm) config: ', wdmOption );
-    app.use( webpackDevMiddleware( compiler, wdmOption ));
-    app.use( require('webpack-hot-middleware')( compiler, {
-        path: '/__webpack_hmr',
-        heartbeat: 10 * 1000,
-    }));
+    //     const wdmOption = {
+    //         publicPath: devHMRConfig.output.publicPath,
+    //     };
+    //     log.debug('webpack-dev-middleware (wdm) config: ', wdmOption );
+    //     express.use( webpackDevMW( compiler, wdmOption ));
+    //     express.use( webpackHotMW( compiler, {
+    //         path: '/__webpack_hmr',
+    //         heartbeat: 10 * 1000,
+    //     }));
 }
 
+app.get('*', (
+    req: Request,
+    res: Response,
+    next: any
+) => {
+    const INDEX_HTML_PFN = path.resolve( __dirname, `../index.html`);
 
-// eslint-disable-next-line no-unused-vars
-app.get('*', (req, res, next) => {
-
-    const INDEX_HTML_PFN = path.resolve( __dirname, `../static/index.html`);
-
-    debug(`request url: ${req.url}`);
+    d(`request url: ${req.url}`);
     log.info(`server __dirname is ${__dirname}`);
     log.info(`sending 'index.html' from ${INDEX_HTML_PFN}`);
 
@@ -123,20 +138,23 @@ app.get('*', (req, res, next) => {
     );
 });
 
-/*
-app.use( (req, res, next) => {
-    // catch 404 and forward to error handler
-    console.log('create Error 404.');
+// catch 404 and forward to error handler
+app.use( function(
+    req: Request,
+    res: Response,
+    next: any
+) {
     next( createError( 404 ), req, res );
 });
-*/
 
 /**
  *  LAST ERROR HANDLER in ExpressApp
  * */
 app.use((
-    // eslint-disable-next-line no-unused-vars
-    err, req, res, _next
+    err: HttpError,
+    req: Request,
+    res: Response,
+    _next: unknown
     // must be 4 args
 ) => {
     log.debug(`request url: ${req.url}`);
@@ -160,14 +178,11 @@ app.use((
     //res.render('error');
 });
 
-debug('app locals', app.locals );
+d('app locals', app.locals );
 
 const EVERY_30_MINUTE = 30;
 /** Закрытие pinger будет после закрытия server  */
 herokuPinger( app, EVERY_30_MINUTE );
 
 
-module.exports = {
-    app,
-    //databasesShutdown,
-};
+export default app ;

@@ -14,7 +14,7 @@ if( !checkRequiredFiles([ paths.appHtml, paths.appIndexJs ]) ) {
     process.exit(1);
 }
 
-const path = require('path');
+const path = require('node:path');
 //const bfj = require('bfj');
 
 /** Process CLI arguments
@@ -38,8 +38,8 @@ const ENV_MODE = isEnvDevelopment ? 'development' : 'production';
 
 // Generate configuration
 const webpackConfiguration = isEnvDevelopment
-    ? require('../config/webpack.dev')
-    : require('../config/webpack.prod')
+    ? require('../bundler/webpack.dev')
+    : require('../bundler/webpack.prod')
 ;
 console.log('entry: ', webpackConfiguration.entry );
 //console.log('devServer: ', webpackConfiguration.devServer );

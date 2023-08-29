@@ -18,8 +18,6 @@ const { sendToWebApp } = require('../../../helpers/send-to-webapp');
 
 
 /**
- * @name rout-weeknatural
- * @description
  * api for 1 week summary: /api/sum/weeknatural/<weekId>.
  * @property {Router} router - Express router
 **/

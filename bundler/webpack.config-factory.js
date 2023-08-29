@@ -1,14 +1,14 @@
-const rootDir = require('fs').realpathSync( process.cwd() );
+const rootDir = require('node:fs').realpathSync( process.cwd() );
 const appVersion = require(`${rootDir}/package.json`).version;
 
-const path = require('path');
+const path = require('node:path');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
-const getClientEnvironment = require('./env');
-const paths = require('./paths');
-const modules = require('./modules');
+const getClientEnvironment = require('../config/env');
+const paths = require('../config/paths');
+const modules = require('../config/modules');
 
 
 // Source maps are resource heavy
@@ -85,7 +85,9 @@ module.exports = function( webpackEnv ) {
             // Finally, this is your app's code:
             paths.appIndexJs,
         ],
-        mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
+        mode: isEnvProduction ? 'production'
+            : isEnvDevelopment ? 'development'
+                : undefined,
         module: require('./webpack-config-module.js')( buildOptions ),
         // Some libraries import Node modules but don't use them in the browser.
         // Tell Webpack to provide empty mocks for them so importing them works.

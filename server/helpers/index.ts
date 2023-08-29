@@ -1,6 +1,14 @@
 
-import * as asklim from 'asklim';
-const { http, Logger } = asklim;
+import {
+    realpathSync,
+    readFileSync,
+} from 'node:fs';
+
+import {
+    http,
+    IConsoleLogger,
+    Logger,
+} from 'asklim';
 
 const {
     send200Ok,
@@ -23,13 +31,19 @@ import { makeResult,
 import { shrinkServerRes } from './debug-utils.js';
 import StatusCodes from './status-codes-enum.js';
 
-const icwd = require('fs').realpathSync( process.cwd() );
+const icwd = realpathSync( process.cwd() );
+const packageJson = JSON.parse( readFileSync(`${icwd}/package.json`, 'utf-8'));
+const { version } = packageJson;
+
 
 //NO [Circular] ... require('./herokuapp'), // ONLY direct from file
 //NO [Circular] ... require('./send-to-webapp'), // ONLY direct from file
 
+export { default as env } from './env';
+export { default as debugFactory } from 'debug';
 export {
     Logger,
+    IConsoleLogger,
     StatusCodes,
     send200Ok,
     send201Created,
@@ -42,6 +56,7 @@ export {
     callbackError400,
     callbackError405,
     icwd,
+    version,
     getProcessEnvWithout,
     consoleLogger, // переопределяет из 'asklim'
     makeResult,

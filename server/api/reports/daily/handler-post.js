@@ -1,16 +1,16 @@
 const debug = require('debug')('reports:daily:');
 const {
-    consoleLogger,
+    Logger,
     StatusCodes: HTTP,
-    send201Created,
+    // send201Created,
+    // send409Conflict,
     send400BadRequest,
-    send409Conflict,
     send500ServerError,
 } = require('../../../helpers');
 
 const DailyReports = require(`../../../applogic/daily-reports`);
 
-const log = consoleLogger('api-reports:daily:');
+const log = new Logger('api-reports:daily:');
 
 
 /**
@@ -34,7 +34,7 @@ module.exports = async function hapi_reports_daily_POST (
 
     if( !req.body
         || !Object.keys( req.body ).length ) {
-        let result = {
+        const result = {
             statusCode: HTTP.BAD_REQUEST,
             logMessage: 'daily-report.POST: req.body is empty.',
             response: 'Bad request, req.body is empty.'
@@ -44,39 +44,40 @@ module.exports = async function hapi_reports_daily_POST (
         return;
     }
 
-    const STATE_HANDLERS = {
+    // const STATE_HANDLERS = {
 
-        [HTTP.CREATED]: (result) => {
-            log.info( result.logMessage );
-            return send201Created( res, result.response );
-        },
+    //     [HTTP.CREATED]: (result) => {
+    //         log.info( result.logMessage );
+    //         return send201Created( res, result.response );
+    //     },
 
-        [HTTP.BAD_REQUEST]: (result) => {
-            log.warn( result.logMessage );
-            return send400BadRequest( res, result.response );
-        },
+    //     [HTTP.BAD_REQUEST]: (result) => {
+    //         log.warn( result.logMessage );
+    //         return send400BadRequest( res, result.response );
+    //     },
 
-        [HTTP.CONFLICT]: (result) => {
-            log.warn( result.logMessage );
-            return send409Conflict( res, result.response );
-        },
+    //     [HTTP.CONFLICT]: (result) => {
+    //         log.warn( result.logMessage );
+    //         return send409Conflict( res, result.response );
+    //     },
 
-        [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
-            log.error( result.logMessage );
-            return send500ServerError( res, result.response );
-        }
-    };
+    //     [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
+    //         log.error( result.logMessage );
+    //         return send500ServerError( res, result.response );
+    //     }
+    // };
 
 
     try {
         const createResult = await DailyReports.createOne( req.body );
-        const { statusCode } = createResult;
+        const handle = req.app.getStateHandler( res, log );
+        handle( createResult );
 
-        if( statusCode in STATE_HANDLERS ) {
-            STATE_HANDLERS[ statusCode ]( createResult );
-        }
-
-        throw new Error(`Handler of ${statusCode} not implemented.`);
+        // const { statusCode } = createResult;
+        // if( statusCode in STATE_HANDLERS ) {
+        //     STATE_HANDLERS[ statusCode ]( createResult );
+        // }
+        // throw new Error(`Handler of ${statusCode} not implemented.`);
     }
     catch (err) {
         log.error( err );

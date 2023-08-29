@@ -3,7 +3,7 @@
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
 
-const paths = require('./paths');
+const paths = require('../config/paths');
 const webpack = require('webpack');
 
 const configFactory = require('./webpack.config-factory.js');
