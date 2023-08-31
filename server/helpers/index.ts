@@ -4,6 +4,8 @@ import {
     readFileSync,
 } from 'node:fs';
 
+import express from 'express';
+
 import {
     http,
     IConsoleLogger,
@@ -42,6 +44,7 @@ const { version } = packageJson;
 export { default as env } from './env';
 export { default as debugFactory } from 'debug';
 export {
+    express,
     Logger,
     IConsoleLogger,
     StatusCodes,

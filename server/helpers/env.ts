@@ -15,7 +15,9 @@ export default cleanEnv( process.env,
     {
         NODE_ENV: str({default: 'undefined'}),
         PORT: port({ default: 3067 }),
-        DEV_MODE: str({}),
+        DEV_MODE: str({
+            choices: ['NOT_HMR','HotModuleReplacement'],
+            default: 'NOT_HMR' }),
         MONGO_TESTDB_URI: str({
             devDefault: defaultToken
         }),

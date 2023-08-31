@@ -117,7 +117,7 @@ app.get('*', (
 ) => {
     const INDEX_HTML_PFN = path.resolve( __dirname, `../index.html`);
 
-    d(`request url: ${req.url}`);
+    d(`[app.get.*] request url: ${req.url}`);
     log.info(`server __dirname is ${__dirname}`);
     log.info(`sending 'index.html' from ${INDEX_HTML_PFN}`);
 
@@ -130,9 +130,6 @@ app.get('*', (
                 // Нужно ли передавать 'err' дальше?
                 // Нужно ли генерировать ошибку 404?
                 next( err );
-            }
-            else {
-                next();
             }
         }
     );
@@ -157,7 +154,7 @@ app.use((
     _next: unknown
     // must be 4 args
 ) => {
-    log.debug(`request url: ${req.url}`);
+    log.debug(`[GEH] request url: ${req.url}`);
 
     let runMode = req.app.get('env');
     const isDev = runMode === 'development';
@@ -185,4 +182,4 @@ const EVERY_30_MINUTE = 30;
 herokuPinger( app, EVERY_30_MINUTE );
 
 
-export default app ;
+export default app;

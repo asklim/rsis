@@ -25,7 +25,7 @@ const mongoURI = {
 const API_SERVER_LOCAL = "http://192.168.0.240:3067";
 
 
-module.exports = {
+export {
     dbName,
     mongoURI,
     API_SERVER_LOCAL,

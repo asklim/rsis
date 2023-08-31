@@ -1,15 +1,11 @@
 
 /** @ typedef { import ("../@types/server/rsis-express").RsisExpress} RsisExpress */
-import express, {
-    Express,
-    // Request,
-    Response
-}  from 'express';
+// import express from 'express';
 
 import {
     debugFactory,
     env,
-    IConsoleLogger,
+    express,
     Logger,
     StatusCodes as HTTP,
     send200Ok,
@@ -21,19 +17,12 @@ import {
     send500ServerError,
 } from './helpers/';
 
-import { HandlerFn } from './types';
+import type { RsisExpress } from './types';
 
 const d = debugFactory('rsis:express');
 const defaultLogger = new Logger('[rsis:express]');
 
-export interface RsisExpress extends Express {
-    getMyDB (): any;
-    logger: IConsoleLogger;
-    startTimestamp: number | undefined;
-    getStartTime: () => number | undefined;
-    // eslint-disable-next-line no-unused-vars
-    getStateHandler: (r: Response, l?: IConsoleLogger) => HandlerFn;
-}
+
 
 
 const app = express() as RsisExpress;
@@ -96,7 +85,8 @@ app.getStateHandler = function getStateHandler(
 
         [HTTP.CONFLICT]: (result) => {
             logger.warn( result.logMessage );
-            return send409Conflict( res, result.response );
+            send409Conflict( res, result.response );
+            return;
         },
 
         [HTTP.INTERNAL_SERVER_ERROR]: (result) => {
