@@ -1,14 +1,18 @@
-//const debug = require('debug')('api:health:');
-const {
+
+import {
     send200Ok,
     send400BadRequest,
     send500ServerError,
-    consoleLogger,
-} = require('../../helpers');
-const log = consoleLogger('[api:health]');
+    Logger,
+} from '../../helpers';
 
-const cfgdb = require('../../databases').getDB('config');
-const sumdb = require(`../../databases`).getDB('sum');
+import { getDB } from '../../databases/';
+
+//const d = debugFactory('api:health:');
+const log = new Logger('[api:health]');
+
+const cfgdb = getDB('config');
+const sumdb = getDB('sum');
 
 
 /**
@@ -27,7 +31,7 @@ const sumdb = require(`../../databases`).getDB('sum');
  * @fires 200 {message : 'nn'} - count of docs.
  * @fires 500 {message : '-1'} - no Mongo
  **/
-module.exports = async function hGET_health (
+export default async function hapi_health_GET (
     req,
     res
 ) {
@@ -110,7 +114,7 @@ module.exports = async function hGET_health (
         }
     }
     send400BadRequest( res, `parameter '${pingId}' is invalid.`);
-};
+}
 
 
 

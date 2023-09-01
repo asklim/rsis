@@ -19,15 +19,16 @@ const router = express.Router();
     (await import('./api/sum/weeknatural/router')).default( rtr );
     (await import('./api/sum/financereport/router')).default( rtr );
     (await import('./api/dataset/router.cjs')).default( rtr );
-})( router );
 
-// eslint-disable-next-line no-unused-vars
-router.use( (req, res, _next) => {
-    log.warn(`${__filename} - unhandled route: ${req.url}`);
-    //log.warn(_req);
-    res.status( 400 );
-    const tstamp = (new Date).toUTCString();
-    res.json( { message: `Bad request at api-router (${tstamp}).`});
-});
+    // eslint-disable-next-line no-unused-vars
+    rtr.use( (req, res, _next) => {
+        log.warn(`${__filename} - unhandled route: ${req.url}`);
+        //log.warn(_req);
+        res.status( 400 );
+        const tstamp = (new Date).toUTCString();
+        res.json( { message: `Bad request at api-router (${tstamp}).`});
+    });
+
+})( router );
 
 export default router;

@@ -1,6 +1,6 @@
 
-const handlerGET = require('./handler-get');
-const { callbackError405 } = require('../../helpers');
+import handlerGET from './handler-get';
+import { callbackError405 } from '../../helpers';
 // Метод запроса не разрешен к использованию для данного URL
 
 
@@ -12,7 +12,7 @@ const { callbackError405 } = require('../../helpers');
  * @usage GET /api/health/mongosum
  */
 
-module.exports = function ( router ) {
+export default function routerApiHealth ( router ) {
 
     const route = '/health';
     const routeWithId = `${route}/:pingId`;
