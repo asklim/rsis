@@ -11,8 +11,7 @@ import { callbackError405 } from '../../helpers';
  * @usage GET /api/health/mongocfg
  * @usage GET /api/health/mongosum
  */
-
-export default function routerApiHealth ( router ) {
+export default function routerApiHealth (router) {
 
     const route = '/health';
     const routeWithId = `${route}/:pingId`;

@@ -18,7 +18,7 @@ const router = express.Router();
     (await import('./api/sum/procurement/router')).default( rtr );
     (await import('./api/sum/weeknatural/router')).default( rtr );
     (await import('./api/sum/financereport/router')).default( rtr );
-    (await import('./api/dataset/router.cjs')).default( rtr );
+    (await import('./api/dataset/router')).default( rtr );
 
     // eslint-disable-next-line no-unused-vars
     rtr.use( (req, res, _next) => {

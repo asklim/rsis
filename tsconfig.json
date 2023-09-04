@@ -2,10 +2,9 @@
     "include": [
         "./server/**/*",
         "./config/**/*",
+        "./src/config/**/*",
         "spec/__test__/*",
-        "**/__test__/*"
-        //"./@types",
-        // "./src/**/*"
+        "**/__test__/*",
     ],
     "exclude": [
       "./bundler/**/*",

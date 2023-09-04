@@ -1,10 +1,10 @@
 
-const procurement = require('./get-procurement.cjs');
+import procurement from './procurement-handler-get';
 
 /**
- * @usage /api/dataset/:providerId/:datasetId
+ * @usage GET /api/dataset/:providerId/:datasetId
  */
-module.exports = function (router) {
+export default function routerApiDataset (router) {
 
     const route = '/dataset';
 
@@ -15,4 +15,3 @@ module.exports = function (router) {
         router.get( item[0], item[1] );
     });
 };
-
