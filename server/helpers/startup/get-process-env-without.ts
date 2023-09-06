@@ -1,13 +1,10 @@
 import { env as ENV } from 'node:process';
 import { securifyToken } from '../securitize';
 
+// type PlainJSObject = { [key: string]: any };
+type PlainJSObject = Record<string, any>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type PlainJSObject = { [key: string]: any };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PlainJSObjectEntry = [string, any];
-// type PJSO = PlainJSObject;
-// type PJSOEntry = PlainJSObjectEntry;
 
 const defaultSecretKeys = [
     'JWT_SECRET',
@@ -40,7 +37,7 @@ export default async function getProcessEnvWithout(
 }
 
 
-export function transformPJSO (
+function transformPJSO (
     obj: PlainJSObject,
     excludes: string,
     isSorted: boolean,
@@ -49,12 +46,14 @@ export function transformPJSO (
 : PlainJSObject
 {
     const excludesArray = excludes.split(',').map( x => x.trim() ).filter(Boolean);
+
     function isForOutput (tuple: PlainJSObjectEntry) {
         const isStartsWith = (element: string) => tuple[0].startsWith( element );
         return !excludesArray.some( isStartsWith );
     }
 
     const isSecretKey = (tuple: PlainJSObjectEntry) => secretKeys.includes( tuple[0] );
+
     function makeSecured (tuple: PlainJSObjectEntry) {
         if( isSecretKey( tuple )) {
             tuple[1] = securifyToken( tuple[1] );

@@ -3,6 +3,10 @@
 
 # microsoft office temporary documents
 ~$*.*
+
+# old js files renamed for delete
+*.jsold
+
 dist/
 ./@types/
 

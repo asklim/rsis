@@ -28,15 +28,13 @@ function securifyToken(
     }
 }
 
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type TStringObj = {[key:string]: any};
+// type TStringObj = {[key:string]: any};
 
 function securifyObjByList (
-    obj: TStringObj,
+    obj: Record<string, any>,
     propList: string[] = ['token']
 )
-: TStringObj
+: Record<string, any>
 {
     const clone = Object.assign( {}, obj );
 

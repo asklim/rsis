@@ -5,6 +5,7 @@ import {
 } from 'node:fs';
 
 import express from 'express';
+import /*axios,*/ { AxiosError } from 'axios';
 
 import {
     http,
@@ -25,13 +26,13 @@ const {
     callbackError405,
 } = http;
 
-import consoleLogger from './logger.js';
-import getProcessEnvWithout from './get-process-env-without.js';
+import consoleLogger from './logger';
+// import getProcessEnvWithout from './get-process-env-without';
 import { makeResult,
-    makeErrorResult } from './make-results.js';
+    makeErrorResult } from './make-results';
 
-import { shrinkServerRes } from './debug-utils.js';
-import StatusCodes from './status-codes-enum.js';
+import { shrinkServerRes } from './debug-utils';
+import StatusCodes from './status-codes-enum';
 
 const icwd = realpathSync( process.cwd() );
 const packageJson = JSON.parse( readFileSync(`${icwd}/package.json`, 'utf-8'));
@@ -46,6 +47,7 @@ export { default as debugFactory } from 'debug';
 export {
     express,
     Logger,
+    logAxiosError,
     IConsoleLogger,
     StatusCodes,
     send200Ok,
@@ -60,9 +62,41 @@ export {
     callbackError405,
     icwd,
     version,
-    getProcessEnvWithout,
+    // getProcessEnvWithout,
     consoleLogger, // переопределяет из 'asklim'
     makeResult,
     makeErrorResult,
     shrinkServerRes,
 };
+
+
+function logAxiosError (
+    error: unknown,
+    logger: IConsoleLogger
+) {
+    const err = error as AxiosError;
+    logger.error('err.config', err.config );
+    // log.error( err );
+    if( err.response ){
+        // The request was made and the server
+        // responded with a status code
+        // that falls out of the range of 2xx
+        logger.error('err.response.headers', err.response.headers );
+        logger.error('err.response.status', err.response.status );
+        logger.error('err.response.data', err.response.data );
+    }
+    else if( err.request ) {
+        // The request was made but
+        // no response was received.
+        // `error.request` is an instance of
+        // XMLHttpRequest in the browser and
+        // an instance of http.ClientRequest in node.js
+        logger.error('err.request', err.request );
+    }
+    else {
+        // Something happened in setting up the request
+        // that triggered an Error
+        logger.error('Error', err.message );
+    }
+
+}

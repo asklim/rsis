@@ -29,25 +29,25 @@ module.exports = function sum_WeekNatural_router (
 
     router.get( routeWithWeekId, readOne );
 
-    router.post( route, (req, res) => {
+    router.post( route, async (req, res) => {
+        try {
+            const result = await createOne( req, res );
 
-        createOne( req, res )?.
-        then( (result) => {
             debug('result from .post method\n', shrinkServerRes( result ));
             // Отсылаем ТОЛЬКО, если создано.
             log.debug('router.post - send To WebApp');
             if( result == HTTP.CREATED ) {
                 sendToWebApp('/api' + route, req.body );
             }
-        }).
-        catch( (e) => {
+        }
+        catch (e) {
             log.warn('Error:', e );
-        });
+        }
     });
 
-    router.put( route, (req, res) => {
+    router.put( route, async (req, res) => {
 
-        updateOne( req, res );
+        await updateOne( req, res );
         log.debug('router.put - send To WebApp');
         sendToWebApp('/api' + route, req.body );
     });

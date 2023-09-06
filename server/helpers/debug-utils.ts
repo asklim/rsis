@@ -3,6 +3,12 @@
 export function shrinkServerRes (
     serverRes: any
 ) {
+    if( typeof serverRes !== 'object' ) {
+        return ({
+            response: serverRes
+        });
+    }
+
     const {
         outputSize,
         _header,

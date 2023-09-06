@@ -6,7 +6,8 @@ import {
     Logger,
 } from '../../helpers';
 
-import { getDB } from '../../databases/';
+import { getDB } from '../../databases';
+import { Connection } from 'mongoose';
 
 //const d = debugFactory('api:health:');
 const log = new Logger('[api:health]');
@@ -32,8 +33,8 @@ const sumdb = getDB('sum');
  * @fires 500 {message : '-1'} - no Mongo
  **/
 export default async function hapi_health_GET (
-    req,
-    res
+    req: any,
+    res: any
 ) {
     //params.pingId : {'app' | 'databases' | 'mongocfg' | 'mongosum'}
     let count = Object.keys( req.params ).length;
@@ -72,7 +73,6 @@ export default async function hapi_health_GET (
         }
     }
 
-
     if( pingId === 'mongosum') {
         try {
             const count = await totalDocumentsInDB( sumdb );
@@ -84,7 +84,6 @@ export default async function hapi_health_GET (
             return;
         }
     }
-
 
     if( pingId === 'databases') {
 
@@ -113,23 +112,25 @@ export default async function hapi_health_GET (
             return;
         }
     }
+
     send400BadRequest( res, `parameter '${pingId}' is invalid.`);
 }
 
 
 
 /**
+ * returns count documents in db for all collections
  * @param mongodb - Mongoose.Connection to db
- * @returns count documents in db for all collections
  **/
-async function totalDocumentsInDB (mongodb) {
-
+async function totalDocumentsInDB (
+    mongodb: Connection
+) {
     let total = 0;
-    for( let name of mongodb.modelNames() ) {
+    for( const name of mongodb.modelNames() ) {
 
-        let theModel = mongodb.model( name );
-        // eslint-disable-next-line no-await-in-loop
-        let count = await theModel.estimatedDocumentCount();
+        const theModel = mongodb.model( name );
+        // es--lint-disable-next-line no-await-in-loop
+        const count = await theModel.estimatedDocumentCount();
         total += count;
     }
     return total;
