@@ -1,7 +1,4 @@
 
-/** @ typedef { import ("../@types/server/rsis-express").RsisExpress} RsisExpress */
-// import express from 'express';
-
 import {
     debugFactory,
     env,
@@ -23,8 +20,6 @@ const d = debugFactory('rsis:express');
 const defaultLogger = new Logger('[rsis:express]');
 
 
-
-
 const app = express() as RsisExpress;
 
 
@@ -40,9 +35,9 @@ app.getMyDB = function () {
 
 app.startTimestamp = Date.now();
 app.getStartTime = function () { return this.startTimestamp;};
-d(`(at define) app.getStartTime: ${app.getStartTime()}`);
 
-//d('app(define).logger is', ({}).hasOwnProperty.call( app, 'logger'));
+d(`(at define) app.getStartTime: ${app.getStartTime()}`);
+// d('(at define) app has `logger` property -', ({}).hasOwnProperty.call( app, 'logger'));
 
 
 app.getStateHandler = function getStateHandler(

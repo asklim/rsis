@@ -1,18 +1,24 @@
-//const debug = require('debug')('dbs:connect');
-const {
+
+import {
+    // debugFactory,
     createConnection,
     connections,
-} = require('mongoose');
-const infoDB = require('./infodb');
-const { consoleLogger, } = require('../helpers');
+} from 'mongoose';
 
+import { Logger, } from '../helpers';
 
-module.exports = function createConn (uri, title) {
+import * as infoDB from './infodb';
 
+//const d = debugFactory('dbs:connect');
 
-    const log = consoleLogger(`[${title}]`);
+/**
+ * DON'T MAKE THIS AS ASYNC FUNCTION
+ */
+export default function createConn (uri: string, title: string) {
 
-    let dbConnect;
+    const log = new Logger(`[${title}]`);
+
+    let dbConnect: any;
     try {
         dbConnect = createConnection( uri, {} );
         // Deprecated in Mongoose v6.0
@@ -28,9 +34,6 @@ module.exports = function createConn (uri, title) {
         log.error('create-conn.js - catch block', error );
         return;
     }
-
-    log.debug(`connected. Total connection's count:`, connections.length );
-    // first 2, then 3, then 4
 
     // CONNECTION EVENTS
 
@@ -65,6 +68,9 @@ module.exports = function createConn (uri, title) {
         await dbConnect.close();
         return title;
     };
+
+    log.debug(`connected. Total connection's count:`, connections.length );
+    // first 2, then 3, then 4
 
     return dbConnect;
 };
