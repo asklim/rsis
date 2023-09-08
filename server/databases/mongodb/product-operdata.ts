@@ -1,11 +1,11 @@
-const { Schema } = require('mongoose');
+import { Schema } from 'mongoose';
 
-const PATH_DEFINITION = require('./schema.paths-definitions');
+import { ITEM_GID } from './schema.paths-definitions';
 
 
 const productOperDataItem = new Schema({
 
-    gid: PATH_DEFINITION.ITEM_GID,
+    gid: ITEM_GID,
 
     /* FIELDS FROM CURRENT WEEK DATA */
     total: {},
@@ -18,4 +18,4 @@ const productOperDataItem = new Schema({
 
 });
 
-module.exports = productOperDataItem;
+export default productOperDataItem;

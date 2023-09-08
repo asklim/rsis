@@ -1,9 +1,15 @@
-//const debug = require('debug')('heroku:');
-const log = require('../helpers').consoleLogger('[heroku:safe-getter]');
+import {
+    IConsoleLogger,
+    logAxiosError,
+    // debugFactory,
+    Logger,
+} from '../helpers/';
+//const d = debugFactory('heroku:');
+const log = new Logger('[heroku:safe-getter]');
 
-const axios = require('axios').default;
+import axios, { AxiosError } from 'axios';
 
-const axiosGetter = (apiUrl) => axios.get( apiUrl,
+const axiosGetter = (apiUrl: string) => axios.get( apiUrl,
     {
         //url: apiUrl,
         //method: "GET",
@@ -22,19 +28,22 @@ const axiosGetter = (apiUrl) => axios.get( apiUrl,
  * либо в данные, либо в undefined.
  * @returns {Function} -
  */
-module.exports = function createSafeGetter (
-    apiUrl,
+export default function createSafeGetter (
+    apiUrl: string,
     getter = axiosGetter,
-    logger = log
-) {
-    return async function () {
+    logger: IConsoleLogger = log
+)
+// : () => Promise<unknown>
+{
+    return async function safeGetter () {
         try {
-            //debug('apiUrl:', typeof apiUrl, apiUrl );
+            //d('apiUrl:', typeof apiUrl, apiUrl );
             return await getter( apiUrl );
         }
         catch (err) {
             logger && logger.error('Error GET of Resource\n');
-            return err;
+            logAxiosError( err, logger );
+            return err as AxiosError;
         }
     };
 };

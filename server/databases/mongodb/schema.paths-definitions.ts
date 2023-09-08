@@ -1,4 +1,4 @@
-const { Schema } = require('mongoose');
+import { Schema } from 'mongoose';
 
 
 const ITEM_GID = {
@@ -79,8 +79,7 @@ const STANDART_XL_GROUP = {
     set: v => Math.round(v),
 };
 
-module.exports = {
-
+export {
     ITEM_GID,
     ITEM_GID_KEY,
     ITEM_LID,
