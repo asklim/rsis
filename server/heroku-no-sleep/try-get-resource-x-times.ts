@@ -10,7 +10,7 @@ import createSafeGetter from './create-safe-getter';
 
 export interface XTimesResponse {
     attempt: number,
-    ms: number,
+    ms?: number,
     ok?: boolean,
     response?: any,
     reason?: string,

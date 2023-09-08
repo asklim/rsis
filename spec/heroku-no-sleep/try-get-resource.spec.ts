@@ -1,8 +1,10 @@
-const createError = require('http-errors');
+import createError from 'http-errors';
 
-const createSafeGetter = require('../../server/heroku-no-sleep/create-safe-getter');
+import createSafeGetter from '../../server/heroku-no-sleep/create-safe-getter';
 
-const tryGetResource = require('../../server/heroku-no-sleep/try-get-resource-x-times.js');
+import tryGetResource, {
+    XTimesResponse
+} from '../../server/heroku-no-sleep/try-get-resource-x-times';
 
 
 const FAKE_URL = 'http://fakeUrl';
@@ -37,7 +39,7 @@ const fakeAxiosGetter = (apiUrl) => {
 const optionsWhenError = {
     attempts: 5,
     interval: 500,
-    getter: createSafeGetter( FAKE_URL, fakeErrorGetter, null ),
+    getter: createSafeGetter( FAKE_URL, fakeErrorGetter, undefined ),
     apiUrl: FAKE_URL
 };
 
@@ -51,6 +53,7 @@ const optionsWhenPass = {
 const tryGetOkResponse1 = {
     ok: true,
     response: axiosResponse( FAKE_URL ),
+    // ms: 418, // response time is different !!!
     attempt: 1
 };
 
@@ -61,12 +64,13 @@ test('01/try get resource, but error',
             const result = await tryGetResource( optionsWhenError );
             console.log('result t01\n', result); // Наверно не срабатывает
         }
-        catch (err) {
+        catch (e) {
+            const err = e as XTimesResponse;
             console.log('err t01\n', err);
             //{ attempt: 5, message: 'No response from http://fakeUrl, 5 times.' }
             expect( err ).not.toBeUndefined();
             expect( err instanceof Object ).toBeTruthy(  );
-            expect( Object.keys( err ).length ).toEqual( 4 );
+            expect( Object.keys( err ).length ).toEqual( 5 );
             expect( typeof err.message === 'string').toBeTruthy();
             expect( typeof err.reason === 'string').toBeTruthy();
             expect( typeof err.attempt === 'number').toBeTruthy();
@@ -78,12 +82,12 @@ test('01/try get resource, but error',
 test('02/get good axios response in first time',
     async () => {
         const result = await tryGetResource( optionsWhenPass );
-        delete result.ms;
+        delete result.ms
         expect( result ).toEqual( tryGetOkResponse1 );
     }
 );
 
-jest.setTimeout(30_000);
+jest.setTimeout( 30_000 );
 
 test('03/try get resource, without getter (real Axios to FAKE_URL) == InternalServerError',
     //[LOGGER]: Error: http://fakeUrl : InternalServerError: Internal Server Error (27149ms)
@@ -96,7 +100,8 @@ test('03/try get resource, without getter (real Axios to FAKE_URL) == InternalSe
             } );
             console.log('result t03\n', result); // не срабатывает
         }
-        catch (err) {
+        catch (e) {
+            const err = e as XTimesResponse;
             console.log('err t03\n', err);
             expect( err ).toBeDefined();
             expect( err instanceof Object ).toBeTruthy();
@@ -105,7 +110,7 @@ test('03/try get resource, without getter (real Axios to FAKE_URL) == InternalSe
             expect( typeof err.reason === 'string').toBeTruthy();
             expect( typeof err.attempt === 'number').toBeTruthy();
             expect( typeof err.ms === 'number').toBeTruthy();
-            expect( Object.keys( err ).length ).toEqual( 4 );
+            expect( Object.keys( err ).length ).toEqual( 5 );
         }
     }
 );

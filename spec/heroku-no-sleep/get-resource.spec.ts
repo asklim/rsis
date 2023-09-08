@@ -1,7 +1,8 @@
 
-const createSafeGetter = require('../create-safe-getter');
+// import { AxiosError } from 'axios';
+import createSafeGetter from '../../server/heroku-no-sleep/create-safe-getter';
 
-const createError = require('http-errors');
+import createError from 'http-errors';
 
 const FAKE_URL = 'http://fakeUrl';
 const axiosResponse = (apiUrl) => ({
@@ -35,7 +36,9 @@ const fakeAxiosGetter = (apiUrl) => {
 
 test('01/get resource error', async () => {
     const getter = createSafeGetter( FAKE_URL, fakeErrorGetter );
-    expect( await getter() ).toBeUndefined();
+    const result = await getter();
+    expect( result ).toBeDefined();
+    expect( result instanceof Error ).toBeTruthy();
 });
 
 it('02/get good axios response', async () => {

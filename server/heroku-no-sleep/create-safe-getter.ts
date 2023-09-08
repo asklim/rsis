@@ -30,7 +30,7 @@ const axiosGetter = (apiUrl: string) => axios.get( apiUrl,
  */
 export default function createSafeGetter (
     apiUrl: string,
-    getter = axiosGetter,
+    getter: (url: string) => Promise<unknown> = axiosGetter,
     logger: IConsoleLogger = log
 )
 // : () => Promise<unknown>
@@ -40,10 +40,11 @@ export default function createSafeGetter (
             //d('apiUrl:', typeof apiUrl, apiUrl );
             return await getter( apiUrl );
         }
-        catch (err) {
+        catch (e) {
             logger && logger.error('Error GET of Resource\n');
+            const err = e as AxiosError;
             logAxiosError( err, logger );
-            return err as AxiosError;
+            return err;
         }
     };
 };
