@@ -1,13 +1,16 @@
-//const debug = require('debug')('-dbg:items-balances:api');
-
-const {
-    consoleLogger,
+import {
+    // debugFactory,
+    Logger,
+    RsisExpress,
+    Request,
+    Response,
     send500ServerError,
-} = require('../../../helpers/');
+} from '<srv>/helpers/';
 
-const log = consoleLogger('[items-balances:api]');
-const ItemsBalances = require(`../../../applogic/items-balances/`);
+import ItemsBalances from '<srv>/applogic/items-balances/';
 
+const log = new Logger('[items-balances:api]');
+//const d = debugFactory('-dbg:items-balances:api');
 
 /**
  * Read a items-balance by uuid or objId
@@ -15,16 +18,21 @@ const ItemsBalances = require(`../../../applogic/items-balances/`);
  * @fires 400 Bad Request & message
  * @fires 404 Not Found   & message
  * @fires 500 Server Error & error object
+ * ---
+ * variant 1 (parameter)
  * @usage GET /api/registr/items-balances/:documentId
+ * ---
+ * variant 2 (query)
  * @usage GET /api/registr/items-balances?queryString
  * @usage GET /api/registr/items-balances/?queryString
- * @usage queryString:
- * filial=filialId & creator=rsisjs
- * onDate=isoDate as YYYY-MM-DD & agent=agentId
+ * ---
+ * queryString:
+ * * filial=filialId & creator=rsisjs & onDate=isoDate & agent=agentId
+ * * format isoDate as YYYY-MM-DD
  **/
-module.exports = async function hapi_registr_itemsBalances_GET (
-    req,
-    res
+export default async function hapi_registr_itemsBalances_GET (
+    req: Request,
+    res: Response
 ) {
     const { documentId } = req.params;
 
@@ -34,8 +42,8 @@ module.exports = async function hapi_registr_itemsBalances_GET (
     ;
 
     try {
-        let readResult;
-        if( documentId == 'list') {
+        let readResult: any;
+        if ( documentId === 'list') {
             log.debug('[h-GET] try find documents, req.query:', req.query );
             readResult = await (new ItemsBalances).find( req.query );
         }
@@ -44,11 +52,12 @@ module.exports = async function hapi_registr_itemsBalances_GET (
                 await (new ItemsBalances).readById( documentId )
                 : await (new ItemsBalances).readByQuery( req.query );
         }
-        req.app.getStateHandler( res, log )( readResult );
+        const app = req.app as RsisExpress;
+        const handle = app.getStateHandler( res, log );
+        handle( readResult );
     }
     catch (err) {
         log.error( err );
-        // @ts-ignore
-        return send500ServerError( res, err );
+        send500ServerError( res, err as Error );
     }
 };

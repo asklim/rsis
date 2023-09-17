@@ -98,11 +98,13 @@ exports = module.exports = class ItemsBalances {
 
     /**
      *
-     * @param {*} param0
+     * @param {object} param0
      * @returns
      */
     async find ({
-        onDates, startDate, endDate,
+        onDates,
+        startDate,
+        endDate,
         agent,
         filial,
         creator
@@ -135,16 +137,17 @@ exports = module.exports = class ItemsBalances {
      * @fires 404 Not Found   & message
      * @fires 500 Server Error & error object
      * @param {object} query
-     * @param {string} query.filial - Level1: filial1 or frm
-     * @param {string} query.agent - Level2: f1, wh1, wh0
-     * @param {string} query.onDate - isoDate as "YYYY-MM-DD"
      * @usage GET /api/registr/items-balances/?queryString
      * @usage queryString:
      * filial=filialId & onDate=isoDate & agent=agentId
      **/
-    async readByQuery (query) {
+    async readByQuery ({
+        filial, // {string} query.filial - Level1: filial1 or frm
+        agent,  // {string} query.agent - Level2: f1, wh1, wh0
+        onDate  // {string} query.onDate - isoDate as "YYYY-MM-DD"
+    }) {
 
-        const { onDate, } = query;
+        // const { onDate, } = query;
 
         if( onDate && !Date.parse( onDate )) {
             return makeResult(
@@ -153,7 +156,7 @@ exports = module.exports = class ItemsBalances {
                 'Bad query.date in request.'
             );
         }
-        return await this._storage.readByQuery( query );
+        return await this._storage.readByQuery({ filial, agent, onDate });
     }
 
 

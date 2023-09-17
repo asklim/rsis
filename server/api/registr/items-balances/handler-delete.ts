@@ -1,14 +1,17 @@
-// const debug = require('debug')('-dbg:items-balances:api');
-
-const {
-    consoleLogger,
+import {
+    // debugFactory,
+    Logger,
+    RsisExpress,
+    Request,
+    Response,
     send400BadRequest,
     send500ServerError,
-} = require('../../../helpers/');
+} from '<srv>/helpers/';
 
-const log = consoleLogger('[items-balances:api]');
-const ItemsBalances = require(`../../../applogic/items-balances/`);
+import ItemsBalances from '<srv>/applogic/items-balances/';
 
+const log = new Logger('[items-balances:api]');
+// const d = debugFactory('-dbg:items-balances:api');
 
 /**
  * Delete items-balances document by uuid, ObjId
@@ -21,9 +24,9 @@ const ItemsBalances = require(`../../../applogic/items-balances/`);
  * DELETE /api/registr/items-balances/60950e87258015071e86c8f7
  * DELETE /api/registr/items-balances/f2ab5c11-a252-4f65-b278-adb3afe12bcd
  **/
-module.exports = async function hapi_registr_itemsBalances_DELETE (
-    req,
-    res
+export default async function hapi_registr_itemsBalances_DELETE (
+    req: Request,
+    res: Response
 ) {
     const { documentId } = req.params;
     documentId ?
@@ -31,7 +34,7 @@ module.exports = async function hapi_registr_itemsBalances_DELETE (
         : log.debug('[h-DELETE] try delete document, req.query:', req.query )
     ;
 
-    if( !documentId ) {
+    if ( !documentId ) {
         log.warn('[h-DELETE] No <documentId>.');
         send400BadRequest( res, 'Bad request, No <documentId>.');
         return;
@@ -40,11 +43,12 @@ module.exports = async function hapi_registr_itemsBalances_DELETE (
     try {
         const deleteResult = await (new ItemsBalances).deleteById( documentId );
 
-        req.app.getStateHandler( res, log )( deleteResult );
+        const app = req.app as RsisExpress;
+        const handle = app.getStateHandler( res, log );
+        handle( deleteResult );
     }
     catch (err) {
         log.error( err );
-        // @ts-ignore
-        return send500ServerError( res, err );
+        send500ServerError( res, err as Error );
     }
 };

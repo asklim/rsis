@@ -46,7 +46,7 @@ module.exports = class IItemsBalancesStorage extends IA_ItemsBalances {
         filial = 'filial1',
         creator = 'mainsm'
     }) {
-        let filtering = { agent, onDate, filial, creator };
+        const filtering = { agent, onDate, filial, creator };
         return await this.readOne( filtering );
     }
 
