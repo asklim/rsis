@@ -4,7 +4,11 @@ import {
     readFileSync,
 } from 'node:fs';
 
-import express from 'express';
+import express, {
+    Request,
+    Response,
+    Router,
+} from 'express';
 import /*axios,*/ { AxiosError } from 'axios';
 
 import {
@@ -25,6 +29,8 @@ const {
     callbackError400,
     callbackError405,
 } = http;
+
+import type { RsisExpress } from '../types';
 
 import consoleLogger from './logger';
 // import getProcessEnvWithout from './get-process-env-without';
@@ -50,6 +56,10 @@ export {
     logAxiosError,
     IConsoleLogger,
     StatusCodes,
+    RsisExpress,
+    Request,
+    Response,
+    Router,
     send200Ok,
     send201Created,
     send204NoContent,

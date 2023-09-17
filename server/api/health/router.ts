@@ -1,8 +1,8 @@
 
-import handlerGET from './handler-get';
-import { callbackError405 } from '../../helpers';
-// Метод запроса не разрешен к использованию для данного URL
+import { callbackError405, Router } from '../../helpers';
 
+import handlerGET from './handler-get';
+// Метод запроса не разрешен к использованию для данного URL
 
 /**
  * Return status of app or DBs
@@ -11,8 +11,9 @@ import { callbackError405 } from '../../helpers';
  * @usage GET /api/health/mongocfg
  * @usage GET /api/health/mongosum
  */
-export default function routerApiHealth (router) {
-
+export default function routerApiHealth (
+    router: Router
+) {
     const route = '/health';
     const routeWithId = `${route}/:pingId`;
 

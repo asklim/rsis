@@ -1,17 +1,20 @@
+import { RequestHandler } from 'express';
+import { /*callbackError405,*/ Router } from '../../helpers';
 
 import procurement from './procurement-handler-get';
+
+const ROOT = '/dataset';
+const routesAndHandlers: [string, RequestHandler][] = [
+    [`${ROOT}/procurement/:weekId`, procurement ],
+];
 
 /**
  * @usage GET /api/dataset/:providerId/:datasetId
  */
-export default function routerApiDataset (router) {
-
-    const route = '/dataset';
-
-    [
-        [`${route}/procurement/:weekId`, procurement],
-    ].
-    forEach( (item) => {
-        router.get( item[0], item[1] );
-    });
+export default function router_api_dataset (
+    router: Router
+) {
+    for ( const [route, handler] of routesAndHandlers ) {
+        router.get( route , handler );
+    }
 };

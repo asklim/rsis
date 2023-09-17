@@ -4,6 +4,8 @@ import axios from 'axios';
 import {
     icwd,
     Logger,
+    Request,
+    Response,
     send200Ok,
     send400BadRequest,
     send404NotFound,
@@ -37,8 +39,8 @@ const { needUnitsForPeriod } = rsisFactory();
  * GET /api/sum/procurement/last
  **/
 export default async function hapi_dataset_procurement_GET (
-    req,
-    res
+    req: Request,
+    res: Response
 ) {
     log.debug(
         'hGET - req.params:', req.params, 'req.query:', req.query
