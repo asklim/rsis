@@ -6,9 +6,11 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
-const getClientEnvironment = require('../config/env');
+const getClientEnvironment = require('./env');
+
+/** paths MUST BE loaded AFTER env module */
 const paths = require('../config/paths');
-const modules = require('../config/modules');
+const modules = require('./modules');
 
 
 // Source maps are resource heavy
@@ -152,13 +154,14 @@ module.exports = function( webpackEnv ) {
 
             // Point sourcemap entries
             // to original disk location (format as URL on Windows)
-            devtoolModuleFilenameTemplate: isEnvProduction
-                ? info =>
-                    path
-                    .relative( paths.appSrc, info.absoluteResourcePath )
-                    .replace(/\\/g, '/')
-                : isEnvDevelopment &&
-                ( info => path.resolve( info.absoluteResourcePath ).replace(/\\/g, '/')),
+            devtoolModuleFilenameTemplate: isEnvProduction ?
+                (info) => path.
+                    relative( paths.appSrc, info.absoluteResourcePath ).
+                    replace(/\\/g, '/')
+                : isEnvDevelopment && ( (info) => path.
+                    resolve( info.absoluteResourcePath ).
+                    replace(/\\/g, '/')
+                ),
 
             // this defaults to 'window', but by setting it to 'this' then
             // module chunks which are built will work in web workers as well.
@@ -172,6 +175,21 @@ module.exports = function( webpackEnv ) {
             } : false,
         plugins: require('./webpack-config-plugins.js')( buildOptions ),
         resolve: {
+            alias: {
+                '<root>': paths.appPath,
+                // Support React Native Web
+                // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+                'react-native': 'react-native-web',
+                //...( isEnvDevelopment && {
+                //    'react-dom': '@hot-loader/react-dom',
+                //}),
+                // Allows for better profiling with ReactDevTools
+                ...( isEnvProductionProfile && {
+                    'react-dom$': 'react-dom/profiling',
+                    'scheduler/tracing': 'scheduler/tracing-profiling',
+                }),
+                ...( modules.webpackAliases || {} ),
+            },
             // This allows you to set a fallback for where Webpack should look for modules.
             // We placed these paths second because we want `node_modules` to "win"
             // if there are any conflicts. This matches Node resolution mechanism.
@@ -195,20 +213,6 @@ module.exports = function( webpackEnv ) {
             extensions: paths.moduleFileExtensions
                 .map( ext => `.${ext}`)
                 .filter( ext => !ext.includes('ts') ),
-            alias: {
-                // Support React Native Web
-                // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-                'react-native': 'react-native-web',
-                //...( isEnvDevelopment && {
-                //    'react-dom': '@hot-loader/react-dom',
-                //}),
-                // Allows for better profiling with ReactDevTools
-                ...( isEnvProductionProfile && {
-                    'react-dom$': 'react-dom/profiling',
-                    'scheduler/tracing': 'scheduler/tracing-profiling',
-                }),
-                ...( modules.webpackAliases || {} ),
-            },
             plugins: [
                 // Adds support for installing with Plug'n'Play,
                 // leading to faster installs and adding

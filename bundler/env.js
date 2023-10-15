@@ -1,10 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
-const paths = require('./paths');
+const paths = require('../config/paths');
 // Make sure that including paths.js after env.js
 // will read .env variables.
-delete require.cache[ require.resolve('./paths')];
+delete require.cache[ require.resolve('../config/paths')];
 
 const { NODE_ENV } = process.env;
 
@@ -59,11 +59,11 @@ dotenvFiles.forEach( (dotenvFile) => {
 
 const appDirectory = fs.realpathSync( process.cwd() );
 
-process.env.NODE_PATH = ( process.env.NODE_PATH || '')
-    .split( path.delimiter )
-    .filter( folder => folder && !path.isAbsolute( folder ))
-    .map( folder => path.resolve( appDirectory, folder ))
-    .join( path.delimiter );
+process.env.NODE_PATH = ( process.env.NODE_PATH || '').
+    split( path.delimiter ).
+    filter( folder => folder && !path.isAbsolute( folder )).
+    map( folder => path.resolve( appDirectory, folder )).
+    join( path.delimiter );
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
@@ -71,9 +71,9 @@ const REACT_APP = /^REACT_APP_/i;
 
 function getClientEnvironment (publicUrl) {
 
-    const raw = Object.keys( process.env )
-        .filter( key => REACT_APP.test( key ))
-        .reduce(
+    const raw = Object.keys( process.env ).
+        filter( key => REACT_APP.test( key )).
+        reduce(
             (env, key) => {
                 env[ key ] = process.env[ key ];
                 return env;

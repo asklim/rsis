@@ -14,7 +14,7 @@ const {
 const log = consoleLogger('[procurement:api]');
 
 
-const { procurementPeriods: period } = require(`${icwd}/src/config/enum-values`);
+const { procurementPeriods: period } = require('<root>/config/enum-values');
 
 const { rsisFactory } = require('asklim');
 const { needUnitsForPeriod } = rsisFactory();

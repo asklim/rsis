@@ -1,4 +1,5 @@
 import {
+    env,
     debugFactory,
     Logger,
 } from '../helpers/';
@@ -26,14 +27,17 @@ export default function createPinger (
     server: RsisExpress,
     minutes: number
 ) {
+    if ( env.API_SERVER == '') {
+        log.warn('Heroku Reconnection Service not started (No Heroku URL).');
+        return;
+    }
+
     const msInterval = 60_000 * minutes;
     const started = server.getStartTime?.() ?? 0;
     d(`started timestamp: ${started}`);
 
-    log.debug(`Reconnection Service started, reconnect every ${minutes} minutes.`);
-
-    let isPingerRunning = true;
-    let herokuTimer;
+    let isPingerRunning: boolean = true;
+    let herokuTimer: NodeJS.Timeout;
 
     server.on( HEROKU_PING_EVENT, herokuPingEvent_handler );
 
@@ -43,6 +47,8 @@ export default function createPinger (
     });
 
     emitHerokuPing();
+
+    log.debug(`Reconnection Service started, reconnect every ${minutes} minutes.`);
 
 
     function herokuPingEvent_handler () {

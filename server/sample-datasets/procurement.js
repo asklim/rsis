@@ -20,7 +20,7 @@
  */
 
 
-module.exports = [
+const procurement = [
     {
         gid : 2019051901,
         name : "Чай-Кофе #1",
@@ -74,3 +74,15 @@ module.exports = [
         xlp: [40,40,48 ],
     },
 ];
+
+const periods = {
+    short:     6,
+    middle:   24,
+    long:     36,
+    xtraLong: 78,
+};
+
+module.exports = {
+    procurement,
+    periods
+};

@@ -16,7 +16,7 @@ import {
 const log = new Logger('[api:procurement]');
 
 
-import { procurementPeriods as period } from '<root>/src/config/enum-values';
+import { procurementPeriods as periods } from '<root>/config/enum-values';
 
 import { rsisFactory } from 'asklim';
 const { needUnitsForPeriod } = rsisFactory();
@@ -67,7 +67,10 @@ export default async function hapi_dataset_procurement_GET (
         }
         const count = dataset.length;
         log.info(`GET: (week: ${weekId}) sent ${count} items.`);
-        send200Ok( res, dataset );
+        send200Ok( res, {
+            procurement: dataset,
+            periods,
+        });
     }
     catch (err) {
         if( err ) {
@@ -85,10 +88,10 @@ const onlyItemsXtraLongGTZero = (item) => item.xlp.reduce( summa ) > 0;
 
 const convertToProcurement = (item) => {
 
-    item.sp = needUnitsForPeriod( item, period.short );
-    item.mp = needUnitsForPeriod( item, period.middle );
-    item.lp = needUnitsForPeriod( item, period.long );
-    item.xlp = needUnitsForPeriod( item, period.xtraLong );
+    item.sp = needUnitsForPeriod( item, periods.short );
+    item.mp = needUnitsForPeriod( item, periods.middle );
+    item.lp = needUnitsForPeriod( item, periods.long );
+    item.xlp = needUnitsForPeriod( item, periods.xtraLong );
     delete item.valid;
     delete item.fqA;
     delete item.fqM;

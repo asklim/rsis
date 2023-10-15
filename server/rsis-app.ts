@@ -2,7 +2,7 @@ import {
     default as createError,
     HttpError
 } from 'http-errors';
-import path from 'node:path';
+// import path from 'node:path';
 
 import express, {
     Request,
@@ -115,7 +115,8 @@ app.get('*', (
     res: Response,
     next: any
 ) => {
-    const INDEX_HTML_PFN = path.resolve( __dirname, `../index.html`);
+    const INDEX_HTML_PFN = paths.distAppHtml;
+    // const INDEX_HTML_PFN = path.resolve( __dirname, `../index.html`);
 
     d(`[app.get.*] request url: ${req.url}`);
     log.info(`server __dirname is ${__dirname}`);
@@ -177,9 +178,9 @@ app.use((
 
 d('app locals', app.locals );
 
-const EVERY_30_MINUTE = 30;
+const EVERY_30_MINUTES = 30;
 /** Закрытие pinger будет после закрытия server  */
-herokuPinger( app, EVERY_30_MINUTE );
+herokuPinger( app, EVERY_30_MINUTES );
 
 
 export default app;

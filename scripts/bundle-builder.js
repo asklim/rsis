@@ -10,7 +10,7 @@ process.on('unhandledRejection', err => {
 const paths = require('../config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 // Warn and crash if required files are missing
-if( !checkRequiredFiles([ paths.appHtml, paths.appIndexJs ]) ) {
+if( !checkRequiredFiles([ paths.appHtmlTemplate, paths.appIndexJs ]) ) {
     process.exit(1);
 }
 

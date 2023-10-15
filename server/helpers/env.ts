@@ -22,7 +22,8 @@ export default cleanEnv( process.env,
             devDefault: defaultToken
         }),
         API_SERVER: str({
-            devDefault: 'https://rsis-webapp.herokuapp.com'
+            default: '',
+            //devDefault: 'https://rsis-webapp.herokuapp.com'
         }),
         ATLAS_CREDENTIALS: str({
             devDefault: defaultToken

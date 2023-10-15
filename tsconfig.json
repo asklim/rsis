@@ -2,7 +2,7 @@
     "include": [
         "./server/**/*",
         "./config/**/*",
-        "./src/config/**/*",
+      //   "./src/config/**/*",
         "spec/__test__/*",
         "**/__test__/*",
     ],

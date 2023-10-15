@@ -1,5 +1,5 @@
 import { debugFactory } from 'utils/debuggers.js';
-const debug = debugFactory('invoice:procurement');
+const d = debugFactory('invoice:procurement');
 
 import * as React from 'react';
 //import PropTypes from 'prop-types';
@@ -51,7 +51,7 @@ import CardFooter from 'components/m-d-r/Card/CardFooter.jsx';
 import Loading from 'components/misc/Loading.jsx';
 import DataLoadError from 'components/misc/DataLoadError.jsx';
 
-import { procurementPeriods as days } from 'config/enum-values.js';
+// import { procurementPeriods as days } from '<root>/config/enum-values';
 
 const PREFIX = 'ProcurementBoard';
 const classes = {
@@ -91,12 +91,19 @@ const ProcurementBoardPage = () => {
     const fromBY = 1;
     const fromEU = 2;
 
+    const days = React.useRef({
+        short:    0,
+        middle:   0,
+        long:     0,
+        xtraLong: 0,
+    });
+
     const [filterByFreq, setFilterByFreq] = React.useState( FREQ_VALUES[ freqLAST ]);
     const [filterByFrom, setFilterByFrom] = React.useState( SUPPLY_FROM );
 
     const [isLoaded, setIsLoaded] = React.useState( false );
     const [isDataLoadingError, setIsDataLoadingError] = React.useState( false );
-    const [serverDataset, setServerDataset] = React.useState( [] );        // Array of Hash
+    const [serverDataset, setServerDataset] = React.useState( {} );        // Dictionary of Hash
     //  /server/sample-datasets/procurements.js
 
     // Viewing lists for Table
@@ -108,7 +115,9 @@ const ProcurementBoardPage = () => {
     const [dataServerResponse, setDataServerResponse] = React.useState( {} );
 
 
-    const tableHeader = (period) => {
+    const tableHeader = (
+        period
+    ) => {
         const lineCount = {
             sp: shortPeriod.length,
             mp: middlePeriod.length,
@@ -120,18 +129,22 @@ const ProcurementBoardPage = () => {
         ];
     };
 
-
-    const isFromIntersected = (item, fromFilter) => {
-
-        const itemFroms = item.from.
-            split(',').
+    const isFromIntersected = (
+        item,
+        fromFilter
+    ) => {
+        const itemFroms = item.from.split(',').
             map( x => x.trim().toLowerCase() );
         //debug('isIntersected, itemFroms ', itemFroms );
         const result = fromFilter.filter( x => itemFroms.includes( x ));
         return result.length !== 0;
     };
 
-    const serverDatasetFilter = (period, freq, fromFilter) => {
+    const serverDatasetFilter = (
+        period,
+        freq,
+        fromFilter
+    ) => {
         const freqId = FREQ_VALUES.indexOf( freq ); // 0|1|2
         return (
             (item) => item[ period ][ freqId ] > 0
@@ -139,28 +152,33 @@ const ProcurementBoardPage = () => {
         );
     };
 
-    const convertToViewList = (period, freq, from) => new Promise(
-        (resolve) => {
-            const filtering = serverDatasetFilter( period, freq, from );
-            const viewList = serverDataset.
-                filter( filtering ).
-                map( (item, key) => {
-                    return [
-                        ( key+1 ).toString(),
-                        item[ period ][freqLAST].toString(),
-                        item[ period ][freqAVRG].toString(),
-                        item[ period ][freqMAX].toString(),
-                        item.name
-                    ];
-                });
-            //debug('convertToView:', freqId, viewList.length );
-            resolve( viewList );
-        })
-    ;
+    const convertToViewList = (
+        period,
+        freq,
+        from
+    ) => new Promise( (resolve) => {
+        const filtering = serverDatasetFilter( period, freq, from );
+        const viewList = serverDataset.procurement.
+            filter( filtering ).
+            map( (item, key) => {
+                return [
+                    ( key+1 ).toString(),
+                    item[ period ][freqLAST].toString(),
+                    item[ period ][freqAVRG].toString(),
+                    item[ period ][freqMAX].toString(),
+                    item.name
+                ];
+            });
+        //debug('convertToView:', freqId, viewList.length );
+        resolve( viewList );
+    });
 
-    const updateViewingLists = (freq=filterByFreq, from=filterByFrom) => {
-
-        debug('!!! updateViewLists freq=', freq, 'from=', from );
+    const updateViewingLists = (
+        freq = filterByFreq,
+        from = filterByFrom
+    ) => {
+        d('!!! updateViewLists freq=', freq, 'from=', from );
+        days.current = serverDataset?.periods;
         Promise.all([
             convertToViewList('sp', freq, from ),
             convertToViewList('mp', freq, from ),
@@ -172,26 +190,29 @@ const ProcurementBoardPage = () => {
             setMiddlePeriod( lists[1] );
             setLongPeriod( lists[2] );
             setXtraLongPeriod( lists[3] );
-            debug('updateViewingLists', lists.map( l => l.length ));
-        }).catch( (err) => {
+            d('updateViewingLists', lists.map( l => l.length ));
+        }).
+        catch( (err) => {
             console.log('Error convert to ViewList', err );
         });
     };
 
-    const handleFilterByFreqChange = (event) => {
-
+    const handleFilterByFreqChange = (
+        event
+    ) => {
         const freq = event.target.value;
         updateViewingLists( freq, undefined );
         setFilterByFreq( freq );
-        debug('handle_FREQ_filterChange:', freq );
+        d('handle_FREQ_filterChange:', freq );
     };
 
 
-    const handleFromFilterClick = (from) =>
-
+    const handleFromFilterClick = (
+        from
+    ) =>
         (event) => {
             const currentIndex = filterByFrom.indexOf( from );
-            debug('event.target', event.target.checked, currentIndex, from );
+            d('event.target', event.target.checked, currentIndex, from );
             const newChecked = [ ...filterByFrom ];
 
             if( currentIndex === -1 ) {
@@ -199,20 +220,21 @@ const ProcurementBoardPage = () => {
             } else {
                 newChecked.splice( currentIndex, 1 );
             }
-            debug('handle_FROM_filterClick:', newChecked );
+            d('handle_FROM_filterClick:', newChecked );
             updateViewingLists( undefined, newChecked );
             setFilterByFrom( newChecked );
-        };
+        }
+    ;
 
-    const fetchLists = () => {
-
+    const fetchLists = (
+    ) => {
         const { origin } = window.location;
         const route = `${origin}/api/dataset/procurement/last`;
 
         //debug('fetchLists window.location.origin: ', origin );
-        debug('fetch Lists from:', route );
+        d('fetch Lists from:', route );
 
-        let headers = {
+        const headers = {
             mode: 'cors',
             credentials: 'omit',
             'Content-Type': 'application/json',
@@ -230,10 +252,10 @@ const ProcurementBoardPage = () => {
             }
             return response.json();
         }).  // '[{}, ..., {}]'
-        then( (hashs) => {
-            console.log('fetch Lists has length:', hashs.length );
-            //is Ok: 444
-            setServerDataset( hashs );
+        then( (dataset) => {
+            console.log('fetch dataset has length:', Object.keys( dataset ).length );
+            //is Ok: 2, not 444 or 409
+            setServerDataset( dataset );
             setIsLoaded( true );
             setIsDataLoadingError( false );
         }).
@@ -252,15 +274,16 @@ const ProcurementBoardPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ serverDataset ]);
 
-    const isFilterByFromChecked = (index) =>
-        filterByFrom.includes( SUPPLY_FROM[ index ]);
+    const isFilterByFromChecked = (
+        index
+    ) => filterByFrom.includes( SUPPLY_FROM[ index ]);
 
-    if( isDataLoadingError ) {
+    if ( isDataLoadingError ) {
         return (
             <DataLoadError fetchapiResponse={dataServerResponse} />
         );
     }
-    if( !isLoaded ) { return <Loading/>; }
+    if ( !isLoaded ) { return <Loading/>; }
 
 
     return (<RootSxDiv className={classes.root}>
@@ -357,7 +380,7 @@ const ProcurementBoardPage = () => {
                 headerColor = 'primary'
                 tabs = {[
                     {
-                        tabName: `${days.short} дней`,
+                        tabName: `${days.current.short} дней`,
                         tabIcon: ShortPeriod,
                         tabContent: (
                             <Table
@@ -368,7 +391,7 @@ const ProcurementBoardPage = () => {
                         )
                     },
                     {
-                        tabName: `${days.middle} дня`,
+                        tabName: `${days.current.middle} дня`,
                         tabIcon: MiddlePeriod,
                         tabContent: (
                             <Table
@@ -379,7 +402,7 @@ const ProcurementBoardPage = () => {
                         )
                     },
                     {
-                        tabName: `${days.long} дней`,
+                        tabName: `${days.current.long} дней`,
                         tabIcon: LongPeriod,
                         tabContent: (
                             <Table
@@ -390,7 +413,7 @@ const ProcurementBoardPage = () => {
                         )
                     },
                     {
-                        tabName: `${days.xtraLong} дней`,
+                        tabName: `${days.current.xtraLong} дней`,
                         tabIcon: XtraLongPeriod,
                         tabContent: (
                             <Table

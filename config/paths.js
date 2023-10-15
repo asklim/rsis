@@ -1,6 +1,6 @@
 
-const path = require('path');
-const fs = require('fs');
+const path = require('node:path');
+const fs = require('node:fs');
 //const url = require('url');
 
 
@@ -83,17 +83,18 @@ const resolveModule = (resolveFn, filePath) =>  {
     return resolveFn(`${filePath}.js`);
 };
 
-const distFolderName = 'dist';
+const distFolderName = 'dist/front';
 
 // config after eject: we're in ./config/
 module.exports = {
 
     distFolderName,
+    distAppHtml :     resolveApp(`${distFolderName}/index.html`),
     dotenv :          resolveApp('.env'),
-    appPath :         resolveApp('.'),
     appBuild :        resolveApp( distFolderName ), //('build'),
+    appPath :         resolveApp('.'),
     appPublic :       resolveApp('src/assets/public'),
-    appHtml :         resolveApp('src/index-template.html'),
+    appHtml :         resolveApp('src/index.html'),
     appHtmlTemplate : resolveApp('src/index-template.html'),
     appIndexJs :      resolveModule( resolveApp, 'src/index'), // without extension !!!
     appNodeModules :  resolveApp('node_modules'),
