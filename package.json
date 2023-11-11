@@ -88,7 +88,7 @@
         "@types/react-dom": "^17.0.17",
         "asklim": "git+https://asklim@github.com/asklim/asklim.git",
         "autoprefixer": "^10.4.7",
-        "axios": "^0.27.2",
+        "axios": "^1.6.0",
         "babel-loader": "^8.2.2",
         "babel-plugin-module-resolver": "^5.0.0",
         "babel-plugin-named-asset-import": "^0.3.7",
