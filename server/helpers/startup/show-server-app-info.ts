@@ -1,7 +1,7 @@
 
 import http from 'node:http';
 import { AddressInfo } from 'node:net';
-import { env } from '<srv>/helpers/';
+import { env } from '<ssrv>/helpers/';
 
 /**
  * Выводит информацию о сервере и
@@ -19,7 +19,9 @@ export default function showServerAppInfo (
     console.log('\napp version', appVersion.cyan );
     console.log('NODE Environment is', env.NODE_ENV.cyan );
 
-    const outputs: { [key: string]: ()=>void } = {
+    const outputs: {
+        [key: string]: () => void
+    } = {
         full: () => console.log( 'Express server = ',  httpServer, '\n' ),
         addr: () => {
             console.log( getAddressInfo( httpServer ), '\n');

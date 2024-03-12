@@ -41,20 +41,20 @@ export async function log (
             infoDocs.push([ theModel.modelName, count ]);
         }
 
-        logging( infoDocs, log, 'v2');
+        infoDocsLogging( infoDocs, log );
     }
     catch (error) {
-        console.log('infodb.js - catch block');
+        console.log('infodb.ts - catch block');
         log.error( error );
     }
 
 };
 
 
-function logging (
+function infoDocsLogging (
     docs: [string, number][],
     logger: IConsoleLogger,
-    version: string = 'v1'
+    version: string = 'v2'
 ) {
     // if ( !Array.isArray( docs )) {
     //     throw new Error(`infodb.logging: 'docs' must be an Array.`);

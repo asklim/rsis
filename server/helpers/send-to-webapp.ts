@@ -17,6 +17,7 @@ export async function sendToWebApp (
     apiRoute: string,
     reqBody: any
 ) {
+    if ( !env.API_SERVER ) { return; }
     if ( apiRoute == '') { return; }
 
     const docMetaInfo = metaInfoToString( reqBody );

@@ -2,13 +2,14 @@
     "include": [
         "./server/**/*",
         "./config/**/*",
-      //   "./src/config/**/*",
-        "spec/__test__/*",
+        "./src/utils/**/*",
+        "imports/__test__/*",
         "**/__test__/*",
     ],
     "exclude": [
       "./bundler/**/*",
-      "./dist/**/*"
+      "./dist/**/*",
+      "src/utils/md5Hash/md5-webtoolkit.js"
     ],
     "compilerOptions": {
         // /* Visit https://aka.ms/tsconfig.json to read more about this file */
@@ -108,9 +109,8 @@
         /* Specify the base directory to resolve non-relative module names.
         */
         "paths": {
-            "@/*": ["*"],
             "<root>/*": ["*"],
-            "<srv>/*": ["server/*"],
+            "<ssrv>/*": ["server/*"],
             "<src>/*": ["src/*"],
         },
         /* Specify a set of entries that re-map imports

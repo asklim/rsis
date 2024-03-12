@@ -1,2 +1,3 @@
 {
+    "jest.jestCommandLine": "npm exec --package=jest -- node node_modules/jest-cli/bin/jest"
 }

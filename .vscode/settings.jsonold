@@ -1,0 +1,18 @@
+{
+    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+
+    // "jestrunner.projectPath": "~/code/rsis",
+    "jestrunner.preserveEditorFocus": true,
+    "jestrunner.jestCommand": "npm run runJest --",
+    "jestrunner.debugOptions": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/jest",
+        "runtimeArgs": [
+        "test",
+        "${fileBasename}",
+        "--runInBand",
+        "--no-cache",
+        "--watchAll=false",
+        "--colors"
+        ]
+    },
+}

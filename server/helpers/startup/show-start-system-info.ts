@@ -3,13 +3,14 @@ import os from 'node:os';
 import util from 'node:util';
 import colors from 'colors';
 
-import { env, icwd  } from '<srv>/helpers/';
+import { env, icwd  } from '<ssrv>/helpers/';
 import getProcessEnvWithout from './get-process-env-without';
 
 export default async function showStartSystemInfo (
     appVersion: string
-): Promise<void>
-{
+) {
+    console.log( colors.gray('process pid:'), colors.cyan(''+process.pid ), '\n' );
+
     if( env.SHOW_STARTUP_INFO == 'NO') { return; }
 
     const {
@@ -34,5 +35,4 @@ export default async function showStartSystemInfo (
         ', hostname is'.gray, `${os.hostname()}`.cyan
     );
     console.log( colors.gray('User Info:'), userInfo.yellow );
-    console.log( colors.gray('process pid:'), colors.cyan(''+process.pid ), '\n' );
 }

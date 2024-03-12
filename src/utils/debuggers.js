@@ -1,6 +1,6 @@
 import * as debugFactory from 'debug';
 //const invoiceDebug = debugFactory('invoice');
-const debug = debugFactory('debug:debug');
+const debug = debugFactory.default('debug:debug');
 
 localStorage.debug =
     /************  Nothing output  **********/

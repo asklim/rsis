@@ -18,11 +18,11 @@ const log = new Logger('[api:procurement]');
 
 import { procurementPeriods as periods } from '<root>/config/enum-values';
 
-import { rsisFactory } from 'asklim';
+import { rsisFactory, } from 'asklim';
 const { needUnitsForPeriod } = rsisFactory();
 
-// d( "typeof needUnitsForPeriod", typeof needUnitsForPeriod );
-// d( "needUnitsForPeriod", needUnitsForPeriod );
+// d("typeof needUnitsForPeriod", typeof needUnitsForPeriod );
+// d("needUnitsForPeriod", needUnitsForPeriod );
 
 
 /**
@@ -100,12 +100,12 @@ const convertToProcurement = (item) => {
 
 /**
  * Make dataset for Procurement View of Invoice Board
- * @param {*} hostname - getting data from { web | local | test }
- * @param {*} weekId - which week number (XXI century format)
+ * * hostname - getting data from { web | local | test }
+ * * weekId - which week number (XXI century format)
  */
 async function makeProcurementDataset (
-    hostname,
-    weekId
+    hostname: string,
+    weekId: string
 ) {
     log.info('try get ProcurementDataSet from', hostname );
 
@@ -132,8 +132,8 @@ async function makeProcurementDataset (
 
 
 async function getBodyOfWeekNatural (
-    hostname,
-    weekId
+    hostname: string,
+    weekId: string
 ) {
     const resp = await axios({
         method: 'GET',

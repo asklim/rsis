@@ -29,16 +29,14 @@ const DB_CODE_NAMES = {
 };
 
 /**
- * return The connection to database
- * @memberof /api/models
- * @summary Возвращает указанную базу данных
- * @param {String} dbType The database type
+ * - return The connection to database
+ * - Возвращает указанную базу данных
 **/
-function getDB (dbType: string) {
+function getDB (databaseType: string) {
 
-    const dbKey = dbType.toLowerCase();
+    const dbKey = databaseType.toLowerCase();
     if( !(dbKey in DB_CODE_NAMES) ) {
-        log.error('Wrong `dbType` parameter.');
+        log.error('Wrong `databaseType` parameter.');
         return;
     }
 
@@ -74,11 +72,12 @@ function createMongoDBConnections () {
 async function databasesShutdown (
     msg: string,
     next: any
-)
-: Promise<void> {
+) {
     try {
         const dbsTitles: string[] = [];
-        for( const dbKey in dbs ) {
+        for (
+            const dbKey in dbs
+        ) {
             const db = dbs[ dbKey ];
             // eslint-disable-next-line no-await-in-loop
             const title = await db.closeConn();
@@ -88,10 +87,10 @@ async function databasesShutdown (
         console.log(`Mongoose disconnected through ${msg}`);
     }
     catch (error) {
-        log.error('databases shutdown error', error );
+        log.error('databases shutdown error\n', error );
     }
     finally {
-        next && await next();
+        await next?.();
     }
 }
 

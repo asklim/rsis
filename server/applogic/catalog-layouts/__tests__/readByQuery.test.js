@@ -6,7 +6,7 @@ const {
 const CatalogLayouts = require('..');
 
 beforeAll( async () => {
-    await createMongoDBConnections();
+    createMongoDBConnections();
 });
 
 afterAll( async () => {

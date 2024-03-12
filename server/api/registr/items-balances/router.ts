@@ -2,7 +2,7 @@ import {
     Router,
     callbackError400,
     //callbackError405
-} from '<srv>/helpers/';
+} from '<ssrv>/helpers/';
 
 
 import handlerGET    from './handler-get';

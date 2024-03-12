@@ -1,5 +1,5 @@
 import { default as axios } from 'axios';
-import { IConsoleLogger } from '<srv>/helpers/';
+import { IConsoleLogger } from '<ssrv>/helpers/';
 
 
 export default async function isAppRunning (

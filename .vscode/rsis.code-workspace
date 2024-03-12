@@ -1,0 +1,69 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		// "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+		"terminal.integrated.defaultProfile.windows": "PowerShell_7",
+		"jestrunner.changeDirectoryToWorkspaceRoot": false,
+		"jestrunner.preserveEditorFocus": true,
+		// "jestrunner.jestCommand": "npm run JestCLI",
+		"jestrunner.jestCommand": "npm exec --package=jest -- node node_modules/jest-cli/bin/jest",
+		"jestrunner.debugOptions": {
+			"runtimeExecutable": "${workspaceRoot}/node_modules/jest-cli/bin/jest.js",
+			"runtimeArgs": [
+				"test",
+				"${fileBasename}",
+				"--runInBand",
+				"--no-cache",
+				"--watchAll=false",
+				"--colors"
+			]
+		}
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"type": "node",
+				"name": "vscode-jest-tests.v2",
+				"request": "launch",
+				"program": "${workspaceFolder}/node_modules/.bin/jest",
+				"args": [
+					"--runInBand",
+					"--watchAll=false",
+					"--testNamePattern",
+					"${jest.testNamePattern}",
+					"--runTestsByPath",
+					"${jest.testFile}"
+				],
+				// "cwd": "${workspaceFolder}",
+				"console": "integratedTerminal",
+				"internalConsoleOptions": "neverOpen",
+				"windows": {
+					"program": "${workspaceFolder}\\node_modules\\jest-cli\\bin\\jest"
+				}
+			},
+			{
+				"name": "jest.v2.rsis",
+				"type": "node",
+				"request": "launch",
+				"runtimeArgs": [
+					"--inspect-brk",
+					"--runInBand",
+					"--watchAll=false",
+					"--testNamePattern",
+					"${jest.testNamePattern}",
+					"--runTestsByPath",
+					"${jest.testFile}"
+				],
+				// "cwd": "${workspaceFolder}",
+				"console": "integratedTerminal",
+				"internalConsoleOptions": "neverOpen",
+				"program": "npm exec --package=jest -- node node_modules/jest-cli/bin/jest"
+			}
+		]
+	}
+}

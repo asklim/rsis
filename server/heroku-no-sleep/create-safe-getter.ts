@@ -26,7 +26,6 @@ const axiosGetter = (apiUrl: string) => axios.get( apiUrl,
  * Возвращает безопасный вариант функции getter ресурса apiUrl
  * Этот вариант возвращает Promise, т.к. async, и промис разрешается
  * либо в данные, либо в undefined.
- * @returns {Function} -
  */
 export default function createSafeGetter (
     apiUrl: string,

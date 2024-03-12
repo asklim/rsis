@@ -4,14 +4,20 @@ import {
     Logger,
 } from '../helpers/';
 
-const d = debugFactory('--rsis:heroku-no-sleep');
-const log = new Logger('[heroku-no-sleep]');
+const d = debugFactory('--rsis:heartbeat');
+const log = new Logger('[rsis:heartbeat]');
 
 import type { RsisExpress } from '../types';
 
 import reconnect from './reconnect';
 
-const HEROKU_PING_EVENT = 'herokuping';
+const HEARTBEAT_PING_EVENT = 'heartbeatping';
+
+type HeartbeatTaskFn = {
+    (): void;
+    (server: RsisExpress): void;
+};
+const tasks: HeartbeatTaskFn[] = [];
 
 /**
  * Поддержка HerokuApp в рабочем состоянии, т.к. контейнеры Heroku засыпают
@@ -27,62 +33,96 @@ export default function createPinger (
     server: RsisExpress,
     minutes: number
 ) {
-    if ( env.API_SERVER == '') {
-        log.warn('Heroku Reconnection Service not started (No Heroku URL).');
-        return;
-    }
+    let heartbeatTimer: NodeJS.Timeout;
 
     const msInterval = 60_000 * minutes;
     const started = server.getStartTime?.() ?? 0;
     d(`started timestamp: ${started}`);
 
-    let isPingerRunning: boolean = true;
-    let herokuTimer: NodeJS.Timeout;
-
-    server.on( HEROKU_PING_EVENT, herokuPingEvent_handler );
-
-    server.on('close', () => {
-        clearTimeout( herokuTimer );
-        log.debug('Reconnection Service stopped.');
-    });
-
-    emitHerokuPing();
-
-    log.debug(`Reconnection Service started, reconnect every ${minutes} minutes.`);
-
-
-    function herokuPingEvent_handler () {
-
-        const isNowInWorkTime = () => {
-            let hours = (new Date()).getUTCHours();
-            return ( hours > 4 && hours < 21 );
-        };
-
-        if( isNowInWorkTime() ) {
-            d('pinger: ping event in worktime!'); // (2nd)second
-            if( !isPingerRunning ) {
-                isPingerRunning = true;
-                log.info(`App running from ${(new Date( started )).toUTCString()}`);
-                log.info(`No-Sleep-Heroku-App started.`);
-            }
-            reconnect();
-        }
-        else {
-            if( isPingerRunning ) {
-                isPingerRunning = false;
-                log.info(`No-Sleep-Heroku-App stopped.`);
-                log.info(`App running from ${new Date( started )}`);
-            }
-        }
-        herokuTimer = setTimeout( emitHerokuPing, msInterval );
-        d('pinger: timer setted !'); // (3rd)third
-    }
-
-
-    function emitHerokuPing () {
-        d('ping: event emiting ....'); // (1st)first
-        server.emit( HEROKU_PING_EVENT );
-        d('ping: event emitted !');  // (4th)forth
+    function emitHeartbeatPing () {
+        // d('ping: event emiting ....'); // (1st)first
+        server.emit( HEARTBEAT_PING_EVENT );
+        // d('ping: event emitted !');  // (4th)forth
         d(`App running from ${(new Date( started )).toISOString()}`);
     }
+
+    function heartbeatEventHandler () {
+        for (const taskFn of tasks) {
+            taskFn( server );
+        }
+        heartbeatTimer = setTimeout( emitHeartbeatPing, msInterval );
+    }
+
+    server.on( HEARTBEAT_PING_EVENT, heartbeatEventHandler );
+
+    server.on('close', () => {
+        clearTimeout( heartbeatTimer );
+        log.debug('Heartbeat Service stopped.');
+    });
+
+    makeAllTasks();
+    emitHeartbeatPing();
+
+    log.debug(`Heartbeat Service started, checkup every ${minutes} minutes.`);
 };
+
+
+function makeAllTasks () {
+
+    tasks.push( everydayLogAppStartTime as HeartbeatTaskFn );
+
+    if ( env.API_SERVER == '') {
+        log.warn('Heroku Reconnection Task not started (No Heroku URL).');
+    }
+    else {
+        tasks.push( herokuPingTask );
+    }
+}
+
+
+const isNowInWorkTime = () => {
+    let hours = (new Date()).getUTCHours();
+    return ( hours > 4 && hours < 21 );
+};
+
+
+let isTodayLogAST = false;
+
+function everydayLogAppStartTime (
+    server:RsisExpress
+) {
+    const started = server.getStartTime?.() ?? 0;
+
+    if ( isNowInWorkTime() ) {
+        if( !isTodayLogAST ) {
+            isTodayLogAST = true;
+            log.info(`App running from ${(new Date( started )).toUTCString()}`);
+        }
+    }
+    else {
+        if ( isTodayLogAST ) {
+            isTodayLogAST = false;
+            log.info(`App running from ${new Date( started )}`);
+        }
+    }
+}
+
+
+let isPingerRunning = true;
+
+function herokuPingTask () {
+
+    if ( isNowInWorkTime() ) {
+        if( !isPingerRunning ) {
+            isPingerRunning = true;
+            log.info(`No-Sleep-Heroku-App task started.`);
+        }
+        reconnect();
+    }
+    else {
+        if ( isPingerRunning ) {
+            isPingerRunning = false;
+            log.info(`No-Sleep-Heroku-App task stopped.`);
+        }
+    }
+}

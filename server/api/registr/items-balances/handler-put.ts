@@ -6,8 +6,8 @@ import {
     Response,
     send400BadRequest,
     send500ServerError,
-} from '<srv>/helpers';
-import ItemsBalances from '<srv>/applogic/items-balances/';
+} from '<ssrv>/helpers';
+import ItemsBalances from '<ssrv>/applogic/items-balances/';
 
 const log = new Logger('[items-balances:api]');
 //const d = debugFactory('-dbg:items-balances:api');

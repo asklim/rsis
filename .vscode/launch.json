@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+{
+            "type": "node",
+            "request": "attach",
+            "name": "Attach",
+            "port": 9229
+        }
+        , {
+            "name": "Debug Jest Tests",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceRoot}\\node_modules\\jest-cli\\bin\\jest.js",
+            "runtimeArgs": [
+                "--inspect-brk",
+                "--runInBand"
+            ],
+            "args": ["--"],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}
