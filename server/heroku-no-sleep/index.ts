@@ -1,6 +1,7 @@
 import {
     env,
     debugFactory,
+    version,
     Logger,
 } from '../helpers/';
 
@@ -43,7 +44,7 @@ export default function createPinger (
         // d('ping: event emiting ....'); // (1st)first
         server.emit( HEARTBEAT_PING_EVENT );
         // d('ping: event emitted !');  // (4th)forth
-        d(`App running from ${(new Date( started )).toISOString()}`);
+        d(`App heartbeat since ${(new Date( started )).toISOString()}`);
     }
 
     function heartbeatEventHandler () {
@@ -89,20 +90,21 @@ const isNowInWorkTime = () => {
 let isTodayLogAST = false;
 
 function everydayLogAppStartTime (
-    server:RsisExpress
+    server: RsisExpress
 ) {
     const started = server.getStartTime?.() ?? 0;
 
     if ( isNowInWorkTime() ) {
         if( !isTodayLogAST ) {
             isTodayLogAST = true;
-            log.info(`App running from ${(new Date( started )).toUTCString()}`);
+            const utc = (new Date( started )).toUTCString();
+            log.info(`App (v.${version}) started at ${utc}`);
         }
     }
     else {
         if ( isTodayLogAST ) {
             isTodayLogAST = false;
-            log.info(`App running from ${new Date( started )}`);
+            log.info(`App running since ${new Date( started )}`);
         }
     }
 }
