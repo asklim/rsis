@@ -1,55 +1,48 @@
+// import type { RsisExpress } from '../../types';
 
-import http from 'node:http';
+import { Server } from 'node:http';
 import { AddressInfo } from 'node:net';
-import { env } from '<ssrv>/helpers/';
+
+import /*colors,*/ { gray, cyan } from 'colors';
+
+import {
+    IConsoleLogger,
+    env,
+    packageVersion
+} from '<ssrv>/helpers/';
 
 /**
- * Выводит информацию о сервере и
- * его окружении в консоль
- * ---
- * @param {string} outputMode - 'full' | 'addr' | ''
- * @param {string} appVersion
- * @param {http.Server} httpServer
+ * Выводит информацию о сервере и его окружении в консоль
+ *
  */
 export default function showServerAppInfo (
-    outputMode: string,
-    appVersion: string,
-    httpServer: http.Server
+    httpServer: Server,
+    logger: IConsoleLogger = console
 ) {
-    console.log('\napp version', appVersion.cyan );
-    console.log('NODE Environment is', env.NODE_ENV.cyan );
-
-    const outputs: {
-        [key: string]: () => void
-    } = {
-        full: () => console.log( 'Express server = ',  httpServer, '\n' ),
-        addr: () => {
-            console.log( getAddressInfo( httpServer ), '\n');
-        }
-    };
-    const modeFn = outputs[ outputMode.toLowerCase() ];
-    const defaultFn = () => console.log('\n');
-
-    ( modeFn ?? defaultFn )();
-    //(outputs[ outputMode.toLowerCase() ] ?? outputs['default'])();
+    const mode = env.NODE_ENV ?? 'undefined';
+    logger.info( gray('process pid:'), cyan(''+process.pid ));
+    logger.info('NODE Environment is', mode.cyan );
+    logger.info( getAddressInfo( httpServer ), '\n');
+    logger.info('package version', packageVersion.cyan, '\n');
+    // logger.log('Express server =', httpServer, '\n');
 }
 
 
 function getAddressInfo (
-    server: http.Server
+    server: Server
 ) {
-    const serverAddress = server.address();
+    const serverAddress = server.address() ?? {};
     const {
-        address,
-        family,
+        address: _a,
+        family: _f,
         port
     } = <AddressInfo> serverAddress;
 
-    const bind = typeof serverAddress === 'string' ?
-        'pipe ' + serverAddress
-        : 'port ' + port;
+    const bind = typeof serverAddress == 'string' ?
+        `pipe ${serverAddress}`
+        : `port ${port}`;
 
-    return 'Express server = "' + address.cyan
-            + '" Family= "' + family.cyan
-            + '" listening on ' + bind.cyan;
+    return (
+        `ExpressAddress="${cyan( _a )}" family="${cyan( _f )}" listening on ${cyan( bind )}`
+    );
 }

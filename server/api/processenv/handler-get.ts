@@ -38,7 +38,7 @@ export default async function hapi_processEnv_GET (
         d('typeof getMyDB is', typeof app?.getMyDB );  // function
         //app.getMyDB();
 
-        const count = (req?.params && Object.keys( req.params ).length) ?? 0;
+        const count = Object.keys( req?.params ).length;
 
         //log.info('handler-get - req.params:', req.params, 'count:', count );
         log.info('handler-get - req.query:', req.query );

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import {
     env,
-    version,
     Logger
 } from './helpers';
 
@@ -21,7 +20,7 @@ initLog.warn('Start of prepare section.');
         log.warn('App has already been launched.');
         process.exit( 1 );
     }
-    await showStartSystemInfo( version );
+    await showStartSystemInfo();
     const { startServer } = await import ('./rsis-base');
     startServer();
 

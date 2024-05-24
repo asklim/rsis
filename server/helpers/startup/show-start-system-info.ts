@@ -3,12 +3,14 @@ import os from 'node:os';
 import util from 'node:util';
 import colors from 'colors';
 
-import { env, icwd  } from '<ssrv>/helpers/';
+import {
+    env,
+    icwd,
+    packageVersion
+} from '<ssrv>/helpers/';
 import getProcessEnvWithout from './get-process-env-without';
 
-export default async function showStartSystemInfo (
-    appVersion: string
-) {
+export default async function showStartSystemInfo () {
     console.log( colors.gray('process pid:'), colors.cyan(''+process.pid ), '\n' );
 
     if( env.SHOW_STARTUP_INFO == 'NO') { return; }
@@ -19,7 +21,7 @@ export default async function showStartSystemInfo (
 
     const node_env = NODE_ENV ?? 'undefined';
     const userInfo = util.format('%O', os.userInfo() );
-    console.log('app version', appVersion.cyan );
+    console.log('package version', packageVersion.cyan );
     console.log('NODE Environment is', node_env.cyan );
 
     const envList = await getProcessEnvWithout('npm_, XDG, LESS');

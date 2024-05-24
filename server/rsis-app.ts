@@ -26,7 +26,6 @@ import {
     Logger,
 } from './helpers/';
 
-import herokuPinger from './heroku-no-sleep/';
 import { API_SERVER_LOCAL } from './rsis.config';
 
 import { default as app } from './rsis-express';
@@ -176,11 +175,6 @@ app.use((
     //res.render('error');
 });
 
-d('app locals', app.locals );
-
-const EVERY_30_MINUTES = 30;
-/** Закрытие pinger будет после закрытия server  */
-herokuPinger( app, EVERY_30_MINUTES );
-
+// d('app locals', app.locals );
 
 export default app;

@@ -42,7 +42,7 @@ import StatusCodes from './status-codes-enum';
 
 const icwd = realpathSync( process.cwd() );
 const packageJson = JSON.parse( readFileSync(`${icwd}/package.json`, 'utf-8'));
-const { version } = packageJson;
+const { version: packageVersion } = packageJson;
 
 
 //NO [Circular] ... require('./herokuapp'), // ONLY direct from file
@@ -71,7 +71,7 @@ export {
     callbackError400,
     callbackError405,
     icwd,
-    version,
+    packageVersion,
     // getProcessEnvWithout,
     consoleLogger, // переопределяет из 'asklim'
     makeResult,

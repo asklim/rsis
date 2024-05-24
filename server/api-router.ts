@@ -26,17 +26,6 @@ const router = express.Router();
         const useRouter = (await import( path )).default;
         useRouter( rtr );
     }
-    // (await import('./api/user/router')).default( rtr );
-    // (await import('./api/config/catalog-layouts/router')).default( rtr );
-    // (await import('./api/config/agents/router')).default( rtr );
-    // (await import('./api/health/router')).default( rtr );
-    // (await import('./api/processenv/router')).default( rtr );
-    // (await import('./api/registr/items-balances/router')).default( rtr );
-    // (await import('./api/reports/daily/router')).default( rtr );
-    // (await import('./api/sum/procurement/router')).default( rtr );
-    // (await import('./api/sum/weeknatural/router')).default( rtr );
-    // (await import('./api/sum/financereport/router')).default( rtr );
-    // (await import('./api/dataset/router')).default( rtr );
 
     // eslint-disable-next-line no-unused-vars
     rtr.use( (req, res /*, _next*/) => {

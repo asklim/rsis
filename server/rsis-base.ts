@@ -8,10 +8,10 @@ import { showServerAppInfo } from './helpers/startup/';
 import {
     debugFactory,
     env,
-    version,
     Logger
  } from './helpers/';
 
+import herokuPinger from './heroku-no-sleep/';
 
 import {
     createMongoDBConnections,
@@ -26,11 +26,11 @@ const log = new Logger('[rsis:base]');
 
 createMongoDBConnections();
 
-d(`typeof getMyDB is ${typeof rsisExpressApp.getMyDB}`);
+// d(`typeof getMyDB is ${typeof rsisExpressApp.getMyDB}`); // function
 //debug( rsisExpressApp.get('env')); // == NODE_ENV
 
-
 const server = http.createServer( rsisExpressApp );
+rsisExpressApp.set('getHTTPServer', () => server );
 initialSetupServer();
 initialSetupProcess();
 
@@ -39,10 +39,16 @@ initialSetupProcess();
  * Listen on provided port, on all network interfaces.
  */
 export function startServer () {
+
     server.listen( env.PORT,  () => {
-        log.info(`server listening on port ${env.PORT}`);
-        showServerAppInfo('addr'/*'full'*/, version, server );
+        // log.info(`server listening on port ${env.PORT}`);
+        showServerAppInfo( server, log );
     });
+    d('rsisExpressApp.locals', rsisExpressApp.locals );
+
+    const EVERY_30_MINUTES = 30;
+    /** Закрытие pinger будет после закрытия server  */
+    herokuPinger( rsisExpressApp, EVERY_30_MINUTES );
 }
 
 
@@ -54,7 +60,7 @@ function initialSetupServer () {
     /**
      * Event listener for HTTP server "error" event.
      */
-    const handlerOnError = (err: ErrnoException) => {
+    const handlerErrorEvent = (err: ErrnoException) => {
 
         if( err.syscall !== 'listen') {
             throw err;
@@ -81,29 +87,30 @@ function initialSetupServer () {
 
     /**
      * Event listener for HTTP server "listening" event.
+     * fired once after setting requestListener on port.
      */
-    const handlerOnListening = () => {
+    const handlerListeningEvent = () => {
         const _a = server.address();
         const addr = _a ?? typeof( _a );
-        const bind = typeof addr === 'string'
-            ? 'pipe ' + addr
-            : 'port ' + addr.port
+        const bind = typeof addr === 'string' ?
+            `pipe ${addr}`
+            : `port ${addr.port}`
         ;
-        log.debug(`Server listening on ${bind}.`);
+        log.debug(`fired event ["listening"] on ${bind}.`);
     };
 
 
-    server.on('error', handlerOnError );
+    server.on('error', handlerErrorEvent );
 
-    server.on('listening', handlerOnListening );
+    server.on('listening', handlerListeningEvent );
 
     server.on('clientError', (_err: Error, socket: Duplex) => {
         socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
     });
 
     server.on('close', () => {
-        console.log('http-server closing ...');
-        // rsisExpressApp.emit('close');
+        log.info('http-server closing ...');
+        rsisExpressApp.emit('close');
         // ngrok.disconnect();
         // console.log('ngrok disconnected.');
     });
@@ -113,8 +120,7 @@ function initialSetupServer () {
 async function shutdownTheServer () {
     return server.close(
         (err) => {
-            if( err ) {
-                if( err )
+            if ( err ) {
                 log.error('Error of closing server.\n', err );
                 return;
             }
@@ -127,19 +133,20 @@ function initialSetupProcess () {
 
     // CAPTURE APP TERMINATION / RESTART EVENTS
     const OK_EXIT_CODE = 0;
-    const clearTwoChar = '\b\b\x20\x20';
+    const blankTwoChars = () => console.log('\b\b\x20\x20');
 
     process.on( // For app termination
         'SIGINT',
         async () => {
-            console.log(`${clearTwoChar}\nGot SIGINT signal (^C)!\n`);
+            blankTwoChars();
+            log.info('Got SIGINT signal (^C)!\n');
             const p = shutdownTheServer();
             //d('shutdown returns', p ); // Promise { <pending> }
             await p;
             //d('shutdown returns', p ); // Promise { undefined }
             await databasesShutdown(
-                'SIGINT, app termination'
-                , () => {}
+                'SIGINT, app termination',
+                () => {}
             );
             console.log(`Process finished (pid:${process.pid}, exit code: 0).`);
             process.exit( OK_EXIT_CODE );

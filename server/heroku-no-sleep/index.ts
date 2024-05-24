@@ -1,14 +1,16 @@
+
+import type { RsisExpress } from '../types';
+
 import {
     env,
     debugFactory,
-    version,
+    packageVersion,
     Logger,
 } from '../helpers/';
+import { showServerAppInfo } from '<ssrv>/helpers/startup/';
 
 const d = debugFactory('--rsis:heartbeat');
 const log = new Logger('[rsis:heartbeat]');
-
-import type { RsisExpress } from '../types';
 
 import reconnect from './reconnect';
 
@@ -31,32 +33,32 @@ const tasks: HeartbeatTaskFn[] = [];
  * иначе таймер удаляется и сервис засыпает до 04:00UTC
 **/
 export default function createPinger (
-    server: RsisExpress,
+    rsisExpressApp: RsisExpress,
     minutes: number
 ) {
     let heartbeatTimer: NodeJS.Timeout;
 
     const msInterval = 60_000 * minutes;
-    const started = server.getStartTime?.() ?? 0;
+    const started = rsisExpressApp.getStartTime?.() ?? 0;
     d(`started timestamp: ${started}`);
 
     function emitHeartbeatPing () {
         // d('ping: event emiting ....'); // (1st)first
-        server.emit( HEARTBEAT_PING_EVENT );
+        rsisExpressApp.emit( HEARTBEAT_PING_EVENT );
         // d('ping: event emitted !');  // (4th)forth
         d(`App heartbeat since ${(new Date( started )).toISOString()}`);
     }
 
     function heartbeatEventHandler () {
         for (const taskFn of tasks) {
-            taskFn( server );
+            taskFn( rsisExpressApp );
         }
         heartbeatTimer = setTimeout( emitHeartbeatPing, msInterval );
     }
 
-    server.on( HEARTBEAT_PING_EVENT, heartbeatEventHandler );
+    rsisExpressApp.on( HEARTBEAT_PING_EVENT, heartbeatEventHandler );
 
-    server.on('close', () => {
+    rsisExpressApp.addListener('close', () => {
         clearTimeout( heartbeatTimer );
         log.debug('Heartbeat Service stopped.');
     });
@@ -90,15 +92,17 @@ const isNowInWorkTime = () => {
 let isTodayLogAST = false;
 
 function everydayLogAppStartTime (
-    server: RsisExpress
+    rsisExpressApp: RsisExpress
 ) {
-    const started = server.getStartTime?.() ?? 0;
+    const started = rsisExpressApp.getStartTime?.() ?? 0;
+    const server = rsisExpressApp.get('getHTTPServer')?.();
 
     if ( isNowInWorkTime() ) {
         if( !isTodayLogAST ) {
             isTodayLogAST = true;
             const utc = (new Date( started )).toUTCString();
-            log.info(`App (v.${version}) started at ${utc}`);
+            log.info(`App (v.${packageVersion}) started at ${utc}`);
+            showServerAppInfo( server, log );
         }
     }
     else {
